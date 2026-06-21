@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Authentication in React — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card,.card{border-radius:14px;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+    .badge-section{display:inline-block;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;font-size:.75rem;font-weight:700;padding:.3rem .8rem;border-radius:20px;letter-spacing:.05em;margin-bottom:.5rem;}
+    .sub-heading{font-size:1.1rem;font-weight:700;color:#0284c7;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+    [data-theme="dark"] .sub-heading{color:#38bdf8;}
+    .flow-step{display:flex;align-items:flex-start;gap:1rem;padding:1rem;background:#f8fafc;border-radius:12px;margin-bottom:.5rem;border:1.5px solid #e2e8f0;}
+    [data-theme="dark"] .flow-step{background:#1e293b;border-color:#334155;}
+    .flow-number{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0;}
+    .flow-arrow{text-align:center;color:#94a3b8;font-size:1.2rem;margin:.1rem 0;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <span class="badge-section">Section 17</span>
+        <h1 class="fw-900 mt-2 mb-3" style="font-size:2.6rem;">Authentication in React</h1>
+        <p class="lead mb-0" style="color:#94a3b8;">Implement JWT authentication, protected routes, OAuth with Google, and role-based access control in React applications.</p>
+      </div>
+      <div class="col-lg-4 text-end d-none d-lg-block">
+        <i class="bi bi-shield-lock" style="font-size:6rem;color:rgba(97,218,251,.15);"></i>
+      </div>
+    </div>
+    <div class="row mt-4 g-3">
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;"><i class="bi bi-key me-1"></i>JWT Flow</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;"><i class="bi bi-lock me-1"></i>Protected Routes</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;"><i class="bi bi-google me-1"></i>OAuth</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;"><i class="bi bi-person-badge me-1"></i>RBAC</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- JWT Flow Diagram -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-diagram-3"></i> JWT Authentication Flow</div>
+    <p class="text-secondary mb-4">JWT (JSON Web Token) is a compact, self-contained token that carries user identity information. It's signed by the server so the client can trust its contents.</p>
+
+    <div class="row g-0">
+      <div class="col-md-6">
+        <div class="flow-step">
+          <div class="flow-number">1</div>
+          <div>
+            <div class="fw-700">User Fills Login Form</div>
+            <small class="text-secondary">Email + password entered in the React form component</small>
+          </div>
+        </div>
+        <div class="flow-arrow"><i class="bi bi-arrow-down"></i></div>
+        <div class="flow-step">
+          <div class="flow-number">2</div>
+          <div>
+            <div class="fw-700">POST /api/login with Credentials</div>
+            <small class="text-secondary">Client sends <code>{ email, password }</code> to backend API</small>
+          </div>
+        </div>
+        <div class="flow-arrow"><i class="bi bi-arrow-down"></i></div>
+        <div class="flow-step">
+          <div class="flow-number">3</div>
+          <div>
+            <div class="fw-700">Server Validates → Returns JWT Token</div>
+            <small class="text-secondary">Server checks credentials, creates signed token with user data</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 ps-md-3">
+        <div class="flow-step">
+          <div class="flow-number">4</div>
+          <div>
+            <div class="fw-700">Client Stores Token</div>
+            <small class="text-secondary"><code>localStorage.setItem('token', data.token)</code> — or httpOnly cookie (more secure)</small>
+          </div>
+        </div>
+        <div class="flow-arrow"><i class="bi bi-arrow-down"></i></div>
+        <div class="flow-step">
+          <div class="flow-number">5</div>
+          <div>
+            <div class="fw-700">Every API Request Includes Token</div>
+            <small class="text-secondary"><code>Authorization: Bearer &lt;token&gt;</code> header on all requests</small>
+          </div>
+        </div>
+        <div class="flow-arrow"><i class="bi bi-arrow-down"></i></div>
+        <div class="flow-step">
+          <div class="flow-number">6</div>
+          <div>
+            <div class="fw-700">Server Validates Token → Returns Data</div>
+            <small class="text-secondary">Server verifies signature, checks expiry, returns protected data</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-box blue mt-3">
+      <strong><i class="bi bi-info-circle me-1"></i> JWT Structure:</strong> A JWT has 3 parts separated by dots: <code>header.payload.signature</code>. The header says which algorithm was used, the payload contains user claims (id, role, expiry), and the signature proves it wasn't tampered with.
+    </div>
+  </div>
+
+  <!-- Complete JWT Auth Implementation -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-code-slash"></i> Complete JWT Auth Implementation</div>
+    <p class="text-secondary mb-3">Build a full AuthContext that handles login, logout, and persisting auth state across page refreshes.</p>
+
+    <div class="code-block"><span class="kw">const</span> AuthContext = <span class="fn">createContext</span>();
+
+<span class="kw">export function</span> <span class="fn">AuthProvider</span>({ children }) {
+  <span class="kw">const</span> [user, setUser] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);
+  <span class="kw">const</span> navigate = <span class="fn">useNavigate</span>();
+
+  <span class="cm">// Check token on app load</span>
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> token = localStorage.<span class="fn">getItem</span>(<span class="st">'token'</span>);
+    <span class="kw">if</span> (token) {
+      api.<span class="fn">get</span>(<span class="st">'/auth/me'</span>, { headers: { Authorization: <span class="st">`Bearer ${token}`</span> } })
+        .<span class="fn">then</span>(data =&gt; <span class="fn">setUser</span>(data.user))
+        .<span class="fn">catch</span>(() =&gt; localStorage.<span class="fn">removeItem</span>(<span class="st">'token'</span>))
+        .<span class="fn">finally</span>(() =&gt; <span class="fn">setLoading</span>(<span class="kw">false</span>));
+    } <span class="kw">else</span> {
+      <span class="fn">setLoading</span>(<span class="kw">false</span>);
+    }
+  }, []);
+
+  <span class="kw">const</span> login = <span class="kw">async</span> ({ email, password }) =&gt; {
+    <span class="kw">const</span> data = <span class="kw">await</span> api.<span class="fn">post</span>(<span class="st">'/auth/login'</span>, { email, password });
+    localStorage.<span class="fn">setItem</span>(<span class="st">'token'</span>, data.token);
+    <span class="fn">setUser</span>(data.user);
+    <span class="fn">navigate</span>(<span class="st">'/dashboard'</span>);
+  };
+
+  <span class="kw">const</span> logout = () =&gt; {
+    localStorage.<span class="fn">removeItem</span>(<span class="st">'token'</span>);
+    <span class="fn">setUser</span>(<span class="kw">null</span>);
+    <span class="fn">navigate</span>(<span class="st">'/login'</span>);
+  };
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">AuthContext.Provider</span> value={{ user, login, logout, loading }}&gt;
+      {loading ? &lt;<span class="fn">FullPageSpinner</span> /&gt; : children}
+    &lt;/<span class="fn">AuthContext.Provider</span>&gt;
+  );
+}
+
+<span class="cm">// Custom hook for consuming auth context</span>
+<span class="kw">export function</span> <span class="fn">useAuth</span>() {
+  <span class="kw">const</span> context = <span class="fn">useContext</span>(AuthContext);
+  <span class="kw">if</span> (!context) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="st">'useAuth must be used within AuthProvider'</span>);
+  <span class="kw">return</span> context;
+}</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-arrow-repeat"></i> Axios Interceptor for Auto Token Injection</div>
+    <div class="code-block"><span class="cm">// src/api/axios.js — attach token to every request automatically</span>
+<span class="kw">import</span> axios <span class="kw">from</span> <span class="st">'axios'</span>;
+
+<span class="kw">const</span> api = axios.<span class="fn">create</span>({ baseURL: process.env.REACT_APP_API_URL });
+
+api.interceptors.request.<span class="fn">use</span>((config) =&gt; {
+  <span class="kw">const</span> token = localStorage.<span class="fn">getItem</span>(<span class="st">'token'</span>);
+  <span class="kw">if</span> (token) config.headers.Authorization = <span class="st">`Bearer ${token}`</span>;
+  <span class="kw">return</span> config;
+});
+
+<span class="cm">// Auto-logout on 401 Unauthorized</span>
+api.interceptors.response.<span class="fn">use</span>(
+  (response) =&gt; response.data,
+  (error) =&gt; {
+    <span class="kw">if</span> (error.response?.status === <span class="st">401</span>) {
+      localStorage.<span class="fn">removeItem</span>(<span class="st">'token'</span>);
+      window.location.href = <span class="st">'/login'</span>;
+    }
+    <span class="kw">return</span> Promise.<span class="fn">reject</span>(error);
+  }
+);
+
+<span class="kw">export default</span> api;</div>
+  </div>
+
+  <!-- Protected Routes -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-lock-fill"></i> Protected Routes</div>
+    <p class="text-secondary mb-3">Protected routes check if the user is authenticated (and optionally if they have the required role) before allowing access. Unauthorized users are redirected to login.</p>
+
+    <div class="code-block"><span class="kw">function</span> <span class="fn">ProtectedRoute</span>({ children, roles }) {
+  <span class="kw">const</span> { user } = <span class="fn">useAuth</span>();
+  <span class="kw">const</span> location = <span class="fn">useLocation</span>();
+
+  <span class="kw">if</span> (!user) {
+    <span class="cm">// Save where they were going — redirect back after login</span>
+    <span class="kw">return</span> &lt;<span class="fn">Navigate</span> to=<span class="st">"/login"</span> state={{ from: location }} replace /&gt;;
+  }
+
+  <span class="kw">if</span> (roles &amp;&amp; !roles.<span class="fn">includes</span>(user.role)) {
+    <span class="kw">return</span> &lt;<span class="fn">Navigate</span> to=<span class="st">"/403"</span> replace /&gt;;
+  }
+
+  <span class="kw">return</span> children;
+}
+
+<span class="cm">// Usage in router</span>
+&lt;<span class="fn">Routes</span>&gt;
+  &lt;<span class="fn">Route</span> path=<span class="st">"/login"</span> element={&lt;<span class="fn">Login</span> /&gt;} /&gt;
+  &lt;<span class="fn">Route</span>
+    path=<span class="st">"/dashboard"</span>
+    element={&lt;<span class="fn">ProtectedRoute</span>&gt;&lt;<span class="fn">Dashboard</span> /&gt;&lt;/<span class="fn">ProtectedRoute</span>&gt;}
+  /&gt;
+  &lt;<span class="fn">Route</span>
+    path=<span class="st">"/admin"</span>
+    element={
+      &lt;<span class="fn">ProtectedRoute</span> roles={[<span class="st">'admin'</span>]}&gt;
+        &lt;<span class="fn">AdminPanel</span> /&gt;
+      &lt;/<span class="fn">ProtectedRoute</span>&gt;
+    }
+  /&gt;
+&lt;/<span class="fn">Routes</span>&gt;</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-arrow-return-left"></i> Redirect Back After Login</div>
+    <div class="code-block"><span class="cm">// In your Login component — redirect back to original destination</span>
+<span class="kw">function</span> <span class="fn">Login</span>() {
+  <span class="kw">const</span> { login } = <span class="fn">useAuth</span>();
+  <span class="kw">const</span> location = <span class="fn">useLocation</span>();
+  <span class="kw">const</span> navigate = <span class="fn">useNavigate</span>();
+
+  <span class="kw">const</span> from = location.state?.from?.pathname || <span class="st">'/dashboard'</span>;
+
+  <span class="kw">const</span> handleSubmit = <span class="kw">async</span> (e) =&gt; {
+    e.<span class="fn">preventDefault</span>();
+    <span class="kw">await</span> <span class="fn">login</span>({ email, password });
+    <span class="fn">navigate</span>(from, { replace: <span class="kw">true</span> }); <span class="cm">// go back where they came from</span>
+  };
+}</div>
+  </div>
+
+  <!-- OAuth with Google -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-google"></i> OAuth with Google</div>
+    <p class="text-secondary mb-3">OAuth allows users to authenticate with their existing Google (or GitHub, Facebook, etc.) account without creating a new password. The Google token is sent to your backend for verification.</p>
+
+    <div class="code-block"><span class="kw">import</span> { GoogleOAuthProvider, GoogleLogin } <span class="kw">from</span> <span class="st">'@react-oauth/google'</span>;
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">GoogleOAuthProvider</span> clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}&gt;
+      &lt;<span class="fn">LoginPage</span> /&gt;
+    &lt;/<span class="fn">GoogleOAuthProvider</span>&gt;
+  );
+}
+
+<span class="kw">function</span> <span class="fn">LoginPage</span>() {
+  <span class="kw">const</span> { login } = <span class="fn">useAuth</span>();
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">GoogleLogin</span>
+      onSuccess={<span class="kw">async</span> (credentialResponse) =&gt; {
+        <span class="cm">// Send Google token to your backend for verification</span>
+        <span class="kw">await</span> <span class="fn">login</span>({ googleToken: credentialResponse.credential });
+      }}
+      onError={() =&gt; console.<span class="fn">log</span>(<span class="st">'Google Login Failed'</span>)}
+    /&gt;
+  );
+}
+
+<span class="cm">// Backend verifies the Google token and issues your own JWT</span>
+<span class="cm">// POST /api/auth/google — body: { googleToken }</span>
+<span class="cm">// Server: verify with Google → create/find user → return your JWT</span></div>
+
+    <div class="concept-box purple mt-2">
+      <strong><i class="bi bi-diagram-2 me-1"></i> OAuth Flow Summary:</strong> Your app → Google → User grants permission → Google sends token to your app → Your app sends token to YOUR backend → Backend verifies with Google → Backend creates session/JWT → User is logged in.
+    </div>
+  </div>
+
+  <!-- RBAC -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-person-badge"></i> Role-Based Access Control (RBAC)</div>
+    <p class="text-secondary mb-3">RBAC restricts what users can see and do based on their assigned role. Implement it at the route level (ProtectedRoute) AND at the UI level (hide/show elements).</p>
+
+    <div class="code-block"><span class="cm">// Permission-based component rendering</span>
+<span class="kw">function</span> <span class="fn">Can</span>({ perform, children, fallback = <span class="kw">null</span> }) {
+  <span class="kw">const</span> { user } = <span class="fn">useAuth</span>();
+
+  <span class="kw">const</span> permissions = {
+    admin: [<span class="st">'read:users'</span>, <span class="st">'write:users'</span>, <span class="st">'delete:users'</span>, <span class="st">'read:reports'</span>],
+    manager: [<span class="st">'read:users'</span>, <span class="st">'write:users'</span>, <span class="st">'read:reports'</span>],
+    user: [<span class="st">'read:users'</span>],
+  };
+
+  <span class="kw">const</span> userPermissions = permissions[user?.role] || [];
+
+  <span class="kw">if</span> (!userPermissions.<span class="fn">includes</span>(perform)) <span class="kw">return</span> fallback;
+  <span class="kw">return</span> children;
+}
+
+<span class="cm">// Usage — clean declarative permission checking</span>
+&lt;<span class="fn">Can</span> perform=<span class="st">"delete:users"</span> fallback={&lt;span&gt;No permission&lt;/span&gt;}&gt;
+  &lt;<span class="fn">DeleteButton</span> onClick={handleDelete} /&gt;
+&lt;/<span class="fn">Can</span>&gt;
+
+&lt;<span class="fn">Can</span> perform=<span class="st">"read:reports"</span>&gt;
+  &lt;<span class="fn">ReportsLink</span> /&gt;
+&lt;/<span class="fn">Can</span>&gt;</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-grid-3x3"></i> Permission Matrix</div>
+    <div class="table-responsive">
+      <table class="table table-bordered" style="font-size:.88rem;">
+        <thead class="table-dark">
+          <tr><th>Permission</th><th>Admin</th><th>Manager</th><th>User</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>read:users</code></td><td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td><td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td><td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td></tr>
+          <tr><td><code>write:users</code></td><td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td><td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td><td class="text-center"><i class="bi bi-x-circle-fill text-danger"></i></td></tr>
+          <tr><td><code>delete:users</code></td><td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td><td class="text-center"><i class="bi bi-x-circle-fill text-danger"></i></td><td class="text-center"><i class="bi bi-x-circle-fill text-danger"></i></td></tr>
+          <tr><td><code>read:reports</code></td><td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td><td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td><td class="text-center"><i class="bi bi-x-circle-fill text-danger"></i></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Token Security Tips -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-shield-check"></i> Token Security</div>
+    <div class="tip-box">
+      <strong><i class="bi bi-shield-fill-check me-1"></i> Use httpOnly cookies instead of localStorage</strong> — httpOnly cookies can't be accessed by JavaScript, protecting against XSS attacks. localStorage is accessible to any script on the page.
+    </div>
+    <div class="tip-box">
+      <strong><i class="bi bi-clock me-1"></i> Set short token expiry + use refresh tokens</strong> — Access tokens should expire in 15-60 minutes. Refresh tokens (stored in httpOnly cookies) silently obtain new access tokens without requiring re-login.
+    </div>
+    <div class="tip-box">
+      <strong><i class="bi bi-arrow-repeat me-1"></i> Always validate on the server</strong> — Never trust client-side role checks alone. Every API request must validate the JWT and check permissions server-side. Client-side checks are only for UX (hiding/showing UI).
+    </div>
+    <div class="tip-box">
+      <strong><i class="bi bi-ban me-1"></i> Implement token revocation</strong> — JWTs are stateless, so you can't "invalidate" them. Use short expiry + a blocklist for compromised tokens, or switch to opaque tokens with server-side sessions for high-security apps.
+    </div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-exclamation-triangle"></i> Common Mistakes</div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle me-1"></i> Storing sensitive data in JWT payload</strong> — The payload is base64 encoded, NOT encrypted. Anyone can decode it. Never put passwords, credit cards, or secrets in the token.
+    </div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle me-1"></i> Only checking auth on the frontend</strong> — A user can bypass React's ProtectedRoute by calling your API directly. Backend must always validate permissions independently.
+    </div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle me-1"></i> Not handling token expiry gracefully</strong> — When a token expires, show the user a "session expired" message and redirect to login, rather than silently failing or showing cryptic errors.
+    </div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle me-1"></i> Exposing auth state in URL</strong> — Never put tokens in URL query parameters — they appear in browser history, server logs, and Referer headers.
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-chat-left-quote"></i> Interview Questions</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is JWT? What are its three parts, and how does signature verification work?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What are the security differences between storing tokens in localStorage vs httpOnly cookies?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you implement a ProtectedRoute in React Router v6? How do you handle role-based access?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you persist authentication state across page refreshes? What happens when the app loads?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Explain the OAuth 2.0 flow. How does "Sign in with Google" work at a high level?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Why is server-side permission checking always necessary even if you implement RBAC on the frontend?</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+    <div class="mt-2 d-flex justify-content-center gap-3 flex-wrap">
+      <a href="index.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Home</a>
+      <a href="react-hooks.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Hooks</a>
+      <a href="react-redux.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Redux</a>
+      <a href="react-interview.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Interview</a>
+      <a href="react-projects.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

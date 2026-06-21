@@ -1,0 +1,1249 @@
+<div class="tab-pane fade" id="tab-fundamentals" role="tabpanel">
+  <div class="accordion" id="acc-fundamentals">
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q1">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is React and why should you use it?
+        </button>
+      </h2>
+      <div id="fundamentals-q1" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          React is an open-source JavaScript library developed by Facebook (Meta) for building user interfaces, primarily for single-page applications. It uses a component-based architecture where the UI is broken into reusable, self-contained pieces that manage their own state and render logic. React's declarative programming model means you describe what the UI should look like for a given state, and React efficiently updates the DOM when state changes — you don't manually manipulate DOM elements. The Virtual DOM abstraction allows React to batch and optimize DOM updates, resulting in high performance even for complex UIs. You should use React because it has a massive ecosystem, excellent tooling (DevTools, CRA, Vite), strong community support, and is backed by Meta with production use at Facebook, Instagram, and WhatsApp scale.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q2">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the Virtual DOM?
+        </button>
+      </h2>
+      <div id="fundamentals-q2" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          The Virtual DOM (VDOM) is a lightweight, in-memory JavaScript representation of the actual browser DOM tree. React maintains this virtual tree and whenever state or props change, it creates a new virtual tree representing the desired UI. React then compares (diffs) the new virtual tree against the previous one to compute the minimal set of changes needed — this process is called reconciliation. Only the actual differences are applied to the real DOM, which is far more efficient than re-rendering the entire page. The Virtual DOM is not a browser API; it is a React-specific concept that exists purely in JavaScript memory and acts as a performance buffer between your component logic and expensive browser DOM operations.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q3">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;How does the Virtual DOM improve performance?
+        </button>
+      </h2>
+      <div id="fundamentals-q3" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Direct DOM manipulation is slow because the browser must recalculate layouts, repaint pixels, and reflow the page for every change. The Virtual DOM batches multiple state changes together and computes the minimum number of real DOM operations needed, applying them all at once rather than one by one. By diffing two virtual trees in JavaScript (which is fast) before touching the real DOM (which is slow), React minimizes the number of expensive browser operations. This approach is especially impactful in complex applications where many components might update in response to a single user action. Additionally, React can group updates, schedule them at optimal times (using Concurrent features in React 18), and skip re-renders for components whose inputs have not changed.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q4">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is JSX?
+        </button>
+      </h2>
+      <div id="fundamentals-q4" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          JSX (JavaScript XML) is a syntax extension for JavaScript that allows you to write HTML-like markup directly inside JavaScript code. It was created by the React team to make component templates more readable and intuitive, co-locating markup with the logic that drives it. JSX is not valid JavaScript and must be transpiled (by Babel or the TypeScript compiler) into React.createElement() calls before it can run in the browser. Under the hood, <code>&lt;div className="foo"&gt;Hello&lt;/div&gt;</code> becomes <code>React.createElement('div', { className: 'foo' }, 'Hello')</code>. JSX supports embedding any JavaScript expression inside curly braces <code>{}</code>, making it easy to render dynamic content, map over arrays, and apply conditional logic inline.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q5">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the difference between HTML and JSX?
+        </button>
+      </h2>
+      <div id="fundamentals-q5" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          While JSX looks very similar to HTML, there are several important differences. In JSX, <code>class</code> becomes <code>className</code> and <code>for</code> becomes <code>htmlFor</code> because these are reserved words in JavaScript. All JSX tags must be closed — self-closing tags like <code>&lt;input&gt;</code> must be written as <code>&lt;input /&gt;</code>. Event handler attributes use camelCase (<code>onClick</code>, <code>onChange</code>) rather than lowercase HTML attributes (<code>onclick</code>, <code>onchange</code>). JSX must have a single root element (or use React.Fragment), whereas HTML can have sibling top-level elements. Inline styles in JSX are JavaScript objects with camelCase properties (<code>{ backgroundColor: 'red' }</code>) rather than CSS strings.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q6">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What are React components?
+        </button>
+      </h2>
+      <div id="fundamentals-q6" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          React components are the fundamental building blocks of a React application — they are independent, reusable pieces of UI that accept inputs (props) and return React elements describing what should appear on screen. Components can be as small as a button or as large as an entire page. There are two types: functional components (plain JavaScript functions that return JSX) and class components (ES6 classes that extend React.Component). Components can be composed together — a parent component renders child components, forming a tree structure. This composability is React's core strength: you build complex UIs by combining simple, well-defined components, the same way you build complex software from small, well-tested functions.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q7">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the difference between functional and class components?
+        </button>
+      </h2>
+      <div id="fundamentals-q7" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Functional components are plain JavaScript functions that accept props and return JSX; they are the modern, recommended way to write React components. Class components are ES6 classes that extend <code>React.Component</code>, require a <code>render()</code> method, and manage state via <code>this.state</code> and <code>this.setState()</code>. Before React 16.8 introduced Hooks, only class components could hold state or use lifecycle methods — functional components were purely presentational. With Hooks, functional components can do everything class components can do, with less boilerplate and more readable code. Class components still exist and work, but new code should use functional components; the main reason to know class components is for maintaining legacy codebases.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q8">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What are props in React?
+        </button>
+      </h2>
+      <div id="fundamentals-q8" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Props (short for "properties") are the mechanism by which a parent component passes data down to a child component. They are read-only from the child's perspective — a component must never modify its own props, following React's principle that data flows one way (top-down). Props can be any JavaScript value: strings, numbers, objects, arrays, functions, or even other React elements. The child receives props as the first argument to a functional component, or via <code>this.props</code> in a class component. Props allow you to make components reusable and configurable — the same <code>Button</code> component can render differently based on the <code>label</code>, <code>color</code>, and <code>onClick</code> props it receives.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q9">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is state in React?
+        </button>
+      </h2>
+      <div id="fundamentals-q9" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          State is a component's internal, mutable data that determines how it renders and behaves. Unlike props (which come from outside), state is owned and managed by the component itself. When state changes, React re-renders the component (and potentially its children) to reflect the new state. In functional components, state is managed with the <code>useState</code> hook; in class components, it is managed with <code>this.state</code> and <code>this.setState()</code>. State should only contain data that directly affects what is rendered — derived data should be computed during render rather than stored as separate state. Examples of state include form input values, toggle on/off booleans, fetched data, and loading/error flags.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q10">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the difference between props and state?
+        </button>
+      </h2>
+      <div id="fundamentals-q10" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Props are external inputs passed into a component by its parent, and they are immutable from the component's perspective. State is internal data that the component itself owns and can update over time. Props make components configurable and reusable; state makes components interactive and dynamic. When props change, the parent re-renders the child with new values. When state changes, the component re-renders itself. A key rule: if a piece of data can be computed from props or other state, it should not be stored as state (to avoid inconsistency). Think of props like function arguments and state like local variables that persist across renders.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q11">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is a React element vs a React component?
+        </button>
+      </h2>
+      <div id="fundamentals-q11" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          A React element is a plain JavaScript object that describes what you want to see on screen — it is the output of JSX or <code>React.createElement()</code>. For example, <code>&lt;div className="foo"&gt;Hello&lt;/div&gt;</code> produces <code>{ type: 'div', props: { className: 'foo', children: 'Hello' } }</code>. A React component is a function or class that, when called/instantiated, produces React elements. Elements are immutable descriptions; components are the factories that create them. React reads elements to build the Virtual DOM and then updates the real DOM accordingly. You never instantiate components manually — React's reconciler calls your component functions and uses the returned elements to build the tree.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q12">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What does ReactDOM.render() do?
+        </button>
+      </h2>
+      <div id="fundamentals-q12" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>ReactDOM.render()</code> is the entry point that mounts a React element tree into a real browser DOM container. It takes two arguments: the React element (or component) to render, and the DOM node to render it into (typically <code>document.getElementById('root')</code>). On subsequent calls with the same container, React performs a diff against the previously rendered tree and applies only the necessary DOM updates rather than re-mounting everything. In React 18, <code>ReactDOM.render()</code> has been replaced by <code>ReactDOM.createRoot().render()</code> to enable Concurrent features. Understanding <code>ReactDOM.render()</code> is important for legacy codebases and for understanding how React bootstraps itself from a static HTML file.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q13">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is React.StrictMode?
+        </button>
+      </h2>
+      <div id="fundamentals-q13" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>React.StrictMode</code> is a development-only tool that helps you find potential problems in your application. It does not render any visible UI — it activates additional checks and warnings for its descendants. In development mode, StrictMode intentionally double-invokes certain functions (including function component bodies, useState initializers, and useReducer reducers) to help detect side effects that would be problematic in Concurrent Mode. It warns about deprecated lifecycle methods, unexpected side effects, and legacy string ref usage. StrictMode has zero impact in production — it is purely a development safeguard. React 18 strengthened StrictMode to also simulate mounting, unmounting, and re-mounting components to verify that effects clean up properly.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q14">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is React.Fragment and why use it?
+        </button>
+      </h2>
+      <div id="fundamentals-q14" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>React.Fragment</code> is a special component that lets you group multiple children without adding an extra DOM node. Since JSX requires a single root element, you previously had to wrap sibling elements in a <code>&lt;div&gt;</code>, which polluted the DOM with meaningless wrapper elements. <code>React.Fragment</code> (or its shorthand <code>&lt;&gt;...&lt;/&gt;</code>) solves this by acting as a phantom wrapper that disappears in the final DOM output. This is especially important in table structures where inserting a <code>&lt;div&gt;</code> between <code>&lt;table&gt;</code> and <code>&lt;tr&gt;</code> would produce invalid HTML. The full <code>&lt;React.Fragment key={item.id}&gt;</code> form is needed when you need to assign a key prop to fragments in a list.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q15">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is a key prop and why is it important?
+        </button>
+      </h2>
+      <div id="fundamentals-q15" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          The <code>key</code> prop is a special string or number attribute you must provide when rendering lists of elements. React uses keys to identify which items have changed, been added, or been removed between renders, enabling efficient list reconciliation. Without keys, React falls back to reordering by index, which can cause bugs — for example, if you delete the first item of a list, React may incorrectly preserve the state of input components because it thinks the first item still exists (just with different content). Keys must be stable (not random), unique among siblings, and ideally come from the data itself (like a database ID). Using array index as a key is acceptable only for static lists that never reorder or filter.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q16">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is React reconciliation?
+        </button>
+      </h2>
+      <div id="fundamentals-q16" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Reconciliation is the process React uses to determine what changes need to be made to the DOM when a component's state or props change. When a component re-renders, React produces a new virtual DOM tree and compares it with the previous tree using its diffing algorithm. The goal is to find the minimal set of mutations to apply to the real DOM. React uses a set of heuristics to make this O(n) rather than O(n³) — for example, if two elements have different types, React destroys the old tree and builds a new one from scratch. Keys on list items help React match old elements to new elements across renders. Reconciliation is transparent to developers — you just update state and React handles the rest.
+          <pre class="code-block">// React reconciles this update efficiently
+function Counter() {
+  const [count, setCount] = React.useState(0);
+  // When setCount is called, React re-renders Counter,
+  // diffs the new output against the previous output,
+  // and updates only the text node that changed.
+  return &lt;button onClick={() =&gt; setCount(c =&gt; c + 1)}&gt;Count: {count}&lt;/button&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q17">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the diffing algorithm in React?
+        </button>
+      </h2>
+      <div id="fundamentals-q17" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          React's diffing algorithm (part of the reconciler) compares two virtual DOM trees to compute the minimal set of changes. The algorithm is optimized with two key assumptions: elements of different types produce different trees (so React doesn't try to reconcile them), and developers can hint stable identity with the <code>key</code> prop. When comparing two elements of the same type, React keeps the underlying DOM node and updates only the changed attributes. When comparing lists, React matches elements by key; without keys it matches by position. The algorithm runs in O(n) time complexity where n is the number of elements. In React 18 with the Fiber architecture, diffing can be paused, prioritized, and resumed, unlike the old synchronous stack-based approach.
+          <pre class="code-block">// Same type: React updates only changed props
+// Before: &lt;div className="old" title="hello" /&gt;
+// After:  &lt;div className="new" title="hello" /&gt;
+// React keeps the DOM node, sets className="new", leaves title alone.
+
+// Different type: React unmounts old, mounts new
+// Before: &lt;Counter /&gt;
+// After:  &lt;Timer /&gt;
+// React destroys Counter (runs cleanup), creates Timer from scratch.</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q18">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What happens when you change a component's key?
+        </button>
+      </h2>
+      <div id="fundamentals-q18" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          When you change a component's key, React treats it as a completely different element, destroys the old component instance (including its state and effects), and mounts a brand new instance. This is because the key is React's mechanism for matching elements across renders — a different key signals "this is a new element, not an update to the old one." This behavior is sometimes used intentionally to force a component to reset its state: by changing its key (e.g., when a user selects a different user to edit), you guarantee the component starts fresh with no stale state. Overusing this trick can be expensive since it triggers full unmount/mount cycles, but it is a legitimate escape hatch for resetting deeply nested state.
+          <pre class="code-block">// Intentionally reset a form when the selected user changes
+function UserEditor({ userId }) {
+  // When userId changes, the key changes,
+  // React unmounts the old UserForm and mounts a fresh one.
+  // This resets all internal form state without extra logic.
+  return &lt;UserForm key={userId} userId={userId} /&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q19">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is prop drilling and how do you avoid it?
+        </button>
+      </h2>
+      <div id="fundamentals-q19" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Prop drilling is the pattern of passing props through multiple intermediate components that don't need the data themselves, just to get it to a deeply nested child that does. It makes code brittle — adding a new piece of data requires modifying every component in the chain — and makes intermediate components harder to reuse since they carry props they don't use. The most common solutions are: React Context (for data that many components at different levels need, like theme or auth), state management libraries (Redux, Zustand) for complex global state, component composition (passing components as children instead of data), and custom hooks that directly access shared state. The right solution depends on how frequently the data changes and how many components need it.
+          <pre class="code-block">// Problem: drilling theme through every component
+function App() {
+  const theme = 'dark';
+  return &lt;Layout theme={theme} /&gt;;
+}
+function Layout({ theme }) {
+  return &lt;Sidebar theme={theme} /&gt;;
+}
+function Sidebar({ theme }) {
+  return &lt;Button theme={theme} /&gt;;  // only Button needed theme
+}
+
+// Solution: React Context
+const ThemeContext = React.createContext('light');
+function App() {
+  return (
+    &lt;ThemeContext.Provider value="dark"&gt;
+      &lt;Layout /&gt;
+    &lt;/ThemeContext.Provider&gt;
+  );
+}
+function Button() {
+  const theme = React.useContext(ThemeContext);  // directly consumed
+  return &lt;button className={theme}&gt;Click&lt;/button&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q20">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is a controlled component?
+        </button>
+      </h2>
+      <div id="fundamentals-q20" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          A controlled component is a form element (input, select, textarea) whose value is controlled by React state. The component's displayed value is always driven by state, and user input is captured via an <code>onChange</code> handler that updates the state. This means React is the "single source of truth" for the input's value — the DOM never holds state independently. Controlled components give you fine-grained control: you can validate input on every keystroke, format values, conditionally enable/disable the submit button, and reset the form easily. The trade-off is that every keystroke causes a state update and re-render, which is usually fine but can be a concern for very large forms.
+          <pre class="code-block">function ControlledInput() {
+  const [value, setValue] = React.useState('');
+
+  return (
+    &lt;input
+      type="text"
+      value={value}                          // React controls the value
+      onChange={(e) =&gt; setValue(e.target.value)}  // update state on change
+    /&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q21">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is an uncontrolled component?
+        </button>
+      </h2>
+      <div id="fundamentals-q21" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          An uncontrolled component is a form element that maintains its own internal state in the DOM, rather than in React state. You read the value when needed (on submit) using a ref, rather than tracking every change. This approach more closely matches how traditional HTML forms work. Uncontrolled components are simpler for basic forms where you don't need real-time validation or value formatting. They can perform better for forms with many fields since there are no state updates on every keystroke. The downside is less control — you can't easily validate on every keystroke or programmatically set values without using refs.
+          <pre class="code-block">function UncontrolledInput() {
+  const inputRef = React.useRef(null);
+
+  const handleSubmit = (e) =&gt; {
+    e.preventDefault();
+    console.log('Value:', inputRef.current.value);  // read on submit
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input type="text" ref={inputRef} defaultValue="initial" /&gt;
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q22">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the difference between controlled and uncontrolled components?
+        </button>
+      </h2>
+      <div id="fundamentals-q22" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          In a controlled component, React state is the single source of truth for the form field's value, updated via onChange handlers on every user input. In an uncontrolled component, the DOM itself holds the value and React only reads it when necessary via refs. Controlled components provide immediate access to the current value, enable real-time validation, and make it trivial to programmatically reset or pre-fill fields. Uncontrolled components are simpler to set up and can be faster for large forms since they don't trigger re-renders on each keystroke. Libraries like React Hook Form use uncontrolled components by default to maximize performance, while also providing a Controller wrapper for third-party components that must be controlled.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q23">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is lifting state up?
+        </button>
+      </h2>
+      <div id="fundamentals-q23" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Lifting state up is the pattern of moving shared state to the closest common ancestor of the components that need it, and passing the data and setter functions down as props. When two sibling components need to share and synchronize the same piece of data, neither should own it independently — instead, the parent owns the state and coordinates updates. This ensures a single source of truth and prevents the two components from getting out of sync. Lifting state is a core React pattern and often a precursor to introducing Context or a state management library when the shared state needs to reach many components. The process involves moving <code>useState</code> up, passing the value as a prop to children, and passing the setter (or a callback) as a prop to the child that needs to modify it.
+          <pre class="code-block">// TemperatureInput needs to sync with another TemperatureInput
+function Calculator() {
+  const [temp, setTemp] = React.useState('');  // state lifted to parent
+
+  return (
+    &lt;&gt;
+      &lt;TemperatureInput scale="c" value={temp} onChange={setTemp} /&gt;
+      &lt;TemperatureInput scale="f" value={toFahrenheit(temp)} onChange={(f) =&gt; setTemp(toCelsius(f))} /&gt;
+    &lt;/&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q24">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is composition vs inheritance in React?
+        </button>
+      </h2>
+      <div id="fundamentals-q24" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          React recommends composition over inheritance for reusing code between components. Composition means building complex components by combining simpler ones, passing components as props or children rather than extending base classes. The <code>children</code> prop is the most common form — a container component renders <code>props.children</code> without knowing what it is. You can also pass components as named props (<code>leftPanel</code>, <code>rightPanel</code>) for more explicit slots. Inheritance in the traditional OOP sense (extending a component class) is almost never needed in React and the React team explicitly discourages it. Composition is more flexible: any component can pass any renderable content to any other component, creating a highly dynamic and decoupled system.
+          <pre class="code-block">// Composition via children
+function Card({ children, title }) {
+  return (
+    &lt;div className="card"&gt;
+      &lt;h2&gt;{title}&lt;/h2&gt;
+      &lt;div className="card-body"&gt;{children}&lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Consumer composes freely
+&lt;Card title="User Profile"&gt;
+  &lt;Avatar /&gt;
+  &lt;UserDetails /&gt;
+&lt;/Card&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q25">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the children prop?
+        </button>
+      </h2>
+      <div id="fundamentals-q25" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          The <code>children</code> prop is a special prop that React automatically populates with the content placed between a component's opening and closing tags. It allows a component to render arbitrary nested content without knowing in advance what that content will be. <code>children</code> can be a single element, multiple elements, a string, null, or even a function (render props pattern). You can inspect and manipulate children using <code>React.Children</code> utilities (map, count, forEach, toArray). The children prop is central to the composition pattern — container components like modals, cards, and layout components accept children and render them in a specific position within their own structure.
+          <pre class="code-block">function Dialog({ title, children }) {
+  return (
+    &lt;div className="dialog"&gt;
+      &lt;div className="dialog-title"&gt;{title}&lt;/div&gt;
+      &lt;div className="dialog-body"&gt;{children}&lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Usage — children is the &lt;p&gt; and &lt;button&gt;
+&lt;Dialog title="Confirm"&gt;
+  &lt;p&gt;Are you sure you want to delete?&lt;/p&gt;
+  &lt;button&gt;Yes&lt;/button&gt;
+&lt;/Dialog&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q26">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What are default props?
+        </button>
+      </h2>
+      <div id="fundamentals-q26" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Default props allow you to specify fallback values for props when they are not explicitly provided by the parent. In functional components, the idiomatic way is to use JavaScript default parameter syntax in the destructured props. In class components, you set a static <code>defaultProps</code> object. Default props are applied before the component receives its props, so inside the component the prop always has a value. This is useful for making props optional while ensuring the component still renders correctly without them. TypeScript projects typically handle defaults through destructuring with defaults rather than <code>defaultProps</code>, which has become somewhat legacy in the modern functional component world.
+          <pre class="code-block">// Modern functional approach
+function Button({ label = 'Click me', variant = 'primary', disabled = false }) {
+  return &lt;button className={variant} disabled={disabled}&gt;{label}&lt;/button&gt;;
+}
+
+// Legacy class approach
+class Button extends React.Component {
+  static defaultProps = {
+    label: 'Click me',
+    variant: 'primary',
+  };
+  render() {
+    return &lt;button className={this.props.variant}&gt;{this.props.label}&lt;/button&gt;;
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q27">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is PropTypes and when would you use it?
+        </button>
+      </h2>
+      <div id="fundamentals-q27" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          PropTypes is a runtime type-checking library for React props that logs warnings to the console when a component receives props of the wrong type or is missing required props. It was historically bundled with React but is now a separate <code>prop-types</code> package. PropTypes validate prop types (string, number, func, shape, arrayOf, etc.) and can mark props as <code>isRequired</code>. In production builds, PropTypes checks are stripped for performance. Today, PropTypes are largely superseded by TypeScript, which provides compile-time type checking. You might still use PropTypes in JavaScript projects without TypeScript, when working in legacy codebases, or when building a component library that needs runtime validation for consumers who may not use TypeScript.
+          <pre class="code-block">import PropTypes from 'prop-types';
+
+function UserCard({ name, age, email }) {
+  return &lt;div&gt;{name} ({age}) - {email}&lt;/div&gt;;
+}
+
+UserCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  age: PropTypes.number.isRequired,
+  email: PropTypes.string,
+};</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q28">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the difference between createElement and cloneElement?
+        </button>
+      </h2>
+      <div id="fundamentals-q28" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>React.createElement(type, props, ...children)</code> creates a brand new React element from scratch with the given type and props. <code>React.cloneElement(element, extraProps, ...children)</code> clones an existing React element, merging in additional props (and optionally overriding children). cloneElement is useful for scenarios where a parent component needs to inject additional props into children it doesn't control — for example, a Tab container automatically injecting <code>isActive</code> into each Tab child. JSX compiles to createElement calls. cloneElement is a less common, more advanced API used in higher-order patterns where you need to augment child elements without forcing the child to be aware of the container's concerns.
+          <pre class="code-block">// cloneElement to inject props into children
+function RadioGroup({ children, value, onChange }) {
+  return (
+    &lt;div&gt;
+      {React.Children.map(children, (child) =&gt;
+        React.cloneElement(child, {
+          checked: child.props.value === value,
+          onChange,
+        })
+      )}
+    &lt;/div&gt;
+  );
+}
+
+// Usage
+&lt;RadioGroup value={selected} onChange={setSelected}&gt;
+  &lt;RadioButton value="a"&gt;Option A&lt;/RadioButton&gt;
+  &lt;RadioButton value="b"&gt;Option B&lt;/RadioButton&gt;
+&lt;/RadioGroup&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q29">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is React.memo?
+        </button>
+      </h2>
+      <div id="fundamentals-q29" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>React.memo</code> is a higher-order component that memoizes a functional component's output. If a memoized component's props have not changed (compared using shallow equality), React skips re-rendering it and reuses the last rendered output. This is a performance optimization for pure functional components that render the same result given the same props. It is the functional equivalent of <code>React.PureComponent</code> for class components. By default, React.memo does a shallow comparison of all props; you can pass a custom comparison function as the second argument for more control. React.memo only helps if the parent re-renders frequently and the child's props haven't changed — otherwise the memoization overhead itself (the comparison) adds cost without benefit.
+          <pre class="code-block">const HeavyComponent = React.memo(function HeavyComponent({ data }) {
+  // Only re-renders when `data` changes (shallow comparison)
+  return &lt;div&gt;{data.value}&lt;/div&gt;;
+});
+
+// Custom comparator (optional second argument)
+const OptimizedList = React.memo(
+  ({ items }) =&gt; &lt;ul&gt;{items.map(i =&gt; &lt;li key={i.id}&gt;{i.name}&lt;/li&gt;)}&lt;/ul&gt;,
+  (prev, next) =&gt; prev.items.length === next.items.length
+);</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q30">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the purpose of the render method in class components?
+        </button>
+      </h2>
+      <div id="fundamentals-q30" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          The <code>render()</code> method is the only required method in a class component. It examines <code>this.props</code> and <code>this.state</code> and returns a React element tree (JSX), null, or a React fragment. The render method must be a pure function — it should not modify state, interact with the browser, or produce side effects. React may call render multiple times (whenever state or props change), so purity is essential for predictability. After render returns its element tree, React reconciles it with the previous output and applies any changes to the real DOM. The output of render should be entirely determined by <code>this.props</code> and <code>this.state</code> — no side effects, no subscriptions, no random values that could produce inconsistent results.
+          <pre class="code-block">class Greeting extends React.Component {
+  render() {
+    // Pure: only uses props and state
+    const { name } = this.props;
+    const { count } = this.state;
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;Hello, {name}!&lt;/h1&gt;
+        &lt;p&gt;You have visited {count} times.&lt;/p&gt;
+      &lt;/div&gt;
+    );
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q31">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What are synthetic events in React?
+        </button>
+      </h2>
+      <div id="fundamentals-q31" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Synthetic events are React's cross-browser wrapper around the browser's native events. React implements its own event system that normalizes differences between browsers, ensuring that event objects have the same interface everywhere. Synthetic events are pooled (in React 16 and below) — the event object is reused after the handler runs, so you cannot access it asynchronously. In React 17+, event pooling was removed because it caused confusion. Synthetic events behave like native events for most purposes: they support <code>stopPropagation()</code>, <code>preventDefault()</code>, and expose the same properties (<code>target</code>, <code>currentTarget</code>, <code>type</code>, etc.). All React event handlers receive a synthetic event rather than a raw browser event.
+          <pre class="code-block">function Form() {
+  const handleSubmit = (e) =&gt; {
+    e.preventDefault();       // SyntheticEvent: works cross-browser
+    e.stopPropagation();      // also available
+    console.log(e.target);    // the form DOM element
+    console.log(e.type);      // 'submit'
+  };
+
+  return &lt;form onSubmit={handleSubmit}&gt;&lt;button&gt;Submit&lt;/button&gt;&lt;/form&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q32">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;How does event handling differ from HTML?
+        </button>
+      </h2>
+      <div id="fundamentals-q32" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          HTML event handlers use lowercase attribute names (<code>onclick</code>, <code>onsubmit</code>) and accept strings of JavaScript code as values. React uses camelCase attribute names (<code>onClick</code>, <code>onSubmit</code>) and accepts function references as values, not strings. In HTML you call <code>return false</code> to prevent default behavior; in React you call <code>e.preventDefault()</code> explicitly. React uses a synthetic event system layered on top of native browser events, providing consistency across browsers. In HTML, event handlers are attributes on individual DOM elements; in React (internally) events are delegated to the root container for efficiency. React also cleans up event listeners automatically when components unmount, preventing memory leaks that can occur with manually added <code>addEventListener</code> calls.
+          <pre class="code-block">// HTML
+&lt;!-- &lt;button onclick="handleClick()"&gt;Click&lt;/button&gt; --&gt;
+
+// React — function reference, camelCase, no string evaluation
+function MyButton() {
+  const handleClick = (e) =&gt; {
+    e.preventDefault();
+    console.log('clicked');
+  };
+  return &lt;button onClick={handleClick}&gt;Click&lt;/button&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q33">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is event delegation in React?
+        </button>
+      </h2>
+      <div id="fundamentals-q33" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Event delegation is a pattern where instead of attaching event listeners to individual DOM elements, you attach a single listener to a common ancestor and determine which element was the actual target using <code>event.target</code>. React implements this internally — rather than attaching individual click listeners to every button in your app, React attaches a single event listener at the root container (the <code>#root</code> div in React 17+, or <code>document</code> in React 16). When an event bubbles up to the root, React looks at the target and invokes the appropriate component's event handler. This means React's event system is much more memory-efficient than naively adding listeners to every element. As a developer, you write <code>onClick</code> handlers on components as if they were native DOM listeners, and React's delegation system handles the rest invisibly.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q34">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the difference between state mutation and immutable state updates?
+        </button>
+      </h2>
+      <div id="fundamentals-q34" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          State mutation means directly modifying an existing state object or array (e.g., <code>this.state.user.name = 'Alice'</code> or <code>array.push(item)</code>). Immutable state updates mean creating new objects or arrays instead of modifying existing ones (e.g., <code>setState({ user: { ...this.state.user, name: 'Alice' } })</code> or <code>[...array, item]</code>). React's change detection relies on reference equality — if you mutate the existing state object and pass the same reference back, React sees no change and skips re-rendering. Immutable updates produce new references, which React detects as changes and correctly triggers re-renders. Redux and React's useState both assume immutable updates; Redux Toolkit uses Immer to allow "mutable-style" syntax that secretly produces immutable updates under the hood.
+          <pre class="code-block">// WRONG: mutates state — React may not re-render
+const [user, setUser] = React.useState({ name: 'Alice', age: 30 });
+user.name = 'Bob'; // mutating the existing object
+setUser(user);     // same reference — React skips re-render!
+
+// CORRECT: creates new object
+setUser({ ...user, name: 'Bob' }); // new reference — React re-renders
+
+// WRONG: mutating array
+const [items, setItems] = React.useState([1, 2, 3]);
+items.push(4); // mutation
+setItems(items); // same reference
+
+// CORRECT
+setItems([...items, 4]); // new array</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q35">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;Why should state updates be immutable in React?
+        </button>
+      </h2>
+      <div id="fundamentals-q35" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          React uses reference equality (<code>Object.is</code>) to determine if state has changed and whether a re-render is needed. If you mutate the existing state object and call the setter with the same reference, React sees the old and new state as identical and bails out of re-rendering, causing UI to be out of sync with data. Immutability also enables React features like time-travel debugging (Redux DevTools), pure component optimizations (React.memo, PureComponent), and safe comparison in useEffect dependency arrays. Additionally, immutable updates make state changes predictable and auditable — each state transition produces a new snapshot that can be logged or replayed. Libraries like Immer make writing immutable updates ergonomic by letting you write mutating syntax that is internally converted to immutable operations.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q36">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the React component lifecycle (class components)?
+        </button>
+      </h2>
+      <div id="fundamentals-q36" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          The React component lifecycle refers to the sequence of methods called at different stages of a class component's existence. The lifecycle has three main phases: mounting (component is created and inserted into the DOM), updating (component re-renders due to new props or state), and unmounting (component is removed from the DOM). During mounting, <code>constructor</code> → <code>render</code> → <code>componentDidMount</code> are called in order. During updates, <code>render</code> → <code>componentDidUpdate</code> are called. During unmounting, <code>componentWillUnmount</code> is called. There are also less common lifecycle methods: <code>getDerivedStateFromProps</code> (called before every render), <code>shouldComponentUpdate</code> (decides whether to re-render), and <code>getSnapshotBeforeUpdate</code> (captures DOM info before updates are applied).
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q37">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What are the three phases of a React component's lifecycle?
+        </button>
+      </h2>
+      <div id="fundamentals-q37" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          The three phases are Mounting, Updating, and Unmounting. Mounting is when the component is first created and inserted into the DOM — this is where you set up initial state, fetch initial data, and attach external subscriptions. Updating occurs whenever the component receives new props from its parent or calls setState — React re-renders the component and applies any DOM changes. Unmounting is when the component is removed from the DOM — this is where you must clean up subscriptions, timers, and event listeners to prevent memory leaks. In functional components with hooks, <code>useEffect</code> covers all three phases: the effect body runs after mount and updates, and the cleanup function runs before the next effect and on unmount.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q38">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is componentDidMount?
+        </button>
+      </h2>
+      <div id="fundamentals-q38" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>componentDidMount</code> is a lifecycle method called once, immediately after the component is first inserted into the DOM. It is the correct place to initiate data fetching, set up subscriptions, attach event listeners, or interact with third-party DOM libraries that require the element to be rendered first. Because the component is in the DOM at this point, you can safely read DOM measurements (<code>getBoundingClientRect</code>) and trigger DOM updates. Calling <code>setState</code> inside <code>componentDidMount</code> causes a second render (before the browser paints), which can cause a flash, so it should be done only when necessary (e.g., when you need DOM measurements to determine initial state). The equivalent in functional components is <code>useEffect(() =&gt; { /* effect */ }, [])</code> with an empty dependency array.
+          <pre class="code-block">class UserProfile extends React.Component {
+  state = { user: null, loading: true };
+
+  componentDidMount() {
+    // Safe to fetch here — component is in the DOM
+    fetchUser(this.props.userId)
+      .then((user) =&gt; this.setState({ user, loading: false }));
+  }
+
+  render() {
+    if (this.state.loading) return &lt;Spinner /&gt;;
+    return &lt;div&gt;{this.state.user.name}&lt;/div&gt;;
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q39">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is componentWillUnmount?
+        </button>
+      </h2>
+      <div id="fundamentals-q39" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>componentWillUnmount</code> is a lifecycle method called immediately before a component is removed from the DOM and destroyed. It is the cleanup phase — you should cancel any pending network requests, clear timers set with <code>setTimeout</code> or <code>setInterval</code>, remove event listeners added in <code>componentDidMount</code>, and unsubscribe from any external data sources. Failing to clean up in componentWillUnmount is one of the most common sources of memory leaks in React apps. After componentWillUnmount returns, the component instance is destroyed and should not be referenced. The functional equivalent is the cleanup function returned from <code>useEffect</code> — it runs when the component unmounts or before the effect re-runs.
+          <pre class="code-block">class DataSubscriber extends React.Component {
+  componentDidMount() {
+    this.timerId = setInterval(this.fetchData, 5000);
+    this.subscription = dataStore.subscribe(this.handleChange);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerId);          // prevent memory leak
+    this.subscription.unsubscribe();      // clean up external subscription
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q40">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is componentDidUpdate?
+        </button>
+      </h2>
+      <div id="fundamentals-q40" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>componentDidUpdate(prevProps, prevState, snapshot)</code> is called after every re-render (update phase), but not after the initial mount. It receives the previous props and state, allowing you to compare them with the current values to decide whether to perform a side effect. Common uses: fetching new data when a prop changes (like a userId), imperatively updating a third-party DOM library, or logging analytics on certain prop changes. You must always guard side effects inside <code>componentDidUpdate</code> with a comparison to avoid infinite loops — if you call <code>setState</code> unconditionally, it triggers another update which calls componentDidUpdate again. The <code>snapshot</code> parameter contains the value returned from <code>getSnapshotBeforeUpdate</code>.
+          <pre class="code-block">componentDidUpdate(prevProps, prevState) {
+  // Only re-fetch if the userId changed
+  if (prevProps.userId !== this.props.userId) {
+    fetchUser(this.props.userId).then((user) =&gt; this.setState({ user }));
+  }
+
+  // Guard against infinite loop — always compare before setState
+  if (prevState.count !== this.state.count) {
+    document.title = `Count: ${this.state.count}`;
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q41">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is React Fiber and how does it improve over the stack reconciler?
+        </button>
+      </h2>
+      <div id="fundamentals-q41" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          React Fiber is a complete rewrite of React's reconciliation engine, introduced in React 16. The old "stack reconciler" worked synchronously and recursively — once it started reconciling a component tree, it couldn't pause, prioritize, or abort; the call stack ran to completion, which could block the main thread and cause janky UIs during large updates. Fiber replaces the implicit call stack with an explicit linked-list data structure (fibers) where each unit of work is a fiber node. This allows React to split reconciliation into small units that can be paused after each fiber, yielding control back to the browser to handle user input or animations, and then resumed. Fiber also enables features like error boundaries, return values from render, fragments, and the foundation for Concurrent Mode in React 18 — including time slicing, Suspense, and priority-based scheduling.
+          <pre class="code-block">// Conceptual model: Fiber as a linked list of work units
+// Each fiber has:
+// {
+//   type: 'div' | FunctionComponent | ...,
+//   stateNode: DOMNode | componentInstance,
+//   child: firstChildFiber,
+//   sibling: nextSiblingFiber,
+//   return: parentFiber,
+//   pendingProps: {},
+//   memoizedProps: {},
+//   memoizedState: hookLinkedList,
+//   effectTag: PLACEMENT | UPDATE | DELETION,
+//   lanes: priorityBitMask,
+// }
+//
+// React can process one fiber at a time,
+// checking if the scheduler has higher priority work
+// before moving to the next fiber.</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q42">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is time-slicing in React?
+        </button>
+      </h2>
+      <div id="fundamentals-q42" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Time-slicing is a Concurrent Mode technique where React breaks its rendering work into small chunks and spreads them across multiple frames, yielding to the browser between chunks to keep the UI responsive. Without time-slicing, a large render (e.g., rendering 10,000 list items) would block the main thread for hundreds of milliseconds, making the app feel frozen. With time-slicing, React processes a few items, yields to the browser (allowing it to handle clicks, animations, etc.), then resumes. React uses the browser's <code>requestIdleCallback</code> (or a polyfill via the <code>scheduler</code> package) to schedule these chunks when the browser is idle. Time-slicing does not make total rendering faster — the total work is the same — but it prevents long tasks from blocking user interactions, improving perceived responsiveness significantly.
+          <pre class="code-block">// Time-slicing is transparent to developers
+// You enable it via createRoot in React 18
+import { createRoot } from 'react-dom/client';
+
+const root = createRoot(document.getElementById('root'));
+root.render(&lt;App /&gt;);
+// Now React uses time-slicing for all renders.
+// Low-priority updates (startTransition) are interruptible.
+// High-priority updates (user input) preempt ongoing renders.
+
+import { startTransition } from 'react';
+
+// Mark this update as low priority — can be interrupted
+startTransition(() =&gt; {
+  setSearchResults(computeExpensiveResults(query));
+});</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q43">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the difference between synchronous and concurrent rendering?
+        </button>
+      </h2>
+      <div id="fundamentals-q43" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          In synchronous rendering (React 17 and below, or legacy mode in React 18), once React starts rendering a component tree, it runs to completion without interruption — no other work can happen until the render finishes. This is simple and predictable but means a slow render blocks user interactions. In concurrent rendering (React 18 with <code>createRoot</code>), React can start rendering, pause, reprioritize, and resume work. High-priority updates (user input, urgent state changes) can interrupt low-priority renders in progress. Concurrent rendering enables features like <code>startTransition</code> (marking updates as non-urgent), <code>useDeferredValue</code>, streaming SSR, and Suspense for data fetching. The mental model shifts from "render is a synchronous operation" to "render is a background, interruptible computation that React coordinates."
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q44">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;Explain how React batches state updates.
+        </button>
+      </h2>
+      <div id="fundamentals-q44" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Batching means React groups multiple state updates that happen within the same event handler into a single re-render, rather than re-rendering after each individual setState call. In React 17 and earlier, batching only happened inside React event handlers — setState calls inside setTimeout, Promises, or native event listeners each triggered a separate re-render. React 18 introduced "automatic batching" — all setState calls, regardless of where they occur (event handlers, async callbacks, setTimeout, Promises), are batched by default using <code>createRoot</code>. This means fewer re-renders and better performance. If you need to force an immediate synchronous update (bypassing batching), you can use <code>ReactDOM.flushSync</code>. Understanding batching is crucial for debugging seemingly inconsistent state reads immediately after setState.
+          <pre class="code-block">// React 17: no batching in async callbacks — 2 re-renders
+setTimeout(() =&gt; {
+  setCount(c =&gt; c + 1);   // re-render 1
+  setFlag(f =&gt; !f);        // re-render 2
+}, 0);
+
+// React 18 with createRoot: automatic batching — 1 re-render
+setTimeout(() =&gt; {
+  setCount(c =&gt; c + 1);   // }
+  setFlag(f =&gt; !f);        // } batched — only 1 re-render
+}, 0);
+
+// Force synchronous update if needed (rare)
+import { flushSync } from 'react-dom';
+flushSync(() =&gt; { setCount(c =&gt; c + 1); }); // immediately re-renders</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q45">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the flushSync API and when would you use it?
+        </button>
+      </h2>
+      <div id="fundamentals-q45" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>ReactDOM.flushSync</code> is an escape hatch that forces React to immediately and synchronously flush all pending state updates inside the provided callback, bypassing React 18's automatic batching. Normally you want batching, but there are rare cases — like when you need to measure a DOM node immediately after a state update, or when an imperative third-party library needs the DOM to be updated before it reads dimensions — where you need the update applied right now. flushSync is analogous to a "force flush" that disrupts React's normal scheduling. It should be used sparingly since it defeats performance optimizations and can cause multiple re-renders. The name is deliberate: flushing synchronously is considered an anti-pattern in most cases.
+          <pre class="code-block">import { flushSync } from 'react-dom';
+
+function handlePrint() {
+  flushSync(() =&gt; {
+    setIsPrinting(true); // DOM updates immediately
+  });
+  // At this point, the DOM has been updated and we can measure it
+  const height = printRef.current.getBoundingClientRect().height;
+  window.print();
+  flushSync(() =&gt; {
+    setIsPrinting(false);
+  });
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q46">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How does React handle events under the hood — event pooling and delegation?
+        </button>
+      </h2>
+      <div id="fundamentals-q46" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          React delegates all events to a single listener at the root container (<code>#root</code> in React 17+) rather than attaching listeners to individual elements. When a native event fires and bubbles up to the root, React intercepts it, constructs a synthetic event wrapper, and dispatches it to the appropriate component handlers by traversing the fiber tree from the target to the root. In React 16 and below, React used event pooling: synthetic event objects were pooled and reused after each handler ran, clearing all properties to zero/null. This caused bugs when accessing events asynchronously. React 17 removed event pooling entirely. The move to root-level delegation in React 17 (from <code>document</code> to the root container) was specifically to support embedding multiple React roots or microfrontends on the same page without cross-contamination.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q47">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the difference between shallow and deep rendering in testing?
+        </button>
+      </h2>
+      <div id="fundamentals-q47" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Shallow rendering renders only the component under test without rendering its children components — child components appear as placeholder elements (e.g., <code>&lt;ChildComponent /&gt;</code>). It isolates the component from its children, making tests fast and focused. Deep rendering (full rendering, as done by React Testing Library) renders the complete component tree including all children, producing real DOM output. React Testing Library strongly recommends full rendering because it tests components as users experience them — through real DOM interactions — rather than testing implementation details. Shallow rendering (popular with Enzyme) can lead to false positives where tests pass even though the real integrated behavior is broken. The React Testing Library philosophy is to avoid shallow rendering and test behavior, not structure.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q48">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;Explain the concept of "tearing" in React concurrent mode.
+        </button>
+      </h2>
+      <div id="fundamentals-q48" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Tearing is a visual consistency problem where different parts of the UI render different values of the same external state during a single render pass. In synchronous rendering, a render always completes atomically, so all components see the same state snapshot. In concurrent rendering, React can pause and resume renders, and during a pause an external store (not managed by React) might update, causing some components to read the old value and others to read the new value in the same render. This "tears" the UI — the same piece of data shows two different values simultaneously. React's solution is <code>useSyncExternalStore</code>, which ensures that external store subscriptions are read synchronously and consistently. Redux and other state libraries have updated their React integration to use <code>useSyncExternalStore</code> to be tearing-safe.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q49">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is hydration in React and when does it matter?
+        </button>
+      </h2>
+      <div id="fundamentals-q49" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Hydration is the process of attaching React's event handlers and interactivity to server-rendered HTML. In SSR (Server-Side Rendering), the server generates the full HTML markup and sends it to the browser, which displays it immediately (good for First Contentful Paint). But that HTML is static — no interactivity yet. React then "hydrates" the page: it traverses the server-rendered DOM, reconciles it with the React component tree, and attaches event listeners without rebuilding the DOM from scratch. If the server HTML and the client's React tree mismatch (hydration mismatch), React must discard the server HTML and re-render on the client — defeating the SSR benefit and producing console warnings. React 18 introduced selective hydration and streaming SSR, allowing parts of the page to hydrate independently and be interactive before others finish.
+          <pre class="code-block">// React 18 SSR entry point — enables selective hydration
+import { hydrateRoot } from 'react-dom/client';
+
+// Hydrate server-rendered HTML
+hydrateRoot(document.getElementById('root'), &lt;App /&gt;);
+
+// Server (Node.js) with streaming SSR
+import { renderToPipeableStream } from 'react-dom/server';
+const { pipe } = renderToPipeableStream(&lt;App /&gt;, {
+  onShellReady() { pipe(response); }
+});</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q50">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is React's ownership model vs the DOM's parent-child model?
+        </button>
+      </h2>
+      <div id="fundamentals-q50" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          In the DOM, the parent-child relationship is purely structural — a parent element contains its children in the DOM tree. In React's ownership model, the owner of a component is the component that creates (renders) it with JSX, which may be different from the structural parent. The owner controls the props passed to the component. For example, if <code>App</code> renders <code>&lt;Modal&gt;&lt;UserForm /&gt;&lt;/Modal&gt;</code>, App owns both Modal and UserForm — it passes props to both. Modal is UserForm's structural parent (it renders <code>props.children</code>), but App is UserForm's owner. This distinction matters for portals (a component renders children outside its DOM subtree, but still owns them) and for understanding where data flows from (always from the owner, regardless of DOM position).
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q51">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the difference between a pure component and a regular component?
+        </button>
+      </h2>
+      <div id="fundamentals-q51" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          A pure component implements a shallow prop and state comparison in <code>shouldComponentUpdate</code> — it only re-renders if at least one prop or state value has changed (by shallow comparison). A regular component re-renders whenever its parent re-renders, regardless of whether its props changed. For class components, <code>React.PureComponent</code> provides this optimization automatically. For functional components, <code>React.memo</code> is the equivalent. Pure components are a performance optimization for components whose output is entirely determined by their props and state (i.e., they have no side effects or randomness). They should be used carefully — shallow comparison won't detect changes inside nested objects, so mutating a nested object won't trigger a re-render even though data changed.
+          <pre class="code-block">// Class: PureComponent does shallow comparison
+class PureList extends React.PureComponent {
+  render() {
+    return &lt;ul&gt;{this.props.items.map(i =&gt; &lt;li key={i.id}&gt;{i.name}&lt;/li&gt;)}&lt;/ul&gt;;
+  }
+}
+
+// Functional equivalent
+const PureList = React.memo(({ items }) =&gt;
+  &lt;ul&gt;{items.map(i =&gt; &lt;li key={i.id}&gt;{i.name}&lt;/li&gt;)}&lt;/ul&gt;
+);</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q52">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is React.PureComponent?
+        </button>
+      </h2>
+      <div id="fundamentals-q52" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>React.PureComponent</code> is identical to <code>React.Component</code> except it implements <code>shouldComponentUpdate</code> with a shallow prop and state comparison. When a parent re-renders and passes new props to a PureComponent, React first checks if any prop (or state) has changed using <code>Object.is</code> for each key. If none have changed, the re-render is skipped. This can provide significant performance improvements in large applications where many leaf components receive the same props repeatedly. The limitation is that shallow comparison only checks the top-level properties — if you pass an object <code>{ user: { name: 'Alice' } }</code> and you mutate <code>user.name</code>, PureComponent won't detect the change because the object reference is the same. Always use immutable updates with PureComponent.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q53">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;When would you use shouldComponentUpdate?
+        </button>
+      </h2>
+      <div id="fundamentals-q53" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          <code>shouldComponentUpdate(nextProps, nextState)</code> is a lifecycle method you override to manually control whether a class component should re-render. It receives the upcoming props and state, and returns <code>true</code> (re-render) or <code>false</code> (skip render). You use it when the automatic shallow comparison of <code>React.PureComponent</code> is not fine-grained enough — for example, when you want to compare deep properties of an object, or when you know that certain prop changes are irrelevant to the rendered output. In practice, <code>React.PureComponent</code> covers most optimization needs, and manually implementing <code>shouldComponentUpdate</code> is rarely needed. In functional components, <code>React.memo</code> with a custom comparator function is the equivalent. Always be careful — returning <code>false</code> incorrectly can cause stale UI.
+          <pre class="code-block">class SmartComponent extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    // Only re-render if the user's name changed (not other user properties)
+    return nextProps.user.name !== this.props.user.name;
+  }
+  render() {
+    return &lt;div&gt;{this.props.user.name}&lt;/div&gt;;
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q54">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What are higher-order components (HOC)?
+        </button>
+      </h2>
+      <div id="fundamentals-q54" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          A higher-order component is a function that takes a component as input and returns a new component with enhanced behavior. HOCs are a pattern for cross-cutting concerns like authentication checks, data fetching, logging, or theme injection. The HOC wraps the original component, potentially injecting additional props, adding lifecycle logic, or conditionally rendering. Common examples: <code>connect()</code> from React-Redux (injects store state as props), <code>withRouter</code> from React Router v5 (injects routing props). HOCs were the primary code reuse mechanism before Hooks. Today, custom hooks are usually preferred because they are composable, easier to type in TypeScript, and don't nest the component tree. HOC pitfalls include prop naming collisions and losing the wrapped component's display name in DevTools.
+          <pre class="code-block">// HOC that adds authentication check
+function withAuth(WrappedComponent) {
+  return function AuthenticatedComponent(props) {
+    const isAuthenticated = useAuth();
+    if (!isAuthenticated) return &lt;Redirect to="/login" /&gt;;
+    return &lt;WrappedComponent {...props} /&gt;;
+  };
+}
+
+const ProtectedDashboard = withAuth(Dashboard);
+// &lt;ProtectedDashboard /&gt; now redirects unauthenticated users</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q55">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What are render props?
+        </button>
+      </h2>
+      <div id="fundamentals-q55" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          The render prop pattern is a technique where a component accepts a function as a prop (or as children) that it calls to determine what to render. This allows the component to share its internal state or logic with any component that uses it, without dictating the rendered output. The consumer controls the UI, and the provider component controls the behavior/data. For example, a <code>Mouse</code> component tracks cursor position and calls <code>props.render({ x, y })</code> — consumers decide how to render using those coordinates. Like HOCs, render props were most popular before Hooks. They solve the same problems (sharing stateful logic) but with more explicit data flow. The pattern is still useful for library APIs (e.g., Formik's <code>&lt;Field render={}&gt;</code>, React Router's <code>&lt;Route render={}&gt;</code> in v5).
+          <pre class="code-block">// Render prop component
+function Mouse({ render }) {
+  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+  return (
+    &lt;div onMouseMove={(e) =&gt; setPosition({ x: e.clientX, y: e.clientY })}&gt;
+      {render(position)}
+    &lt;/div&gt;
+  );
+}
+
+// Consumer decides what to render with the position data
+&lt;Mouse render={({ x, y }) =&gt; (
+  &lt;p&gt;Mouse is at ({x}, {y})&lt;/p&gt;
+)} /&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q56">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the context API?
+        </button>
+      </h2>
+      <div id="fundamentals-q56" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          The Context API is React's built-in solution for sharing data across components without passing props through every level of the tree. You create a context with <code>React.createContext(defaultValue)</code>, wrap part of your tree with a <code>Context.Provider</code> that supplies the value, and consume that value in any descendant using <code>useContext(Context)</code> or <code>Context.Consumer</code>. It is ideal for "global" data like user authentication, theme, language/locale, and feature flags that many components need but shouldn't have to receive explicitly as props. Context causes all consumers to re-render whenever the provided value changes (even if they only use a small part of it), so for frequently changing state you should either split contexts, memoize the value, or use a more optimized state management solution.
+          <pre class="code-block">const UserContext = React.createContext(null);
+
+function App() {
+  const [user, setUser] = React.useState({ name: 'Alice' });
+  return (
+    &lt;UserContext.Provider value={{ user, setUser }}&gt;
+      &lt;Dashboard /&gt;
+    &lt;/UserContext.Provider&gt;
+  );
+}
+
+function UserGreeting() {
+  const { user } = React.useContext(UserContext);
+  return &lt;h1&gt;Hello, {user.name}!&lt;/h1&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q57">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is portals in React?
+        </button>
+      </h2>
+      <div id="fundamentals-q57" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Portals allow you to render a React component's output into a different DOM node than its parent's DOM node, while maintaining the component's position in the React component tree. This is useful for modals, tooltips, and dropdowns that need to visually escape overflow-hidden or z-index-constrained parent elements. Despite being rendered elsewhere in the DOM, portal children still behave as normal React children — events bubble up through the React component tree (not the DOM tree), and context works normally. You create a portal with <code>ReactDOM.createPortal(child, container)</code> where <code>container</code> is any DOM node that exists outside the current React tree root. Portals do not affect the component lifecycle — they mount and unmount normally with their React parent.
+          <pre class="code-block">function Modal({ children, isOpen }) {
+  if (!isOpen) return null;
+  // Renders into document.body, not into the parent's DOM node
+  return ReactDOM.createPortal(
+    &lt;div className="modal-overlay"&gt;
+      &lt;div className="modal"&gt;{children}&lt;/div&gt;
+    &lt;/div&gt;,
+    document.body
+  );
+}
+
+// Events still bubble through React tree — onClick on modal bubbles to App</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q58">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What are error boundaries?
+        </button>
+      </h2>
+      <div id="fundamentals-q58" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Error boundaries are class components that implement <code>static getDerivedStateFromError()</code> and/or <code>componentDidCatch()</code> to catch JavaScript errors thrown during rendering, lifecycle methods, or constructors of any component in their tree. Without error boundaries, a JavaScript error in any component would unmount the entire React tree, showing a blank page. With an error boundary, you can catch errors from descendants, log them, and display a fallback UI instead. Error boundaries do NOT catch errors in event handlers (use regular try/catch), async code, server-side rendering, or errors thrown in the error boundary itself. As of React 16, you can have multiple error boundaries at different levels of the tree, providing granular recovery — a broken widget shows its own error UI without affecting the rest of the page.
+          <pre class="code-block">class ErrorBoundary extends React.Component {
+  state = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error) {
+    // Update state so the next render shows the fallback UI
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // Log to error reporting service (Sentry, etc.)
+    logErrorToService(error, errorInfo.componentStack);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return &lt;div&gt;Something went wrong: {this.state.error.message}&lt;/div&gt;;
+    }
+    return this.props.children;
+  }
+}
+
+// Usage
+&lt;ErrorBoundary&gt;
+  &lt;MightThrow /&gt;
+&lt;/ErrorBoundary&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q59">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the difference between getDerivedStateFromError and componentDidCatch?
+        </button>
+      </h2>
+      <div id="fundamentals-q59" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          Both lifecycle methods are part of the error boundary API but serve different purposes and run at different times. <code>static getDerivedStateFromError(error)</code> is a static method called during the render phase — it receives the thrown error and returns state updates that trigger a re-render showing the fallback UI. It must be pure (no side effects) and is synchronous. <code>componentDidCatch(error, info)</code> is called during the commit phase, after the error boundary has re-rendered with the fallback UI. It is the correct place for side effects like logging the error to a monitoring service (Sentry, Datadog) because it runs after the DOM has been updated. In summary: use <code>getDerivedStateFromError</code> to update state/show fallback, and use <code>componentDidCatch</code> to log/report the error.
+          <pre class="code-block">class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+
+  // Render phase: update state to show fallback (pure, no side effects)
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  // Commit phase: log the error (side effects allowed here)
+  componentDidCatch(error, { componentStack }) {
+    Sentry.captureException(error, { extra: { componentStack } });
+  }
+
+  render() {
+    return this.state.hasError
+      ? &lt;FallbackUI /&gt;
+      : this.props.children;
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fundamentals-q60">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;Explain React's update priority system (lanes) introduced in React 18.
+        </button>
+      </h2>
+      <div id="fundamentals-q60" class="accordion-collapse collapse" data-bs-parent="#acc-fundamentals">
+        <div class="accordion-body">
+          React 18's priority system uses a concept called "lanes" — a bitmask-based priority scheme where each bit (or group of bits) represents a priority level for a pending update. When multiple updates are pending simultaneously, React processes them in priority order rather than first-in-first-out. The lanes include (from highest to lowest priority): SyncLane (flushSync, legacy mode), InputContinuousLane (continuous user input like dragging), DefaultLane (normal updates), TransitionLane (startTransition updates), and IdleLane (truly background work). When React 18 receives a new update, it assigns it a lane based on how it was triggered. The scheduler then works through pending updates starting from the highest priority lane, potentially interrupting lower-priority in-progress work. This system replaces the previous <code>expirationTime</code> model with a more flexible, composable priority representation that supports features like batching multiple transitions together.
+          <pre class="code-block">// Developer-facing API that maps to lane priorities:
+
+// SyncLane — runs synchronously, cannot be interrupted
+import { flushSync } from 'react-dom';
+flushSync(() =&gt; setState(...));
+
+// DefaultLane — normal React updates
+setState(newValue); // triggered by React event handler
+
+// TransitionLane — interruptible, lower priority
+import { startTransition } from 'react';
+startTransition(() =&gt; {
+  setSearchResults(heavyComputation(query)); // can be interrupted by user input
+});
+
+// React internally assigns lane bits like:
+// SyncLane            = 0b0000000000000000000000000000001
+// InputContinuousLane = 0b0000000000000000000000000000100
+// DefaultLane         = 0b0000000000000000000000000010000
+// TransitionLane1     = 0b0000000000000000000000001000000</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Section 1: Introduction — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-item{background:#111827;border-color:#1e293b;}
+    [data-theme="dark"] .accordion-button{background:#1e293b;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-button:not(.collapsed){background:#172554;color:#bfdbfe;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    [data-theme="dark"] .concept-box.red{background:#450a0a;border-color:#ef4444;color:#fecaca;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}.code-block .cl{color:#f9a8d4;}.code-block .num{color:#fb923c;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+    .step-flow{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0;align-items:center;}
+    .step-box{background:#eff6ff;border:2px solid #93c5fd;border-radius:10px;padding:.7rem 1rem;font-size:.85rem;font-weight:700;text-align:center;min-width:110px;}
+    [data-theme="dark"] .step-box{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    .step-arrow{color:#61dafb;font-weight:900;font-size:1.2rem;}
+    .toc-pill{display:inline-flex;align-items:center;gap:.3rem;background:#f8f9ff;border:1px solid #e2e8f0;border-radius:20px;padding:.3rem .8rem;font-size:.82rem;font-weight:600;text-decoration:none;color:#1e293b;margin:.2rem;}
+    .toc-pill:hover{background:#61dafb22;border-color:#61dafb;color:#0ea5e9;}
+    [data-theme="dark"] .toc-pill{background:#1e293b;border-color:#334155;color:#94a3b8;}
+
+    /* Timeline */
+    .timeline{position:relative;padding-left:2rem;}
+    .timeline::before{content:'';position:absolute;left:.6rem;top:0;bottom:0;width:2px;background:linear-gradient(180deg,#61dafb,#7c3aed);}
+    .timeline-item{position:relative;margin-bottom:1.8rem;}
+    .timeline-dot{position:absolute;left:-2rem;width:1.2rem;height:1.2rem;border-radius:50%;background:#61dafb;border:3px solid #fff;box-shadow:0 0 0 2px #61dafb;margin-top:.15rem;}
+    [data-theme="dark"] .timeline-dot{border-color:#111827;}
+    .timeline-year{font-size:.7rem;font-weight:700;color:#61dafb;text-transform:uppercase;letter-spacing:.08em;}
+    .timeline-title{font-weight:700;font-size:.95rem;margin:.1rem 0 .2rem;}
+    .timeline-desc{font-size:.85rem;color:#64748b;}
+
+    /* Ecosystem card */
+    .eco-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1rem;text-align:center;transition:transform .2s,border-color .2s;height:100%;}
+    .eco-card:hover{transform:translateY(-3px);border-color:#61dafb;}
+    [data-theme="dark"] .eco-card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .eco-icon{font-size:1.6rem;margin-bottom:.4rem;display:block;}
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);z-index:1050;">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Learn</a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item active" href="react-intro.html">1. Introduction</a></li>
+            <li><a class="dropdown-item" href="js-for-react.html">2. JS for React</a></li>
+            <li><a class="dropdown-item" href="react-setup.html">3. Setup</a></li>
+            <li><a class="dropdown-item" href="react-jsx.html">4. JSX</a></li>
+            <li><a class="dropdown-item" href="react-components.html">5. Components</a></li>
+            <li><a class="dropdown-item" href="react-hooks.html">8. Hooks</a></li>
+            <li><a class="dropdown-item" href="react-redux.html">15. Redux</a></li>
+            <li><a class="dropdown-item" href="react-typescript.html">19. TypeScript</a></li>
+            <li><a class="dropdown-item" href="react-nextjs.html">20. Next.js</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html"><i class="bi bi-grid me-1"></i>Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html"><i class="bi bi-patch-question me-1"></i>Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- SECTION HERO -->
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8">
+        <div class="mb-2">
+          <a href="index.html" class="text-decoration-none" style="color:#61dafb;font-size:.85rem;font-weight:600;"><i class="bi bi-arrow-left me-1"></i>Back to Home</a>
+        </div>
+        <span style="background:rgba(97,218,251,.15);border:1px solid rgba(97,218,251,.3);color:#61dafb;padding:.3rem .8rem;border-radius:20px;font-size:.78rem;font-weight:700;">Section 01</span>
+        <h1 class="fw-bold mt-2 mb-2" style="font-family:'Poppins',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);">React Introduction</h1>
+        <p style="color:#94a3b8;font-size:1rem;max-width:650px;">What is React, why it was created, how it works under the hood, and everything you need before writing your first line of code.</p>
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <span style="background:#1e293b;color:#94a3b8;padding:.25rem .7rem;border-radius:8px;font-size:.78rem;">12 Topics</span>
+          <span style="background:#1e293b;color:#94a3b8;padding:.25rem .7rem;border-radius:8px;font-size:.78rem;">~45 min read</span>
+          <span style="background:#1e293b;color:#34d399;padding:.25rem .7rem;border-radius:8px;font-size:.78rem;">Beginner</span>
+        </div>
+      </div>
+      <div class="col-lg-4 text-end d-none d-lg-block">
+        <svg viewBox="0 0 120 120" width="100" height="100">
+          <circle cx="60" cy="60" r="10" fill="#61dafb"/>
+          <ellipse cx="60" cy="60" rx="50" ry="18" fill="none" stroke="#61dafb" stroke-width="2.5" opacity=".7"/>
+          <ellipse cx="60" cy="60" rx="50" ry="18" fill="none" stroke="#0ea5e9" stroke-width="2.5" opacity=".7" transform="rotate(60 60 60)"/>
+          <ellipse cx="60" cy="60" rx="50" ry="18" fill="none" stroke="#38bdf8" stroke-width="2.5" opacity=".7" transform="rotate(120 60 60)"/>
+        </svg>
+      </div>
+    </div>
+    <!-- Table of Contents -->
+    <div class="mt-4 pt-3" style="border-top:1px solid rgba(255,255,255,.08);">
+      <div style="color:#64748b;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem;">Contents</div>
+      <div>
+        <a href="#what-is-react" class="toc-pill"><i class="bi bi-1-circle me-1"></i>What is React</a>
+        <a href="#why-react" class="toc-pill"><i class="bi bi-2-circle me-1"></i>Why React</a>
+        <a href="#history" class="toc-pill"><i class="bi bi-3-circle me-1"></i>History</a>
+        <a href="#spa-vs-mpa" class="toc-pill"><i class="bi bi-4-circle me-1"></i>SPA vs MPA</a>
+        <a href="#vdom" class="toc-pill"><i class="bi bi-5-circle me-1"></i>Virtual DOM</a>
+        <a href="#flow" class="toc-pill"><i class="bi bi-6-circle me-1"></i>Flow of Execution</a>
+        <a href="#architecture" class="toc-pill"><i class="bi bi-7-circle me-1"></i>Architecture</a>
+        <a href="#ecosystem" class="toc-pill"><i class="bi bi-8-circle me-1"></i>Ecosystem</a>
+        <a href="#interview" class="toc-pill"><i class="bi bi-9-circle me-1"></i>Interview Q&amp;A</a>
+        <a href="#mistakes" class="toc-pill"><i class="bi bi-exclamation-triangle me-1"></i>Common Mistakes</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container-xl pb-5">
+
+  <!-- 1. WHAT IS REACT -->
+  <div id="what-is-react" class="content-card" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="color:#0ea5e9;"><i class="bi bi-lightbulb-fill me-2"></i>1. What is React?</h2>
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-8">
+        <div class="concept-box blue">
+          <strong>React</strong> is an open-source JavaScript <strong>library</strong> (not a framework) for building user interfaces — specifically for building component-based, declarative UI. Developed and maintained by Meta (Facebook) and a large open-source community.
+        </div>
+        <p>React focuses <strong>only on the View layer</strong> — the "V" in MVC. It does not prescribe how you handle routing, state management, or data fetching. You compose your app from small, reusable <strong>components</strong> that each own their own state and render independently.</p>
+        <div class="row g-3 mt-1">
+          <div class="col-md-4">
+            <div class="concept-box blue h-100 mb-0">
+              <div class="fw-bold mb-1"><i class="bi bi-puzzle text-primary me-1"></i>Component-Based</div>
+              <div style="font-size:.85rem;">Build encapsulated components that manage their own state, then compose them to make complex UIs.</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="concept-box green h-100 mb-0">
+              <div class="fw-bold mb-1"><i class="bi bi-file-earmark-code text-success me-1"></i>Declarative</div>
+              <div style="font-size:.85rem;">Describe what you want the UI to look like for a given state — React handles the DOM updates.</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="concept-box purple h-100 mb-0">
+              <div class="fw-bold mb-1"><i class="bi bi-arrow-repeat text-purple me-1" style="color:#7c3aed;"></i>Learn Once, Write Anywhere</div>
+              <div style="font-size:.85rem;">Same mental model for web (React DOM), mobile (React Native), and even desktop/TV.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 text-center">
+        <svg viewBox="0 0 200 200" width="180" height="180">
+          <defs><radialGradient id="ig1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#61dafb" stop-opacity=".2"/><stop offset="100%" stop-color="#61dafb" stop-opacity="0"/></radialGradient></defs>
+          <circle cx="100" cy="100" r="90" fill="url(#ig1)"/>
+          <ellipse cx="100" cy="100" rx="80" ry="30" fill="none" stroke="#61dafb" stroke-width="2.5"/>
+          <ellipse cx="100" cy="100" rx="80" ry="30" fill="none" stroke="#0ea5e9" stroke-width="2.5" transform="rotate(60 100 100)"/>
+          <ellipse cx="100" cy="100" rx="80" ry="30" fill="none" stroke="#38bdf8" stroke-width="2.5" transform="rotate(120 100 100)"/>
+          <circle cx="100" cy="100" r="18" fill="#61dafb"/>
+          <text x="100" y="97" text-anchor="middle" font-size="8" font-weight="900" fill="#0f172a" font-family="Poppins">React</text>
+          <text x="100" y="108" text-anchor="middle" font-size="7" fill="#0f172a" font-family="Inter">Library</text>
+        </svg>
+        <div style="font-size:.8rem;color:#64748b;margin-top:.5rem;">UI Layer only — composable &amp; declarative</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. WHY REACT -->
+  <div id="why-react" class="content-card" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="color:#10b981;"><i class="bi bi-question-circle-fill me-2"></i>2. Why React? Problems it Solves</h2>
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div style="background:#fff5f5;border-radius:12px;padding:1.3rem;border:1.5px solid #fca5a5;">
+          <h6 class="fw-bold text-danger mb-3"><i class="bi bi-x-circle-fill me-2"></i>Before React (Vanilla JS / jQuery)</h6>
+          <ul style="font-size:.88rem;line-height:2.1;color:#64748b;margin:0;">
+            <li>Manual DOM manipulation — verbose and error-prone</li>
+            <li>No component model — code became spaghetti</li>
+            <li>State scattered across the DOM and JS variables</li>
+            <li>Full page reloads for simple data changes</li>
+            <li>No reusability — copy-paste everywhere</li>
+            <li>Hard to test UI logic in isolation</li>
+            <li>Performance issues with large DOM trees</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div style="background:#f0fdf4;border-radius:12px;padding:1.3rem;border:1.5px solid #6ee7b7;">
+          <h6 class="fw-bold text-success mb-3"><i class="bi bi-check-circle-fill me-2"></i>With React</h6>
+          <ul style="font-size:.88rem;line-height:2.1;color:#64748b;margin:0;">
+            <li>Declarative UI — describe what, not how</li>
+            <li>Component model — encapsulated, reusable pieces</li>
+            <li>State lives inside components — predictable data flow</li>
+            <li>Virtual DOM — only minimal DOM changes applied</li>
+            <li>Share components across the whole app</li>
+            <li>Unit-testable components with React Testing Library</li>
+            <li>Huge ecosystem, strong community &amp; Meta backing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3">
+      <pre class="code-block"><span class="cm">// Before React — manual DOM manipulation</span>
+<span class="kw">const</span> btn = <span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="st">'btn'</span>);
+btn.<span class="fn">addEventListener</span>(<span class="st">'click'</span>, () => {
+  <span class="kw">const</span> count = <span class="fn">parseInt</span>(btn.textContent) + <span class="num">1</span>;
+  btn.textContent = count;  <span class="cm">// manual DOM update</span>
+});
+
+<span class="cm">// With React — declarative</span>
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="kw">return</span> <span class="kw">&lt;button</span> <span class="fn">onClick</span>={() => <span class="fn">setCount</span>(c => c + <span class="num">1</span>)}<span class="kw">&gt;</span>{count}<span class="kw">&lt;/button&gt;</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- 3. HISTORY TIMELINE -->
+  <div id="history" class="content-card" data-aos="fade-up">
+    <h2 class="fw-bold mb-4" style="color:#f59e0b;"><i class="bi bi-clock-history me-2"></i>3. React History Timeline</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#61dafb;"></div>
+        <div class="timeline-year">2011</div>
+        <div class="timeline-title">Internal Creation at Facebook</div>
+        <div class="timeline-desc">Jordan Walke creates FaxJS (later renamed React) to solve performance problems with Facebook's News Feed UI. The key insight: instead of mutating DOM directly, describe the UI as a function of state.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#0ea5e9;"></div>
+        <div class="timeline-year">2013</div>
+        <div class="timeline-title">Open Source Release — React 0.3</div>
+        <div class="timeline-desc">React is open-sourced at JSConf US in May 2013. Initial reception was mixed — developers were skeptical of JSX mixing HTML with JavaScript.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#8b5cf6;"></div>
+        <div class="timeline-year">2015</div>
+        <div class="timeline-title">React Native + React 0.13</div>
+        <div class="timeline-desc">React Native launches — bringing React's component model to iOS and Android. React 0.13 introduces ES6 class components. Redux is created by Dan Abramov and Andrew Clark.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#10b981;"></div>
+        <div class="timeline-year">2017</div>
+        <div class="timeline-title">React 16 — Fiber Rewrite</div>
+        <div class="timeline-desc">Complete rewrite of React's core (Fiber architecture). Introduces error boundaries, portals, fragments, and async rendering foundations. Major performance improvement.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#f59e0b;"></div>
+        <div class="timeline-year">2019</div>
+        <div class="timeline-title">React 16.8 — Hooks</div>
+        <div class="timeline-desc">Hooks are introduced — the biggest paradigm shift in React's history. useState, useEffect, and custom hooks eliminate the need for class components in most cases.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#ef4444;"></div>
+        <div class="timeline-year">2022</div>
+        <div class="timeline-title">React 18 — Concurrent Features</div>
+        <div class="timeline-desc">React 18 ships with concurrent rendering, automatic batching, Suspense for data, startTransition, and the new root API. Introduces the React Compiler (experimental).</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#e879f9;"></div>
+        <div class="timeline-year">2024</div>
+        <div class="timeline-title">React 19 — Server Components GA</div>
+        <div class="timeline-desc">React 19 ships Server Components, Server Actions, improved hydration, the React Compiler (stable), and new hooks: use(), useOptimistic(), useFormStatus().</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. SPA vs MPA -->
+  <div id="spa-vs-mpa" class="content-card" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="color:#6366f1;"><i class="bi bi-window-split me-2"></i>4. SPA vs MPA</h2>
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <div class="concept-box blue mb-0">
+          <h6 class="fw-bold"><i class="bi bi-file-earmark me-2" style="color:#3b82f6;"></i>SPA — Single Page Application</h6>
+          <p style="font-size:.85rem;margin:0;">One HTML file. JavaScript dynamically updates the DOM as the user navigates. The browser never fully reloads. Examples: Gmail, Twitter, Figma, React apps.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box purple mb-0">
+          <h6 class="fw-bold"><i class="bi bi-files me-2" style="color:#7c3aed;"></i>MPA — Multi Page Application</h6>
+          <p style="font-size:.85rem;margin:0;">Each page is a separate HTML file served from the server. Full page reload on navigation. Examples: Traditional WordPress sites, e-commerce catalogs, Wikipedia.</p>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered" style="font-size:.88rem;">
+        <thead style="background:#f8faff;">
+          <tr>
+            <th style="width:25%;">Aspect</th>
+            <th class="text-primary">SPA (React)</th>
+            <th style="color:#7c3aed;">MPA (Traditional)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fw-bold">Navigation</td>
+            <td>JS routing, no reload — instant</td>
+            <td>Full server round-trip, page reloads</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Initial Load</td>
+            <td>Slower (JS bundle must download first)</td>
+            <td>Faster (minimal HTML served immediately)</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">SEO</td>
+            <td>Needs SSR/SSG for good SEO (Next.js)</td>
+            <td>Excellent — content is pre-rendered HTML</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">User Experience</td>
+            <td>App-like, smooth transitions</td>
+            <td>Traditional website feel, visible reloads</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">State Persistence</td>
+            <td>State preserved across routes</td>
+            <td>State lost on each page load</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Best For</td>
+            <td>Dashboards, apps, complex UI</td>
+            <td>Blogs, marketing sites, content sites</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tip-box mt-2">
+      <strong>Pro Tip:</strong> React + Next.js gives you the best of both worlds — component-based React with server rendering for SEO and fast initial loads.
+    </div>
+  </div>
+
+  <!-- 5. VIRTUAL DOM vs REAL DOM -->
+  <div id="vdom" class="content-card" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="color:#0ea5e9;"><i class="bi bi-diagram-3 me-2"></i>5. Virtual DOM vs Real DOM</h2>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div style="background:#fff5f5;border-radius:14px;padding:1.5rem;border:1.5px solid #fca5a5;height:100%;">
+          <h6 class="fw-bold text-danger mb-3"><i class="bi bi-x-circle me-2"></i>Real DOM — Slow</h6>
+          <ul style="font-size:.86rem;line-height:2;margin:0;color:#64748b;">
+            <li>A browser object (tree of HTML nodes)</li>
+            <li>Updates are <strong>synchronous and blocking</strong></li>
+            <li>Full style recalculation on change</li>
+            <li>Reflow &amp; repaint are expensive</li>
+            <li>Large updates cause jank / dropped frames</li>
+            <li>Direct manipulation is verbose and risky</li>
+          </ul>
+          <pre class="code-block mt-3" style="font-size:.75rem;"><span class="cm">// Expensive! Re-triggers full layout</span>
+<span class="kw">const</span> el = <span class="fn">document</span>.<span class="fn">getElementById</span>(<span class="st">'list'</span>);
+el.<span class="fn">innerHTML</span> = newHTML; <span class="cm">// destroys &amp; recreates</span></pre>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div style="background:#f0fdf4;border-radius:14px;padding:1.5rem;border:1.5px solid #6ee7b7;height:100%;">
+          <h6 class="fw-bold text-success mb-3"><i class="bi bi-check-circle me-2"></i>Virtual DOM — Fast</h6>
+          <ul style="font-size:.86rem;line-height:2;margin:0;color:#64748b;">
+            <li>Plain JavaScript object tree in memory</li>
+            <li>Updates are <strong>cheap</strong> — just object comparison</li>
+            <li>Diffing finds minimal changeset (O(n) heuristic)</li>
+            <li>Only changed nodes touch the real DOM</li>
+            <li>Batches multiple updates into one render</li>
+            <li>Automatic — you never manipulate it directly</li>
+          </ul>
+          <pre class="code-block mt-3" style="font-size:.75rem;"><span class="cm">// React handles this automatically</span>
+<span class="fn">setState</span>({items: newItems});
+<span class="cm">// React diffs → patches only changed nodes</span></pre>
+        </div>
+      </div>
+    </div>
+    <div class="concept-box amber mt-3">
+      <strong>Important Nuance:</strong> The Virtual DOM is not inherently faster than the real DOM for every operation. Its advantage is <strong>batching and minimizing</strong> real DOM mutations. Libraries like Svelte compile away the virtual DOM entirely — neither approach is universally superior.
+    </div>
+  </div>
+
+  <!-- 6. FLOW OF EXECUTION -->
+  <div id="flow" class="content-card" data-aos="fade-up" style="background:#0f172a;border:1px solid #1e293b;">
+    <h2 class="fw-bold mb-2 text-white"><i class="bi bi-arrow-right-circle me-2" style="color:#61dafb;"></i>6. React Flow of Execution</h2>
+    <p style="color:#64748b;margin-bottom:1.5rem;">The complete pipeline from JSX source code to browser pixels:</p>
+    <div class="step-flow mb-4">
+      <div class="step-box">1. JSX Code</div><span class="step-arrow">→</span>
+      <div class="step-box">2. Babel</div><span class="step-arrow">→</span>
+      <div class="step-box">3. createElement()</div><span class="step-arrow">→</span>
+      <div class="step-box">4. Virtual DOM</div><span class="step-arrow">→</span>
+      <div class="step-box">5. Diffing</div><span class="step-arrow">→</span>
+      <div class="step-box">6. Real DOM</div><span class="step-arrow">→</span>
+      <div class="step-box">7. Paint</div>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-4">
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:12px;padding:1rem;">
+          <div style="color:#61dafb;font-size:.72rem;font-weight:700;text-transform:uppercase;margin-bottom:.5rem;">Step 1: You write JSX</div>
+          <pre class="code-block mb-0"><span class="kw">const</span> app = (
+  <span class="kw">&lt;div</span> <span class="fn">className</span>=<span class="st">"app"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;h1&gt;</span>Hello React<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+);</pre>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:12px;padding:1rem;">
+          <div style="color:#a78bfa;font-size:.72rem;font-weight:700;text-transform:uppercase;margin-bottom:.5rem;">Step 2: After Babel</div>
+          <pre class="code-block mb-0"><span class="kw">const</span> app =
+  <span class="fn">React</span>.<span class="fn">createElement</span>(
+    <span class="st">'div'</span>,
+    {<span class="fn">className</span>:<span class="st">'app'</span>},
+    <span class="fn">React</span>.<span class="fn">createElement</span>(
+      <span class="st">'h1'</span>,<span class="num">null</span>,
+      <span class="st">'Hello React'</span>));</pre>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div style="background:#111827;border:1px solid #1e293b;border-radius:12px;padding:1rem;">
+          <div style="color:#60a5fa;font-size:.72rem;font-weight:700;text-transform:uppercase;margin-bottom:.5rem;">Step 3: React Element Object</div>
+          <pre class="code-block mb-0">{ <span class="fn">type</span>: <span class="st">'div'</span>,
+  <span class="fn">props</span>: {
+    <span class="fn">className</span>:<span class="st">'app'</span>,
+    <span class="fn">children</span>: {
+      <span class="fn">type</span>:<span class="st">'h1'</span>,
+      <span class="fn">props</span>:{
+        <span class="fn">children</span>:
+         <span class="st">'Hello React'</span>}}}}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. REACT ARCHITECTURE -->
+  <div id="architecture" class="content-card" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="color:#8b5cf6;"><i class="bi bi-building me-2"></i>7. React Architecture Layers</h2>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div style="background:#fafafa;border-radius:12px;padding:1.2rem;border:1px solid #e2e8f0;">
+          <h6 class="fw-bold mb-3">Conceptual Layers</h6>
+          <div style="border:2px solid #61dafb;border-radius:10px;padding:.8rem;text-align:center;background:#eff6ff;margin-bottom:.5rem;">
+            <strong style="color:#0ea5e9;">Your Components</strong><br/><small class="text-muted">App, Header, Button, Card...</small>
+          </div>
+          <div style="text-align:center;color:#61dafb;font-weight:900;font-size:1.2rem;margin:.2rem 0;">↓</div>
+          <div style="border:2px solid #8b5cf6;border-radius:10px;padding:.8rem;text-align:center;background:#f5f3ff;margin-bottom:.5rem;">
+            <strong style="color:#7c3aed;">React (Reconciler + Scheduler)</strong><br/><small class="text-muted">Virtual DOM, Fiber, Diffing</small>
+          </div>
+          <div style="text-align:center;color:#8b5cf6;font-weight:900;font-size:1.2rem;margin:.2rem 0;">↓</div>
+          <div style="border:2px solid #10b981;border-radius:10px;padding:.8rem;text-align:center;background:#f0fdf4;margin-bottom:.5rem;">
+            <strong style="color:#059669;">React DOM / React Native</strong><br/><small class="text-muted">Platform-specific renderer</small>
+          </div>
+          <div style="text-align:center;color:#10b981;font-weight:900;font-size:1.2rem;margin:.2rem 0;">↓</div>
+          <div style="border:2px solid #f59e0b;border-radius:10px;padding:.8rem;text-align:center;background:#fffbeb;">
+            <strong style="color:#d97706;">Browser DOM / Native APIs</strong><br/><small class="text-muted">Real DOM, Android, iOS</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-bold mb-3">Key Architectural Concepts</h6>
+        <div class="concept-box blue mb-2">
+          <strong>Fiber Architecture (React 16+)</strong><br/>
+          <span style="font-size:.85rem;">React's internal reconciliation engine. Breaks render work into small units that can be paused, aborted, or reused — enabling concurrent features.</span>
+        </div>
+        <div class="concept-box purple mb-2">
+          <strong>Reconciler (react package)</strong><br/>
+          <span style="font-size:.85rem;">Platform-agnostic — handles virtual DOM, diffing, and scheduling. Shared between React DOM and React Native.</span>
+        </div>
+        <div class="concept-box green mb-2">
+          <strong>Renderer (react-dom package)</strong><br/>
+          <span style="font-size:.85rem;">Platform-specific — translates React element tree to real DOM nodes. Separate packages exist for Native, Three.js, PDF, etc.</span>
+        </div>
+        <div class="concept-box amber mb-0">
+          <strong>Scheduler</strong><br/>
+          <span style="font-size:.85rem;">Prioritizes render work. High-priority updates (user input) interrupt low-priority work (background data refresh).</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. ECOSYSTEM -->
+  <div id="ecosystem" class="content-card" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="color:#f97316;"><i class="bi bi-grid-3x3-gap me-2"></i>8. React Ecosystem</h2>
+    <p class="text-muted mb-4">React is a library, not a framework. You compose your stack from these well-maintained ecosystem packages:</p>
+    <div class="row g-3">
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">🛣️</span><div class="fw-bold" style="font-size:.85rem;">React Router</div><div style="font-size:.75rem;color:#64748b;">Client-side routing v6</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">🗄️</span><div class="fw-bold" style="font-size:.85rem;">Redux Toolkit</div><div style="font-size:.75rem;color:#64748b;">Global state management</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">🔄</span><div class="fw-bold" style="font-size:.85rem;">React Query / TanStack</div><div style="font-size:.75rem;color:#64748b;">Async state &amp; caching</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">▲</span><div class="fw-bold" style="font-size:.85rem;">Next.js</div><div style="font-size:.75rem;color:#64748b;">SSR / SSG / App Router</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">📱</span><div class="fw-bold" style="font-size:.85rem;">React Native</div><div style="font-size:.75rem;color:#64748b;">iOS &amp; Android mobile</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">⚡</span><div class="fw-bold" style="font-size:.85rem;">Vite</div><div style="font-size:.75rem;color:#64748b;">Build tool / dev server</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">🧪</span><div class="fw-bold" style="font-size:.85rem;">Testing Library</div><div style="font-size:.75rem;color:#64748b;">Component testing</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">💅</span><div class="fw-bold" style="font-size:.85rem;">Styled Components</div><div style="font-size:.75rem;color:#64748b;">CSS-in-JS styling</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">🌬️</span><div class="fw-bold" style="font-size:.85rem;">Tailwind CSS</div><div style="font-size:.75rem;color:#64748b;">Utility-first styling</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">⚛️</span><div class="fw-bold" style="font-size:.85rem;">Recoil / Jotai</div><div style="font-size:.75rem;color:#64748b;">Atomic state management</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">🐻</span><div class="fw-bold" style="font-size:.85rem;">Zustand</div><div style="font-size:.75rem;color:#64748b;">Lightweight state</div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="eco-card"><span class="eco-icon">🎭</span><div class="fw-bold" style="font-size:.85rem;">Framer Motion</div><div style="font-size:.75rem;color:#64748b;">Animation library</div></div></div>
+    </div>
+  </div>
+
+  <!-- 9. INTERVIEW QUESTIONS -->
+  <div id="interview" class="content-card" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="color:#7c3aed;"><i class="bi bi-patch-question-fill me-2"></i>9. Interview Questions</h2>
+    <div class="accordion" id="introAccordion">
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#iq1">Q1: What is React and how is it different from a framework like Angular?</button></h2>
+        <div id="iq1" class="accordion-collapse collapse show" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            React is a <strong>JavaScript library</strong> for building UIs — specifically focused on the View layer only. Unlike Angular (a full framework), React doesn't include built-in solutions for routing, state management, HTTP calls, or forms. You compose your own stack from the ecosystem. This gives React more flexibility but requires more decisions.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq2">Q2: What is the Virtual DOM and why does React use it?</button></h2>
+        <div id="iq2" class="accordion-collapse collapse" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            The Virtual DOM is a plain JavaScript object representation of the real DOM tree. React uses it to batch and minimize real DOM mutations. When state changes, React creates a new VDOM tree, diffs it against the previous one (reconciliation), and applies only the minimal set of changes to the real DOM. This avoids expensive full re-renders.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq3">Q3: What is JSX and is it required to use React?</button></h2>
+        <div id="iq3" class="accordion-collapse collapse" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            JSX is a syntax extension for JavaScript that looks like HTML. It's compiled by Babel to <code>React.createElement()</code> calls. JSX is <strong>not required</strong> — you can write React using pure <code>React.createElement()</code> calls, but JSX makes the code much more readable and maintainable.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq4">Q4: What is reconciliation in React?</button></h2>
+        <div id="iq4" class="accordion-collapse collapse" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            Reconciliation is React's algorithm for efficiently updating the DOM when state or props change. React builds a new virtual DOM tree and compares it with the previous one using a heuristic diffing algorithm (O(n) complexity). It assumes different element types produce different trees, and uses <code>key</code> props to identify list items. Only the differences are applied to the real DOM.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq5">Q5: What is the difference between declarative and imperative programming?</button></h2>
+        <div id="iq5" class="accordion-collapse collapse" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            <strong>Imperative</strong>: You describe <em>how</em> to achieve a result — step by step DOM mutations (vanilla JS). <strong>Declarative</strong>: You describe <em>what</em> the result should look like — React figures out how to make the DOM match. React's declarative model means you write less code, make fewer mistakes, and your code is easier to reason about.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq6">Q6: What is the Fiber architecture?</button></h2>
+        <div id="iq6" class="accordion-collapse collapse" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            Fiber (React 16+) is a complete rewrite of React's reconciliation engine. The key idea: break rendering into small units of work that can be paused, resumed, or abandoned. This enables concurrent features — React can pause rendering to handle a user event, then resume. Each Fiber node corresponds to a component instance and stores information about the work to be done.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq7">Q7: What new features came in React 18?</button></h2>
+        <div id="iq7" class="accordion-collapse collapse" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            React 18 introduced: <strong>Concurrent rendering</strong> (startTransition, useDeferredValue), <strong>Automatic batching</strong> (state updates in setTimeout, Promises are now batched), <strong>Suspense for data fetching</strong>, the new <code>createRoot</code> API, <code>useId</code> for stable IDs, and the <code>useTransition</code> hook.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq8">Q8: What is the difference between React and React DOM?</button></h2>
+        <div id="iq8" class="accordion-collapse collapse" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            <code>react</code>: The core library containing the reconciler, component model, and hooks. Platform-agnostic.<br/>
+            <code>react-dom</code>: The web-specific renderer that translates React's virtual tree to real browser DOM nodes. You import <code>createRoot</code> from here. For mobile you'd use <code>react-native</code> instead.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq9">Q9: What is a Single Page Application (SPA)?</button></h2>
+        <div id="iq9" class="accordion-collapse collapse" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            An SPA loads a single HTML file and uses JavaScript to dynamically update the content without full page reloads. Navigation is handled client-side by a router (React Router). Advantages: app-like feel, fast transitions, state persistence. Disadvantages: slower initial load, requires extra work for SEO (needs SSR), worse on low-end devices.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item border rounded mb-2">
+        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq10">Q10: Who created React and when was it open-sourced?</button></h2>
+        <div id="iq10" class="accordion-collapse collapse" data-bs-parent="#introAccordion">
+          <div class="accordion-body" style="font-size:.88rem;">
+            React was created by <strong>Jordan Walke</strong>, a software engineer at Facebook, around 2011 (originally called FaxJS). It was first used in Facebook's News Feed in 2011, then Instagram in 2012. It was open-sourced at JSConf US in <strong>May 2013</strong>. It's now maintained by Meta and a large open-source community.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. COMMON MISTAKES -->
+  <div id="mistakes" class="content-card" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="color:#ef4444;"><i class="bi bi-exclamation-triangle-fill me-2"></i>10. Common Mistakes Beginners Make</h2>
+    <div class="mistake-box">
+      <strong>Mistake 1: Thinking React is a full framework</strong><br/>
+      React only handles the UI. You still need React Router for routing, Redux/Zustand/Context for state, React Query for data fetching. Don't expect React to provide these out of the box.
+    </div>
+    <div class="mistake-box">
+      <strong>Mistake 2: Confusing JSX with HTML</strong><br/>
+      JSX looks like HTML but it's JavaScript. You use <code>className</code> not <code>class</code>, <code>htmlFor</code> not <code>for</code>, and all tags must be closed (including <code>&lt;br /&gt;</code>, <code>&lt;img /&gt;</code>). JavaScript expressions go in <code>{}</code> not inside attribute values with quotes.
+    </div>
+    <div class="mistake-box">
+      <strong>Mistake 3: Mutating state directly</strong><br/>
+      <code>state.items.push(newItem)</code> — never do this. State mutations don't trigger re-renders. Always use <code>setState</code> or the state setter from <code>useState</code>. Always create a new object/array when updating state.
+    </div>
+    <div class="mistake-box">
+      <strong>Mistake 4: Thinking the Virtual DOM is always faster than the real DOM</strong><br/>
+      The VDOM adds overhead for diffing. For very simple UIs, direct DOM manipulation is faster. React's advantage is making complex, stateful UIs <strong>easier to maintain</strong> with acceptable performance, not being the absolute fastest possible approach.
+    </div>
+    <div class="mistake-box">
+      <strong>Mistake 5: Missing keys in lists</strong><br/>
+      Rendering lists without <code>key</code> props causes React's reconciler to be unable to efficiently diff the list. Always provide a stable, unique <code>key</code> per item — typically the item's database ID, not its array index (index causes bugs when list reorders).
+    </div>
+    <!-- =============================================
+         ENTRY POINT & APP FLOW — complete walkthrough
+         ============================================= -->
+    <div id="entry-flow" class="mt-5 pt-3" style="border-top:2px solid #e2e8f0;">
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="badge" style="background:#61dafb;color:#0f172a;font-weight:700;font-size:.8rem;padding:.4rem .9rem;border-radius:20px;">Deep Dive</span>
+        <span class="badge bg-warning text-dark" style="font-size:.8rem;">Must Know</span>
+      </div>
+      <h2 class="fw-900 mb-1" style="font-size:1.6rem;letter-spacing:-.5px;">React Entry Point &amp; App Boot Flow</h2>
+      <p class="text-muted mb-4">What actually happens from the moment the browser loads your app to the first pixel appearing on screen — every step explained.</p>
+
+      <!-- STEP 1: index.html -->
+      <div class="content-card mb-3">
+        <div class="d-flex align-items-start gap-3">
+          <div style="background:linear-gradient(135deg,#61dafb,#3b82f6);color:#0f172a;font-weight:900;font-size:.9rem;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div class="w-100">
+            <h5 class="fw-800 mb-1">Browser loads <code>index.html</code></h5>
+            <p class="text-muted small mb-2">This is the ONLY html file in a React SPA. It has a single empty div — React will fill everything inside it.</p>
+            <div class="code-block" data-lang="HTML"><span class="cm">&lt;!-- public/index.html (Vite: index.html at root) --&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=<span class="st">"en"</span>&gt;
+  &lt;head&gt;
+    &lt;meta charset=<span class="st">"UTF-8"</span> /&gt;
+    &lt;title&gt;My React App&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    <span class="cm">&lt;!-- React mounts the ENTIRE app into this one div --&gt;</span>
+    &lt;div <span class="atr">id</span>=<span class="st">"root"</span>&gt;&lt;/div&gt;
+
+    <span class="cm">&lt;!-- Vite injects the bundled JS here automatically --&gt;</span>
+    &lt;script <span class="atr">type</span>=<span class="st">"module"</span> <span class="atr">src</span>=<span class="st">"/src/main.jsx"</span>&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</div>
+            <div class="tip-box mt-2"><strong>Key insight:</strong> The <code>&lt;div id="root"&gt;</code> starts completely empty. React JavaScript takes over and fills it with all your components.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: main.jsx / index.js -->
+      <div class="content-card mb-3">
+        <div class="d-flex align-items-start gap-3">
+          <div style="background:linear-gradient(135deg,#61dafb,#3b82f6);color:#0f172a;font-weight:900;font-size:.9rem;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div class="w-100">
+            <h5 class="fw-800 mb-1"><code>main.jsx</code> — The True Entry Point</h5>
+            <p class="text-muted small mb-2">This is where React boots up. It finds the <code>#root</code> div and hands control to your <code>&lt;App /&gt;</code> component.</p>
+            <div class="code-block" data-lang="JSX"><span class="cm">// src/main.jsx  (Vite)  OR  src/index.js  (Create React App)</span>
+<span class="kw">import</span> React <span class="kw">from</span> <span class="st">'react'</span>
+<span class="kw">import</span> ReactDOM <span class="kw">from</span> <span class="st">'react-dom/client'</span>   <span class="cm">// React 18+</span>
+<span class="kw">import</span> App <span class="kw">from</span> <span class="st">'./App'</span>
+<span class="kw">import</span> <span class="st">'./index.css'</span>                       <span class="cm">// global styles loaded here</span>
+
+<span class="cm">// 1. Find the #root div in index.html</span>
+<span class="kw">const</span> rootElement = document.<span class="fn">getElementById</span>(<span class="st">'root'</span>)
+
+<span class="cm">// 2. Create a React root (enables React 18 concurrent features)</span>
+<span class="kw">const</span> root = ReactDOM.<span class="fn">createRoot</span>(rootElement)
+
+<span class="cm">// 3. Render your entire app tree into that root</span>
+root.<span class="fn">render</span>(
+  <span class="tag">&lt;React.StrictMode&gt;</span>   <span class="cm">{/* dev-only double-render to catch bugs */}</span>
+    <span class="tag">&lt;App /&gt;</span>
+  <span class="tag">&lt;/React.StrictMode&gt;</span>
+)</div>
+            <div class="concept-box blue mt-2">
+              <strong>What is <code>React.StrictMode</code>?</strong> A dev-only wrapper that intentionally renders components twice (in development only — never in production) to help you spot side effects and deprecated patterns. It has zero impact on the built app.
+            </div>
+            <div class="concept-box amber mt-2">
+              <strong>React 17 vs React 18 root API:</strong><br/>
+              <code>ReactDOM.render(&lt;App /&gt;, document.getElementById('root'))</code> — old (React 17, deprecated)<br/>
+              <code>ReactDOM.createRoot(el).render(&lt;App /&gt;)</code> — new (React 18, enables concurrent features)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: App.jsx -->
+      <div class="content-card mb-3">
+        <div class="d-flex align-items-start gap-3">
+          <div style="background:linear-gradient(135deg,#61dafb,#3b82f6);color:#0f172a;font-weight:900;font-size:.9rem;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div class="w-100">
+            <h5 class="fw-800 mb-1"><code>App.jsx</code> — The Root Component</h5>
+            <p class="text-muted small mb-2">App is just a regular React component — the root of the whole component tree. It wires together your providers, router, and top-level layout.</p>
+            <div class="code-block" data-lang="JSX"><span class="cm">// src/App.jsx — typical real-world App component</span>
+<span class="kw">import</span> { BrowserRouter, Routes, Route } <span class="kw">from</span> <span class="st">'react-router-dom'</span>
+<span class="kw">import</span> { Provider } <span class="kw">from</span> <span class="st">'react-redux'</span>
+<span class="kw">import</span> { store } <span class="kw">from</span> <span class="st">'./state/store'</span>
+<span class="kw">import</span> Navbar <span class="kw">from</span> <span class="st">'./components/Navbar'</span>
+<span class="kw">import</span> Home <span class="kw">from</span> <span class="st">'./pages/Home'</span>
+<span class="kw">import</span> Dashboard <span class="kw">from</span> <span class="st">'./pages/Dashboard'</span>
+<span class="kw">import</span> ProtectedRoute <span class="kw">from</span> <span class="st">'./components/ProtectedRoute'</span>
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    <span class="cm">{/* Provider makes Redux store available to ALL children */}</span>
+    <span class="tag">&lt;Provider</span> <span class="atr">store</span>={store}<span class="tag">&gt;</span>
+      <span class="cm">{/* BrowserRouter enables URL-based routing */}</span>
+      <span class="tag">&lt;BrowserRouter&gt;</span>
+        <span class="tag">&lt;Navbar /&gt;</span>          <span class="cm">{/* always visible */}</span>
+        <span class="tag">&lt;Routes&gt;</span>
+          <span class="tag">&lt;Route</span> <span class="atr">path</span>=<span class="st">"/"</span>          <span class="atr">element</span>={<span class="tag">&lt;Home /&gt;</span>} <span class="tag">/&gt;</span>
+          <span class="tag">&lt;Route</span> <span class="atr">path</span>=<span class="st">"/dashboard"</span> <span class="atr">element</span>={
+            <span class="tag">&lt;ProtectedRoute&gt;</span><span class="tag">&lt;Dashboard /&gt;</span><span class="tag">&lt;/ProtectedRoute&gt;</span>
+          } <span class="tag">/&gt;</span>
+        <span class="tag">&lt;/Routes&gt;</span>
+      <span class="tag">&lt;/BrowserRouter&gt;</span>
+    <span class="tag">&lt;/Provider&gt;</span>
+  )
+}
+
+<span class="kw">export default</span> App</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: JSX → createElement → Fiber -->
+      <div class="content-card mb-3">
+        <div class="d-flex align-items-start gap-3">
+          <div style="background:linear-gradient(135deg,#61dafb,#3b82f6);color:#0f172a;font-weight:900;font-size:.9rem;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+          <div class="w-100">
+            <h5 class="fw-800 mb-1">JSX compiles → <code>React.createElement()</code> → Fiber tree</h5>
+            <p class="text-muted small mb-2">Your JSX is never HTML — Babel/Vite transpiles it into <code>React.createElement()</code> calls that produce plain JavaScript objects describing what to render.</p>
+            <div class="code-block" data-lang="JSX"><span class="cm">// What you write (JSX):</span>
+<span class="kw">function</span> <span class="fn">Greeting</span>({ name }) {
+  <span class="kw">return</span> <span class="tag">&lt;h1</span> <span class="atr">className</span>=<span class="st">"title"</span><span class="tag">&gt;</span>Hello, {name}!<span class="tag">&lt;/h1&gt;</span>
+}
+
+<span class="cm">// What Babel compiles it to:</span>
+<span class="kw">function</span> <span class="fn">Greeting</span>({ name }) {
+  <span class="kw">return</span> React.<span class="fn">createElement</span>(
+    <span class="st">'h1'</span>,                        <span class="cm">// element type</span>
+    { className: <span class="st">'title'</span> },      <span class="cm">// props object</span>
+    <span class="st">'Hello, '</span>, name, <span class="st">'!'</span>         <span class="cm">// children</span>
+  )
+}
+
+<span class="cm">// That call returns a plain JS object (React element):</span>
+{
+  type: <span class="st">'h1'</span>,
+  props: { className: <span class="st">'title'</span>, children: [<span class="st">'Hello, '</span>, name, <span class="st">'!'</span>] },
+  key: <span class="kw">null</span>,
+  ref: <span class="kw">null</span>
+}</div>
+            <div class="tip-box mt-2">React 17+ introduced the new JSX transform — you no longer need <code>import React from 'react'</code> at the top of every file. Vite and CRA both use this automatically.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5: Reconciliation + DOM commit -->
+      <div class="content-card mb-3">
+        <div class="d-flex align-items-start gap-3">
+          <div style="background:linear-gradient(135deg,#61dafb,#3b82f6);color:#0f172a;font-weight:900;font-size:.9rem;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+          <div class="w-100">
+            <h5 class="fw-800 mb-1">Reconciliation → Real DOM update</h5>
+            <p class="text-muted small mb-2">React builds a Fiber tree (Virtual DOM), diffs it against the previous tree, and commits only the minimum DOM changes needed.</p>
+            <div class="code-block" data-lang="JS"><span class="cm">// Simplified reconciliation mental model:</span>
+
+<span class="cm">// 1. RENDER PHASE (can be paused/restarted — no side effects)</span>
+<span class="cm">//    React calls your component function → gets JSX objects</span>
+<span class="cm">//    Builds new Fiber tree</span>
+<span class="cm">//    Diffs new tree vs old tree → produces list of changes</span>
+
+<span class="cm">// 2. COMMIT PHASE (synchronous — cannot be interrupted)</span>
+<span class="cm">//    Applies DOM mutations (insertions, updates, deletions)</span>
+<span class="cm">//    Runs layout effects (useLayoutEffect)</span>
+<span class="cm">//    Paints to screen</span>
+<span class="cm">//    Runs passive effects (useEffect)</span>
+
+<span class="cm">// What React actually changes in the DOM for a counter update:</span>
+<span class="cm">// BEFORE: &lt;button&gt;Count: 0&lt;/button&gt;</span>
+<span class="cm">// AFTER:  &lt;button&gt;Count: 1&lt;/button&gt;</span>
+<span class="cm">// React only updates the TEXT NODE — not the whole button</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL FLOW DIAGRAM -->
+      <div class="content-card mb-4">
+        <h5 class="fw-800 mb-3"><i class="bi bi-diagram-3-fill me-2" style="color:#61dafb;"></i>Complete Boot Flow — Visual</h5>
+        <div style="overflow-x:auto;">
+          <div class="d-flex align-items-stretch gap-0" style="min-width:700px;">
+
+            <div style="background:#0f172a;border-radius:12px 0 0 12px;padding:1.2rem 1rem;text-align:center;min-width:120px;border:2px solid #1e3a5f;">
+              <div style="font-size:1.5rem;">🌐</div>
+              <div style="color:#61dafb;font-weight:700;font-size:.8rem;margin-top:.4rem;">index.html</div>
+              <div style="color:#64748b;font-size:.7rem;margin-top:.2rem;">&lt;div id="root"&gt;<br/>is empty</div>
+            </div>
+
+            <div style="display:flex;align-items:center;background:#0f172a;padding:0 .5rem;border-top:2px solid #1e3a5f;border-bottom:2px solid #1e3a5f;">
+              <span style="color:#61dafb;font-size:1.4rem;">→</span>
+            </div>
+
+            <div style="background:#0f172a;padding:1.2rem 1rem;text-align:center;min-width:130px;border-top:2px solid #1e3a5f;border-bottom:2px solid #1e3a5f;">
+              <div style="font-size:1.5rem;">⚡</div>
+              <div style="color:#61dafb;font-weight:700;font-size:.8rem;margin-top:.4rem;">main.jsx</div>
+              <div style="color:#64748b;font-size:.7rem;margin-top:.2rem;">createRoot()<br/>+ render()</div>
+            </div>
+
+            <div style="display:flex;align-items:center;background:#0f172a;padding:0 .5rem;border-top:2px solid #1e3a5f;border-bottom:2px solid #1e3a5f;">
+              <span style="color:#61dafb;font-size:1.4rem;">→</span>
+            </div>
+
+            <div style="background:#0f172a;padding:1.2rem 1rem;text-align:center;min-width:130px;border-top:2px solid #1e3a5f;border-bottom:2px solid #1e3a5f;">
+              <div style="font-size:1.5rem;">🧩</div>
+              <div style="color:#61dafb;font-weight:700;font-size:.8rem;margin-top:.4rem;">App.jsx</div>
+              <div style="color:#64748b;font-size:.7rem;margin-top:.2rem;">Providers<br/>Router<br/>Layout</div>
+            </div>
+
+            <div style="display:flex;align-items:center;background:#0f172a;padding:0 .5rem;border-top:2px solid #1e3a5f;border-bottom:2px solid #1e3a5f;">
+              <span style="color:#61dafb;font-size:1.4rem;">→</span>
+            </div>
+
+            <div style="background:#0f172a;padding:1.2rem 1rem;text-align:center;min-width:130px;border-top:2px solid #1e3a5f;border-bottom:2px solid #1e3a5f;">
+              <div style="font-size:1.5rem;">🔧</div>
+              <div style="color:#61dafb;font-weight:700;font-size:.8rem;margin-top:.4rem;">JSX → createElement</div>
+              <div style="color:#64748b;font-size:.7rem;margin-top:.2rem;">Plain JS objects<br/>(React elements)</div>
+            </div>
+
+            <div style="display:flex;align-items:center;background:#0f172a;padding:0 .5rem;border-top:2px solid #1e3a5f;border-bottom:2px solid #1e3a5f;">
+              <span style="color:#61dafb;font-size:1.4rem;">→</span>
+            </div>
+
+            <div style="background:#0f172a;padding:1.2rem 1rem;text-align:center;min-width:130px;border-top:2px solid #1e3a5f;border-bottom:2px solid #1e3a5f;">
+              <div style="font-size:1.5rem;">🌳</div>
+              <div style="color:#61dafb;font-weight:700;font-size:.8rem;margin-top:.4rem;">Fiber Tree</div>
+              <div style="color:#64748b;font-size:.7rem;margin-top:.2rem;">Virtual DOM<br/>diff &amp; reconcile</div>
+            </div>
+
+            <div style="display:flex;align-items:center;background:#0f172a;padding:0 .5rem;border-top:2px solid #1e3a5f;border-bottom:2px solid #1e3a5f;">
+              <span style="color:#61dafb;font-size:1.4rem;">→</span>
+            </div>
+
+            <div style="background:#0f172a;border-radius:0 12px 12px 0;padding:1.2rem 1rem;text-align:center;min-width:120px;border:2px solid #1e3a5f;">
+              <div style="font-size:1.5rem;">🖥️</div>
+              <div style="color:#22c55e;font-weight:700;font-size:.8rem;margin-top:.4rem;">Real DOM</div>
+              <div style="color:#64748b;font-size:.7rem;margin-top:.2rem;">Browser paints<br/>pixels to screen</div>
+            </div>
+
+          </div>
+        </div>
+        <p class="text-muted small mt-3 mb-0"><i class="bi bi-info-circle me-1"></i>On every state update, React re-runs the component function, produces a new Fiber tree, diffs it against the previous one, and commits only the minimal DOM changes. index.html is never touched again.</p>
+      </div>
+
+      <!-- STEP 6: What happens on state update -->
+      <div class="content-card mb-3">
+        <h5 class="fw-800 mb-3"><i class="bi bi-arrow-repeat me-2" style="color:#61dafb;"></i>What happens when state changes?</h5>
+        <div class="code-block" data-lang="JSX"><span class="cm">// 1. User clicks a button → event handler calls setCount(1)</span>
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>)
+
+  <span class="kw">return</span> (
+    <span class="tag">&lt;button</span> <span class="atr">onClick</span>={() =&gt; <span class="fn">setCount</span>(count + <span class="num">1</span>)}<span class="tag">&gt;</span>
+      Count: {count}
+    <span class="tag">&lt;/button&gt;</span>
+  )
+}
+
+<span class="cm">// What React does internally when setCount(1) is called:</span>
+<span class="cm">// ┌─────────────────────────────────────────────────────────┐</span>
+<span class="cm">// │ STEP A: Schedule a re-render of Counter component       │</span>
+<span class="cm">// │ STEP B: Call Counter() function again with new state    │</span>
+<span class="cm">// │ STEP C: Get new JSX: &lt;button&gt;Count: 1&lt;/button&gt;         │</span>
+<span class="cm">// │ STEP D: Diff vs old JSX: &lt;button&gt;Count: 0&lt;/button&gt;     │</span>
+<span class="cm">// │ STEP E: Only change: text "Count: 0" → "Count: 1"       │</span>
+<span class="cm">// │ STEP F: Update ONLY that text node in the real DOM      │</span>
+<span class="cm">// │ STEP G: Browser repaints the changed pixel              │</span>
+<span class="cm">// └─────────────────────────────────────────────────────────┘</span>
+
+<span class="cm">// The entire &lt;button&gt; element is NOT recreated — only the text changes.</span>
+<span class="cm">// This is why React's virtual DOM approach is efficient.</span></div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-md-6">
+            <div class="concept-box green">
+              <strong>Re-render means re-running the function</strong><br/>
+              When React re-renders a component it simply calls the component function again. The previous DOM is NOT destroyed — React figures out the minimal changes and applies only those.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="concept-box amber">
+              <strong>Children re-render too</strong><br/>
+              When a parent re-renders, all its child components also re-render by default. Use <code>React.memo()</code> to skip re-renders for children whose props haven't changed.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 7: Vite vs CRA file structure diff -->
+      <div class="content-card mb-3">
+        <h5 class="fw-800 mb-3"><i class="bi bi-folder2-open me-2" style="color:#61dafb;"></i>Vite vs CRA — Entry Point File Structure</h5>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="concept-box blue">
+              <strong>Vite (modern — recommended)</strong>
+              <div class="code-block mt-2" data-lang="bash" style="font-size:.78rem;">my-app/
+├── index.html          <span class="cm"># root HTML — at project root</span>
+├── src/
+│   ├── main.jsx        <span class="cm"># entry point</span>
+│   ├── App.jsx         <span class="cm"># root component</span>
+│   ├── App.css
+│   └── index.css
+├── public/             <span class="cm"># static assets</span>
+└── vite.config.js</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="concept-box purple">
+              <strong>Create React App (legacy)</strong>
+              <div class="code-block mt-2" data-lang="bash" style="font-size:.78rem;">my-app/
+├── public/
+│   └── index.html      <span class="cm"># root HTML — inside public/</span>
+├── src/
+│   ├── index.js        <span class="cm"># entry point (not main.jsx)</span>
+│   ├── App.js
+│   ├── App.css
+│   └── index.css
+└── package.json</div>
+            </div>
+          </div>
+        </div>
+        <div class="tip-box mt-2"><strong>Only functional difference:</strong> In Vite, <code>index.html</code> is at the project root and directly references <code>src/main.jsx</code> with <code>&lt;script type="module"&gt;</code>. In CRA, <code>index.html</code> is inside <code>public/</code> and CRA injects the script tag during the build. The React boot sequence inside <code>main.jsx</code>/<code>index.js</code> is identical.</div>
+      </div>
+
+      <!-- STEP 8: Providers ordering -->
+      <div class="content-card mb-3">
+        <h5 class="fw-800 mb-3"><i class="bi bi-layers-fill me-2" style="color:#61dafb;"></i>Provider Order in App.jsx — matters!</h5>
+        <p class="text-muted small mb-2">Providers wrap your app in a specific order. Inner providers can access outer providers. Get the order wrong and features break.</p>
+        <div class="code-block" data-lang="JSX"><span class="cm">// Recommended provider order in App.jsx / main.jsx</span>
+root.<span class="fn">render</span>(
+  <span class="tag">&lt;React.StrictMode&gt;</span>           <span class="cm">{/* 1. outermost — dev checks */}</span>
+
+    <span class="tag">&lt;ErrorBoundary&gt;</span>              <span class="cm">{/* 2. catch any crash */}</span>
+
+      <span class="tag">&lt;Provider</span> <span class="atr">store</span>={store}<span class="tag">&gt;</span>    <span class="cm">{/* 3. Redux — global state */}</span>
+
+        <span class="tag">&lt;QueryClientProvider</span>         <span class="cm">{/* 4. React Query — server state */}</span>
+          <span class="atr">client</span>={queryClient}<span class="tag">&gt;</span>
+
+          <span class="tag">&lt;ThemeProvider&gt;</span>            <span class="cm">{/* 5. theme — needs Redux for user prefs */}</span>
+
+            <span class="tag">&lt;AuthProvider&gt;</span>           <span class="cm">{/* 6. auth — needs Redux + Query */}</span>
+
+              <span class="tag">&lt;BrowserRouter&gt;</span>        <span class="cm">{/* 7. router — innermost, needs auth */}</span>
+                <span class="tag">&lt;App /&gt;</span>
+              <span class="tag">&lt;/BrowserRouter&gt;</span>
+
+            <span class="tag">&lt;/AuthProvider&gt;</span>
+          <span class="tag">&lt;/ThemeProvider&gt;</span>
+        <span class="tag">&lt;/QueryClientProvider&gt;</span>
+      <span class="tag">&lt;/Provider&gt;</span>
+    <span class="tag">&lt;/ErrorBoundary&gt;</span>
+  <span class="tag">&lt;/React.StrictMode&gt;</span>
+)
+
+<span class="cm">// Rule: if Provider B needs access to Provider A's context, A must be OUTER.</span></div>
+        <div class="mistake-box mt-2"><strong>Common mistake:</strong> Putting <code>&lt;BrowserRouter&gt;</code> outside <code>&lt;AuthProvider&gt;</code> — this means your auth provider can't use <code>useNavigate()</code> to redirect after login. Router must wrap auth, not the other way around.</div>
+      </div>
+
+      <!-- Interview Questions for this section -->
+      <div class="mt-4">
+        <h5 class="fw-800 mb-3"><i class="bi bi-chat-quote-fill me-2" style="color:#7c3aed;"></i>Interview Questions — Entry Point &amp; Flow</h5>
+        <div class="accordion" id="entryFlowAccordion">
+
+          <div class="accordion-item border-0 mb-2" style="border-radius:10px!important;overflow:hidden;">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-700" type="button" data-bs-toggle="collapse" data-bs-target="#ef1" style="border-radius:10px;font-size:.9rem;">
+                <span class="badge me-2" style="background:#dcfce7;color:#166534;">Easy</span>
+                What is the entry point of a React application?
+              </button>
+            </h2>
+            <div id="ef1" class="accordion-collapse collapse" data-bs-parent="#entryFlowAccordion">
+              <div class="accordion-body" style="font-size:.9rem;">
+                The entry point is <code>main.jsx</code> (Vite) or <code>src/index.js</code> (CRA). This file imports <code>ReactDOM</code>, finds the <code>#root</code> div in <code>index.html</code>, calls <code>ReactDOM.createRoot(element).render(&lt;App /&gt;)</code>, and hands control to the React component tree. <code>index.html</code> itself just provides the empty <code>&lt;div id="root"&gt;</code> container and loads the JS bundle.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 mb-2" style="border-radius:10px!important;overflow:hidden;">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-700" type="button" data-bs-toggle="collapse" data-bs-target="#ef2" style="border-radius:10px;font-size:.9rem;">
+                <span class="badge me-2" style="background:#fef9c3;color:#854d0e;">Medium</span>
+                What is the difference between <code>ReactDOM.render()</code> and <code>ReactDOM.createRoot()</code>?
+              </button>
+            </h2>
+            <div id="ef2" class="accordion-collapse collapse" data-bs-parent="#entryFlowAccordion">
+              <div class="accordion-body" style="font-size:.9rem;">
+                <code>ReactDOM.render()</code> is the React 17 API — it renders synchronously in legacy mode, meaning React 18 concurrent features like <code>useTransition</code>, <code>useDeferredValue</code>, and automatic batching are NOT available. <code>ReactDOM.createRoot()</code> is the React 18 API that opts into concurrent mode, enabling all modern features. The old API is deprecated — always use <code>createRoot</code> for new projects.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 mb-2" style="border-radius:10px!important;overflow:hidden;">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-700" type="button" data-bs-toggle="collapse" data-bs-target="#ef3" style="border-radius:10px;font-size:.9rem;">
+                <span class="badge me-2" style="background:#fef9c3;color:#854d0e;">Medium</span>
+                What does <code>React.StrictMode</code> do and does it affect production?
+              </button>
+            </h2>
+            <div id="ef3" class="accordion-collapse collapse" data-bs-parent="#entryFlowAccordion">
+              <div class="accordion-body" style="font-size:.9rem;">
+                <code>React.StrictMode</code> is a development-only tool that intentionally double-invokes component functions and effects to expose side effects and deprecated lifecycle usage. It helps catch bugs early. It has <strong>zero effect in production</strong> — React strips it out during the production build. The double-render is why you might see <code>console.log</code> statements fire twice in development.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 mb-2" style="border-radius:10px!important;overflow:hidden;">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-700" type="button" data-bs-toggle="collapse" data-bs-target="#ef4" style="border-radius:10px;font-size:.9rem;">
+                <span class="badge me-2" style="background:#fee2e2;color:#991b1b;">Hard</span>
+                Explain what happens step-by-step when you call <code>setCount(1)</code> in a React component.
+              </button>
+            </h2>
+            <div id="ef4" class="accordion-collapse collapse" data-bs-parent="#entryFlowAccordion">
+              <div class="accordion-body" style="font-size:.9rem;">
+                <ol class="mb-0" style="padding-left:1.2rem;">
+                  <li><strong>Schedule:</strong> React schedules a re-render for that component (batched with other state updates in React 18).</li>
+                  <li><strong>Render phase:</strong> React calls the component function again. <code>useState</code> now returns the new value <code>1</code> instead of <code>0</code>. The function returns new JSX.</li>
+                  <li><strong>Fiber diffing:</strong> React compares the new Fiber tree against the previous one using the reconciliation algorithm.</li>
+                  <li><strong>Commit phase:</strong> React applies only the minimal DOM mutations identified by the diff — in this case just updating a text node.</li>
+                  <li><strong>Layout effects:</strong> <code>useLayoutEffect</code> cleanup + new effect runs synchronously.</li>
+                  <li><strong>Paint:</strong> Browser repaints the changed pixels.</li>
+                  <li><strong>Passive effects:</strong> <code>useEffect</code> cleanup + new effect runs asynchronously after paint.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 mb-2" style="border-radius:10px!important;overflow:hidden;">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-700" type="button" data-bs-toggle="collapse" data-bs-target="#ef5" style="border-radius:10px;font-size:.9rem;">
+                <span class="badge me-2" style="background:#fef9c3;color:#854d0e;">Medium</span>
+                Why do providers need to be in a specific order in App.jsx?
+              </button>
+            </h2>
+            <div id="ef5" class="accordion-collapse collapse" data-bs-parent="#entryFlowAccordion">
+              <div class="accordion-body" style="font-size:.9rem;">
+                Providers form a nested tree — inner providers can use the context of outer providers, but not vice versa. For example, if <code>AuthProvider</code> needs to call <code>useNavigate()</code> to redirect after login, it must be rendered <em>inside</em> <code>&lt;BrowserRouter&gt;</code> because <code>useNavigate</code> requires the Router context. Similarly, if <code>AuthProvider</code> stores auth state in Redux, it must be inside <code>&lt;Provider store={store}&gt;</code>. Always ask: "Does this provider consume any other context?" — if yes, it goes inside that provider.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- END ENTRY FLOW SECTION -->
+
+    <div class="d-flex gap-3 mt-4 pt-3" style="border-top:1px solid #e2e8f0;">
+      <a href="js-for-react.html" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Previous</a>
+      <a href="react-setup.html" class="btn btn-sm text-white" style="background:#61dafb;color:#0f172a!important;font-weight:700;border:none;">Next: React Setup <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#0f172a;color:#64748b;padding:2rem 0;margin-top:4rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="fw-bold mb-2" style="color:#61dafb;font-size:1.1rem;">React Mastery Hub</div>
+        <p class="small">Complete React learning platform — beginner to architect level.</p>
+      </div>
+      <div class="col-md-4">
+        <div class="fw-bold mb-2 text-white">Core Sections</div>
+        <div class="d-flex flex-column gap-1">
+          <a href="react-intro.html" class="text-decoration-none small" style="color:#64748b;">Introduction</a>
+          <a href="react-hooks.html" class="text-decoration-none small" style="color:#64748b;">Hooks (Core)</a>
+          <a href="react-redux.html" class="text-decoration-none small" style="color:#64748b;">Redux</a>
+          <a href="react-typescript.html" class="text-decoration-none small" style="color:#64748b;">TypeScript</a>
+          <a href="react-nextjs.html" class="text-decoration-none small" style="color:#64748b;">Next.js</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="fw-bold mb-2 text-white">Resources</div>
+        <div class="d-flex flex-column gap-1">
+          <a href="react-interview.html" class="text-decoration-none small" style="color:#64748b;">Interview Q&amp;A (500+)</a>
+          <a href="react-projects.html" class="text-decoration-none small" style="color:#64748b;">Projects (60+)</a>
+          <a href="react-devops.html" class="text-decoration-none small" style="color:#64748b;">DevOps for React</a>
+          <a href="react-performance.html" class="text-decoration-none small" style="color:#64748b;">Performance</a>
+        </div>
+      </div>
+    </div>
+    <hr style="border-color:#1e293b;margin:1.5rem 0;"/>
+    <div class="text-center small">React Mastery Hub — From Zero to Architect</div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({duration:700,once:true,offset:80});
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

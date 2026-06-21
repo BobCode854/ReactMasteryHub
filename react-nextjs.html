@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Next.js with React — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card,.card{border-radius:14px;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .code-block .tp{color:#fb923c;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+    .badge-section{display:inline-block;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-size:.75rem;font-weight:700;padding:.3rem .8rem;border-radius:20px;letter-spacing:.05em;margin-bottom:.5rem;}
+    .sub-heading{font-size:1.1rem;font-weight:700;color:#059669;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+    [data-theme="dark"] .sub-heading{color:#34d399;}
+    .file-tree{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:2;}
+    .file-tree .folder{color:#60a5fa;}
+    .file-tree .file{color:#86efac;}
+    .file-tree .special{color:#f9a8d4;}
+    .file-tree .note{color:#64748b;font-style:italic;}
+    .rendering-card{border-radius:12px;padding:1.2rem;height:100%;}
+    .rendering-card.ssr{background:linear-gradient(135deg,#1e3a5f,#1e40af);color:#fff;}
+    .rendering-card.ssg{background:linear-gradient(135deg,#14532d,#166534);color:#fff;}
+    .rendering-card.isr{background:linear-gradient(135deg,#451a03,#78350f);color:#fff;}
+    .rendering-card.csr{background:linear-gradient(135deg,#3b0764,#581c87);color:#fff;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <span class="badge-section">Section 20</span>
+        <h1 class="fw-900 mt-2 mb-3" style="font-size:2.6rem;">Next.js with React</h1>
+        <p class="lead mb-0" style="color:#94a3b8;">Master SSR, SSG, ISR, and CSR rendering strategies, the App Router, API Routes, and file-system based routing — all the tools that make React production-ready.</p>
+      </div>
+      <div class="col-lg-4 text-end d-none d-lg-block">
+        <i class="bi bi-globe2" style="font-size:6rem;color:rgba(97,218,251,.15);"></i>
+      </div>
+    </div>
+    <div class="row mt-4 g-3">
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">SSR</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">SSG</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">ISR</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">App Router</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">API Routes</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- Why Next.js -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-question-circle"></i> Why Next.js?</div>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="concept-box red mb-0">
+          <div class="fw-700 mb-2"><i class="bi bi-x-circle me-1 text-danger"></i> Plain React SPA Problem</div>
+          <ul class="mb-0" style="font-size:.9rem;">
+            <li>Browser receives empty HTML: <code>&lt;div id="root"&gt;&lt;/div&gt;</code></li>
+            <li>JavaScript runs, fetches data, renders content</li>
+            <li>Search engines can't index blank HTML</li>
+            <li>Users see white screen until JS loads</li>
+            <li>Slower First Contentful Paint (FCP)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box green mb-0">
+          <div class="fw-700 mb-2"><i class="bi bi-check-circle me-1 text-success"></i> Next.js Solution</div>
+          <ul class="mb-0" style="font-size:.9rem;">
+            <li>Server renders full HTML before sending to browser</li>
+            <li>Search engines receive complete, indexable HTML</li>
+            <li>Users see content immediately (no white flash)</li>
+            <li>Better Core Web Vitals (LCP, FCP, TTI)</li>
+            <li>Built-in image optimization, code splitting, routing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-box blue mt-3">
+      <strong><i class="bi bi-info-circle me-1"></i> Next.js Features:</strong> File-system routing, server-side rendering, static generation, incremental static regeneration, API routes, image optimization, font optimization, Edge Runtime, Middleware, Server Components, and full TypeScript support — all out of the box.
+    </div>
+  </div>
+
+  <!-- Rendering Strategies -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-layers"></i> Rendering Strategies</div>
+    <p class="text-secondary mb-4">Next.js lets you choose the right rendering strategy per page. Mix and match based on your data freshness needs and performance requirements.</p>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs" id="renderTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ssr" type="button">SSR</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ssg" type="button">SSG</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#isr" type="button">ISR</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#csr" type="button">CSR</button>
+      </li>
+    </ul>
+    <div class="tab-content pt-3" id="renderTabsContent">
+
+      <!-- SSR -->
+      <div class="tab-pane fade show active" id="ssr" role="tabpanel">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="rendering-card ssr">
+              <div class="fw-800 mb-2" style="font-size:1.2rem;">SSR</div>
+              <div style="font-size:.85rem;opacity:.9;">Server-Side Rendering</div>
+              <hr style="border-color:rgba(255,255,255,.2);">
+              <div style="font-size:.85rem;"><strong>When:</strong> Every request</div>
+              <div style="font-size:.85rem;"><strong>Data:</strong> Always fresh</div>
+              <div style="font-size:.85rem;"><strong>Use for:</strong> Dashboards, user-specific pages, real-time data</div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <p class="text-secondary mb-2">The page runs on the server for <strong>every request</strong>. The server fetches data, renders the full HTML, and sends it to the browser. Use <code>cache: 'no-store'</code>.</p>
+            <div class="code-block"><span class="cm">// app/users/page.tsx (Next.js 13+ App Router)</span>
+<span class="kw">async function</span> <span class="fn">UsersPage</span>() {
+  <span class="cm">// This runs on the server on EVERY request</span>
+  <span class="kw">const</span> users = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">'https://api.example.com/users'</span>, {
+    cache: <span class="st">'no-store'</span> <span class="cm">// always fresh — never cached</span>
+  }).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>());
+
+  <span class="kw">return</span> (
+    &lt;main&gt;
+      &lt;h1&gt;Users&lt;/h1&gt;
+      {users.<span class="fn">map</span>(user =&gt; &lt;<span class="fn">UserCard</span> key={user.id} {...user} /&gt;)}
+    &lt;/main&gt;
+  );
+}
+<span class="kw">export default</span> UsersPage;</div>
+            <div class="tip-box">
+              <strong>Best for:</strong> User dashboards, shopping carts, pages that need real-time data. The tradeoff is slower TTFB (Time To First Byte) since every request hits the server.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SSG -->
+      <div class="tab-pane fade" id="ssg" role="tabpanel">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="rendering-card ssg">
+              <div class="fw-800 mb-2" style="font-size:1.2rem;">SSG</div>
+              <div style="font-size:.85rem;opacity:.9;">Static Site Generation</div>
+              <hr style="border-color:rgba(255,255,255,.2);">
+              <div style="font-size:.85rem;"><strong>When:</strong> Build time only</div>
+              <div style="font-size:.85rem;"><strong>Data:</strong> Baked in at build</div>
+              <div style="font-size:.85rem;"><strong>Use for:</strong> Blog posts, docs, marketing pages</div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <p class="text-secondary mb-2">HTML is generated <strong>at build time</strong> and served as a static file. Blazing fast — served from CDN with zero server computation per request. Use <code>cache: 'force-cache'</code>.</p>
+            <div class="code-block"><span class="cm">// Generates HTML at BUILD TIME — fastest possible</span>
+<span class="kw">async function</span> <span class="fn">BlogPage</span>({ params }) {
+  <span class="kw">const</span> post = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`https://api.example.com/posts/${params.slug}`</span>, {
+    cache: <span class="st">'force-cache'</span> <span class="cm">// cache forever (until rebuild)</span>
+  }).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>());
+
+  <span class="kw">return</span> &lt;article&gt;&lt;h1&gt;{post.title}&lt;/h1&gt;&lt;p&gt;{post.content}&lt;/p&gt;&lt;/article&gt;;
+}
+
+<span class="cm">// Tell Next.js which paths to pre-generate at build time</span>
+<span class="kw">export async function</span> <span class="fn">generateStaticParams</span>() {
+  <span class="kw">const</span> posts = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">'https://api.example.com/posts'</span>).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>());
+  <span class="kw">return</span> posts.<span class="fn">map</span>(post =&gt; ({ slug: post.slug }));
+}</div>
+            <div class="tip-box">
+              <strong>Best for:</strong> Content that doesn't change often — documentation, blogs, marketing sites. Rebuilds are needed to update content.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ISR -->
+      <div class="tab-pane fade" id="isr" role="tabpanel">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="rendering-card isr">
+              <div class="fw-800 mb-2" style="font-size:1.2rem;">ISR</div>
+              <div style="font-size:.85rem;opacity:.9;">Incremental Static Regeneration</div>
+              <hr style="border-color:rgba(255,255,255,.2);">
+              <div style="font-size:.85rem;"><strong>When:</strong> Background revalidation</div>
+              <div style="font-size:.85rem;"><strong>Data:</strong> Fresh after revalidation</div>
+              <div style="font-size:.85rem;"><strong>Use for:</strong> E-commerce, news sites</div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <p class="text-secondary mb-2">Best of both worlds — static speed + automatic updates. Pages are pre-built, but Next.js regenerates them in the background after a set interval. Use <code>next: { revalidate: N }</code>.</p>
+            <div class="code-block"><span class="cm">// Regenerates page in background every 60 seconds</span>
+<span class="kw">async function</span> <span class="fn">ProductPage</span>({ params }) {
+  <span class="kw">const</span> product = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`https://api.example.com/products/${params.id}`</span>, {
+    next: { revalidate: <span class="st">60</span> } <span class="cm">// revalidate every 60 seconds</span>
+  }).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>());
+
+  <span class="kw">return</span> &lt;<span class="fn">ProductDetail</span> {...product} /&gt;;
+}
+
+<span class="cm">// On-demand revalidation — trigger after CMS update</span>
+<span class="cm">// app/api/revalidate/route.ts</span>
+<span class="kw">import</span> { revalidatePath } <span class="kw">from</span> <span class="st">'next/cache'</span>;
+
+<span class="kw">export async function</span> <span class="fn">POST</span>(request) {
+  <span class="kw">const</span> { path } = <span class="kw">await</span> request.<span class="fn">json</span>();
+  <span class="fn">revalidatePath</span>(path); <span class="cm">// purge cache for specific path</span>
+  <span class="kw">return</span> Response.<span class="fn">json</span>({ revalidated: <span class="kw">true</span> });
+}</div>
+            <div class="tip-box">
+              <strong>Best for:</strong> Product pages, news articles, anything that changes occasionally. Users always get cached (fast) responses while Next.js updates in the background.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CSR -->
+      <div class="tab-pane fade" id="csr" role="tabpanel">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="rendering-card csr">
+              <div class="fw-800 mb-2" style="font-size:1.2rem;">CSR</div>
+              <div style="font-size:.85rem;opacity:.9;">Client-Side Rendering</div>
+              <hr style="border-color:rgba(255,255,255,.2);">
+              <div style="font-size:.85rem;"><strong>When:</strong> After hydration</div>
+              <div style="font-size:.85rem;"><strong>Data:</strong> Fetched client-side</div>
+              <div style="font-size:.85rem;"><strong>Use for:</strong> User-specific data, highly interactive UIs</div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <p class="text-secondary mb-2">Opt into client-side rendering with the <code>'use client'</code> directive. The component renders in the browser, enabling hooks, event handlers, and browser APIs.</p>
+            <div class="code-block"><span class="st">'use client'</span>; <span class="cm">// opt into client-side rendering</span>
+
+<span class="kw">function</span> <span class="fn">Dashboard</span>() {
+  <span class="cm">// Now you can use useState, useEffect, event handlers</span>
+  <span class="kw">const</span> { data } = <span class="fn">useSWR</span>(<span class="st">'/api/dashboard'</span>, fetcher);
+  <span class="kw">const</span> [filter, setFilter] = <span class="fn">useState</span>(<span class="st">'all'</span>);
+
+  <span class="kw">return</span> (
+    &lt;div&gt;
+      &lt;select onChange={e =&gt; <span class="fn">setFilter</span>(e.target.value)}&gt;
+        &lt;option value=<span class="st">"all"</span>&gt;All&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;div&gt;{data?.stats}&lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+<span class="kw">export default</span> Dashboard;</div>
+            <div class="tip-box">
+              <strong>Best for:</strong> Dashboards with user-specific data, real-time updates, highly interactive UIs where SEO doesn't matter. Default in Next.js is Server Components — you opt in to CSR only where needed.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Server vs Client Components -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-arrow-left-right"></i> Server Components vs Client Components</div>
+    <div class="row g-4 mb-3">
+      <div class="col-md-6">
+        <div class="concept-box blue h-100 mb-0">
+          <div class="fw-700 mb-2"><i class="bi bi-server me-1"></i> Server Components (default)</div>
+          <ul style="font-size:.88rem;margin:0;" class="ps-3">
+            <li>No <code>'use client'</code> directive needed</li>
+            <li>Run on the server — never sent to browser</li>
+            <li>Can be <code>async</code> — await directly in the component</li>
+            <li>Access databases, file system, environment variables</li>
+            <li>Cannot use hooks, browser APIs, or event handlers</li>
+            <li>Result: smaller client bundle, faster load</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box purple h-100 mb-0">
+          <div class="fw-700 mb-2"><i class="bi bi-display me-1"></i> Client Components (<code>'use client'</code>)</div>
+          <ul style="font-size:.88rem;margin:0;" class="ps-3">
+            <li>Add <code>'use client'</code> at the top of the file</li>
+            <li>Run in the browser (hydrated from server HTML)</li>
+            <li>Can use <code>useState</code>, <code>useEffect</code>, all hooks</li>
+            <li>Can use event handlers, browser APIs</li>
+            <li>Cannot <code>await</code> directly (use hooks instead)</li>
+            <li>Added to client bundle</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill me-1"></i> Rule of thumb:</strong> Keep components as Server Components as long as possible. Only add <code>'use client'</code> when you need interactivity (state, events, browser APIs). You can pass server data as props to client components.
+    </div>
+  </div>
+
+  <!-- API Routes -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-cloud-upload"></i> API Routes</div>
+    <p class="text-secondary mb-3">Next.js API Routes let you build your backend directly inside your Next.js project. No separate Express server needed for simple APIs.</p>
+
+    <div class="code-block"><span class="cm">// app/api/users/route.ts — handles GET and POST</span>
+<span class="kw">import</span> { NextResponse } <span class="kw">from</span> <span class="st">'next/server'</span>;
+
+<span class="kw">export async function</span> <span class="fn">GET</span>(request: <span class="tp">Request</span>) {
+  <span class="kw">const</span> { searchParams } = <span class="kw">new</span> <span class="fn">URL</span>(request.url);
+  <span class="kw">const</span> page = searchParams.<span class="fn">get</span>(<span class="st">'page'</span>) || <span class="st">'1'</span>;
+
+  <span class="kw">const</span> users = <span class="kw">await</span> db.user.<span class="fn">findMany</span>({
+    skip: (parseInt(page) - <span class="st">1</span>) * <span class="st">10</span>,
+    take: <span class="st">10</span>,
+  });
+  <span class="kw">return</span> NextResponse.<span class="fn">json</span>(users);
+}
+
+<span class="kw">export async function</span> <span class="fn">POST</span>(request: <span class="tp">Request</span>) {
+  <span class="kw">const</span> body = <span class="kw">await</span> request.<span class="fn">json</span>();
+  <span class="kw">const</span> user = <span class="kw">await</span> db.user.<span class="fn">create</span>({ data: body });
+  <span class="kw">return</span> NextResponse.<span class="fn">json</span>(user, { status: <span class="st">201</span> });
+}
+
+<span class="cm">// app/api/users/[id]/route.ts — dynamic route handler</span>
+<span class="kw">export async function</span> <span class="fn">GET</span>(
+  request: <span class="tp">Request</span>,
+  { params }: { params: { id: <span class="tp">string</span> } }
+) {
+  <span class="kw">const</span> user = <span class="kw">await</span> db.user.<span class="fn">findUnique</span>({ where: { id: params.id } });
+  <span class="kw">if</span> (!user) <span class="kw">return</span> NextResponse.<span class="fn">json</span>({ error: <span class="st">'Not found'</span> }, { status: <span class="st">404</span> });
+  <span class="kw">return</span> NextResponse.<span class="fn">json</span>(user);
+}
+
+<span class="kw">export async function</span> <span class="fn">DELETE</span>(
+  request: <span class="tp">Request</span>,
+  { params }: { params: { id: <span class="tp">string</span> } }
+) {
+  <span class="kw">await</span> db.user.<span class="fn">delete</span>({ where: { id: params.id } });
+  <span class="kw">return</span> <span class="kw">new</span> <span class="fn">Response</span>(<span class="kw">null</span>, { status: <span class="st">204</span> });
+}</div>
+  </div>
+
+  <!-- App Router vs Pages Router -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-table"></i> App Router vs Pages Router</div>
+    <div class="table-responsive">
+      <table class="table table-bordered" style="font-size:.86rem;">
+        <thead class="table-dark">
+          <tr><th>Feature</th><th>App Router (Next.js 13+)</th><th>Pages Router (Legacy)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Location</td><td><code>app/</code> directory</td><td><code>pages/</code> directory</td></tr>
+          <tr><td>Default rendering</td><td>Server Components</td><td>Client Components</td></tr>
+          <tr><td>Data fetching</td><td><code>async/await</code> in components</td><td><code>getServerSideProps</code>, <code>getStaticProps</code></td></tr>
+          <tr><td>Layouts</td><td><code>layout.tsx</code> — nested, persistent</td><td><code>_app.tsx</code> — single layout</td></tr>
+          <tr><td>Loading states</td><td><code>loading.tsx</code></td><td>Manual with state</td></tr>
+          <tr><td>Error boundaries</td><td><code>error.tsx</code></td><td>Manual class component</td></tr>
+          <tr><td>Streaming</td><td>Built-in with Suspense</td><td>Not supported</td></tr>
+          <tr><td>Status</td><td><span class="badge bg-success">Current — recommended</span></td><td><span class="badge bg-secondary">Stable — but legacy</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- File System Routing -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-folder-tree"></i> File System Routing — App Router</div>
+    <p class="text-secondary mb-3">Next.js routing is based entirely on your folder structure. Each folder creates a URL segment. Special files have predefined roles.</p>
+
+    <div class="row g-4">
+      <div class="col-md-5">
+        <div class="file-tree">
+<span class="folder">app/</span>
+├── <span class="special">layout.tsx</span>         <span class="note">← root layout (wraps all)</span>
+├── <span class="special">page.tsx</span>           <span class="note">← route: /</span>
+├── <span class="special">loading.tsx</span>        <span class="note">← automatic Suspense wrapper</span>
+├── <span class="special">error.tsx</span>          <span class="note">← error boundary UI</span>
+├── <span class="special">not-found.tsx</span>      <span class="note">← 404 page</span>
+├── <span class="folder">blog/</span>
+│   ├── <span class="special">page.tsx</span>       <span class="note">← route: /blog</span>
+│   └── <span class="folder">[slug]/</span>        <span class="note">← dynamic segment</span>
+│       └── <span class="special">page.tsx</span>   <span class="note">← route: /blog/:slug</span>
+├── <span class="folder">(auth)/</span>            <span class="note">← route group (no URL)</span>
+│   ├── <span class="special">layout.tsx</span>     <span class="note">← auth-only layout</span>
+│   ├── <span class="folder">login/</span>
+│   │   └── <span class="special">page.tsx</span>   <span class="note">← route: /login</span>
+│   └── <span class="folder">register/</span>
+│       └── <span class="special">page.tsx</span>   <span class="note">← route: /register</span>
+└── <span class="folder">api/</span>
+    └── <span class="folder">users/</span>
+        └── <span class="special">route.ts</span>   <span class="note">← API: /api/users</span></div>
+      </div>
+      <div class="col-md-7">
+        <h6 class="fw-700 mb-3">Special Files Explained</h6>
+        <div class="table-responsive">
+          <table class="table table-bordered" style="font-size:.84rem;">
+            <thead class="table-dark"><tr><th>File</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>page.tsx</code></td><td>The UI for a route — makes a route publicly accessible</td></tr>
+              <tr><td><code>layout.tsx</code></td><td>Shared UI for a segment and its children — persists across navigation</td></tr>
+              <tr><td><code>loading.tsx</code></td><td>Instant loading UI shown while page data is fetching (Suspense fallback)</td></tr>
+              <tr><td><code>error.tsx</code></td><td>Error UI for a segment — must be a Client Component with <code>'use client'</code></td></tr>
+              <tr><td><code>not-found.tsx</code></td><td>UI for 404 errors when <code>notFound()</code> is thrown</td></tr>
+              <tr><td><code>route.ts</code></td><td>API endpoint — export GET, POST, PUT, DELETE, PATCH functions</td></tr>
+              <tr><td><code>[slug]</code></td><td>Dynamic route segment — accessible via <code>params.slug</code></td></tr>
+              <tr><td><code>(group)</code></td><td>Route group — organizes routes without adding URL segment</td></tr>
+              <tr><td><code>@slot</code></td><td>Named slot for parallel routes — renders multiple pages simultaneously</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="concept-box amber mt-3 mb-0">
+          <strong><i class="bi bi-layers me-1"></i> Layouts are Persistent:</strong> Unlike pages, layouts don't re-render during navigation between pages that share that layout. This preserves scroll position and component state.
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading mt-4" style="font-size:.95rem;"><i class="bi bi-code-slash"></i> Dynamic Routes Example</div>
+    <div class="code-block"><span class="cm">// app/blog/[slug]/page.tsx</span>
+<span class="kw">interface</span> <span class="tp">PageProps</span> {
+  params: { slug: <span class="tp">string</span> };
+  searchParams: { [key: <span class="tp">string</span>]: <span class="tp">string</span> | <span class="tp">string</span>[] | <span class="tp">undefined</span> };
+}
+
+<span class="kw">export async function</span> <span class="fn">generateMetadata</span>({ params }: <span class="tp">PageProps</span>) {
+  <span class="kw">const</span> post = <span class="kw">await</span> <span class="fn">getPost</span>(params.slug);
+  <span class="kw">return</span> {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: { images: [post.coverImage] },
+  };
+}
+
+<span class="kw">export default async function</span> <span class="fn">BlogPost</span>({ params }: <span class="tp">PageProps</span>) {
+  <span class="kw">const</span> post = <span class="kw">await</span> <span class="fn">getPost</span>(params.slug);
+  <span class="kw">if</span> (!post) <span class="fn">notFound</span>(); <span class="cm">// triggers not-found.tsx</span>
+
+  <span class="kw">return</span> (
+    &lt;article&gt;
+      &lt;h1&gt;{post.title}&lt;/h1&gt;
+      &lt;div dangerouslySetInnerHTML={{ __html: post.content }} /&gt;
+    &lt;/article&gt;
+  );
+}</div>
+  </div>
+
+  <!-- Middleware -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-funnel"></i> Middleware</div>
+    <p class="text-secondary mb-3">Middleware runs before a request is processed — great for authentication redirects, A/B testing, geolocation, and request logging. Runs on the Edge for minimal latency.</p>
+
+    <div class="code-block"><span class="cm">// middleware.ts — at the root of your project</span>
+<span class="kw">import</span> { NextResponse } <span class="kw">from</span> <span class="st">'next/server'</span>;
+<span class="kw">import type</span> { NextRequest } <span class="kw">from</span> <span class="st">'next/server'</span>;
+
+<span class="kw">export function</span> <span class="fn">middleware</span>(request: <span class="tp">NextRequest</span>) {
+  <span class="kw">const</span> token = request.cookies.<span class="fn">get</span>(<span class="st">'token'</span>)?.value;
+  <span class="kw">const</span> isProtected = request.nextUrl.pathname.<span class="fn">startsWith</span>(<span class="st">'/dashboard'</span>);
+
+  <span class="kw">if</span> (isProtected &amp;&amp; !token) {
+    <span class="kw">const</span> loginUrl = <span class="kw">new</span> <span class="fn">URL</span>(<span class="st">'/login'</span>, request.url);
+    loginUrl.searchParams.<span class="fn">set</span>(<span class="st">'from'</span>, request.nextUrl.pathname);
+    <span class="kw">return</span> NextResponse.<span class="fn">redirect</span>(loginUrl);
+  }
+
+  <span class="kw">return</span> NextResponse.<span class="fn">next</span>();
+}
+
+<span class="cm">// Apply only to matching paths</span>
+<span class="kw">export const</span> config = {
+  matcher: [<span class="st">'/dashboard/:path*'</span>, <span class="st">'/admin/:path*'</span>, <span class="st">'/api/:path*'</span>],
+};</div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-chat-left-quote"></i> Interview Questions</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What problem does Next.js solve that plain React can't? How does server-side rendering help with SEO?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Explain the four rendering strategies in Next.js: SSR, SSG, ISR, and CSR. When would you use each?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the difference between Server Components and Client Components? When do you use <code>'use client'</code>?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does file-system routing work in the Next.js App Router? What are <code>layout.tsx</code>, <code>loading.tsx</code>, and <code>error.tsx</code> for?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What are Next.js API Routes? How do you handle GET and POST requests in the App Router?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is ISR (Incremental Static Regeneration)? How does it differ from SSG and SSR?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is Next.js Middleware? What are common use cases, and where does it run?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is <code>generateStaticParams</code> and how does it replace <code>getStaticPaths</code> from the Pages Router?</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+    <div class="mt-2 d-flex justify-content-center gap-3 flex-wrap">
+      <a href="index.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Home</a>
+      <a href="react-hooks.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Hooks</a>
+      <a href="react-redux.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Redux</a>
+      <a href="react-interview.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Interview</a>
+      <a href="react-projects.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

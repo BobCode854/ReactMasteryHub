@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Context API — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--text:#f1f5f9;--border:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;}
+    .content-section{background:#fff;border-radius:16px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-section{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-redux.html">Redux</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;border:1px solid #61dafb;font-size:.85rem;">Section 14</span>
+      <span class="text-white-50">React Mastery Hub</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.5rem;">Context API</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;">createContext, custom providers, useReducer pattern, performance gotchas, and Context vs Redux</p>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+
+  <!-- Context Deep Dive -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-broadcast me-2 text-primary"></i>Context Deep Dive</h2>
+    <p class="text-muted mb-3">Context provides a way to pass data through the component tree without prop-drilling. The pattern: create a context, wrap the tree in a Provider, consume via a custom hook.</p>
+    <div class="concept-box blue mb-3">
+      <strong>Four-step pattern:</strong> 1. <code>createContext</code> with default, 2. Provider component with state, 3. Custom hook with guard, 4. Consume the hook anywhere in the tree.
+    </div>
+    <pre class="code-block"><span class="cm">// 1. Create context with typed default value</span>
+<span class="kw">const</span> AuthContext = <span class="fn">createContext</span>({
+  user: <span class="kw">null</span>,
+  login: () =&gt; {},
+  logout: () =&gt; {},
+});
+
+<span class="cm">// 2. Custom Provider with state + logic</span>
+<span class="kw">export function</span> <span class="fn">AuthProvider</span>({ children }) {
+  <span class="kw">const</span> [user, setUser] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> token = localStorage.<span class="fn">getItem</span>(<span class="st">'token'</span>);
+    <span class="kw">if</span> (token) {
+      <span class="fn">verifyToken</span>(token).<span class="fn">then</span>(setUser).<span class="fn">finally</span>(() =&gt; <span class="fn">setLoading</span>(<span class="kw">false</span>));
+    } <span class="kw">else</span> {
+      <span class="fn">setLoading</span>(<span class="kw">false</span>);
+    }
+  }, []);
+
+  <span class="kw">const</span> <span class="fn">login</span> = <span class="kw">async</span> (credentials) =&gt; {
+    <span class="kw">const</span> userData = <span class="kw">await</span> <span class="fn">loginAPI</span>(credentials);
+    localStorage.<span class="fn">setItem</span>(<span class="st">'token'</span>, userData.token);
+    <span class="fn">setUser</span>(userData.user);
+  };
+
+  <span class="kw">const</span> <span class="fn">logout</span> = () =&gt; {
+    localStorage.<span class="fn">removeItem</span>(<span class="st">'token'</span>);
+    <span class="fn">setUser</span>(<span class="kw">null</span>);
+  };
+
+  <span class="kw">if</span> (loading) <span class="kw">return</span> &lt;GlobalSpinner /&gt;;
+
+  <span class="kw">return</span> (
+    &lt;AuthContext.Provider value={{ user, login, logout }}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  );
+}
+
+<span class="cm">// 3. Custom hook — clean API + safety guard</span>
+<span class="kw">export function</span> <span class="fn">useAuth</span>() {
+  <span class="kw">const</span> ctx = <span class="fn">useContext</span>(AuthContext);
+  <span class="kw">if</span> (!ctx) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="st">'useAuth must be inside AuthProvider'</span>);
+  <span class="kw">return</span> ctx;
+}
+
+<span class="cm">// 4. Usage — anywhere inside the Provider tree</span>
+<span class="kw">function</span> <span class="fn">ProfileButton</span>() {
+  <span class="kw">const</span> { user, logout } = <span class="fn">useAuth</span>();
+  <span class="kw">return</span> user ? (
+    &lt;button <span class="fn">onClick</span>={logout}&gt;{user.name} &mdash; Logout&lt;/button&gt;
+  ) : (
+    &lt;Link to=<span class="st">"/login"</span>&gt;Login&lt;/Link&gt;
+  );
+}</pre>
+  </div>
+
+  <!-- Multiple Contexts -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-layers me-2 text-success"></i>Composing Multiple Contexts</h2>
+    <p class="text-muted mb-3">Large apps typically have multiple contexts. Compose them in a single <code>AppProviders</code> component to keep <code>main.tsx</code> clean and make it easy to add or reorder providers.</p>
+    <pre class="code-block"><span class="cm">// Compose all providers at app root</span>
+<span class="kw">function</span> <span class="fn">AppProviders</span>({ children }) {
+  <span class="kw">return</span> (
+    &lt;AuthProvider&gt;
+      &lt;ThemeProvider&gt;
+        &lt;CartProvider&gt;
+          &lt;NotificationProvider&gt;
+            {children}
+          &lt;/NotificationProvider&gt;
+        &lt;/CartProvider&gt;
+      &lt;/ThemeProvider&gt;
+    &lt;/AuthProvider&gt;
+  );
+}
+
+<span class="cm">// main.tsx — clean entry point</span>
+root.<span class="fn">render</span>(
+  &lt;AppProviders&gt;
+    &lt;App /&gt;
+  &lt;/AppProviders&gt;
+);</pre>
+    <div class="tip-box">
+      <strong>Order matters:</strong> Providers listed later are nested deeper — they can consume providers listed earlier. Put foundational providers (Auth, Theme) outermost.
+    </div>
+  </div>
+
+  <!-- Context + useReducer -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-gear-wide-connected me-2 text-warning"></i>Context + useReducer (Mini-Redux)</h2>
+    <p class="text-muted mb-3">Combining Context with <code>useReducer</code> gives you Redux-like state management without the library overhead — great for feature-level or medium-complexity state.</p>
+    <pre class="code-block"><span class="kw">const</span> CartContext = <span class="fn">createContext</span>();
+
+<span class="kw">function</span> <span class="fn">cartReducer</span>(state, action) {
+  <span class="kw">switch</span> (action.type) {
+    <span class="kw">case</span> <span class="st">'ADD'</span>:
+      <span class="kw">return</span> { ...state, items: [...state.items, action.item] };
+    <span class="kw">case</span> <span class="st">'REMOVE'</span>:
+      <span class="kw">return</span> { ...state, items: state.items.<span class="fn">filter</span>(i =&gt; i.id !== action.id) };
+    <span class="kw">case</span> <span class="st">'CLEAR'</span>:
+      <span class="kw">return</span> { items: [], total: 0 };
+    <span class="kw">default</span>:
+      <span class="kw">return</span> state;
+  }
+}
+
+<span class="kw">export function</span> <span class="fn">CartProvider</span>({ children }) {
+  <span class="kw">const</span> [state, dispatch] = <span class="fn">useReducer</span>(cartReducer, { items: [], total: 0 });
+  <span class="kw">return</span> (
+    &lt;CartContext.Provider value={{ state, dispatch }}&gt;
+      {children}
+    &lt;/CartContext.Provider&gt;
+  );
+}
+
+<span class="kw">export const</span> <span class="fn">useCart</span> = () =&gt; <span class="fn">useContext</span>(CartContext);
+
+<span class="cm">// Usage</span>
+<span class="kw">function</span> <span class="fn">CartButton</span>({ product }) {
+  <span class="kw">const</span> { dispatch } = <span class="fn">useCart</span>();
+  <span class="kw">return</span> (
+    &lt;button <span class="fn">onClick</span>={() =&gt; dispatch({ type: <span class="st">'ADD'</span>, item: product })}&gt;
+      Add to Cart
+    &lt;/button&gt;
+  );
+}</pre>
+  </div>
+
+  <!-- Context vs Redux -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-table me-2 text-info"></i>Context vs Redux</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Feature</th>
+            <th>Context API</th>
+            <th>Redux Toolkit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Setup</strong></td>
+            <td><span class="badge bg-success">Zero config, built-in</span></td>
+            <td><span class="badge bg-warning text-dark">Install + configure store</span></td>
+          </tr>
+          <tr>
+            <td><strong>Boilerplate</strong></td>
+            <td>Low</td>
+            <td>Low (RTK greatly reduces it)</td>
+          </tr>
+          <tr>
+            <td><strong>Performance</strong></td>
+            <td><span class="badge bg-warning text-dark">Re-renders all consumers</span></td>
+            <td><span class="badge bg-success">Selective re-renders via selectors</span></td>
+          </tr>
+          <tr>
+            <td><strong>DevTools</strong></td>
+            <td>React DevTools only</td>
+            <td>Redux DevTools (time-travel, diffs)</td>
+          </tr>
+          <tr>
+            <td><strong>Middleware</strong></td>
+            <td>No built-in support</td>
+            <td>Thunks, saga, listener middleware</td>
+          </tr>
+          <tr>
+            <td><strong>Best for</strong></td>
+            <td>Auth, theme, locale, low-change global state</td>
+            <td>Complex app-wide state, frequent updates</td>
+          </tr>
+          <tr>
+            <td><strong>Learning curve</strong></td>
+            <td>Low</td>
+            <td>Medium</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Performance Gotcha -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>Performance Gotcha: Context Re-renders All Consumers</h2>
+    <div class="mistake-box mb-3">
+      <strong>The problem:</strong> Every time the context value changes, <em>all</em> components that call <code>useContext</code> for that context re-render — even if the specific value they use hasn't changed.
+    </div>
+    <pre class="code-block"><span class="cm">// Problem: user or theme change triggers ALL consumers to re-render</span>
+<span class="kw">const</span> AppContext = <span class="fn">createContext</span>();
+<span class="kw">function</span> <span class="fn">AppProvider</span>({ children }) {
+  <span class="kw">const</span> [user, setUser] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [theme, setTheme] = <span class="fn">useState</span>(<span class="st">'light'</span>);
+  <span class="kw">const</span> [cart, setCart] = <span class="fn">useState</span>([]);
+
+  <span class="cm">// Changing cart re-renders ALL components using this context!</span>
+  <span class="kw">return</span> &lt;AppContext.Provider value={{ user, theme, cart, setCart }}&gt;{children}&lt;/AppContext.Provider&gt;;
+}
+
+<span class="cm">// Solution: split into separate focused contexts</span>
+<span class="kw">function</span> <span class="fn">AppProviders</span>({ children }) {
+  <span class="kw">return</span> (
+    &lt;AuthProvider&gt;       <span class="cm">// only re-renders auth consumers</span>
+      &lt;ThemeProvider&gt;    <span class="cm">// only re-renders theme consumers</span>
+        &lt;CartProvider&gt;   <span class="cm">// only re-renders cart consumers</span>
+          {children}
+        &lt;/CartProvider&gt;
+      &lt;/ThemeProvider&gt;
+    &lt;/AuthProvider&gt;
+  );
+}</pre>
+    <div class="tip-box">
+      <strong>Tip:</strong> For high-frequency updates (form input, cursor position, real-time data), Context is the wrong tool. Use Zustand, Jotai, or Redux with selectors which support granular subscriptions.
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is prop drilling and how does Context solve it?</div>
+    <div class="concept-box purple mb-3">
+      Prop drilling is passing props through multiple intermediate components that don't use them — only to get data to a deeply nested child. Context solves this by making data available to any component in the subtree via <code>useContext</code>, without explicitly passing props through each level.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Why should you create a custom hook for context instead of using useContext directly?</div>
+    <div class="concept-box purple mb-3">
+      A custom hook (e.g., <code>useAuth()</code>) provides three benefits: 1. It throws a meaningful error if used outside the Provider, catching bugs early. 2. It hides the context import — consumers don't need to know which context object is used. 3. It allows adding derived values or utilities without changing the context shape.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the performance issue with Context and how do you fix it?</div>
+    <div class="concept-box purple mb-3">
+      When a Context value changes, every component subscribed via <code>useContext</code> re-renders regardless of which part of the value changed. Fix: split one large context into multiple smaller focused contexts so only the relevant consumers re-render. Alternative: use <code>useMemo</code> to stabilise the context value object.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>When would you choose Context over Redux?</div>
+    <div class="concept-box purple mb-3">
+      Context is ideal for low-frequency global state: auth user, theme, locale, feature flags. It requires no extra dependency and has minimal setup. Choose Redux when: the app has complex state logic with many actions, you need DevTools for debugging, or multiple high-frequency state slices need selective subscriptions to avoid performance issues.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does useReducer with Context compare to Redux?</div>
+    <div class="concept-box purple mb-3">
+      The combination provides the same conceptual pattern (actions, reducer, dispatch) without the Redux library. However it lacks Redux DevTools, middleware support (thunks, sagas), and the performance optimisations of useSelector. It's a good choice for feature-level state in medium complexity apps but doesn't scale as well as Redux for large app-wide state.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What default value should you pass to createContext?</div>
+    <div class="concept-box purple mb-3">
+      Pass a sensible typed default matching the shape of the real value. The default is only used when a component calls <code>useContext</code> outside of any Provider — typically a bug. By adding a guard in your custom hook (<code>if (!ctx) throw new Error(...)</code>), you can pass <code>null</code> or <code>undefined</code> as the default and catch misuse early in development.
+    </div>
+  </div>
+
+</div>
+
+<footer class="py-4 mt-2" style="background:#0f172a;color:#64748b;">
+  <div class="container-xl text-center">
+    <span>React Mastery Hub &mdash; Section 14: Context API</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

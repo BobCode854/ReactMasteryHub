@@ -1,0 +1,2371 @@
+<!-- ============================================================
+     Tab 10 · Architecture & Patterns · Questions 1-25
+     Pattern: accordion-item, id="architecture-qN"
+     data-bs-parent="#acc-architecture"
+     ============================================================ -->
+
+<!-- Q1 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q1">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q1"
+            aria-expanded="false" aria-controls="architecture-q1">
+      <span class="diff-easy">Easy</span>&nbsp;
+      1. What is the single responsibility principle applied to React components?
+    </button>
+  </h2>
+  <div id="architecture-q1" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q1"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>Single Responsibility Principle (SRP)</strong> states that every module, class, or function
+        should have only one reason to change — one job it does well. Applied to React components, this means
+        each component should do <em>one thing</em>: either fetch data, or render UI, or handle a specific piece
+        of business logic — never all three at once.
+      </p>
+      <p>
+        A component that violates SRP is easy to spot: it makes API calls, manages multiple unrelated state
+        slices, formats data, and renders JSX all in the same file. Such components become impossible to test
+        in isolation, hard to reuse, and brittle when requirements change. Breaking them apart into focused
+        units reduces the blast radius of each change.
+      </p>
+      <p>
+        In practice, SRP guides you to extract custom hooks for data-fetching logic, separate utility functions
+        for data transformation, and keep JSX components purely concerned with presentation. A
+        <code>UserProfileCard</code> component should only know how to <em>display</em> a user profile — a
+        <code>useUserProfile</code> hook handles the fetch, and a <code>formatUserDate</code> utility handles
+        date formatting.
+      </p>
+      <p>
+        The rule of thumb: if you struggle to name a component with a single noun or short phrase, it probably
+        does too much. Components named <code>UserDashboardWithDataAndExport</code> are a red flag.
+      </p>
+<pre class="code-block">
+// VIOLATES SRP — one component doing too many things
+function UserCard({ userId }) {
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    fetch(`/api/users/${userId}`).then(r => r.json()).then(setUser);
+    fetch(`/api/users/${userId}/posts`).then(r => r.json()).then(setPosts);
+  }, [userId]);
+
+  const formattedJoinDate = user
+    ? new Date(user.joinedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+    : '';
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{user?.name}&lt;/h2&gt;
+      &lt;p&gt;Joined: {formattedJoinDate}&lt;/p&gt;
+      &lt;ul&gt;{posts.map(p =&gt; &lt;li key={p.id}&gt;{p.title}&lt;/li&gt;)}&lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}
+
+// FOLLOWS SRP — each piece has one job
+// 1. Custom hook: data concern
+function useUserProfile(userId) {
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    fetch(`/api/users/${userId}`).then(r => r.json()).then(setUser);
+    fetch(`/api/users/${userId}/posts`).then(r => r.json()).then(setPosts);
+  }, [userId]);
+  return { user, posts };
+}
+
+// 2. Utility: formatting concern
+function formatJoinDate(isoString) {
+  return new Date(isoString).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'long'
+  });
+}
+
+// 3. Component: display concern only
+function UserCard({ userId }) {
+  const { user, posts } = useUserProfile(userId);
+  if (!user) return &lt;p&gt;Loading...&lt;/p&gt;;
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{user.name}&lt;/h2&gt;
+      &lt;p&gt;Joined: {formatJoinDate(user.joinedAt)}&lt;/p&gt;
+      &lt;ul&gt;{posts.map(p =&gt; &lt;li key={p.id}&gt;{p.title}&lt;/li&gt;)}&lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q2">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q2"
+            aria-expanded="false" aria-controls="architecture-q2">
+      <span class="diff-easy">Easy</span>&nbsp;
+      2. What is a presentational vs container component pattern?
+    </button>
+  </h2>
+  <div id="architecture-q2" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q2"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>Presentational / Container</strong> split, popularised by Dan Abramov, divides components
+        into two camps. <em>Presentational</em> (a.k.a. "dumb") components care only about how things look —
+        they receive data through props, emit events through callback props, and contain almost no state or
+        side effects. <em>Container</em> (a.k.a. "smart") components care about how things work — they
+        connect to Redux/Context, make API calls, and pass data down to presentational components.
+      </p>
+      <p>
+        The benefit is a clean seam between UI and logic. Presentational components are trivially testable
+        (just pass props), trivially storybook-able (no mocking needed), and easily reusable across different
+        data sources. Container components centralise all complexity in one place so it is easy to audit.
+      </p>
+      <p>
+        It is worth noting that Dan Abramov himself later said he no longer recommends this split as a hard
+        rule now that hooks exist — a custom hook achieves the same separation without the extra wrapper
+        component. The pattern remains valid conceptually and is still common in codebases using Redux
+        <code>connect()</code>.
+      </p>
+<pre class="code-block">
+// --- Presentational component ---
+// Knows nothing about Redux or APIs. Pure UI.
+function UserList({ users, onSelectUser, isLoading }) {
+  if (isLoading) return &lt;p&gt;Loading users...&lt;/p&gt;;
+  return (
+    &lt;ul className="user-list"&gt;
+      {users.map(user =&gt; (
+        &lt;li key={user.id} onClick={() =&gt; onSelectUser(user.id)}&gt;
+          &lt;img src={user.avatar} alt={user.name} /&gt;
+          &lt;span&gt;{user.name}&lt;/span&gt;
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+// --- Container component ---
+// Knows about Redux store; passes data and callbacks down.
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUsers, selectUser } from './usersSlice';
+
+function UserListContainer() {
+  const dispatch = useDispatch();
+  const users = useSelector(state =&gt; state.users.list);
+  const isLoading = useSelector(state =&gt; state.users.loading);
+
+  useEffect(() =&gt; { dispatch(fetchUsers()); }, [dispatch]);
+
+  return (
+    &lt;UserList
+      users={users}
+      isLoading={isLoading}
+      onSelectUser={id =&gt; dispatch(selectUser(id))}
+    /&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q3">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q3"
+            aria-expanded="false" aria-controls="architecture-q3">
+      <span class="diff-easy">Easy</span>&nbsp;
+      3. What are smart and dumb components?
+    </button>
+  </h2>
+  <div id="architecture-q3" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q3"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        "Smart" and "dumb" are informal names for the same container/presentational split described above,
+        but the terminology emphasises <em>awareness</em>. A <strong>dumb component</strong> is blissfully
+        unaware of the application around it — it receives props, renders UI, fires callbacks. It could
+        live in a completely different app and work identically. A <strong>smart component</strong> is
+        "aware" of application infrastructure: the store, the router, the auth context, API endpoints.
+      </p>
+      <p>
+        The key measure is: does the component import anything application-specific (Redux, React Query,
+        React Router)? If yes, it is smart. If it only imports React and maybe some UI library types,
+        it is dumb. Dumb components should dominate by count — the pyramid should be wide at the bottom
+        (dumb) and narrow at the top (smart).
+      </p>
+      <p>
+        Modern hooks blur the line: a component can use a custom hook that internally calls
+        <code>useSelector</code>, making the component technically "aware" without any direct Redux
+        import. The spirit of the pattern still applies — keep the JSX layer thin and push complexity
+        into hooks.
+      </p>
+<pre class="code-block">
+// DUMB — zero application knowledge
+function Badge({ label, color = 'blue' }) {
+  return (
+    &lt;span style={{ background: color, borderRadius: 4, padding: '2px 8px' }}&gt;
+      {label}
+    &lt;/span&gt;
+  );
+}
+
+// ALSO DUMB — receives everything via props, fires callbacks
+function ProductCard({ name, price, stock, onAddToCart }) {
+  return (
+    &lt;div className="card"&gt;
+      &lt;h3&gt;{name}&lt;/h3&gt;
+      &lt;p&gt;${price.toFixed(2)}&lt;/p&gt;
+      &lt;Badge label={stock &gt; 0 ? 'In Stock' : 'Out of Stock'}
+             color={stock &gt; 0 ? 'green' : 'red'} /&gt;
+      &lt;button onClick={onAddToCart} disabled={stock === 0}&gt;
+        Add to Cart
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// SMART — knows about the store and dispatches actions
+function ProductCardContainer({ productId }) {
+  const product = useSelector(state =&gt;
+    state.products.items.find(p =&gt; p.id === productId)
+  );
+  const dispatch = useDispatch();
+
+  return (
+    &lt;ProductCard
+      {...product}
+      onAddToCart={() =&gt; dispatch(addToCart(productId))}
+    /&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q4">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q4"
+            aria-expanded="false" aria-controls="architecture-q4">
+      <span class="diff-easy">Easy</span>&nbsp;
+      4. What is a higher-order component (HOC)?
+    </button>
+  </h2>
+  <div id="architecture-q4" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q4"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        A <strong>Higher-Order Component</strong> is a function that takes a component as input and returns
+        a new, enhanced component. It is the React application of the higher-order function concept from
+        functional programming. HOCs add cross-cutting concerns — authentication guards, logging, data
+        fetching, theming — without modifying the original component.
+      </p>
+      <p>
+        The canonical naming convention is to prefix the HOC with <code>with</code>:
+        <code>withAuth</code>, <code>withTheme</code>, <code>withRouter</code>. The returned component
+        should forward all props it doesn't consume to the wrapped component, and it should copy over
+        <code>displayName</code> for better DevTools readability.
+      </p>
+      <p>
+        HOCs are less common in modern React since custom hooks cover most of the same use cases with less
+        indirection and no wrapper component nesting. They remain relevant when you need to intercept the
+        component itself (e.g., wrap it in an error boundary or inject a ref) or when working with
+        class-based codebases where hooks aren't available.
+      </p>
+      <p>
+        Pitfalls: HOCs can cause "wrapper hell" (deeply nested components in DevTools), they must not be
+        called inside render (they should be applied at module scope), and they can accidentally swallow
+        static methods unless you use <code>hoist-non-react-statics</code>.
+      </p>
+<pre class="code-block">
+// Generic HOC that adds authentication guard
+function withAuth(WrappedComponent) {
+  function AuthGuard(props) {
+    const { isAuthenticated, isLoading } = useAuth();
+
+    if (isLoading) return &lt;LoadingSpinner /&gt;;
+    if (!isAuthenticated) return &lt;Navigate to="/login" replace /&gt;;
+
+    return &lt;WrappedComponent {...props} /&gt;;
+  }
+
+  // Preserve display name for React DevTools
+  AuthGuard.displayName = `withAuth(${
+    WrappedComponent.displayName || WrappedComponent.name || 'Component'
+  })`;
+
+  return AuthGuard;
+}
+
+// HOC that injects analytics tracking
+function withTracking(WrappedComponent, eventName) {
+  return function TrackedComponent(props) {
+    const { track } = useAnalytics();
+
+    useEffect(() =&gt; {
+      track(`${eventName}_viewed`);
+    }, [track]);
+
+    const handleClick = useCallback((e) =&gt; {
+      track(`${eventName}_clicked`);
+      props.onClick?.(e);
+    }, [track, props.onClick]);
+
+    return &lt;WrappedComponent {...props} onClick={handleClick} /&gt;;
+  };
+}
+
+// Usage
+const ProtectedDashboard = withAuth(Dashboard);
+const TrackedButton = withTracking(Button, 'cta_button');
+
+// Composing HOCs
+const ProtectedTrackedDashboard = withAuth(withTracking(Dashboard, 'dashboard'));
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q5">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q5"
+            aria-expanded="false" aria-controls="architecture-q5">
+      <span class="diff-easy">Easy</span>&nbsp;
+      5. What is the render props pattern?
+    </button>
+  </h2>
+  <div id="architecture-q5" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q5"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>render props pattern</strong> is a technique for sharing stateful logic between
+        components by passing a function as a prop. The component with the shared logic calls that
+        function to produce its output, handing back control over what gets rendered. This inverts the
+        normal relationship: instead of the parent dictating what renders, the parent supplies the
+        rendering instructions to the logic-holding child.
+      </p>
+      <p>
+        The function prop is often literally named <code>render</code>, but it doesn't have to be —
+        using <code>children</code> as a function ("function-as-children") achieves the same pattern with
+        cleaner JSX. React Router's early versions used render props extensively;
+        <code>&lt;Route render={({ match }) =&gt; ...} /&gt;</code> is the canonical example.
+      </p>
+      <p>
+        Render props avoid the <code>displayName</code> and static-method forwarding problems of HOCs,
+        and they make the data flow explicit — you can see exactly what values are being injected.
+        The downside is potential "callback hell" when multiple render-prop components are nested, which
+        custom hooks have largely solved.
+      </p>
+<pre class="code-block">
+// Logic-holding component exposes its state via render prop
+function MouseTracker({ render }) {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = useCallback((e) =&gt; {
+    setPosition({ x: e.clientX, y: e.clientY });
+  }, []);
+
+  return (
+    &lt;div style={{ height: '100vh' }} onMouseMove={handleMouseMove}&gt;
+      {render(position)}
+    &lt;/div&gt;
+  );
+}
+
+// Consumer decides what to render with the position data
+function App() {
+  return (
+    &lt;MouseTracker
+      render={({ x, y }) =&gt; (
+        &lt;h1&gt;Mouse is at ({x}, {y})&lt;/h1&gt;
+      )}
+    /&gt;
+  );
+}
+
+// --- children-as-function variant (cleaner JSX) ---
+function DataFetcher({ url, children }) {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() =&gt; {
+    fetch(url)
+      .then(r =&gt; r.json())
+      .then(setData)
+      .catch(setError)
+      .finally(() =&gt; setLoading(false));
+  }, [url]);
+
+  return children({ data, error, loading });
+}
+
+// Usage
+&lt;DataFetcher url="/api/products"&gt;
+  {({ data, loading, error }) =&gt; {
+    if (loading) return &lt;Spinner /&gt;;
+    if (error)   return &lt;ErrorBanner error={error} /&gt;;
+    return &lt;ProductGrid products={data} /&gt;;
+  }}
+&lt;/DataFetcher&gt;
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q6">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q6"
+            aria-expanded="false" aria-controls="architecture-q6">
+      <span class="diff-medium">Medium</span>&nbsp;
+      6. What is the compound components pattern?
+    </button>
+  </h2>
+  <div id="architecture-q6" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q6"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        <strong>Compound components</strong> are a set of components that work together to form a single
+        cohesive UI unit, sharing implicit state through React Context rather than through explicit prop
+        drilling. The parent component owns state and distributes it to child sub-components that are
+        namespaced under it. The consumer assembles the final UI by composing those sub-components in any
+        order — achieving high flexibility without exposing complex configuration props.
+      </p>
+      <p>
+        HTML's <code>&lt;select&gt;</code> + <code>&lt;option&gt;</code> is the original compound
+        component pair — they communicate implicitly, the browser handles their shared state, and you
+        can compose them however you like. React's <code>&lt;Select&gt;</code> +
+        <code>&lt;Select.Option&gt;</code> pattern mimics this.
+      </p>
+      <p>
+        The pattern avoids "prop explosion" — instead of a single <code>&lt;Tabs tabs={[...]} /&gt;</code>
+        with a complex config object, you get composable
+        <code>&lt;Tabs&gt;&lt;Tabs.List&gt;...&lt;/Tabs.List&gt;&lt;Tabs.Panels&gt;...&lt;/Tabs.Panels&gt;&lt;/Tabs&gt;</code>.
+        Consumers can insert extra DOM elements, reorder sub-components, or omit optional parts entirely.
+      </p>
+<pre class="code-block">
+// Internal context
+const TabsContext = React.createContext(null);
+
+// Root compound component — owns the shared state
+function Tabs({ children, defaultIndex = 0 }) {
+  const [activeIndex, setActiveIndex] = useState(defaultIndex);
+  return (
+    &lt;TabsContext.Provider value={{ activeIndex, setActiveIndex }}&gt;
+      &lt;div className="tabs"&gt;{children}&lt;/div&gt;
+    &lt;/TabsContext.Provider&gt;
+  );
+}
+
+// Sub-component: tab list
+Tabs.List = function TabList({ children }) {
+  return &lt;div role="tablist" className="tabs__list"&gt;{children}&lt;/div&gt;;
+};
+
+// Sub-component: individual tab trigger
+Tabs.Tab = function Tab({ children, index }) {
+  const { activeIndex, setActiveIndex } = useContext(TabsContext);
+  return (
+    &lt;button
+      role="tab"
+      aria-selected={activeIndex === index}
+      className={`tabs__tab ${activeIndex === index ? 'active' : ''}`}
+      onClick={() =&gt; setActiveIndex(index)}
+    &gt;
+      {children}
+    &lt;/button&gt;
+  );
+};
+
+// Sub-component: panels container
+Tabs.Panels = function TabPanels({ children }) {
+  return &lt;div className="tabs__panels"&gt;{children}&lt;/div&gt;;
+};
+
+// Sub-component: individual panel
+Tabs.Panel = function TabPanel({ children, index }) {
+  const { activeIndex } = useContext(TabsContext);
+  if (activeIndex !== index) return null;
+  return (
+    &lt;div role="tabpanel" className="tabs__panel"&gt;
+      {children}
+    &lt;/div&gt;
+  );
+};
+
+// Consumer — total control over composition
+function App() {
+  return (
+    &lt;Tabs defaultIndex={0}&gt;
+      &lt;Tabs.List&gt;
+        &lt;Tabs.Tab index={0}&gt;Overview&lt;/Tabs.Tab&gt;
+        &lt;Tabs.Tab index={1}&gt;Details&lt;/Tabs.Tab&gt;
+        &lt;Tabs.Tab index={2}&gt;Reviews&lt;/Tabs.Tab&gt;
+      &lt;/Tabs.List&gt;
+      &lt;Tabs.Panels&gt;
+        &lt;Tabs.Panel index={0}&gt;&lt;OverviewContent /&gt;&lt;/Tabs.Panel&gt;
+        &lt;Tabs.Panel index={1}&gt;&lt;DetailsContent /&gt;&lt;/Tabs.Panel&gt;
+        &lt;Tabs.Panel index={2}&gt;&lt;ReviewsContent /&gt;&lt;/Tabs.Panel&gt;
+      &lt;/Tabs.Panels&gt;
+    &lt;/Tabs&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q7">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q7"
+            aria-expanded="false" aria-controls="architecture-q7">
+      <span class="diff-medium">Medium</span>&nbsp;
+      7. What is the controlled components pattern applied to custom components?
+    </button>
+  </h2>
+  <div id="architecture-q7" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q7"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        React's built-in controlled component concept (where <code>value</code> + <code>onChange</code>
+        give the parent full control of form input state) extends naturally to custom components. A
+        <strong>controlled custom component</strong> accepts its current value via a prop and notifies
+        the parent of changes via a callback — it holds <em>no</em> internal state for that value.
+        An <strong>uncontrolled custom component</strong> manages its own internal state and only
+        surfaces it on demand (via a ref or a final submit callback).
+      </p>
+      <p>
+        Many component libraries (Headless UI, Radix UI, React Aria) support both modes using a pattern
+        called <strong>uncontrolled + controlled duality</strong>: if a value prop is passed, the
+        component is controlled; if only a defaultValue prop is passed, it manages its own state.
+        Implementing this yourself requires careful handling to avoid the "controlled → uncontrolled"
+        React warning.
+      </p>
+      <p>
+        The practical decision: use controlled mode when the parent needs to read or manipulate the value
+        at any time (form validation, dependent field logic, testing); use uncontrolled when the component
+        is self-contained and the parent only needs the final value.
+      </p>
+<pre class="code-block">
+// A controlled/uncontrolled dual-mode custom Rating component
+function Rating({ value, defaultValue = 0, onChange }) {
+  // If `value` is provided externally, component is controlled
+  const isControlled = value !== undefined;
+
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const displayValue = isControlled ? value : internalValue;
+
+  const handleSelect = (star) =&gt; {
+    if (!isControlled) {
+      setInternalValue(star);
+    }
+    onChange?.(star);
+  };
+
+  return (
+    &lt;div className="rating" aria-label={`Rating: ${displayValue} of 5`}&gt;
+      {[1, 2, 3, 4, 5].map(star =&gt; (
+        &lt;button
+          key={star}
+          type="button"
+          className={star &lt;= displayValue ? 'star filled' : 'star'}
+          onClick={() =&gt; handleSelect(star)}
+          aria-label={`${star} star`}
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+// --- Controlled usage (parent drives state) ---
+function ReviewForm() {
+  const [rating, setRating] = useState(0);
+  return (
+    &lt;form&gt;
+      &lt;Rating value={rating} onChange={setRating} /&gt;
+      &lt;p&gt;You selected: {rating} stars&lt;/p&gt;
+    &lt;/form&gt;
+  );
+}
+
+// --- Uncontrolled usage (component drives its own state) ---
+function QuickRating() {
+  return &lt;Rating defaultValue={3} onChange={val =&gt; console.log('Rated:', val)} /&gt;;
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q8">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q8"
+            aria-expanded="false" aria-controls="architecture-q8">
+      <span class="diff-medium">Medium</span>&nbsp;
+      8. What is the provider pattern?
+    </button>
+  </h2>
+  <div id="architecture-q8" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q8"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>provider pattern</strong> uses React Context to make data or services available to
+        any descendant component in the tree without explicit prop drilling. A Provider component sits
+        high in the component tree and a corresponding <code>useXxx</code> hook (or direct
+        <code>useContext</code> call) lets any descendant subscribe to that data.
+      </p>
+      <p>
+        The pattern is used for genuinely global or subtree-wide concerns: authentication state, theme,
+        locale/i18n, feature flags, toast notifications. It should not be used as a shortcut to avoid
+        passing props down two levels — that is an anti-pattern that makes data flow hard to trace.
+      </p>
+      <p>
+        A well-designed provider module exports three things: the Provider component, a custom hook
+        (<code>useAuth</code>, <code>useTheme</code>), and optionally the context object itself for
+        advanced cases. The custom hook should throw a descriptive error if called outside the provider,
+        making misconfiguration obvious immediately.
+      </p>
+<pre class="code-block">
+// auth-context.tsx
+const AuthContext = React.createContext(null);
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() =&gt; {
+    // Rehydrate from session/token on mount
+    getCurrentUser()
+      .then(setUser)
+      .catch(() =&gt; setUser(null))
+      .finally(() =&gt; setLoading(false));
+  }, []);
+
+  const login = useCallback(async (credentials) =&gt; {
+    const loggedInUser = await authService.login(credentials);
+    setUser(loggedInUser);
+  }, []);
+
+  const logout = useCallback(async () =&gt; {
+    await authService.logout();
+    setUser(null);
+  }, []);
+
+  const value = useMemo(
+    () =&gt; ({ user, loading, login, logout, isAuthenticated: !!user }),
+    [user, loading, login, logout]
+  );
+
+  return &lt;AuthContext.Provider value={value}&gt;{children}&lt;/AuthContext.Provider&gt;;
+}
+
+// Custom hook with guard
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (ctx === null) {
+    throw new Error('useAuth must be used inside &lt;AuthProvider&gt;');
+  }
+  return ctx;
+}
+
+// Any descendant can consume without prop drilling
+function NavBar() {
+  const { user, logout, isAuthenticated } = useAuth();
+  return (
+    &lt;nav&gt;
+      {isAuthenticated ? (
+        &lt;&gt;
+          &lt;span&gt;Hello, {user.name}&lt;/span&gt;
+          &lt;button onClick={logout}&gt;Log out&lt;/button&gt;
+        &lt;/&gt;
+      ) : (
+        &lt;a href="/login"&gt;Log in&lt;/a&gt;
+      )}
+    &lt;/nav&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q9">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q9"
+            aria-expanded="false" aria-controls="architecture-q9">
+      <span class="diff-medium">Medium</span>&nbsp;
+      9. What is the observer pattern in React?
+    </button>
+  </h2>
+  <div id="architecture-q9" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q9"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>observer pattern</strong> defines a one-to-many dependency so that when one object
+        (the subject/observable) changes state, all its dependents (observers) are notified automatically.
+        In React, this manifests in several ways: components <em>observe</em> Redux state slices via
+        <code>useSelector</code>, components observe Context values via <code>useContext</code>, and
+        components observe external stores via <code>useSyncExternalStore</code>.
+      </p>
+      <p>
+        A custom event bus or pub/sub system is the most explicit implementation of the observer pattern
+        outside of React's built-in primitives. It is useful for communication between completely
+        independent parts of a large app — for example, a file-upload widget deep in the tree emitting
+        an event that a top-level notification banner subscribes to.
+      </p>
+      <p>
+        React Query and SWR implement the observer pattern internally — multiple components subscribed
+        to the same query key all re-render when fresh data arrives, without any shared state boilerplate
+        in the application code.
+      </p>
+<pre class="code-block">
+// Simple event emitter (observer pattern) for cross-subtree communication
+class EventEmitter {
+  constructor() { this.listeners = new Map(); }
+
+  on(event, listener) {
+    if (!this.listeners.has(event)) this.listeners.set(event, new Set());
+    this.listeners.get(event).add(listener);
+    // Return cleanup function
+    return () =&gt; this.listeners.get(event)?.delete(listener);
+  }
+
+  emit(event, payload) {
+    this.listeners.get(event)?.forEach(fn =&gt; fn(payload));
+  }
+}
+
+export const eventBus = new EventEmitter();
+
+// Hook to subscribe to an event (observer)
+function useEventBus(event, handler) {
+  useEffect(() =&gt; {
+    const unsubscribe = eventBus.on(event, handler);
+    return unsubscribe; // cleanup on unmount
+  }, [event, handler]);
+}
+
+// Publisher component — deep inside the tree
+function FileUploader() {
+  const handleUpload = async (file) =&gt; {
+    await uploadFile(file);
+    eventBus.emit('file:uploaded', { fileName: file.name });
+  };
+  return &lt;input type="file" onChange={e =&gt; handleUpload(e.target.files[0])} /&gt;;
+}
+
+// Observer component — completely separate part of the tree
+function NotificationBanner() {
+  const [message, setMessage] = useState('');
+
+  useEventBus('file:uploaded', useCallback(({ fileName }) =&gt; {
+    setMessage(`${fileName} uploaded successfully!`);
+    setTimeout(() =&gt; setMessage(''), 3000);
+  }, []));
+
+  if (!message) return null;
+  return &lt;div className="banner banner--success"&gt;{message}&lt;/div&gt;;
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q10">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q10"
+            aria-expanded="false" aria-controls="architecture-q10">
+      <span class="diff-medium">Medium</span>&nbsp;
+      10. What is feature-based folder structure?
+    </button>
+  </h2>
+  <div id="architecture-q10" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q10"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        <strong>Feature-based (domain-based) folder structure</strong> organises code by business
+        domain rather than by technical type. Instead of top-level <code>components/</code>,
+        <code>hooks/</code>, and <code>utils/</code> folders that mix all domains together, you have
+        top-level <code>features/</code> folders where each feature folder contains its own components,
+        hooks, state, API calls, types, and tests. Everything related to "authentication" lives in
+        <code>features/auth/</code>, everything related to "checkout" in <code>features/checkout/</code>.
+      </p>
+      <p>
+        This structure scales far better than type-based organisation. In a type-based layout, adding a
+        single feature touches 6-8 different top-level directories. In a feature-based layout you work
+        entirely within one folder. Features can be added, removed, or moved with minimal cross-feature
+        changes.
+      </p>
+      <p>
+        Shared utilities and truly cross-cutting UI primitives live in a <code>shared/</code> or
+        <code>common/</code> folder at the top level. The discipline is to keep shared things genuinely
+        shared and resist the temptation to put everything shared into feature folders.
+      </p>
+<pre class="code-block">
+// Type-based (poor at scale)
+src/
+  components/
+    UserCard.tsx
+    ProductCard.tsx
+    CheckoutForm.tsx
+  hooks/
+    useUser.ts
+    useProducts.ts
+    useCart.ts
+  api/
+    userApi.ts
+    productApi.ts
+    cartApi.ts
+  store/
+    userSlice.ts
+    productSlice.ts
+    cartSlice.ts
+
+// Feature-based (scales well)
+src/
+  features/
+    auth/
+      components/
+        LoginForm.tsx
+        SignupForm.tsx
+      hooks/
+        useAuth.ts
+        useSession.ts
+      api/
+        authApi.ts
+      store/
+        authSlice.ts
+      types/
+        auth.types.ts
+      index.ts          // public API — barrel export
+    products/
+      components/
+        ProductCard.tsx
+        ProductGrid.tsx
+        ProductFilter.tsx
+      hooks/
+        useProducts.ts
+        useProductSearch.ts
+      api/
+        productApi.ts
+      store/
+        productSlice.ts
+      index.ts
+    cart/
+      components/ ...
+      hooks/ ...
+      index.ts
+  shared/               // truly cross-cutting
+    components/
+      Button.tsx
+      Modal.tsx
+      Spinner.tsx
+    hooks/
+      useDebounce.ts
+      useLocalStorage.ts
+    utils/
+      formatDate.ts
+      currency.ts
+  app/
+    App.tsx
+    router.tsx
+    store.ts
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q11 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q11">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q11"
+            aria-expanded="false" aria-controls="architecture-q11">
+      <span class="diff-medium">Medium</span>&nbsp;
+      11. What is the barrel export pattern?
+    </button>
+  </h2>
+  <div id="architecture-q11" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q11"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        A <strong>barrel</strong> is an <code>index.ts</code> (or <code>index.js</code>) file that
+        re-exports everything from a module folder, acting as a single public entry point. Consumers
+        import from the folder path rather than from specific internal file paths, decoupling them from
+        internal file organisation.
+      </p>
+      <p>
+        Benefits: import paths are shorter and more stable; internal refactors (renaming or splitting
+        files) don't break consumers as long as the public API stays the same; the barrel acts as an
+        explicit contract for what a feature or module exposes.
+      </p>
+      <p>
+        The primary risk is <strong>tree-shaking degradation</strong>. Bundlers that cannot statically
+        analyse re-exports may import entire barrel files when only one export is needed. Modern bundlers
+        (Vite, webpack 5 with ESM) handle this well, but circular dependency issues can still arise.
+        As a rule, avoid importing from a feature's barrel file <em>inside</em> that same feature — only
+        cross-feature imports should go through the barrel.
+      </p>
+<pre class="code-block">
+// features/auth/components/LoginForm.tsx
+export function LoginForm() { ... }
+
+// features/auth/components/SignupForm.tsx
+export function SignupForm() { ... }
+
+// features/auth/hooks/useAuth.ts
+export function useAuth() { ... }
+
+// features/auth/index.ts  ← the barrel
+export { LoginForm }  from './components/LoginForm';
+export { SignupForm } from './components/SignupForm';
+export { useAuth }    from './hooks/useAuth';
+// Note: do NOT export internal implementation details
+
+// --- Consumer imports (clean) ---
+import { LoginForm, useAuth } from '@/features/auth';
+// vs. without barrel (fragile internal path):
+import { LoginForm } from '@/features/auth/components/LoginForm';
+import { useAuth }   from '@/features/auth/hooks/useAuth';
+
+// --- Typed barrel with explicit public API ---
+// features/products/index.ts
+export type { Product, ProductFilter } from './types/product.types';
+export { ProductCard }   from './components/ProductCard';
+export { ProductGrid }   from './components/ProductGrid';
+export { useProducts }   from './hooks/useProducts';
+export { productApi }    from './api/productApi';
+// productSlice is intentionally NOT exported — internal to the feature
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q12 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q12">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q12"
+            aria-expanded="false" aria-controls="architecture-q12">
+      <span class="diff-medium">Medium</span>&nbsp;
+      12. What is colocation in React architecture?
+    </button>
+  </h2>
+  <div id="architecture-q12" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q12"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        <strong>Colocation</strong> is the principle of placing code as close as possible to where it
+        is used. Kent C. Dodds summarises it as: "Things that change together should be located together."
+        In React this means: tests next to the components they test, styles next to the components they
+        style, GraphQL queries in the same file as the component that uses them, and state managed at
+        the lowest component level that needs it.
+      </p>
+      <p>
+        The opposite of colocation is centralisation — putting all tests in a single <code>__tests__/</code>
+        top-level folder, all styles in a top-level <code>styles/</code> folder. While centralisation
+        feels tidy, it creates a split-brain problem: to understand a component you must navigate between
+        multiple distant folders. Colocation keeps all relevant context in one place.
+      </p>
+      <p>
+        State colocation is especially impactful: state that only one component uses should live in that
+        component, not in a global store. Lifting state only as high as it needs to go — no higher —
+        reduces unnecessary re-renders and makes each component easier to reason about.
+      </p>
+<pre class="code-block">
+// Non-colocated (scattered across the project)
+src/
+  components/UserCard.tsx
+  tests/components/UserCard.test.tsx
+  styles/UserCard.module.css
+  queries/userQueries.ts          // GraphQL queries
+  stories/UserCard.stories.tsx
+
+// Colocated (everything lives with the component)
+src/
+  features/users/
+    components/
+      UserCard/
+        UserCard.tsx
+        UserCard.test.tsx         // test next to component
+        UserCard.module.css       // styles next to component
+        UserCard.stories.tsx      // storybook story next to component
+        UserCard.graphql          // query next to component (or inside .tsx)
+        index.ts                  // barrel
+
+// State colocation example
+// WRONG: global store holds UI state only one component uses
+const globalStore = {
+  isDropdownOpen: false,        // only Dropdown cares
+  dropdownSelectedItem: null,   // only Dropdown cares
+  products: [...],              // truly global — fine
+};
+
+// RIGHT: local state stays local
+function Dropdown({ options, onSelect }) {
+  const [isOpen, setIsOpen] = useState(false);         // colocated
+  const [selected, setSelected] = useState(null);      // colocated
+  // ...
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q13 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q13">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q13"
+            aria-expanded="false" aria-controls="architecture-q13">
+      <span class="diff-medium">Medium</span>&nbsp;
+      13. What are feature flags and how do you implement them in React?
+    </button>
+  </h2>
+  <div id="architecture-q13" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q13"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        <strong>Feature flags</strong> (also called feature toggles) are configuration values that
+        enable or disable features at runtime without deploying new code. They allow teams to merge
+        code continuously without releasing it (<em>trunk-based development</em>), run A/B tests,
+        do percentage rollouts, grant early access to specific users, and kill a misbehaving feature
+        instantly.
+      </p>
+      <p>
+        Implementation ranges from a simple JSON config file (as used in this YMS project) to a
+        full-featured remote service like LaunchDarkly or Statsig. The React integration follows the
+        provider pattern: a <code>FeatureFlagsProvider</code> loads the config and distributes it via
+        Context; a <code>useFeatureFlag(flagName)</code> hook reads individual flags; and a
+        <code>&lt;FeatureFlag name="x"&gt;</code> component renders children conditionally.
+      </p>
+      <p>
+        Critical rules: feature flags should be boolean (on/off), have a clear owner, and have a
+        planned expiry. Long-lived flags become technical debt — once a feature is fully rolled out,
+        the flag and its conditional branches should be removed.
+      </p>
+<pre class="code-block">
+// 1. Feature flag config (can be a static JSON or fetched from a service)
+// config/featureFlags.json
+{
+  "newCheckout": true,
+  "darkMode": false,
+  "aiSearch": true,
+  "betaDashboard": false
+}
+
+// 2. Provider
+const FeatureFlagsContext = React.createContext({});
+
+export function FeatureFlagsProvider({ children }) {
+  const [flags, setFlags] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() =&gt; {
+    // Could be static JSON, API call, or LaunchDarkly SDK
+    import('./config/featureFlags.json')
+      .then(module =&gt; setFlags(module.default))
+      .finally(() =&gt; setLoading(false));
+  }, []);
+
+  if (loading) return null;
+
+  return (
+    &lt;FeatureFlagsContext.Provider value={flags}&gt;
+      {children}
+    &lt;/FeatureFlagsContext.Provider&gt;
+  );
+}
+
+// 3. Hook
+export function useFeatureFlag(flagName) {
+  const flags = useContext(FeatureFlagsContext);
+  return !!flags[flagName];
+}
+
+// 4. Declarative component
+export function FeatureFlag({ name, fallback = null, children }) {
+  const enabled = useFeatureFlag(name);
+  return enabled ? children : fallback;
+}
+
+// 5. Usage
+function App() {
+  const isNewCheckout = useFeatureFlag('newCheckout');
+
+  return (
+    &lt;div&gt;
+      {/* Imperative */}
+      {isNewCheckout ? &lt;NewCheckout /&gt; : &lt;LegacyCheckout /&gt;}
+
+      {/* Declarative */}
+      &lt;FeatureFlag name="aiSearch" fallback={&lt;BasicSearch /&gt;}&gt;
+        &lt;AISearch /&gt;
+      &lt;/FeatureFlag&gt;
+    &lt;/div&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q14 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q14">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q14"
+            aria-expanded="false" aria-controls="architecture-q14">
+      <span class="diff-medium">Medium</span>&nbsp;
+      14. What is the adapter pattern for API calls?
+    </button>
+  </h2>
+  <div id="architecture-q14" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q14"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>adapter pattern</strong> wraps a third-party or external interface with a custom
+        interface that matches what your application expects. Applied to API calls, it means creating a
+        thin abstraction layer between your React components/hooks and the actual HTTP library
+        (fetch, axios, GraphQL client). Components call your adapter; the adapter calls the library.
+      </p>
+      <p>
+        This provides three concrete benefits. First, it normalises data shapes — the backend API may
+        return <code>snake_case</code> or oddly-nested objects; the adapter transforms them to the
+        camelCase, flat shape your TypeScript types expect. Second, it makes the HTTP library swappable
+        — switching from axios to fetch or from REST to GraphQL requires changing only the adapter, not
+        dozens of component files. Third, it makes testing trivial — you mock the adapter, not the
+        underlying HTTP call.
+      </p>
+      <p>
+        In this YMS codebase, <code>src/api/apiAxios.ts</code> is the base adapter layer — it wraps
+        axios with request ID injection and error interceptors. Domain-specific adapters like
+        <code>src/api/trailer.ts</code> build on top of it.
+      </p>
+<pre class="code-block">
+// The backend API returns:
+// { user_id: 1, first_name: "Alice", last_name: "Smith", created_at: "2024-01-01T00:00:00Z" }
+
+// Our app's type (camelCase, flat)
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  createdAt: Date;
+}
+
+// Raw API response type
+interface UserApiResponse {
+  user_id: number;
+  first_name: string;
+  last_name: string;
+  created_at: string;
+}
+
+// Adapter layer: transforms + abstracts HTTP
+const userAdapter = {
+  // Transform API shape → app shape
+  fromApi(raw: UserApiResponse): User {
+    return {
+      id: raw.user_id,
+      firstName: raw.first_name,
+      lastName: raw.last_name,
+      fullName: `${raw.first_name} ${raw.last_name}`,
+      createdAt: new Date(raw.created_at),
+    };
+  },
+
+  // All HTTP calls go through here
+  async getById(id: number): Promise&lt;User&gt; {
+    const { data } = await apiAxios.get&lt;UserApiResponse&gt;(`/users/${id}`);
+    return this.fromApi(data);
+  },
+
+  async getAll(): Promise&lt;User[]&gt; {
+    const { data } = await apiAxios.get&lt;UserApiResponse[]&gt;('/users');
+    return data.map(this.fromApi);
+  },
+
+  async update(id: number, patch: Partial&lt;User&gt;): Promise&lt;User&gt; {
+    const { data } = await apiAxios.patch&lt;UserApiResponse&gt;(`/users/${id}`, patch);
+    return this.fromApi(data);
+  },
+};
+
+// Custom hook consumes the adapter — not axios directly
+function useUser(userId: number) {
+  const [user, setUser] = useState&lt;User | null&gt;(null);
+  useEffect(() =&gt; {
+    userAdapter.getById(userId).then(setUser);
+  }, [userId]);
+  return user;
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q15 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q15">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q15"
+            aria-expanded="false" aria-controls="architecture-q15">
+      <span class="diff-medium">Medium</span>&nbsp;
+      15. What is the repository pattern applied to React?
+    </button>
+  </h2>
+  <div id="architecture-q15" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q15"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>repository pattern</strong>, borrowed from Domain-Driven Design, provides an
+        abstraction layer over data sources — whether REST API, GraphQL, localStorage, IndexedDB, or
+        a mock. Application code (hooks, components) depends on the repository interface, not on any
+        specific data source implementation. Swapping implementations (e.g., replacing a mock with a
+        real API, or REST with GraphQL) requires zero changes in consuming code.
+      </p>
+      <p>
+        In React, a repository is typically a plain object or class with methods that return Promises.
+        The repository is injected via Context (for React-idiomatic feel) or instantiated as a module
+        singleton. The key discipline is that repositories never know about React — they don't call
+        hooks or interact with the DOM.
+      </p>
+      <p>
+        This pattern is especially valuable for testability: tests can supply a fake in-memory
+        repository that fulfils requests synchronously, making tests fast and deterministic without
+        network mocking.
+      </p>
+<pre class="code-block">
+// Repository interface (TypeScript)
+interface IProductRepository {
+  findAll(): Promise&lt;Product[]&gt;;
+  findById(id: string): Promise&lt;Product | null&gt;;
+  create(data: Omit&lt;Product, 'id'&gt;): Promise&lt;Product&gt;;
+  update(id: string, data: Partial&lt;Product&gt;): Promise&lt;Product&gt;;
+  delete(id: string): Promise&lt;void&gt;;
+}
+
+// REST implementation
+class RestProductRepository implements IProductRepository {
+  async findAll() {
+    const { data } = await apiAxios.get('/products');
+    return data.map(productAdapter.fromApi);
+  }
+  async findById(id) {
+    const { data } = await apiAxios.get(`/products/${id}`);
+    return productAdapter.fromApi(data);
+  }
+  async create(productData) {
+    const { data } = await apiAxios.post('/products', productData);
+    return productAdapter.fromApi(data);
+  }
+  async update(id, patch) {
+    const { data } = await apiAxios.patch(`/products/${id}`, patch);
+    return productAdapter.fromApi(data);
+  }
+  async delete(id) { await apiAxios.delete(`/products/${id}`); }
+}
+
+// In-memory implementation (for tests / offline mode)
+class InMemoryProductRepository implements IProductRepository {
+  private items: Product[] = [...seedProducts];
+  async findAll() { return [...this.items]; }
+  async findById(id) { return this.items.find(p =&gt; p.id === id) ?? null; }
+  async create(data) {
+    const product = { ...data, id: crypto.randomUUID() };
+    this.items.push(product);
+    return product;
+  }
+  async update(id, patch) {
+    const idx = this.items.findIndex(p =&gt; p.id === id);
+    this.items[idx] = { ...this.items[idx], ...patch };
+    return this.items[idx];
+  }
+  async delete(id) { this.items = this.items.filter(p =&gt; p.id !== id); }
+}
+
+// Context injection
+const ProductRepoContext = React.createContext&lt;IProductRepository&gt;(
+  new RestProductRepository()
+);
+
+// Hook
+function useProducts() {
+  const repo = useContext(ProductRepoContext);
+  const [products, setProducts] = useState&lt;Product[]&gt;([]);
+  useEffect(() =&gt; { repo.findAll().then(setProducts); }, [repo]);
+  return products;
+}
+
+// In tests: wrap with InMemoryProductRepository
+render(
+  &lt;ProductRepoContext.Provider value={new InMemoryProductRepository()}&gt;
+    &lt;ProductGrid /&gt;
+  &lt;/ProductRepoContext.Provider&gt;
+);
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q16 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q16">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q16"
+            aria-expanded="false" aria-controls="architecture-q16">
+      <span class="diff-medium">Medium</span>&nbsp;
+      16. What are micro-frontends?
+    </button>
+  </h2>
+  <div id="architecture-q16" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q16"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        <strong>Micro-frontends</strong> apply microservices thinking to the frontend: instead of one
+        large monolithic React app, multiple independent teams own and deploy separate frontend
+        applications (or modules) that compose into a unified user experience. Each micro-frontend can
+        use different frameworks, different release cycles, and independent CI/CD pipelines.
+      </p>
+      <p>
+        There are several composition strategies. <em>Build-time composition</em> (npm packages) is
+        the simplest but tightest coupling. <em>Runtime composition via iframes</em> offers the
+        strongest isolation but limits communication. <em>Runtime composition via JavaScript</em>
+        (Module Federation, import maps, or single-spa) allows shared dependencies and smooth UI
+        integration. <em>Server-side composition</em> stitches HTML fragments on the server.
+      </p>
+      <p>
+        The trade-offs are significant: micro-frontends add infrastructure complexity, potential
+        bundle duplication, harder cross-team coordination for shared state, and a more complex local
+        development setup. They are best suited for very large organisations where multiple independent
+        teams work on distinct product areas and deployment independence is a real need — not for
+        medium-sized applications where a well-structured monorepo suffices.
+      </p>
+<pre class="code-block">
+// Conceptual structure of a micro-frontend architecture
+//
+// shell/                    ← orchestrator / app shell
+//   src/
+//     App.tsx               ← loads remote modules dynamically
+//     router.tsx
+// mfe-auth/                 ← owned by Auth team
+//   src/
+//     LoginPage.tsx
+//     SignupPage.tsx
+//   webpack.config.js       ← exposes LoginPage via Module Federation
+// mfe-products/             ← owned by Catalog team
+//   src/
+//     ProductGrid.tsx
+//     ProductDetail.tsx
+//   webpack.config.js       ← exposes ProductGrid
+// mfe-checkout/             ← owned by Commerce team
+//   src/
+//     CheckoutFlow.tsx
+//   webpack.config.js
+
+// Shell dynamically loads remote components at runtime
+const RemoteLoginPage = React.lazy(() =&gt;
+  import('mfe_auth/LoginPage')    // resolved by Module Federation
+);
+
+const RemoteProductGrid = React.lazy(() =&gt;
+  import('mfe_products/ProductGrid')
+);
+
+function Shell() {
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;Suspense fallback={&lt;GlobalSpinner /&gt;}&gt;
+        &lt;Routes&gt;
+          &lt;Route path="/login"    element={&lt;RemoteLoginPage /&gt;} /&gt;
+          &lt;Route path="/products" element={&lt;RemoteProductGrid /&gt;} /&gt;
+        &lt;/Routes&gt;
+      &lt;/Suspense&gt;
+    &lt;/BrowserRouter&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q17 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q17">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q17"
+            aria-expanded="false" aria-controls="architecture-q17">
+      <span class="diff-medium">Medium</span>&nbsp;
+      17. What is Module Federation in Webpack 5?
+    </button>
+  </h2>
+  <div id="architecture-q17" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q17"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        <strong>Module Federation</strong> is a Webpack 5 feature that allows separately compiled
+        JavaScript bundles to share code at runtime. A <em>host</em> application can dynamically load
+        <em>remote</em> modules from other deployed applications as if they were local imports. Remotes
+        can also declare <em>shared</em> libraries (like React) that are deduplicated — preventing
+        multiple React instances from loading.
+      </p>
+      <p>
+        Each federated app has a <code>remoteEntry.js</code> manifest file loaded by the host. This
+        manifest tells Webpack what modules are exposed and which shared libraries are available. If
+        a shared library's version is compatible, the already-loaded version is reused; otherwise a
+        fallback is loaded.
+      </p>
+      <p>
+        This is the technical backbone of production micro-frontend architectures at scale. It enables
+        independent deployments: the checkout team can ship a new <code>CheckoutFlow</code> without
+        the shell app redeploying. The main gotchas are version mismatch between shared libraries,
+        error boundaries needed for failed remote loads, and local development complexity requiring
+        all remotes to run simultaneously.
+      </p>
+<pre class="code-block">
+// mfe-products/webpack.config.js — REMOTE
+const { ModuleFederationPlugin } = require('webpack').container;
+
+module.exports = {
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'mfe_products',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './ProductGrid':   './src/components/ProductGrid',
+        './ProductDetail': './src/components/ProductDetail',
+      },
+      shared: {
+        react:        { singleton: true, requiredVersion: '^18.0.0' },
+        'react-dom':  { singleton: true, requiredVersion: '^18.0.0' },
+      },
+    }),
+  ],
+};
+
+// shell/webpack.config.js — HOST
+module.exports = {
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'shell',
+      remotes: {
+        mfe_products: 'mfe_products@https://products.example.com/remoteEntry.js',
+        mfe_auth:     'mfe_auth@https://auth.example.com/remoteEntry.js',
+      },
+      shared: {
+        react:       { singleton: true, requiredVersion: '^18.0.0' },
+        'react-dom': { singleton: true, requiredVersion: '^18.0.0' },
+      },
+    }),
+  ],
+};
+
+// shell/src/App.tsx — consuming the remote
+const ProductGrid = React.lazy(() =&gt; import('mfe_products/ProductGrid'));
+
+function App() {
+  return (
+    &lt;ErrorBoundary fallback={&lt;RemoteLoadError /&gt;}&gt;
+      &lt;Suspense fallback={&lt;Skeleton /&gt;}&gt;
+        &lt;ProductGrid category="electronics" /&gt;
+      &lt;/Suspense&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q18 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q18">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q18"
+            aria-expanded="false" aria-controls="architecture-q18">
+      <span class="diff-medium">Medium</span>&nbsp;
+      18. What is the strangler fig pattern applied to React migrations?
+    </button>
+  </h2>
+  <div id="architecture-q18" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q18"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>strangler fig pattern</strong>, named after the strangler fig tree that grows
+        around and eventually replaces its host tree, is a migration strategy where a new system
+        is built incrementally around the old one. Traffic is gradually routed to the new system,
+        and the old system is "strangled" piece by piece until it can be removed entirely.
+      </p>
+      <p>
+        Applied to React: you might be migrating from an AngularJS or jQuery app to React, or from
+        React class components to function components and hooks, or from a monolith to micro-frontends.
+        The key is that both the old and new code coexist during the transition — you never do a
+        "big bang" rewrite that blocks feature development for months.
+      </p>
+      <p>
+        Practical tactics: mount React components inside legacy AngularJS templates using
+        <code>ReactDOM.render</code>; use an adapter layer to call legacy API services from new React
+        code; use feature flags to swap routes between old and new implementations; migrate
+        route-by-route rather than component-by-component to deliver user value with each step.
+      </p>
+<pre class="code-block">
+// Scenario: migrating a legacy jQuery/server-rendered page to React route-by-route
+
+// 1. Shell app routes some paths to React, others still to legacy server
+//    Typically done with a reverse proxy (nginx) or a thin shell app
+
+// nginx.conf (simplified)
+// location /app/products {
+//   proxy_pass http://react-app:3000;   ← new React app
+// }
+// location /app/checkout {
+//   proxy_pass http://legacy-app:8080;  ← old server-rendered app
+// }
+
+// 2. React app can embed legacy pages in an iframe during transition
+function LegacyPageWrapper({ legacyPath }) {
+  return (
+    &lt;iframe
+      src={`https://legacy.example.com${legacyPath}`}
+      style={{ width: '100%', height: '100vh', border: 'none' }}
+      title="Legacy page"
+    /&gt;
+  );
+}
+
+// 3. Feature flag controls which implementation renders per route
+function CheckoutRoute() {
+  const useNewCheckout = useFeatureFlag('newReactCheckout');
+  return useNewCheckout
+    ? &lt;NewReactCheckout /&gt;
+    : &lt;LegacyPageWrapper legacyPath="/checkout" /&gt;;
+}
+
+// 4. Once all routes migrated, remove legacy wrapper and flag
+// The "strangler" has replaced the host tree.
+
+// 5. Class → function component migration follows same principle
+// Old: class UserProfile extends React.Component { ... }
+// New: function UserProfile(props) { ... }
+// Swap one component at a time, run tests, ship — never a full rewrite.
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q19 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q19">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q19"
+            aria-expanded="false" aria-controls="architecture-q19">
+      <span class="diff-medium">Medium</span>&nbsp;
+      19. What is design system architecture in React?
+    </button>
+  </h2>
+  <div id="architecture-q19" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q19"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        A <strong>design system</strong> is a collection of reusable components, design tokens, and
+        guidelines that ensure visual and behavioural consistency across products. In React, it is
+        typically a standalone npm package (or monorepo workspace) that product teams install as a
+        dependency. It separates "how things look and behave" from "what the product does".
+      </p>
+      <p>
+        The architecture has clear layers: <em>design tokens</em> (CSS variables or JS constants for
+        colours, spacing, typography, breakpoints) at the foundation; <em>primitive components</em>
+        (Button, Input, Text, Icon) built directly on tokens; <em>composite components</em>
+        (Card, Modal, DataTable) built from primitives; and <em>patterns/templates</em> for common
+        page layouts and flows.
+      </p>
+      <p>
+        Key architectural decisions: headless vs. styled (Radix UI / Headless UI provide accessible
+        behaviour without styles; teams add their own styles on top), CSS-in-JS vs. CSS Modules vs.
+        design token CSS variables, and theming strategy (single theme vs. multi-brand themes via
+        token overrides). Storybook is the standard tool for developing, documenting, and testing
+        design system components in isolation.
+      </p>
+<pre class="code-block">
+// design-system/
+//   tokens/
+//     colors.ts
+//     spacing.ts
+//     typography.ts
+//   primitives/
+//     Button/
+//     Input/
+//     Text/
+//   composites/
+//     Card/
+//     Modal/
+//     DataTable/
+//   index.ts
+
+// tokens/colors.ts — design tokens as JS constants & CSS variables
+export const colors = {
+  primary:   { 50: '#eff6ff', 500: '#3b82f6', 900: '#1e3a8a' },
+  danger:    { 50: '#fef2f2', 500: '#ef4444', 900: '#7f1d1d' },
+  neutral:   { 0: '#ffffff', 100: '#f3f4f6', 900: '#111827' },
+} as const;
+
+// Applied as CSS custom properties for runtime theming
+export const cssTokens = `
+  :root {
+    --color-primary: ${colors.primary[500]};
+    --color-danger:  ${colors.danger[500]};
+    --spacing-1:     4px;
+    --spacing-2:     8px;
+    --spacing-4:     16px;
+    --radius-md:     6px;
+    --font-sans:     Inter, system-ui, sans-serif;
+  }
+`;
+
+// primitives/Button/Button.tsx
+interface ButtonProps extends React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt; {
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  size?:    'sm' | 'md' | 'lg';
+  loading?: boolean;
+}
+
+export function Button({
+  variant = 'primary', size = 'md', loading = false,
+  children, disabled, className, ...rest
+}: ButtonProps) {
+  return (
+    &lt;button
+      className={clsx('btn', `btn--${variant}`, `btn--${size}`, className)}
+      disabled={disabled || loading}
+      aria-busy={loading}
+      {...rest}
+    &gt;
+      {loading &amp;&amp; &lt;Spinner size="sm" aria-hidden /&gt;}
+      {children}
+    &lt;/button&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q20 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q20">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q20"
+            aria-expanded="false" aria-controls="architecture-q20">
+      <span class="diff-medium">Medium</span>&nbsp;
+      20. What is atomic design and how does it apply to React?
+    </button>
+  </h2>
+  <div id="architecture-q20" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q20"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        <strong>Atomic design</strong>, introduced by Brad Frost, is a methodology for building UI
+        systems by composing components at five levels of complexity, inspired by chemistry:
+        <em>atoms</em>, <em>molecules</em>, <em>organisms</em>, <em>templates</em>, and <em>pages</em>.
+        Each level is built from the level below it, creating a clear compositional hierarchy.
+      </p>
+      <p>
+        <strong>Atoms</strong> are the smallest indivisible UI elements: Button, Input, Label, Icon,
+        Badge. <strong>Molecules</strong> combine atoms into small functional units: SearchBar
+        (Input + Button + Icon), FormField (Label + Input + ValidationMessage).
+        <strong>Organisms</strong> are meaningful, standalone UI sections: NavigationHeader
+        (Logo + NavLinks + UserMenu), ProductCard (Image + Heading + Price + CartButton).
+        <strong>Templates</strong> define layout structure without real content (wireframes with
+        slots). <strong>Pages</strong> are templates filled with real data — they are the rendered
+        routes in a React app.
+      </p>
+      <p>
+        Atomic design maps naturally to a design system / Storybook structure. Atoms and molecules
+        live in the design system package; organisms and templates are application-level components;
+        pages are route-level components. The discipline enforces that higher levels don't leak
+        implementation details down to lower ones.
+      </p>
+<pre class="code-block">
+// ATOMS — single-purpose, no composition
+function Button({ children, ...props }) { ... }
+function Input({ label, ...props }) { ... }
+function Avatar({ src, alt, size }) { ... }
+function Badge({ label, color }) { ... }
+
+// MOLECULES — small functional combos of atoms
+function SearchBar({ onSearch }) {
+  const [query, setQuery] = useState('');
+  return (
+    &lt;div className="search-bar"&gt;
+      &lt;Input value={query} onChange={e =&gt; setQuery(e.target.value)}
+             placeholder="Search..." /&gt;
+      &lt;Button onClick={() =&gt; onSearch(query)}&gt;Search&lt;/Button&gt;
+    &lt;/div&gt;
+  );
+}
+
+function UserMeta({ user }) {
+  return (
+    &lt;div className="user-meta"&gt;
+      &lt;Avatar src={user.avatar} alt={user.name} size="sm" /&gt;
+      &lt;span&gt;{user.name}&lt;/span&gt;
+      &lt;Badge label={user.role} color="blue" /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// ORGANISMS — meaningful UI sections
+function ProductCard({ product, onAddToCart }) {
+  return (
+    &lt;div className="product-card"&gt;
+      &lt;img src={product.image} alt={product.name} /&gt;
+      &lt;h3&gt;{product.name}&lt;/h3&gt;
+      &lt;p&gt;${product.price}&lt;/p&gt;
+      &lt;Badge label={product.category} /&gt;
+      &lt;Button onClick={() =&gt; onAddToCart(product.id)}&gt;Add to Cart&lt;/Button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// TEMPLATES — layout scaffolding, no real data
+function TwoColumnTemplate({ sidebar, main }) {
+  return (
+    &lt;div className="layout-two-col"&gt;
+      &lt;aside className="layout-two-col__sidebar"&gt;{sidebar}&lt;/aside&gt;
+      &lt;main className="layout-two-col__main"&gt;{main}&lt;/main&gt;
+    &lt;/div&gt;
+  );
+}
+
+// PAGES — templates filled with real data (route components)
+function ProductsPage() {
+  const { products, isLoading } = useProducts();
+  return (
+    &lt;TwoColumnTemplate
+      sidebar={&lt;FilterPanel /&gt;}
+      main={&lt;ProductGrid products={products} isLoading={isLoading} /&gt;}
+    /&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q21 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q21">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q21"
+            aria-expanded="false" aria-controls="architecture-q21">
+      <span class="diff-hard">Hard</span>&nbsp;
+      21. What is the SOLID principles applied to React?
+    </button>
+  </h2>
+  <div id="architecture-q21" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q21"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        SOLID is a set of five object-oriented design principles that translate remarkably well to
+        React component and hook design, even though React is not class-based (in modern practice).
+      </p>
+      <p>
+        <strong>S — Single Responsibility:</strong> Each component/hook does one thing. A
+        <code>useUserProfile</code> hook fetches user data; a <code>UserProfileCard</code> component
+        renders it. They do not bleed into each other's concerns.
+      </p>
+      <p>
+        <strong>O — Open/Closed:</strong> Components should be open for extension but closed for
+        modification. A <code>Button</code> component accepts a <code>className</code>, <code>as</code>
+        (polymorphic), and render prop overrides so consumers can customise it without changing the
+        Button source. Adding a new variant doesn't require touching the Button internals if it uses
+        a <code>variant</code> prop.
+      </p>
+      <p>
+        <strong>L — Liskov Substitution:</strong> Child components should be substitutable for their
+        parent's expected interface. If a route accepts any component implementing
+        <code>{ isLoading, data }</code> props, any component with that shape should work — a mock,
+        a skeleton, or the real thing.
+      </p>
+      <p>
+        <strong>I — Interface Segregation:</strong> Don't force components to depend on props they
+        don't use. A <code>UserAvatar</code> that only needs <code>name</code> and <code>avatarUrl</code>
+        should not receive the entire <code>User</code> object. Split large prop interfaces into
+        focused ones.
+      </p>
+      <p>
+        <strong>D — Dependency Inversion:</strong> High-level components should not depend on
+        specific low-level implementations. Use Context / dependency injection to supply data sources;
+        use render props or component slots to supply rendering; depend on interfaces (TypeScript types)
+        not concrete classes.
+      </p>
+<pre class="code-block">
+// O — Open/Closed: Button open for extension via props, closed to modification
+function Button({ variant = 'primary', size = 'md', as: Tag = 'button',
+                  leftIcon, rightIcon, children, ...rest }) {
+  return (
+    &lt;Tag className={`btn btn--${variant} btn--${size}`} {...rest}&gt;
+      {leftIcon}&lt;span&gt;{children}&lt;/span&gt;{rightIcon}
+    &lt;/Tag&gt;
+  );
+}
+// Consumer can make it a link without touching Button source:
+&lt;Button as="a" href="/checkout" variant="primary"&gt;Checkout&lt;/Button&gt;
+
+// I — Interface Segregation: narrow props, not a god object
+// BAD:
+function UserAvatar({ user }: { user: User }) {  // User has 20 fields
+  return &lt;img src={user.avatarUrl} alt={user.fullName} /&gt;;
+}
+
+// GOOD: only depend on what you need
+interface AvatarProps { avatarUrl: string; name: string; size?: 'sm' | 'md' | 'lg'; }
+function UserAvatar({ avatarUrl, name, size = 'md' }: AvatarProps) {
+  return &lt;img src={avatarUrl} alt={name} className={`avatar avatar--${size}`} /&gt;;
+}
+
+// D — Dependency Inversion: depend on interface, inject implementation
+interface ILogger { log(msg: string): void; error(msg: string, err?: unknown): void; }
+
+const LoggerContext = React.createContext&lt;ILogger&gt;(console);
+
+function useLogger() { return useContext(LoggerContext); }
+
+// Component depends on ILogger interface, not console directly
+function PaymentForm() {
+  const logger = useLogger();
+  const handleSubmit = () =&gt; {
+    try { processPayment(); }
+    catch (e) { logger.error('Payment failed', e); }
+  };
+  return &lt;form onSubmit={handleSubmit}&gt;...&lt;/form&gt;;
+}
+
+// Tests inject a silent mock logger:
+render(
+  &lt;LoggerContext.Provider value={{ log: vi.fn(), error: vi.fn() }}&gt;
+    &lt;PaymentForm /&gt;
+  &lt;/LoggerContext.Provider&gt;
+);
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q22 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q22">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q22"
+            aria-expanded="false" aria-controls="architecture-q22">
+      <span class="diff-hard">Hard</span>&nbsp;
+      22. How do you implement dependency injection in React?
+    </button>
+  </h2>
+  <div id="architecture-q22" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q22"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        <strong>Dependency Injection (DI)</strong> in React is the practice of supplying a component's
+        dependencies from outside rather than having the component create or import them directly.
+        This decouples components from specific implementations and makes them trivially testable and
+        configurable. React provides three natural DI mechanisms: <em>props</em>, <em>Context</em>,
+        and <em>render props / component slots</em>.
+      </p>
+      <p>
+        <strong>Props-based DI</strong> is the simplest form — pass services or functions as props.
+        It is explicit and easy to trace but becomes unwieldy when the dependency must cross many
+        component layers (prop drilling). <strong>Context-based DI</strong> solves the cross-layer
+        problem — the dependency is registered once at a provider and consumed anywhere in the subtree.
+        This is how theme providers, auth providers, and analytics providers work.
+        <strong>Component slot DI</strong> injects rendering behaviour — a component accepts a
+        <code>renderItem</code> or <code>itemComponent</code> prop so consumers can swap the rendering
+        implementation without touching the container.
+      </p>
+      <p>
+        For complex applications, libraries like InversifyJS or tsyringe can provide a full IoC
+        container integrated with React via Context, but this is rarely needed — React's primitives
+        cover virtually all real use cases.
+      </p>
+<pre class="code-block">
+// 1. PROPS-BASED DI — simple, explicit
+interface AnalyticsService {
+  track(event: string, props?: Record&lt;string, unknown&gt;): void;
+}
+
+function SignupButton({ analytics }: { analytics: AnalyticsService }) {
+  return (
+    &lt;button onClick={() =&gt; analytics.track('signup_clicked')}&gt;
+      Sign Up
+    &lt;/button&gt;
+  );
+}
+
+// Production usage
+&lt;SignupButton analytics={segmentAnalytics} /&gt;
+// Test usage
+&lt;SignupButton analytics={{ track: vi.fn() }} /&gt;
+
+// 2. CONTEXT-BASED DI — cross-layer, no prop drilling
+const ServicesContext = React.createContext&lt;{
+  analytics: AnalyticsService;
+  logger: ILogger;
+  featureFlags: IFeatureFlags;
+} | null&gt;(null);
+
+export function ServicesProvider({ children, overrides = {} }) {
+  const services = useMemo(() =&gt; ({
+    analytics: overrides.analytics ?? segmentAnalytics,
+    logger:    overrides.logger    ?? console,
+    featureFlags: overrides.featureFlags ?? productionFlags,
+  }), [overrides]);
+
+  return (
+    &lt;ServicesContext.Provider value={services}&gt;
+      {children}
+    &lt;/ServicesContext.Provider&gt;
+  );
+}
+
+export function useServices() {
+  const ctx = useContext(ServicesContext);
+  if (!ctx) throw new Error('Must be inside ServicesProvider');
+  return ctx;
+}
+
+// 3. COMPONENT SLOT DI — inject rendering behaviour
+interface ListProps&lt;T&gt; {
+  items: T[];
+  renderItem: (item: T, index: number) =&gt; React.ReactNode;
+  keyExtractor: (item: T) =&gt; string;
+}
+
+function VirtualList&lt;T&gt;({ items, renderItem, keyExtractor }: ListProps&lt;T&gt;) {
+  return (
+    &lt;ul&gt;
+      {items.map((item, i) =&gt; (
+        &lt;li key={keyExtractor(item)}&gt;{renderItem(item, i)}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+// Consumer injects rendering:
+&lt;VirtualList
+  items={products}
+  keyExtractor={p =&gt; p.id}
+  renderItem={product =&gt; &lt;ProductCard product={product} /&gt;}
+/&gt;
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q23 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q23">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q23"
+            aria-expanded="false" aria-controls="architecture-q23">
+      <span class="diff-hard">Hard</span>&nbsp;
+      23. What is the factory pattern for React components?
+    </button>
+  </h2>
+  <div id="architecture-q23" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q23"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>factory pattern</strong> provides a way to create objects (or in React's case,
+        components) without specifying the exact class or function upfront. A factory function
+        encapsulates the creation logic, returning different component implementations based on
+        configuration or runtime conditions. This is particularly useful for dynamic form builders,
+        plugin systems, CMS-driven UIs, or any situation where the component to render is determined
+        by data.
+      </p>
+      <p>
+        In React, factories manifest as: a <em>component factory function</em> that returns a new
+        component based on configuration (similar to HOCs but focused on creation rather than
+        enhancement); a <em>component registry/map</em> that maps a type string to a component; or a
+        dynamic <code>createElement</code>-based approach for truly runtime-determined rendering.
+      </p>
+      <p>
+        The component registry pattern is the most common and readable form in production React code.
+        A <code>COMPONENT_MAP</code> maps a <code>type</code> field from API data to a React component;
+        a single renderer component looks up and renders the correct component. This is how CMS
+        block renderers, drag-and-drop page builders, and dynamic form libraries work internally.
+      </p>
+<pre class="code-block">
+// 1. COMPONENT REGISTRY — most common factory pattern
+const BLOCK_REGISTRY: Record&lt;string, React.ComponentType&lt;any&gt;&gt; = {
+  hero:       HeroBlock,
+  text:       RichTextBlock,
+  image:      ImageBlock,
+  video:      VideoBlock,
+  cta:        CtaBlock,
+  testimonial: TestimonialBlock,
+  form:       FormBlock,
+};
+
+// Factory component that selects the right component
+function BlockRenderer({ block }: { block: ContentBlock }) {
+  const Component = BLOCK_REGISTRY[block.type];
+
+  if (!Component) {
+    console.warn(`Unknown block type: ${block.type}`);
+    return null;
+  }
+
+  return &lt;Component {...block.props} key={block.id} /&gt;;
+}
+
+// CMS page built from API data — no if/else chains
+function Page({ blocks }: { blocks: ContentBlock[] }) {
+  return (
+    &lt;main&gt;
+      {blocks.map(block =&gt; (
+        &lt;BlockRenderer block={block} key={block.id} /&gt;
+      ))}
+    &lt;/main&gt;
+  );
+}
+
+// 2. COMPONENT FACTORY FUNCTION — creates configured components
+function createFormField(type: 'text' | 'select' | 'checkbox' | 'date') {
+  const fieldComponents = {
+    text:     TextInput,
+    select:   SelectInput,
+    checkbox: CheckboxInput,
+    date:     DatePicker,
+  };
+
+  const FieldComponent = fieldComponents[type];
+
+  return function ConfiguredField({ name, label, validation, ...rest }) {
+    const { register, formState: { errors } } = useFormContext();
+    return (
+      &lt;div className="form-field"&gt;
+        &lt;label htmlFor={name}&gt;{label}&lt;/label&gt;
+        &lt;FieldComponent
+          id={name}
+          {...register(name, validation)}
+          aria-invalid={!!errors[name]}
+          {...rest}
+        /&gt;
+        {errors[name] &amp;&amp; &lt;span className="error"&gt;{errors[name].message}&lt;/span&gt;}
+      &lt;/div&gt;
+    );
+  };
+}
+
+const TextField    = createFormField('text');
+const SelectField  = createFormField('select');
+const DateField    = createFormField('date');
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q24 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q24">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q24"
+            aria-expanded="false" aria-controls="architecture-q24">
+      <span class="diff-hard">Hard</span>&nbsp;
+      24. What is the strategy pattern applied to React?
+    </button>
+  </h2>
+  <div id="architecture-q24" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q24"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        The <strong>strategy pattern</strong> defines a family of algorithms (strategies), encapsulates
+        each one, and makes them interchangeable. The client code selects which strategy to use at
+        runtime without knowing the implementation details of any individual strategy. In React, this
+        translates to passing behaviour as props — functions, components, or objects — rather than
+        hardcoding conditional logic inside a component.
+      </p>
+      <p>
+        Common applications in React: sorting strategies for a data table (pass a
+        <code>sortFn</code> prop); validation strategies for a form (pass a <code>validator</code>
+        object); rendering strategies for a list (pass a <code>renderItem</code> function); pricing
+        strategies for a cart (pass a <code>pricingStrategy</code> object). Each strategy is a
+        self-contained unit; the host component delegates to it without if/else chains.
+      </p>
+      <p>
+        The strategy pattern dramatically improves testability — each strategy can be tested in
+        complete isolation without mounting any React components. It also makes the host component
+        stable: new strategies are added without modifying the host.
+      </p>
+<pre class="code-block">
+// Validation strategies (objects with a validate method)
+interface ValidationStrategy {
+  validate(value: string): string | null; // null = valid
+}
+
+const requiredStrategy: ValidationStrategy = {
+  validate: (value) =&gt; value.trim() ? null : 'This field is required',
+};
+
+const emailStrategy: ValidationStrategy = {
+  validate: (value) =&gt; /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+    ? null : 'Please enter a valid email',
+};
+
+const minLengthStrategy = (min: number): ValidationStrategy =&gt; ({
+  validate: (value) =&gt; value.length &gt;= min
+    ? null : `Must be at least ${min} characters`,
+});
+
+// Composite strategy — runs multiple strategies in sequence
+function composeStrategies(...strategies: ValidationStrategy[]): ValidationStrategy {
+  return {
+    validate(value) {
+      for (const strategy of strategies) {
+        const error = strategy.validate(value);
+        if (error) return error;
+      }
+      return null;
+    },
+  };
+}
+
+// Generic input that delegates validation to whatever strategy is passed
+function ValidatedInput({
+  name, label, value, onChange, validationStrategy
+}: {
+  name: string; label: string; value: string;
+  onChange: (val: string) =&gt; void;
+  validationStrategy?: ValidationStrategy;
+}) {
+  const [touched, setTouched] = useState(false);
+  const error = touched && validationStrategy
+    ? validationStrategy.validate(value)
+    : null;
+
+  return (
+    &lt;div&gt;
+      &lt;label htmlFor={name}&gt;{label}&lt;/label&gt;
+      &lt;input
+        id={name}
+        value={value}
+        onChange={e =&gt; onChange(e.target.value)}
+        onBlur={() =&gt; setTouched(true)}
+        aria-describedby={error ? `${name}-error` : undefined}
+      /&gt;
+      {error &amp;&amp; &lt;p id={`${name}-error`} className="error"&gt;{error}&lt;/p&gt;}
+    &lt;/div&gt;
+  );
+}
+
+// Sorting strategy for a data table
+interface SortStrategy&lt;T&gt; { sort(items: T[]): T[]; }
+
+const alphabeticalSort: SortStrategy&lt;Product&gt; = {
+  sort: items =&gt; [...items].sort((a, b) =&gt; a.name.localeCompare(b.name)),
+};
+const priceAscSort: SortStrategy&lt;Product&gt; = {
+  sort: items =&gt; [...items].sort((a, b) =&gt; a.price - b.price),
+};
+const relevanceSort = (query: string): SortStrategy&lt;Product&gt; =&gt; ({
+  sort: items =&gt; [...items].sort((a, b) =&gt;
+    scoreRelevance(b, query) - scoreRelevance(a, query)
+  ),
+});
+
+function ProductTable({ products, sortStrategy }: {
+  products: Product[];
+  sortStrategy: SortStrategy&lt;Product&gt;;
+}) {
+  const sorted = useMemo(
+    () =&gt; sortStrategy.sort(products),
+    [products, sortStrategy]
+  );
+  return &lt;table&gt;...{sorted.map(renderRow)}&lt;/table&gt;;
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q25 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-architecture-q25">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#architecture-q25"
+            aria-expanded="false" aria-controls="architecture-q25">
+      <span class="diff-hard">Hard</span>&nbsp;
+      25. How do you architect a large-scale React application?
+    </button>
+  </h2>
+  <div id="architecture-q25" class="accordion-collapse collapse"
+       aria-labelledby="heading-architecture-q25"
+       data-bs-parent="#acc-architecture">
+    <div class="accordion-body">
+      <p>
+        Architecting a large-scale React application requires disciplined decisions across multiple
+        dimensions: <em>project structure</em>, <em>state management</em>, <em>data fetching</em>,
+        <em>routing</em>, <em>code splitting</em>, <em>testing strategy</em>, and <em>team conventions</em>.
+        The goal is a codebase that remains productive as both the feature count and the team size grow.
+      </p>
+      <p>
+        <strong>Project structure:</strong> Feature-based organisation (see Q10) with strict barrel
+        exports. Each feature is a self-contained module with its own components, hooks, API layer,
+        state slice, and tests. Cross-feature shared code lives in a dedicated <code>shared/</code>
+        folder. This structure ensures that adding a feature is a local operation, not a cross-repo
+        surgery.
+      </p>
+      <p>
+        <strong>State management:</strong> Apply the "state colocation" principle rigorously. Local
+        UI state in component state, subtree state in Context, server/async state in React Query or
+        RTK Query, global client state (auth, settings) in Redux Toolkit or Zustand. Avoid overloading
+        global state with server data — that is React Query's job.
+      </p>
+      <p>
+        <strong>Performance:</strong> Route-based code splitting with <code>React.lazy</code> and
+        <code>Suspense</code> as a baseline. Memoize expensive computations with <code>useMemo</code>;
+        stabilise callbacks with <code>useCallback</code>; use <code>React.memo</code> on components
+        that render frequently with stable props. For large lists, use virtualisation (TanStack Virtual).
+      </p>
+      <p>
+        <strong>Quality gates:</strong> TypeScript strict mode, ESLint with architecture-enforcement
+        rules (import/no-cycle to prevent circular dependencies, boundaries between features),
+        Vitest unit + React Testing Library integration tests, and Playwright/Cypress E2E tests for
+        critical flows. CI blocks merges on failing tests, lint errors, or type errors.
+      </p>
+<pre class="code-block">
+// Large-scale architecture blueprint
+
+// ── Directory layout ──────────────────────────────────────────────
+// src/
+//   app/              ← app bootstrap, router, global providers, store
+//     App.tsx
+//     router.tsx
+//     store.ts
+//     providers.tsx   ← composes all providers
+//   features/         ← one folder per business domain
+//     auth/
+//     products/
+//     cart/
+//     orders/
+//     admin/
+//   shared/           ← reusable across features
+//     components/     ← design system primitives
+//     hooks/          ← generic hooks (useDebounce, useMediaQuery)
+//     utils/          ← pure functions
+//     types/          ← shared TypeScript types
+//   pages/            ← route entry points, thin wrappers
+//   assets/
+
+// ── State management layers ───────────────────────────────────────
+// Layer 1: Local UI state
+const [isOpen, setIsOpen] = useState(false);
+
+// Layer 2: Server state (React Query)
+const { data: products, isLoading } = useQuery({
+  queryKey: ['products', filters],
+  queryFn: () =&gt; productApi.getAll(filters),
+  staleTime: 5 * 60 * 1000,
+});
+
+// Layer 3: Global client state (Redux Toolkit)
+// Only for: auth session, user preferences, global notifications
+const user = useSelector(state =&gt; state.auth.user);
+
+// ── Code splitting ────────────────────────────────────────────────
+const AdminPanel = React.lazy(() =&gt; import('@/features/admin'));
+const OrdersPage = React.lazy(() =&gt; import('@/pages/OrdersPage'));
+
+function AppRouter() {
+  return (
+    &lt;Suspense fallback={&lt;PageSkeleton /&gt;}&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/admin/*"  element={&lt;ProtectedRoute roles={['admin']}&gt;&lt;AdminPanel /&gt;&lt;/ProtectedRoute&gt;} /&gt;
+        &lt;Route path="/orders"   element={&lt;OrdersPage /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/Suspense&gt;
+  );
+}
+
+// ── ESLint architectural boundaries ──────────────────────────────
+// .eslintrc — enforce no cross-feature direct imports (use barrels)
+// "import/no-restricted-paths": [
+//   "error",
+//   { "zones": [
+//     { "target": "./src/features/products",
+//       "from": "./src/features/cart",
+//       "message": "products must not import from cart directly — use shared/" }
+//   ]}
+// ]
+
+// ── Error boundary strategy ───────────────────────────────────────
+// Root boundary: catches catastrophic failures
+// Route boundary: isolates page-level failures
+// Feature boundary: isolates widget-level failures
+function AppProviders({ children }) {
+  return (
+    &lt;ErrorBoundary fallback={&lt;AppCrashPage /&gt;}&gt;
+      &lt;AuthProvider&gt;
+        &lt;QueryClientProvider client={queryClient}&gt;
+          &lt;Provider store={store}&gt;
+            &lt;ThemeProvider&gt;
+              &lt;FeatureFlagsProvider&gt;
+                {children}
+              &lt;/FeatureFlagsProvider&gt;
+            &lt;/ThemeProvider&gt;
+          &lt;/Provider&gt;
+        &lt;/QueryClientProvider&gt;
+      &lt;/AuthProvider&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>

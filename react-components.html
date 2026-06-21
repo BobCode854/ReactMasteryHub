@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>React Components — Section 5 — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;background:var(--bg,#f0f4ff);color:var(--text,#1e293b);}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--surface2:#1e293b;--text:#f1f5f9;--text-muted:#94a3b8;--border:#1e293b;}
+    .concept-box{border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.83rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;} .code-block .fn{color:#60a5fa;} .code-block .st{color:#86efac;}
+    .code-block .cm{color:#64748b;font-style:italic;} .code-block .cl{color:#f9a8d4;} .code-block .num{color:#fb923c;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .hook-card{border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:2px solid transparent;transition:all .2s;}
+    .hook-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(97,218,251,.15);}
+    .hook-card.blue{background:#eff6ff;border-color:#93c5fd;}
+    .hook-card.purple{background:#f5f3ff;border-color:#c4b5fd;}
+    .hook-card.green{background:#f0fdf4;border-color:#6ee7b7;}
+    .hook-card.amber{background:#fffbeb;border-color:#fcd34d;}
+    [data-theme="dark"] .hook-card.blue{background:#1e3a5f;border-color:#3b82f6;}
+    [data-theme="dark"] .hook-card.purple{background:#3b0764;border-color:#a78bfa;}
+    [data-theme="dark"] .hook-card.green{background:#14532d;border-color:#22c55e;}
+    .lifecycle-phase{border-radius:12px;padding:1.2rem;text-align:center;}
+    .lifecycle-phase.mount{background:linear-gradient(135deg,#d1fae5,#a7f3d0);}
+    .lifecycle-phase.update{background:linear-gradient(135deg,#dbeafe,#bfdbfe);}
+    .lifecycle-phase.unmount{background:linear-gradient(135deg,#fee2e2,#fecaca);}
+    [data-theme="dark"] .lifecycle-phase.mount{background:linear-gradient(135deg,#14532d,#166534);}
+    [data-theme="dark"] .lifecycle-phase.update{background:linear-gradient(135deg,#1e3a5f,#1e40af);}
+    [data-theme="dark"] .lifecycle-phase.unmount{background:linear-gradient(135deg,#450a0a,#7f1d1d);}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3.5rem 0 2.5rem;margin-bottom:2rem;}
+    .comp-card{border-radius:16px;padding:2rem;margin-bottom:2rem;border:1px solid rgba(0,0,0,.08);background:#fff;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+    [data-theme="dark"] .comp-card{background:#111827;border-color:#1e293b;}
+    .badge-type{font-size:.7rem;font-weight:700;padding:.3rem .7rem;border-radius:20px;text-transform:uppercase;letter-spacing:.05em;}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="react-components.html">Components</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="section-hero" style="padding-top:5rem;">
+  <div class="container-xl">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb" style="opacity:.7;">
+        <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none" style="color:#61dafb;">Home</a></li>
+        <li class="breadcrumb-item active text-white">Section 5: Components</li>
+      </ol>
+    </nav>
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge" style="background:#61dafb;color:#0f172a;font-size:.85rem;padding:.5rem 1rem;">Section 5</span>
+      <span class="badge bg-success">9 Component Types</span>
+    </div>
+    <h1 class="fw-900 display-5 mb-2">React Components</h1>
+    <p class="lead mb-0" style="opacity:.8;max-width:600px;">Master all 9 types of React components — from functional to compound, HOCs to controlled/uncontrolled. Build a mental model for when to use each pattern.</p>
+  </div>
+</div>
+
+<main class="container-xl pb-5">
+
+  <!-- COMPONENT 1: Functional Components -->
+  <div class="comp-card" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge-type" style="background:#dbeafe;color:#1d4ed8;">01</span>
+      <h2 class="h4 fw-700 mb-0">Functional Components</h2>
+      <span class="badge ms-auto" style="background:#dcfce7;color:#15803d;">Modern Standard</span>
+    </div>
+    <div class="concept-box blue mb-3">
+      <strong>What it is:</strong> A plain JavaScript function that accepts props and returns JSX. The modern standard since React 16.8 introduced Hooks. Simpler, less boilerplate, and fully capable of all React features.
+    </div>
+    <pre class="code-block"><span class="kw">function</span> <span class="fn">UserCard</span>({ name, email, avatar }) {
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span> className=<span class="st">"card"</span>&gt;
+      &lt;<span class="cl">img</span> src={avatar} alt={name} /&gt;
+      &lt;<span class="cl">h3</span>&gt;{name}&lt;/<span class="cl">h3</span>&gt;
+      &lt;<span class="cl">p</span>&gt;{email}&lt;/<span class="cl">p</span>&gt;
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}</pre>
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <strong>When to use:</strong><br/>
+          Use functional components for <em>everything</em> in modern React. They can use all hooks (useState, useEffect, useContext, etc.), support async patterns, and are simpler to read and test.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box purple">
+          <strong>Real Industry Example:</strong><br/>
+          Every component in Next.js apps, Vercel's dashboard, and modern React codebases. Shopify's Polaris design system uses exclusively functional components.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENT 2: Class Components -->
+  <div class="comp-card" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge-type" style="background:#fef3c7;color:#92400e;">02</span>
+      <h2 class="h4 fw-700 mb-0">Class Components</h2>
+      <span class="badge ms-auto" style="background:#fee2e2;color:#b91c1c;">Legacy</span>
+    </div>
+    <div class="concept-box amber">
+      <strong>What it is:</strong> ES6 class that extends React.Component. The only way to write stateful components before React 16.8. Still found in older codebases. Has lifecycle methods and <code>this</code> binding complexity.
+    </div>
+    <pre class="code-block"><span class="kw">class</span> <span class="cl">Counter</span> <span class="kw">extends</span> <span class="cl">React.Component</span> {
+  <span class="fn">constructor</span>(props) {
+    <span class="kw">super</span>(props);
+    <span class="kw">this</span>.state = { count: <span class="num">0</span> };
+  }
+
+  increment = () =&gt; {
+    <span class="kw">this</span>.<span class="fn">setState</span>(prev =&gt; ({ count: prev.count + <span class="num">1</span> }));
+  };
+
+  <span class="fn">render</span>() {
+    <span class="kw">return</span> (
+      &lt;<span class="cl">div</span>&gt;
+        &lt;<span class="cl">p</span>&gt;Count: {<span class="kw">this</span>.state.count}&lt;/<span class="cl">p</span>&gt;
+        &lt;<span class="cl">button</span> onClick={<span class="kw">this</span>.increment}&gt;+&lt;/<span class="cl">button</span>&gt;
+      &lt;/<span class="cl">div</span>&gt;
+    );
+  }
+}</pre>
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box amber">
+          <strong>When to use:</strong><br/>
+          When maintaining legacy codebases. Also for Error Boundaries — <code>componentDidCatch</code> and <code>getDerivedStateFromError</code> have no hook equivalents yet (as of React 18).
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box red">
+          <strong>Common Gotchas:</strong><br/>
+          <code>this</code> binding issues in event handlers. Must use arrow function class properties or <code>.bind(this)</code> in constructor. Verbose lifecycle methods vs clean hooks.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENT 3: Pure Components / React.memo -->
+  <div class="comp-card" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge-type" style="background:#ede9fe;color:#6d28d9;">03</span>
+      <h2 class="h4 fw-700 mb-0">Pure Components &amp; React.memo</h2>
+      <span class="badge ms-auto" style="background:#ede9fe;color:#6d28d9;">Performance</span>
+    </div>
+    <div class="concept-box purple">
+      <strong>What it is:</strong> Components that only re-render when their props or state actually change. React.PureComponent does a shallow comparison for class components. React.memo does the same for functional components. Prevents unnecessary re-renders.
+    </div>
+    <pre class="code-block"><span class="cm">// Class Pure Component — shallow prop comparison built-in</span>
+<span class="kw">class</span> <span class="cl">PureUserCard</span> <span class="kw">extends</span> <span class="cl">React.PureComponent</span> {
+  <span class="fn">render</span>() {
+    <span class="kw">return</span> &lt;<span class="cl">div</span>&gt;{<span class="kw">this</span>.props.name}&lt;/<span class="cl">div</span>&gt;;
+  }
+}
+
+<span class="cm">// Functional equivalent — React.memo</span>
+<span class="kw">const</span> MemoizedCard = <span class="cl">React</span>.<span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">UserCard</span>({ name, score }) {
+  <span class="kw">return</span> &lt;<span class="cl">div</span>&gt;{name}: {score}&lt;/<span class="cl">div</span>&gt;;
+});
+<span class="cm">// Only re-renders if name or score actually changes</span>
+
+<span class="cm">// Custom comparison function</span>
+<span class="kw">const</span> MemoizedCard = <span class="cl">React</span>.<span class="fn">memo</span>(UserCard, (prevProps, nextProps) =&gt; {
+  <span class="kw">return</span> prevProps.id === nextProps.id; <span class="cm">// true = skip re-render</span>
+});</pre>
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <strong>When to use:</strong><br/>
+          Components that render frequently but receive the same props often. List items in long lists, table rows, cards in dashboards. Pair with useCallback to stabilize function props.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box blue">
+          <strong>Real Industry Example:</strong><br/>
+          Facebook's feed items, Twitter's tweet cards — each item is memoized so scrolling doesn't re-render all visible items when one state changes. AG Grid row components.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENT 4: Higher Order Components (HOC) -->
+  <div class="comp-card" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge-type" style="background:#dcfce7;color:#15803d;">04</span>
+      <h2 class="h4 fw-700 mb-0">Higher Order Components (HOC)</h2>
+      <span class="badge ms-auto" style="background:#fef3c7;color:#92400e;">Pattern</span>
+    </div>
+    <div class="concept-box green">
+      <strong>What it is:</strong> A function that takes a component and returns a new component with added behavior. Used for cross-cutting concerns: authentication, logging, analytics, theming. Named with <code>with</code> prefix by convention.
+    </div>
+    <pre class="code-block"><span class="cm">// HOC: wraps a component and adds authentication check</span>
+<span class="kw">function</span> <span class="fn">withAuthentication</span>(WrappedComponent) {
+  <span class="kw">return function</span> <span class="fn">AuthenticatedComponent</span>(props) {
+    <span class="kw">const</span> { isLoggedIn } = <span class="fn">useAuth</span>();
+    <span class="kw">if</span> (!isLoggedIn) <span class="kw">return</span> &lt;<span class="cl">Navigate</span> to=<span class="st">"/login"</span> /&gt;;
+    <span class="kw">return</span> &lt;<span class="cl">WrappedComponent</span> {...props} /&gt;;
+  };
+}
+
+<span class="cm">// HOC: adds loading state</span>
+<span class="kw">function</span> <span class="fn">withLoading</span>(WrappedComponent) {
+  <span class="kw">return function</span> <span class="fn">WithLoadingComponent</span>({ isLoading, ...props }) {
+    <span class="kw">if</span> (isLoading) <span class="kw">return</span> &lt;<span class="cl">Spinner</span> /&gt;;
+    <span class="kw">return</span> &lt;<span class="cl">WrappedComponent</span> {...props} /&gt;;
+  };
+}
+
+<span class="cm">// Usage: compose HOCs</span>
+<span class="kw">const</span> ProtectedDashboard = <span class="fn">withAuthentication</span>(<span class="fn">withLoading</span>(Dashboard));</pre>
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box blue">
+          <strong>When to use:</strong><br/>
+          Authentication guards, permission checks, analytics tracking, feature flags. When the same logic needs to wrap many different components. Redux's <code>connect()</code> is a classic HOC.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box purple">
+          <strong>Real Industry Example:</strong><br/>
+          React Router's <code>withRouter()</code>, Redux's <code>connect()</code>, Relay's <code>createFragmentContainer()</code>. Stripe's dashboard uses HOCs for permission-based component wrapping.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENT 5: Compound Components -->
+  <div class="comp-card" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge-type" style="background:#dbeafe;color:#1d4ed8;">05</span>
+      <h2 class="h4 fw-700 mb-0">Compound Components</h2>
+      <span class="badge ms-auto" style="background:#dbeafe;color:#1d4ed8;">Advanced Pattern</span>
+    </div>
+    <div class="concept-box blue">
+      <strong>What it is:</strong> A pattern where parent and child components share state via Context. The parent manages state; children read from context. Gives consumers flexible composition without prop drilling. Used heavily in UI libraries.
+    </div>
+    <pre class="code-block"><span class="kw">const</span> TabsContext = <span class="fn">createContext</span>(null);
+
+<span class="cm">// Parent manages shared state</span>
+<span class="kw">function</span> <span class="fn">Tabs</span>({ children }) {
+  <span class="kw">const</span> [active, setActive] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="kw">return</span> (
+    &lt;<span class="cl">TabsContext.Provider</span> value={{ active, setActive }}&gt;
+      &lt;<span class="cl">div</span> className=<span class="st">"tabs"</span>&gt;{children}&lt;/<span class="cl">div</span>&gt;
+    &lt;/<span class="cl">TabsContext.Provider</span>&gt;
+  );
+}
+
+<span class="cm">// Child components access shared state via context</span>
+Tabs.Tab = <span class="kw">function</span> <span class="fn">Tab</span>({ index, label }) {
+  <span class="kw">const</span> { active, setActive } = <span class="fn">useContext</span>(TabsContext);
+  <span class="kw">return</span> (
+    &lt;<span class="cl">button</span>
+      className={active === index ? <span class="st">'active'</span> : <span class="st">''</span>}
+      onClick={() =&gt; <span class="fn">setActive</span>(index)}
+    &gt;
+      {label}
+    &lt;/<span class="cl">button</span>&gt;
+  );
+};
+
+Tabs.Panel = <span class="kw">function</span> <span class="fn">Panel</span>({ index, children }) {
+  <span class="kw">const</span> { active } = <span class="fn">useContext</span>(TabsContext);
+  <span class="kw">return</span> active === index ? &lt;<span class="cl">div</span>&gt;{children}&lt;/<span class="cl">div</span>&gt; : <span class="kw">null</span>;
+};
+
+<span class="cm">// Usage — flexible composition</span>
+&lt;<span class="cl">Tabs</span>&gt;
+  &lt;<span class="cl">Tabs.Tab</span> index={<span class="num">0</span>} label=<span class="st">"Profile"</span> /&gt;
+  &lt;<span class="cl">Tabs.Tab</span> index={<span class="num">1</span>} label=<span class="st">"Settings"</span> /&gt;
+  &lt;<span class="cl">Tabs.Panel</span> index={<span class="num">0</span>}&gt;Profile content&lt;/<span class="cl">Tabs.Panel</span>&gt;
+  &lt;<span class="cl">Tabs.Panel</span> index={<span class="num">1</span>}&gt;Settings content&lt;/<span class="cl">Tabs.Panel</span>&gt;
+&lt;/<span class="cl">Tabs</span>&gt;</pre>
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <strong>When to use:</strong><br/>
+          Design systems and UI libraries. Whenever you want flexible composition without excessive props. Tabs, Accordions, Dropdowns, Modals, Select menus. Radix UI, Headless UI use this pattern extensively.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box purple">
+          <strong>Real Industry Example:</strong><br/>
+          Reach UI's Tabs, Radix UI's Dialog, Headless UI's Listbox. React Bootstrap's Nav/Tabs. Any component library where consumers need to control layout while library manages state.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENT 6: Container vs Presentational -->
+  <div class="comp-card" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge-type" style="background:#fef3c7;color:#92400e;">06</span>
+      <h2 class="h4 fw-700 mb-0">Container vs Presentational Components</h2>
+      <span class="badge ms-auto" style="background:#fef3c7;color:#92400e;">Architecture Pattern</span>
+    </div>
+    <div class="concept-box amber">
+      <strong>What it is:</strong> A separation-of-concerns pattern. Container components handle data fetching and state; presentational components handle rendering UI. Also called Smart/Dumb or Stateful/Stateless split.
+    </div>
+    <div class="table-responsive mt-3">
+      <table class="table table-bordered">
+        <thead style="background:#0f172a;color:#f1f5f9;">
+          <tr>
+            <th>Aspect</th>
+            <th>Container Component</th>
+            <th>Presentational Component</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Purpose</strong></td><td>Data &amp; logic</td><td>UI rendering</td></tr>
+          <tr><td><strong>State</strong></td><td>Yes — manages state</td><td>No — stateless (usually)</td></tr>
+          <tr><td><strong>Side effects</strong></td><td>Yes — API calls, subscriptions</td><td>No — pure UI</td></tr>
+          <tr><td><strong>Styling</strong></td><td>Minimal</td><td>Most styling lives here</td></tr>
+          <tr><td><strong>Reusability</strong></td><td>Low</td><td>High — reusable across pages</td></tr>
+          <tr><td><strong>Testing</strong></td><td>Integration tests</td><td>Unit / snapshot tests</td></tr>
+          <tr><td><strong>Example</strong></td><td>UserListContainer</td><td>UserCard, UserList</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <pre class="code-block"><span class="cm">// Container — fetches data, manages state</span>
+<span class="kw">function</span> <span class="fn">UserListContainer</span>() {
+  <span class="kw">const</span> [users, setUsers] = <span class="fn">useState</span>([]);
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="fn">fetch</span>(<span class="st">'/api/users'</span>)
+      .<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>())
+      .<span class="fn">then</span>(data =&gt; { <span class="fn">setUsers</span>(data); <span class="fn">setLoading</span>(<span class="kw">false</span>); });
+  }, []);
+
+  <span class="kw">return</span> &lt;<span class="cl">UserList</span> users={users} loading={loading} /&gt;;
+}
+
+<span class="cm">// Presentational — pure UI, no side effects</span>
+<span class="kw">function</span> <span class="fn">UserList</span>({ users, loading }) {
+  <span class="kw">if</span> (loading) <span class="kw">return</span> &lt;<span class="cl">Spinner</span> /&gt;;
+  <span class="kw">return</span> (
+    &lt;<span class="cl">ul</span> className=<span class="st">"user-list"</span>&gt;
+      {users.<span class="fn">map</span>(user =&gt; &lt;<span class="cl">UserCard</span> key={user.id} {...user} /&gt;)}
+    &lt;/<span class="cl">ul</span>&gt;
+  );
+}</pre>
+    <div class="concept-box blue mt-2">
+      <strong>Real Industry Example:</strong> Redux apps split containers (connected to store) from presentational (pure render). Dan Abramov popularized this pattern at Facebook/Twitter.
+    </div>
+  </div>
+
+  <!-- COMPONENT 7: Controlled vs Uncontrolled -->
+  <div class="comp-card" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge-type" style="background:#ede9fe;color:#6d28d9;">07</span>
+      <h2 class="h4 fw-700 mb-0">Controlled vs Uncontrolled Components</h2>
+      <span class="badge ms-auto" style="background:#ede9fe;color:#6d28d9;">Forms</span>
+    </div>
+    <div class="concept-box purple">
+      <strong>What it is:</strong> Controlled components have their form state managed by React (via useState). Uncontrolled components let the DOM manage state, accessed via refs. React recommends controlled components for most cases.
+    </div>
+    <pre class="code-block"><span class="cm">// CONTROLLED: React is the single source of truth</span>
+<span class="kw">function</span> <span class="fn">ControlledInput</span>() {
+  <span class="kw">const</span> [value, setValue] = <span class="fn">useState</span>(<span class="st">''</span>);
+  <span class="kw">return</span> (
+    &lt;<span class="cl">input</span>
+      value={value}                         <span class="cm">// React controls value</span>
+      onChange={e =&gt; <span class="fn">setValue</span>(e.target.value)} <span class="cm">// React updates on change</span>
+    /&gt;
+  );
+}
+
+<span class="cm">// UNCONTROLLED: DOM manages value, we read it via ref</span>
+<span class="kw">function</span> <span class="fn">UncontrolledInput</span>() {
+  <span class="kw">const</span> inputRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> handleSubmit = () =&gt; {
+    console.<span class="fn">log</span>(inputRef.current.value); <span class="cm">// read on demand</span>
+  };
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="cl">input</span> ref={inputRef} defaultValue=<span class="st">"initial"</span> /&gt;
+      &lt;<span class="cl">button</span> onClick={handleSubmit}&gt;Submit&lt;/<span class="cl">button</span>&gt;
+    &lt;/&gt;
+  );
+}</pre>
+    <div class="row g-3 mt-2">
+      <div class="col-md-6">
+        <div class="concept-box green"><strong>Controlled — Use when:</strong><br/>Real-time validation, conditional rendering based on input, instant feedback (search-as-you-type), formatting input on change.</div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box amber"><strong>Uncontrolled — Use when:</strong><br/>File inputs (always uncontrolled), integrating with non-React libraries, simple forms where you only need values on submit, performance-critical forms.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENT 8: Fragment Components -->
+  <div class="comp-card" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge-type" style="background:#dcfce7;color:#15803d;">08</span>
+      <h2 class="h4 fw-700 mb-0">Fragment Components</h2>
+      <span class="badge ms-auto" style="background:#dcfce7;color:#15803d;">Utility</span>
+    </div>
+    <div class="concept-box green">
+      <strong>What it is:</strong> React.Fragment (or the shorthand <code>&lt;&gt;&lt;/&gt;</code>) lets you return multiple elements without adding an extra DOM node. Essential for table rows, definition lists, and keeping DOM clean.
+    </div>
+    <pre class="code-block"><span class="cm">// Without Fragment — adds unnecessary div wrapper</span>
+<span class="kw">function</span> <span class="fn">TableRow</span>({ name, age }) {
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt; <span class="cm">// ❌ breaks table structure!</span>
+      &lt;<span class="cl">td</span>&gt;{name}&lt;/<span class="cl">td</span>&gt;
+      &lt;<span class="cl">td</span>&gt;{age}&lt;/<span class="cl">td</span>&gt;
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}
+
+<span class="cm">// With Fragment — no extra DOM node</span>
+<span class="kw">function</span> <span class="fn">TableRow</span>({ name, age }) {
+  <span class="kw">return</span> (
+    &lt;&gt; <span class="cm">// shorthand Fragment</span>
+      &lt;<span class="cl">td</span>&gt;{name}&lt;/<span class="cl">td</span>&gt;
+      &lt;<span class="cl">td</span>&gt;{age}&lt;/<span class="cl">td</span>&gt;
+    &lt;/&gt;
+  );
+}
+
+<span class="cm">// Fragment with key (must use explicit React.Fragment)</span>
+{items.<span class="fn">map</span>(item =&gt; (
+  &lt;<span class="cl">React.Fragment</span> key={item.id}&gt;
+    &lt;<span class="cl">dt</span>&gt;{item.term}&lt;/<span class="cl">dt</span>&gt;
+    &lt;<span class="cl">dd</span>&gt;{item.description}&lt;/<span class="cl">dd</span>&gt;
+  &lt;/<span class="cl">React.Fragment</span>&gt;
+))}</pre>
+  </div>
+
+  <!-- COMPONENT 9: Error Boundary Components -->
+  <div class="comp-card" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge-type" style="background:#fee2e2;color:#b91c1c;">09</span>
+      <h2 class="h4 fw-700 mb-0">Error Boundary Components</h2>
+      <span class="badge ms-auto" style="background:#fee2e2;color:#b91c1c;">Error Handling</span>
+    </div>
+    <div class="concept-box red">
+      <strong>What it is:</strong> Class components that catch JavaScript errors anywhere in their child tree, log them, and display a fallback UI. Must be class components — no hooks equivalent yet. Essential for production apps.
+    </div>
+    <pre class="code-block"><span class="kw">class</span> <span class="cl">ErrorBoundary</span> <span class="kw">extends</span> <span class="cl">React.Component</span> {
+  <span class="fn">constructor</span>(props) {
+    <span class="kw">super</span>(props);
+    <span class="kw">this</span>.state = { hasError: <span class="kw">false</span>, error: <span class="kw">null</span> };
+  }
+
+  <span class="kw">static</span> <span class="fn">getDerivedStateFromError</span>(error) {
+    <span class="kw">return</span> { hasError: <span class="kw">true</span>, error };
+  }
+
+  <span class="fn">componentDidCatch</span>(error, info) {
+    <span class="cm">// Log to error reporting service</span>
+    <span class="fn">logErrorToService</span>(error, info.componentStack);
+  }
+
+  <span class="fn">render</span>() {
+    <span class="kw">if</span> (<span class="kw">this</span>.state.hasError) {
+      <span class="kw">return</span> &lt;<span class="cl">div</span> className=<span class="st">"error-fallback"</span>&gt;Something went wrong.&lt;/<span class="cl">div</span>&gt;;
+    }
+    <span class="kw">return this</span>.props.children;
+  }
+}
+
+<span class="cm">// Usage — wrap sections of your app</span>
+&lt;<span class="cl">ErrorBoundary</span>&gt;
+  &lt;<span class="cl">UserDashboard</span> /&gt; <span class="cm">// crash here won't kill the whole app</span>
+&lt;/<span class="cl">ErrorBoundary</span>&gt;</pre>
+    <div class="concept-box blue mt-2">
+      <strong>Real Industry Example:</strong> Every production React app should have ErrorBoundaries. Libraries like <code>react-error-boundary</code> provide a functional wrapper. Sentry's React SDK integrates with Error Boundaries for automatic crash reporting.
+    </div>
+  </div>
+
+  <!-- INTERVIEW QUESTIONS -->
+  <div class="comp-card" data-aos="fade-up">
+    <h2 class="h4 fw-700 mb-4"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions — React Components</h2>
+    <div class="accordion" id="interviewAccordion">
+
+      <!-- Q1 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q1" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q1</span>
+            What is the difference between functional and class components?
+          </button>
+        </h2>
+        <div id="q1" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><strong>Functional components</strong> are plain JavaScript functions that accept props and return JSX. <strong>Class components</strong> extend <code>React.Component</code> and use <code>render()</code> to return JSX.</p>
+            <p>Key differences:</p>
+            <ul>
+              <li><strong>State:</strong> Functional components use <code>useState</code> hook; class components use <code>this.state</code> and <code>this.setState</code>.</li>
+              <li><strong>Lifecycle:</strong> Functional components use <code>useEffect</code>; class components have <code>componentDidMount</code>, <code>componentDidUpdate</code>, <code>componentWillUnmount</code>.</li>
+              <li><strong>Syntax:</strong> Functional is simpler — no <code>this</code>, no constructor, no binding.</li>
+              <li><strong>Performance:</strong> Functional components can be slightly lighter and easier to optimize with React.memo.</li>
+              <li><strong>Modern standard:</strong> Since React 16.8, functional components can do everything class components can. React team recommends functional components for all new code.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q2" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q2</span>
+            When would you still use a class component in 2024?
+          </button>
+        </h2>
+        <div id="q2" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>There are two primary scenarios where class components are still necessary or preferred:</p>
+            <ol>
+              <li><strong>Error Boundaries:</strong> <code>componentDidCatch</code> and <code>getDerivedStateFromError</code> have no functional/hook equivalent as of React 18. Error boundaries must be class components. (The <code>react-error-boundary</code> library provides a functional wrapper around a class component.)</li>
+              <li><strong>Legacy codebases:</strong> When working on older React projects that were built before hooks existed, you'll encounter class components. Refactoring is possible but not always worth the risk/time.</li>
+            </ol>
+            <p>For all new code written today, functional components with hooks are the correct choice.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q3" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q3</span>
+            What is React.memo and when should you use it?
+          </button>
+        </h2>
+        <div id="q3" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><code>React.memo</code> is a higher-order component that memoizes a functional component. It performs a shallow comparison of props before re-rendering — if props haven't changed, it skips the re-render and returns the cached result.</p>
+            <p><strong>When to use it:</strong></p>
+            <ul>
+              <li>Components in long lists (e.g., table rows, feed items) where parent re-renders frequently</li>
+              <li>Components with expensive render logic that receive stable props</li>
+              <li>Pure display components in dashboards that re-render due to unrelated state changes</li>
+            </ul>
+            <p><strong>When NOT to use it:</strong></p>
+            <ul>
+              <li>Components that always receive new props — memoization adds overhead with no benefit</li>
+              <li>Simple components where the render cost is trivial</li>
+              <li>When props include objects/functions created inline (they fail shallow equality) — pair with <code>useMemo</code>/<code>useCallback</code> to stabilize them</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q4" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q4</span>
+            Explain the HOC pattern with a real-world example.
+          </button>
+        </h2>
+        <div id="q4" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>A <strong>Higher Order Component (HOC)</strong> is a function that takes a component as input and returns a new enhanced component. It's a pattern for reusing component logic.</p>
+            <p><strong>Real-world example — withAuthentication:</strong> Rather than adding an auth check inside every protected page component, you create a HOC:</p>
+            <pre class="code-block"><span class="kw">function</span> <span class="fn">withAuthentication</span>(WrappedComponent) {
+  <span class="kw">return function</span> <span class="fn">AuthenticatedComponent</span>(props) {
+    <span class="kw">const</span> { isLoggedIn } = <span class="fn">useAuth</span>();
+    <span class="kw">if</span> (!isLoggedIn) <span class="kw">return</span> &lt;<span class="cl">Navigate</span> to=<span class="st">"/login"</span> /&gt;;
+    <span class="kw">return</span> &lt;<span class="cl">WrappedComponent</span> {...props} /&gt;;
+  };
+}
+<span class="kw">const</span> ProtectedDashboard = <span class="fn">withAuthentication</span>(Dashboard);</pre>
+            <p>Other real examples: Redux's <code>connect()</code>, React Router's <code>withRouter()</code>, <code>React.memo()</code> itself. HOCs are less common today since custom hooks often achieve the same goal with less complexity.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q5" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q5</span>
+            What are compound components? How do they use Context?
+          </button>
+        </h2>
+        <div id="q5" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><strong>Compound components</strong> are a pattern where a parent component and its child components work together to share implicit state. The parent acts as the state manager; children consume that state via React Context.</p>
+            <p>This gives consumers flexible, expressive composition — they can arrange child components in any order or structure without passing dozens of props.</p>
+            <p><strong>How Context is used:</strong></p>
+            <ol>
+              <li>Parent creates a Context and provides its state to it via <code>Context.Provider</code></li>
+              <li>Child sub-components (often attached as static properties) consume the context with <code>useContext</code></li>
+              <li>Consumer code simply composes the children — no explicit prop threading needed</li>
+            </ol>
+            <p><strong>Real examples:</strong> Radix UI's Dialog (Trigger, Content, Close), Headless UI's Listbox (Button, Options, Option), Reach UI's Tabs (Tab, TabList, TabPanel, TabPanels).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q6" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q6</span>
+            What is the difference between controlled and uncontrolled components?
+          </button>
+        </h2>
+        <div id="q6" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>This distinction is about <strong>who owns the form element's state</strong>.</p>
+            <p><strong>Controlled components:</strong> React is the single source of truth. The input's <code>value</code> is driven by React state, and every change is handled via <code>onChange</code>. React always knows the current value.</p>
+            <p><strong>Uncontrolled components:</strong> The DOM manages its own state. You use a <code>ref</code> to read the value when needed (e.g., on form submit). React doesn't track changes in real time.</p>
+            <p><strong>When to use which:</strong></p>
+            <ul>
+              <li><strong>Controlled:</strong> Real-time validation, dependent fields, search-as-you-type, formatting on input</li>
+              <li><strong>Uncontrolled:</strong> File inputs (always uncontrolled by spec), integrating third-party DOM libraries, simple forms that only need values on submit</li>
+            </ul>
+            <p>React's official recommendation is to use controlled components for most form elements.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q7" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q7</span>
+            What is the Container/Presentational pattern? Is it still relevant with hooks?
+          </button>
+        </h2>
+        <div id="q7" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>The <strong>Container/Presentational pattern</strong> (also called Smart/Dumb) separates components into two types:</p>
+            <ul>
+              <li><strong>Container:</strong> Handles data fetching, state management, side effects. Passes data down as props.</li>
+              <li><strong>Presentational:</strong> Handles rendering UI. Receives data via props, has no knowledge of where data comes from.</li>
+            </ul>
+            <p><strong>Is it still relevant?</strong> Yes and no. The pattern's goal — separation of concerns — is still valid. But the implementation has evolved:</p>
+            <ul>
+              <li>With hooks, you can extract data logic into a <strong>custom hook</strong> instead of a container component, keeping separation without the extra component layer.</li>
+              <li>The pattern is less formal today but the mental model remains useful — especially distinguishing "data fetching" components from "pure display" components in code reviews and testing strategy.</li>
+            </ul>
+            <p>Dan Abramov (the pattern's popularizer) has himself noted hooks make it less necessary as a hard rule.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q8" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q8</span>
+            What is an Error Boundary? Why must it be a class component?
+          </button>
+        </h2>
+        <div id="q8" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>An <strong>Error Boundary</strong> is a React component that catches JavaScript errors anywhere in its child component tree during rendering, lifecycle methods, and constructors. Instead of crashing the whole app, it shows a fallback UI.</p>
+            <p>It works via two special lifecycle methods:</p>
+            <ul>
+              <li><code>static getDerivedStateFromError(error)</code> — updates state to trigger fallback UI</li>
+              <li><code>componentDidCatch(error, info)</code> — logs the error (e.g., to Sentry)</li>
+            </ul>
+            <p><strong>Why must it be a class component?</strong> These two lifecycle methods have no hook equivalents in React 18. The React team has discussed adding an <code>use(ErrorBoundary)</code> or similar API, but it hasn't shipped. Until then, Error Boundaries require class components.</p>
+            <p>The <code>react-error-boundary</code> library wraps this class component into a convenient functional API with <code>&lt;ErrorBoundary&gt;</code> and <code>useErrorBoundary()</code>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q9" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q9</span>
+            How does React.PureComponent differ from React.Component?
+          </button>
+        </h2>
+        <div id="q9" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><code>React.Component</code> re-renders every time <code>setState</code> is called or the parent re-renders — regardless of whether props or state actually changed.</p>
+            <p><code>React.PureComponent</code> implements <code>shouldComponentUpdate</code> automatically. It performs a <strong>shallow comparison</strong> of current and next props/state. If nothing has changed shallowly, it skips the re-render.</p>
+            <p><strong>Key caveats of shallow comparison:</strong></p>
+            <ul>
+              <li>Primitive values (string, number, boolean) are compared by value — works correctly</li>
+              <li>Objects and arrays are compared by reference — a new array <code>[]</code> always fails equality even if contents are the same</li>
+              <li>Deeply nested changes won't trigger re-render — can cause stale UI bugs</li>
+            </ul>
+            <p>The functional equivalent is <code>React.memo()</code>. Both are optimization tools — only add them when you've identified a performance issue, not preemptively on every component.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#q10" style="border-radius:10px;">
+            <span class="badge me-2" style="background:#ede9fe;color:#6d28d9;">Q10</span>
+            What are React Fragments and when do you need to use React.Fragment vs &lt;&gt;&lt;/&gt;?
+          </button>
+        </h2>
+        <div id="q10" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><strong>React Fragments</strong> let you group multiple JSX elements without adding an extra DOM node. React requires a single root element per component — Fragments fulfill this requirement without polluting the DOM with wrappers like <code>&lt;div&gt;</code>.</p>
+            <p><strong>Shorthand <code>&lt;&gt;&lt;/&gt;</code> — use when:</strong></p>
+            <ul>
+              <li>You just need to group elements with no attributes</li>
+              <li>Most day-to-day usage — returning multiple sibling elements, table rows, etc.</li>
+            </ul>
+            <p><strong>Explicit <code>&lt;React.Fragment&gt;</code> — required when:</strong></p>
+            <ul>
+              <li>You need to pass a <code>key</code> prop (e.g., mapping over a list where each fragment needs a key for reconciliation)</li>
+              <li>The shorthand syntax <code>&lt;&gt;</code> does not support attributes including <code>key</code></li>
+            </ul>
+            <pre class="code-block"><span class="cm">// Shorthand — no key needed</span>
+<span class="kw">return</span> (
+  &lt;&gt;
+    &lt;<span class="cl">td</span>&gt;Name&lt;/<span class="cl">td</span>&gt;
+    &lt;<span class="cl">td</span>&gt;Age&lt;/<span class="cl">td</span>&gt;
+  &lt;/&gt;
+);
+
+<span class="cm">// Explicit — key required in list</span>
+{items.<span class="fn">map</span>(item =&gt; (
+  &lt;<span class="cl">React.Fragment</span> key={item.id}&gt;
+    &lt;<span class="cl">dt</span>&gt;{item.term}&lt;/<span class="cl">dt</span>&gt;
+    &lt;<span class="cl">dd</span>&gt;{item.desc}&lt;/<span class="cl">dd</span>&gt;
+  &lt;/<span class="cl">React.Fragment</span>&gt;
+))}</pre>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COMMON MISTAKES -->
+  <div class="comp-card" data-aos="fade-up">
+    <h2 class="h4 fw-700 mb-4"><i class="bi bi-exclamation-triangle-fill me-2" style="color:#ef4444;"></i>Common Mistakes to Avoid</h2>
+
+    <div class="mistake-box">
+      <strong>1. Forgetting key prop in lists</strong><br/>
+      When rendering lists with <code>.map()</code>, every element must have a unique <code>key</code> prop. Missing or non-unique keys cause React's reconciliation algorithm to make incorrect assumptions — resulting in state ending up in the wrong component, stale renders, and hard-to-debug UI bugs. Never use array index as key when the list can be reordered or filtered.
+    </div>
+
+    <div class="mistake-box">
+      <strong>2. Mutating state directly</strong><br/>
+      Always use <code>setState</code> (class) or the setter from <code>useState</code> (functional) — never mutate state directly. Direct mutation like <code>this.state.items.push(x)</code> or <code>arr.push(x); setArr(arr)</code> does not trigger a re-render because React compares object references. The reference hasn't changed, so React thinks nothing happened and the UI stays stale.
+    </div>
+
+    <div class="mistake-box">
+      <strong>3. Calling hooks conditionally</strong><br/>
+      React hooks must be called in the same order on every render — no hooks inside <code>if</code> statements, loops, or nested functions. Violating the Rules of Hooks causes React to misalign the internal hooks array between renders, leading to incorrect state assignments and runtime crashes. If you need conditional logic, put it inside the hook, not around it.
+    </div>
+
+    <div class="mistake-box">
+      <strong>4. Not memoizing expensive components in lists</strong><br/>
+      Rendering 100+ items in a list where each item is a complex component without <code>React.memo</code> means every parent state change (e.g., a filter input) re-renders all 100+ items — even if their data didn't change. Wrap list item components in <code>React.memo</code> and stabilize function props with <code>useCallback</code> to avoid cascading re-renders and maintain smooth scrolling performance.
+    </div>
+  </div>
+
+</main>
+
+<footer style="background:#0f172a;color:#64748b;padding:2rem 0;margin-top:3rem;text-align:center;border-top:1px solid #1e293b;">
+  <div class="container-xl">
+    <p class="mb-1" style="color:#94a3b8;">React Mastery Hub — Section 5: Components</p>
+    <div class="d-flex justify-content-center gap-4 mt-2">
+      <a href="react-props.html" style="color:#61dafb;text-decoration:none;">Next: Props &rarr;</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({duration:700,once:true,offset:80});
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

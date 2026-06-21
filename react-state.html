@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>State Management — Section 7 — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;background:var(--bg,#f0f4ff);color:var(--text,#1e293b);}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--surface2:#1e293b;--text:#f1f5f9;--text-muted:#94a3b8;--border:#1e293b;}
+    .concept-box{border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fde68a;}
+    [data-theme="dark"] .concept-box.red{background:#450a0a;border-color:#ef4444;color:#fecaca;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.83rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;} .code-block .fn{color:#60a5fa;} .code-block .st{color:#86efac;}
+    .code-block .cm{color:#64748b;font-style:italic;} .code-block .cl{color:#f9a8d4;} .code-block .num{color:#fb923c;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.8rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;border-color:#ef4444;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3.5rem 0 2.5rem;margin-bottom:2rem;}
+    .state-card{border-radius:16px;padding:2rem;margin-bottom:2rem;border:1px solid rgba(0,0,0,.08);background:#fff;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+    [data-theme="dark"] .state-card{background:#111827;border-color:#1e293b;}
+    .flow-step{border-radius:10px;padding:1rem 1.2rem;text-align:center;font-weight:600;font-size:.9rem;}
+    .flow-arrow{font-size:1.4rem;text-align:center;color:#7c3aed;margin:.3rem 0;}
+    .comparison-badge{display:inline-block;padding:.2rem .6rem;border-radius:6px;font-size:.75rem;font-weight:700;}
+    .section-title{font-size:1.4rem;font-weight:800;margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem;}
+    .section-number{background:linear-gradient(135deg,#7c3aed,#3b82f6);color:#fff;border-radius:8px;width:2rem;height:2rem;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;flex-shrink:0;}
+    .table-comparison{width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;overflow:hidden;}
+    .table-comparison th{background:#1e1b4b;color:#e2e8f0;padding:.75rem 1rem;font-size:.82rem;font-weight:700;}
+    .table-comparison td{padding:.7rem 1rem;font-size:.83rem;border-bottom:1px solid #e2e8f0;background:#fff;}
+    .table-comparison tr:last-child td{border-bottom:none;}
+    [data-theme="dark"] .table-comparison td{background:#111827;border-color:#1e293b;color:#e2e8f0;}
+    .accordion-button{font-weight:600;}
+    .accordion-button:not(.collapsed){color:#7c3aed;background:#f5f3ff;}
+    [data-theme="dark"] .accordion-button:not(.collapsed){color:#c4b5fd;background:#1e1b4b;}
+    [data-theme="dark"] .accordion-button{background:#111827;color:#e2e8f0;}
+    [data-theme="dark"] .accordion-item{background:#111827;border-color:#1e293b;}
+    [data-theme="dark"] .accordion-body{background:#111827;color:#e2e8f0;}
+    .step-badge{display:inline-flex;align-items:center;justify-content:center;width:1.8rem;height:1.8rem;border-radius:50%;font-weight:800;font-size:.8rem;flex-shrink:0;}
+    pre{margin:0;white-space:pre-wrap;word-break:break-word;}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-components.html">Components</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-props.html">Props</a></li>
+        <li class="nav-item"><a class="nav-link active" href="react-state.html">State</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="section-hero" style="padding-top:5rem;">
+  <div class="container-xl">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb" style="opacity:.7;">
+        <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none" style="color:#61dafb;">Home</a></li>
+        <li class="breadcrumb-item active text-white">Section 7: State</li>
+      </ol>
+    </nav>
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge" style="background:#61dafb;color:#0f172a;font-size:.85rem;padding:.5rem 1rem;">Section 7</span>
+      <span class="badge bg-warning text-dark">Core Concept</span>
+    </div>
+    <h1 class="fw-900 display-5 mb-2">State Management</h1>
+    <p class="lead mb-0" style="opacity:.8;max-width:600px;">Deep dive into React state — useState patterns, state lifecycle, async updates, batching in React 18, and when to choose local vs global state.</p>
+  </div>
+</div>
+
+<main class="container-xl pb-5">
+
+  <!-- SECTION 1: useState Deep Dive -->
+  <div class="state-card" data-aos="fade-up">
+    <div class="section-title">
+      <span class="section-number">1</span>
+      useState Deep Dive
+    </div>
+
+    <div class="concept-box blue">
+      <strong>What is State?</strong><br/>
+      State is data that changes over time and causes component re-renders when updated. Unlike props (immutable, external), state is <em>owned and managed by the component itself</em>. React's <code>useState</code> hook returns a tuple: <code>[currentValue, setterFunction]</code>. Every time the setter is called with a new value, React schedules a re-render and the component function re-runs with the updated state value.
+    </div>
+
+    <div class="code-block"><pre><span class="cm">// ─── Basic useState usage ──────────────────────────────────────────</span>
+<span class="kw">import</span> { <span class="fn">useState</span> } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="cl">Counter</span>() {
+  <span class="cm">// Destructure the tuple: [value, setter]</span>
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      &lt;<span class="cl">p</span>&gt;Count: {count}&lt;/<span class="cl">p</span>&gt;
+      &lt;<span class="cl">button</span> onClick={() =&gt; <span class="fn">setCount</span>(count + <span class="num">1</span>)}&gt;Increment&lt;/<span class="cl">button</span>&gt;
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}
+
+<span class="cm">// ─── Functional update: prev => prev + 1 ──────────────────────────</span>
+<span class="cm">// WHY: If multiple updates fire before a re-render (batching), using</span>
+<span class="cm">// the closure value of `count` may be stale. The functional form</span>
+<span class="cm">// receives the GUARANTEED latest state from React's queue — always</span>
+<span class="cm">// use it when new state depends on the previous value.</span>
+&lt;<span class="cl">button</span> onClick={() =&gt; <span class="fn">setCount</span>(prev =&gt; prev + <span class="num">1</span>)}&gt;Safe Increment&lt;/<span class="cl">button</span>&gt;
+
+<span class="cm">// ─── Object state — correct vs incorrect ──────────────────────────</span>
+<span class="kw">const</span> [user, setUser] = <span class="fn">useState</span>({ name: <span class="st">'Alice'</span>, age: <span class="num">30</span>, role: <span class="st">'admin'</span> });
+
+<span class="cm">// ❌ WRONG — mutates state directly, React won't detect the change</span>
+user.name = <span class="st">'Bob'</span>;
+<span class="fn">setUser</span>(user); <span class="cm">// same reference → no re-render!</span>
+
+<span class="cm">// ✅ CORRECT — spread to create a new object reference</span>
+<span class="fn">setUser</span>(prev =&gt; ({ ...prev, name: <span class="st">'Bob'</span> }));
+
+<span class="cm">// ─── Array state — add, remove, update ───────────────────────────</span>
+<span class="kw">const</span> [items, setItems] = <span class="fn">useState</span>([<span class="st">'apple'</span>, <span class="st">'banana'</span>]);
+
+<span class="cm">// Add item</span>
+<span class="fn">setItems</span>(prev =&gt; [...prev, <span class="st">'cherry'</span>]);
+
+<span class="cm">// Remove by value</span>
+<span class="fn">setItems</span>(prev =&gt; prev.<span class="fn">filter</span>(item =&gt; item !== <span class="st">'banana'</span>));
+
+<span class="cm">// Remove by index</span>
+<span class="fn">setItems</span>(prev =&gt; prev.<span class="fn">filter</span>((_, idx) =&gt; idx !== <span class="num">1</span>));
+
+<span class="cm">// Update item at index — map to replace</span>
+<span class="fn">setItems</span>(prev =&gt; prev.<span class="fn">map</span>((item, idx) =&gt; idx === <span class="num">0</span> ? <span class="st">'avocado'</span> : item));</pre></div>
+
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i>Pro Tip:</strong> Always use functional updates (<code>prev =&gt; ...</code>) when new state depends on previous state. React may batch state updates and the closure over state could be stale — the functional form receives the freshest value from React's internal update queue, not the potentially-stale closure.
+    </div>
+  </div>
+
+  <!-- SECTION 2: State Lifecycle Visual -->
+  <div class="state-card" data-aos="fade-up">
+    <div class="section-title">
+      <span class="section-number">2</span>
+      State Lifecycle Visual
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-md-6 col-lg-4">
+        <!-- Flow diagram -->
+        <div class="d-flex flex-column gap-1">
+
+          <div class="flow-step d-flex align-items-center gap-2" style="background:#eff6ff;border:1.5px solid #93c5fd;">
+            <span class="step-badge" style="background:#3b82f6;color:#fff;">1</span>
+            <span style="font-size:.88rem;">Component mounts &amp; <code>useState(initialValue)</code> initializes state</span>
+          </div>
+          <div class="flow-arrow">&#8595;</div>
+
+          <div class="flow-step d-flex align-items-center gap-2" style="background:#f5f3ff;border:1.5px solid #c4b5fd;">
+            <span class="step-badge" style="background:#7c3aed;color:#fff;">2</span>
+            <span style="font-size:.88rem;">User action triggers event handler — <code>setState(newValue)</code> called</span>
+          </div>
+          <div class="flow-arrow">&#8595;</div>
+
+          <div class="flow-step d-flex align-items-center gap-2" style="background:#fffbeb;border:1.5px solid #fcd34d;">
+            <span class="step-badge" style="background:#d97706;color:#fff;">3</span>
+            <span style="font-size:.88rem;">React <strong>schedules</strong> re-render (async, batched with other updates)</span>
+          </div>
+          <div class="flow-arrow">&#8595;</div>
+
+          <div class="flow-step d-flex align-items-center gap-2" style="background:#f0fdf4;border:1.5px solid #6ee7b7;">
+            <span class="step-badge" style="background:#16a34a;color:#fff;">4</span>
+            <span style="font-size:.88rem;">Component function re-executes — <code>useState</code> returns <strong>new</strong> value</span>
+          </div>
+          <div class="flow-arrow">&#8595;</div>
+
+          <div class="flow-step d-flex align-items-center gap-2" style="background:#fdf4ff;border:1.5px solid #e879f9;">
+            <span class="step-badge" style="background:#a21caf;color:#fff;">5</span>
+            <span style="font-size:.88rem;">React diffs Virtual DOM — minimal DOM patches applied to screen</span>
+          </div>
+          <div class="flow-arrow">&#8595;</div>
+
+          <div class="flow-step d-flex align-items-center gap-2" style="background:#fff7ed;border:1.5px solid #fb923c;">
+            <span class="step-badge" style="background:#ea580c;color:#fff;">6</span>
+            <span style="font-size:.88rem;"><code>useEffect</code>s with matching deps run <em>after</em> the browser paints</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-8">
+        <div class="concept-box amber mb-3">
+          <strong><i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>State updates are ASYNC</strong><br/>
+          React does not immediately apply state changes. The new value is only available on the <strong>next render</strong>. Calling <code>setState</code> queues an update — it does not synchronously mutate the value. This is a core source of confusion for new React developers.
+        </div>
+
+        <div class="code-block"><pre><span class="cm">// ─── The stale state issue ─────────────────────────────────────</span>
+<span class="kw">function</span> <span class="cl">StaleDemo</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+
+  <span class="kw">const</span> handleClick = () =&gt; {
+    <span class="fn">setCount</span>(count + <span class="num">1</span>);
+    <span class="cm">// ❌ count is STILL 0 here — state hasn't re-rendered yet</span>
+    console.<span class="fn">log</span>(count); <span class="cm">// prints 0, not 1!</span>
+  };
+
+  <span class="cm">// ✅ FIX — useEffect runs AFTER re-render with fresh value</span>
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="cm">// count is the NEW value here, after the re-render</span>
+    console.<span class="fn">log</span>(<span class="st">'Count updated to:'</span>, count);
+    <span class="kw">if</span> (count &gt; <span class="num">0</span>) {
+      <span class="fn">sendAnalytics</span>({ event: <span class="st">'count_updated'</span>, value: count });
+    }
+  }, [count]); <span class="cm">// runs every time count changes</span>
+
+  <span class="kw">return</span> &lt;<span class="cl">button</span> onClick={handleClick}&gt;Count: {count}&lt;/<span class="cl">button</span>&gt;;
+}</pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: State Batching React 18 -->
+  <div class="state-card" data-aos="fade-up">
+    <div class="section-title">
+      <span class="section-number">3</span>
+      State Batching — React 18
+    </div>
+
+    <div class="concept-box blue mb-3">
+      <strong><i class="bi bi-layers-fill me-1"></i>Automatic Batching in React 18</strong><br/>
+      React 18 introduced <strong>Automatic Batching</strong> — multiple <code>setState</code> calls in the same event handler, <code>setTimeout</code>, Promise, or <em>any other context</em> are batched into a single re-render. React 17 only batched inside native event handlers. This is a significant performance improvement that also simplifies reasoning about renders.
+    </div>
+
+    <div class="code-block"><pre><span class="cm">// ─── React 18 automatic batching — ONE re-render regardless of context ──</span>
+<span class="kw">function</span> <span class="fn">handleClick</span>() {
+  <span class="fn">setCount</span>(c =&gt; c + <span class="num">1</span>);   <span class="cm">// batched</span>
+  <span class="fn">setVisible</span>(v =&gt; !v);     <span class="cm">// batched</span>
+  <span class="fn">setName</span>(<span class="st">'John'</span>);         <span class="cm">// batched</span>
+  <span class="cm">// Result: ONE re-render, not three!</span>
+}
+
+<span class="cm">// ─── React 17 — only batched in synthetic events ──────────────────────</span>
+<span class="cm">// In React 17, setTimeout caused 2 separate re-renders:</span>
+<span class="fn">setTimeout</span>(() =&gt; {
+  <span class="fn">setCount</span>(c =&gt; c + <span class="num">1</span>); <span class="cm">// re-render #1 (React 17 — NOT batched!)</span>
+  <span class="fn">setVisible</span>(v =&gt; !v);   <span class="cm">// re-render #2 (React 17 — NOT batched!)</span>
+  <span class="cm">// React 18: still just ONE re-render — automatic batching applies!</span>
+}, <span class="num">1000</span>);
+
+<span class="cm">// ─── Same with Promises (React 18 batches, React 17 did NOT) ─────────</span>
+<span class="fn">fetchData</span>().<span class="fn">then</span>(() =&gt; {
+  <span class="fn">setData</span>(result);     <span class="cm">// React 18: batched</span>
+  <span class="fn">setLoading</span>(<span class="kw">false</span>);  <span class="cm">// React 18: batched — ONE re-render!</span>
+});
+
+<span class="cm">// ─── Opt OUT of batching (rare — use sparingly!) ─────────────────────</span>
+<span class="kw">import</span> { <span class="fn">flushSync</span> } <span class="kw">from</span> <span class="st">'react-dom'</span>;
+
+<span class="cm">// flushSync forces an immediate, synchronous re-render</span>
+<span class="fn">flushSync</span>(() =&gt; <span class="fn">setCount</span>(c =&gt; c + <span class="num">1</span>)); <span class="cm">// forces immediate re-render #1</span>
+<span class="fn">flushSync</span>(() =&gt; <span class="fn">setVisible</span>(v =&gt; !v));   <span class="cm">// forces immediate re-render #2</span>
+<span class="cm">// Use case: reading updated DOM layout between state updates</span></pre></div>
+
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="p-3 rounded-3 text-center" style="background:#fff0f0;border:1.5px solid #fca5a5;">
+          <div class="fw-700 mb-1" style="color:#dc2626;">React 17</div>
+          <div style="font-size:.85rem;color:#7f1d1d;">Only batches inside <strong>synthetic event handlers</strong>. setTimeout / Promise / native events each trigger separate re-renders per setState call.</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="p-3 rounded-3 text-center" style="background:#f0fdf4;border:1.5px solid #6ee7b7;">
+          <div class="fw-700 mb-1" style="color:#16a34a;">React 18</div>
+          <div style="font-size:.85rem;color:#14532d;">Batches <strong>everywhere</strong> — event handlers, setTimeout, Promises, native events. Opt out with <code>flushSync</code> when needed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: State Updates Are Async -->
+  <div class="state-card" data-aos="fade-up">
+    <div class="section-title">
+      <span class="section-number">4</span>
+      State Updates Are Async — Stale Closures &amp; Fixes
+    </div>
+
+    <div class="concept-box red mb-3">
+      <strong><i class="bi bi-x-circle-fill me-1"></i>Common Pitfall: Reading State After setState</strong><br/>
+      Reading state immediately after calling <code>setState</code> returns the <strong>OLD value</strong>. State updates are scheduled — the closure still holds the stale value from the render in which the handler was created. React will apply the update on the next render, not synchronously.
+    </div>
+
+    <div class="code-block"><pre><span class="cm">// ─── WRONG — reading state right after setState ─────────────────────</span>
+<span class="kw">const</span> handleClick = () =&gt; {
+  <span class="fn">setCount</span>(count + <span class="num">1</span>);
+  console.<span class="fn">log</span>(count);       <span class="cm">// ❌ logs OLD value — still the stale closure!</span>
+  <span class="fn">sendAnalytics</span>(count);     <span class="cm">// ❌ sends wrong count to analytics</span>
+  <span class="fn">saveToServer</span>(count);      <span class="cm">// ❌ saves stale value to server</span>
+};
+
+<span class="cm">// ─── CORRECT — use useEffect to react to state changes ──────────────</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="kw">if</span> (count &gt; <span class="num">0</span>) {
+    <span class="fn">sendAnalytics</span>(count); <span class="cm">// ✅ runs after re-render with new value</span>
+    <span class="fn">saveToServer</span>(count);  <span class="cm">// ✅ correct value guaranteed</span>
+  }
+}, [count]); <span class="cm">// dependency array ensures this runs when count changes</span>
+
+<span class="cm">// ─── CORRECT — local variable captures the intended next value ───────</span>
+<span class="kw">const</span> handleClickWithLocal = () =&gt; {
+  <span class="kw">const</span> nextCount = count + <span class="num">1</span>;
+  <span class="fn">setCount</span>(nextCount);
+  <span class="fn">sendAnalytics</span>(nextCount); <span class="cm">// ✅ use the local variable, not state</span>
+};
+
+<span class="cm">// ─── CORRECT — functional updates chain correctly ────────────────────</span>
+<span class="kw">const</span> handleTripleIncrement = () =&gt; {
+  <span class="fn">setCount</span>(prev =&gt; prev + <span class="num">1</span>); <span class="cm">// ✅ prev is guaranteed fresh from queue</span>
+  <span class="fn">setCount</span>(prev =&gt; prev + <span class="num">1</span>); <span class="cm">// ✅ chains correctly: prev = previous result</span>
+  <span class="fn">setCount</span>(prev =&gt; prev + <span class="num">1</span>); <span class="cm">// ✅ result: count + 3 (not count + 1!)</span>
+  <span class="cm">// Without functional form: setCount(count + 1) x3 = only count + 1!</span>
+};</pre></div>
+
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i>Key Mental Model:</strong> Each render is a snapshot — the event handlers created during that render close over the state values from <em>that specific render</em>. <code>setState</code> schedules a new snapshot, it does not mutate the current one. The functional updater (<code>prev =&gt; ...</code>) bypasses this by receiving the queued value directly from React.
+    </div>
+  </div>
+
+  <!-- SECTION 5: State Initialization Patterns -->
+  <div class="state-card" data-aos="fade-up">
+    <div class="section-title">
+      <span class="section-number">5</span>
+      State Initialization Patterns
+    </div>
+
+    <div class="concept-box purple mb-3">
+      <strong><i class="bi bi-lightning-charge-fill me-1"></i>Lazy Initialization</strong><br/>
+      The initial value passed to <code>useState</code> is only used on the <strong>first render</strong>. However, if you pass an expression (like a function call), it is evaluated on <em>every render</em> — even though the result is discarded after mount. Pass a <strong>function reference</strong> instead to defer the computation, so it only runs once.
+    </div>
+
+    <div class="code-block"><pre><span class="cm">// ─── Normal initialization — expression evaluates on EVERY render ────</span>
+<span class="kw">const</span> [list, setList] = <span class="fn">useState</span>(<span class="fn">expensiveCompute</span>()); <span class="cm">// ❌ runs every render!</span>
+
+<span class="cm">// ─── Lazy initialization — function only called ONCE on mount ────────</span>
+<span class="kw">const</span> [list, setList] = <span class="fn">useState</span>(() =&gt; <span class="fn">expensiveCompute</span>()); <span class="cm">// ✅ runs once</span>
+
+<span class="cm">// ─── Reading from localStorage lazily ────────────────────────────────</span>
+<span class="kw">const</span> [theme, setTheme] = <span class="fn">useState</span>(() =&gt; {
+  <span class="cm">// This function only runs on the initial render</span>
+  <span class="kw">const</span> saved = localStorage.<span class="fn">getItem</span>(<span class="st">'theme'</span>);
+  <span class="kw">return</span> saved || <span class="st">'light'</span>;
+});
+
+<span class="cm">// ─── Parsing URL params lazily ────────────────────────────────────────</span>
+<span class="kw">const</span> [filters, setFilters] = <span class="fn">useState</span>(() =&gt; {
+  <span class="kw">const</span> params = <span class="kw">new</span> <span class="cl">URLSearchParams</span>(window.location.search);
+  <span class="kw">return</span> {
+    search: params.<span class="fn">get</span>(<span class="st">'q'</span>) || <span class="st">''</span>,
+    page: <span class="fn">parseInt</span>(params.<span class="fn">get</span>(<span class="st">'page'</span>) || <span class="st">'1'</span>, <span class="num">10</span>),
+    sort: params.<span class="fn">get</span>(<span class="st">'sort'</span>) || <span class="st">'asc'</span>,
+  };
+});
+
+<span class="cm">// ─── Complex default structure built once ────────────────────────────</span>
+<span class="kw">const</span> [formData, setFormData] = <span class="fn">useState</span>(() =&gt; ({
+  id: <span class="fn">crypto</span>.<span class="fn">randomUUID</span>(),   <span class="cm">// generates unique ID once, not every render</span>
+  createdAt: <span class="kw">new</span> <span class="cl">Date</span>().<span class="fn">toISOString</span>(),
+  fields: {},
+}));</pre></div>
+  </div>
+
+  <!-- SECTION 6: Local vs Global State -->
+  <div class="state-card" data-aos="fade-up">
+    <div class="section-title">
+      <span class="section-number">6</span>
+      Local vs Global State — When to Use What
+    </div>
+
+    <div class="table-responsive mb-3">
+      <table class="table-comparison">
+        <thead>
+          <tr>
+            <th>State Type</th>
+            <th>When to Use</th>
+            <th>Tools</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="comparison-badge" style="background:#dbeafe;color:#1d4ed8;">Local state</span></td>
+            <td>Single component, not shared with others</td>
+            <td><code>useState</code>, <code>useReducer</code></td>
+            <td>Form input value, modal open/close toggle</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-badge" style="background:#dcfce7;color:#15803d;">Lifted state</span></td>
+            <td>Shared between sibling components</td>
+            <td><code>useState</code> in parent</td>
+            <td>Filter value affecting a sibling list component</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-badge" style="background:#fef9c3;color:#854d0e;">Context</span></td>
+            <td>Cross-component, low-frequency updates</td>
+            <td><code>useContext</code> + <code>useState</code></td>
+            <td>Theme, current user, locale/language setting</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-badge" style="background:#ede9fe;color:#5b21b6;">Redux Toolkit</span></td>
+            <td>Complex logic, many consumers, need for time-travel debug or dev tools</td>
+            <td>Redux store + slices</td>
+            <td>Shopping cart, multi-step form across routes</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-badge" style="background:#fce7f3;color:#9d174d;">Zustand</span></td>
+            <td>Simple global state, less boilerplate than Redux</td>
+            <td>Zustand store</td>
+            <td>Global app settings, auth user object</td>
+          </tr>
+          <tr>
+            <td><span class="comparison-badge" style="background:#e0f2fe;color:#075985;">React Query / SWR</span></td>
+            <td>Server state — data fetching, caching, background refetching</td>
+            <td>React Query, SWR</td>
+            <td>API data, paginated lists, infinite scroll</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i>Rule of Thumb:</strong> Start with <strong>local state</strong>. Lift it when siblings need it. Use <strong>Context</strong> for medium-scale sharing (theme, auth, language). Use <strong>Redux/Zustand</strong> for complex global state with many consumers. Use <strong>React Query</strong> for server state — don't store fetched API data in useState; that's exactly what React Query solves.
+    </div>
+
+    <div class="code-block"><pre><span class="cm">// ─── When to lift state vs use Context ───────────────────────────────</span>
+
+<span class="cm">// 1. Local state — stays inside the component</span>
+<span class="kw">function</span> <span class="cl">SearchBar</span>() {
+  <span class="kw">const</span> [query, setQuery] = <span class="fn">useState</span>(<span class="st">''</span>); <span class="cm">// only SearchBar needs this</span>
+  <span class="kw">return</span> &lt;<span class="cl">input</span> value={query} onChange={e =&gt; <span class="fn">setQuery</span>(e.target.value)} /&gt;;
+}
+
+<span class="cm">// 2. Lifted state — parent manages, passes down to siblings</span>
+<span class="kw">function</span> <span class="cl">ProductPage</span>() {
+  <span class="kw">const</span> [filter, setFilter] = <span class="fn">useState</span>(<span class="st">'all'</span>); <span class="cm">// shared between children</span>
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="cl">FilterBar</span> filter={filter} onFilter={setFilter} /&gt;
+      &lt;<span class="cl">ProductList</span> filter={filter} /&gt;
+    &lt;/&gt;
+  );
+}
+
+<span class="cm">// 3. Context — avoids prop drilling across many levels</span>
+<span class="kw">const</span> ThemeContext = <span class="fn">createContext</span>(<span class="st">'light'</span>);
+
+<span class="kw">function</span> <span class="cl">App</span>() {
+  <span class="kw">const</span> [theme, setTheme] = <span class="fn">useState</span>(<span class="st">'light'</span>);
+  <span class="kw">return</span> (
+    &lt;<span class="cl">ThemeContext.Provider</span> value={{ theme, setTheme }}&gt;
+      &lt;<span class="cl">Layout</span> /&gt; <span class="cm">// any descendant can useContext(ThemeContext)</span>
+    &lt;/<span class="cl">ThemeContext.Provider</span>&gt;
+  );
+}</pre></div>
+  </div>
+
+  <!-- INTERVIEW QUESTIONS -->
+  <div class="state-card" data-aos="fade-up">
+    <div class="section-title">
+      <span class="section-number" style="background:linear-gradient(135deg,#0ea5e9,#6366f1);">Q</span>
+      Interview Questions
+    </div>
+
+    <div class="accordion" id="interviewAccordion">
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq1">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q1.</span> What is state in React? How does it differ from props?
+          </button>
+        </h2>
+        <div id="iq1" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><strong>State</strong> is mutable data <em>owned by a component</em>. When state changes, React re-renders the component to reflect the new value. State is private — only the component that owns it can change it (by calling its setter).</p>
+            <p><strong>Props</strong> are immutable inputs <em>passed from a parent</em>. A component can read props but cannot modify them. Props flow down the component tree; state lives inside a single component (though it can be shared by lifting to a parent).</p>
+            <p>Key difference: State makes a component dynamic and interactive. Props make a component configurable and reusable. A common pattern is a parent holding state and passing it as props to child components.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq2">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q2.</span> Why should you use functional updates (<code>prev =&gt; ...</code>) with setState?
+          </button>
+        </h2>
+        <div id="iq2" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>Functional updates should be used when new state depends on the previous state because React may batch multiple <code>setState</code> calls. If you use the state value directly from the closure (<code>setCount(count + 1)</code>), all batched updates read the same stale closure value — so three calls would still only result in <code>count + 1</code>.</p>
+            <p>With the functional form (<code>setCount(prev =&gt; prev + 1)</code>), React passes the most recently queued value as <code>prev</code>, so three calls correctly chain to <code>count + 3</code>. It also avoids stale closure bugs where the closure captures an outdated snapshot of state.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq3">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q3.</span> What happens when you call setState multiple times in the same handler?
+          </button>
+        </h2>
+        <div id="iq3" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>In React 18, all multiple <code>setState</code> calls within the same synchronous event handler (or any async context, thanks to automatic batching) are <strong>batched into a single re-render</strong>. React collects all the state updates, processes them, and then triggers one render with all updates applied simultaneously.</p>
+            <p>In React 17, batching only occurred inside React synthetic event handlers. Calls inside <code>setTimeout</code>, Promises, or native DOM event listeners would each trigger a separate re-render.</p>
+            <p>You can opt out of batching in React 18 using <code>flushSync</code> from <code>react-dom</code>, which forces synchronous, immediate flushing of the update queue.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq4">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q4.</span> What is state batching? How did React 18 change it?
+          </button>
+        </h2>
+        <div id="iq4" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><strong>State batching</strong> is React's optimization of grouping multiple state updates together and applying them in a single re-render rather than re-rendering after each individual update. This reduces unnecessary renders and improves performance.</p>
+            <p><strong>React 17 and earlier:</strong> Batching only applied inside React's own synthetic event handlers (e.g., onClick, onChange). State updates triggered from <code>setTimeout</code>, native event listeners, Promises, or <code>async/await</code> were NOT batched — each <code>setState</code> caused a separate re-render.</p>
+            <p><strong>React 18:</strong> Introduced <em>Automatic Batching</em> — state updates are now batched in ALL contexts, including <code>setTimeout</code>, Promises, and native events. This makes performance more consistent and predictable without requiring any code changes. Use <code>flushSync</code> to opt out when you need immediate DOM feedback between updates.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq5">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q5.</span> Why can't you read the updated state immediately after setState?
+          </button>
+        </h2>
+        <div id="iq5" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>React state updates are <strong>asynchronous</strong> — calling <code>setState</code> does not immediately mutate the state variable. It <em>schedules</em> an update that will be applied on the next render. The current render's state values are immutable snapshots — they do not change mid-render.</p>
+            <p>JavaScript closures are the underlying mechanism: the event handler function closes over the state variable from the render in which it was created. Calling <code>setState</code> doesn't break the closure — the variable in scope still holds the old value.</p>
+            <p>To act on the new state value, use <code>useEffect</code> with the state variable in its dependency array — this runs after the re-render with the new value. Alternatively, store the intended new value in a local variable and use that instead of reading state after the setter call.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq6">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q6.</span> What is the difference between useState and useReducer?
+          </button>
+        </h2>
+        <div id="iq6" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><code>useState</code> is ideal for <strong>simple, independent state values</strong> — a number, a boolean, a string. The update logic is typically straightforward.</p>
+            <p><code>useReducer</code> is better for <strong>complex state logic</strong> where multiple sub-values are closely related, where the next state depends on the previous in non-trivial ways, or when multiple actions can update state in different ways. It mirrors the Redux pattern: you dispatch actions to a reducer function that returns the next state.</p>
+            <p>Rule of thumb: If you find yourself writing many <code>useState</code> calls that all update together, or if update logic is complex with multiple cases, migrate to <code>useReducer</code>. <code>useReducer</code> also makes it easier to extract and test state logic independently of the component.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq7">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q7.</span> How do you update an object or array stored in state correctly?
+          </button>
+        </h2>
+        <div id="iq7" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>React detects state changes by <strong>reference equality</strong>. Mutating an object or array in place and passing the same reference to the setter will NOT trigger a re-render — React sees the same reference and assumes nothing changed.</p>
+            <p><strong>Objects:</strong> Use the spread operator to create a new object: <code>setUser(prev =&gt; ({ ...prev, name: 'Bob' }))</code>. For deeply nested objects, spread at each level or use a library like Immer.</p>
+            <p><strong>Arrays:</strong> Use non-mutating methods — <code>map</code>, <code>filter</code>, spread, or <code>concat</code>. Avoid <code>push</code>, <code>pop</code>, <code>splice</code>, or direct index assignment. For example: add with <code>[...prev, newItem]</code>, remove with <code>prev.filter(...)&gt;</code>, update with <code>prev.map(...)</code>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq8">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q8.</span> What is "lifting state up" and when do you need it?
+          </button>
+        </h2>
+        <div id="iq8" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><strong>Lifting state up</strong> means moving state from a child component to the closest common ancestor of all components that need it. The parent then passes the state down as props and passes the setter as a callback prop.</p>
+            <p>You need it when two sibling components need to share or react to the same state — for example, a filter dropdown and a data list that is filtered by it. Neither sibling can directly read the other's state, so the parent holds the filter value and passes it to both children.</p>
+            <p>The trade-off: lifting state can cause unnecessary re-renders for the parent and all its children. When state is lifted very high (e.g., to the root), consider Context or a state management library to avoid deep prop drilling.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq9">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q9.</span> When would you use Context vs Redux for state?
+          </button>
+        </h2>
+        <div id="iq9" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p><strong>React Context</strong> is built-in and best for <em>low-frequency, mostly-read</em> global state like the current theme, logged-in user, or locale. It re-renders all consumers when the context value changes, so it performs poorly for frequently-updated state (like a search query that updates on every keystroke).</p>
+            <p><strong>Redux Toolkit</strong> is better when you have: complex update logic with many action types, state that is read by dozens of components (Redux uses selector memoization to prevent unnecessary re-renders), need for middleware (thunks, sagas), or benefit from Redux DevTools time-travel debugging. It adds boilerplate but pays off in large applications.</p>
+            <p>A practical guideline: Context for simple global values, Redux for complex shared state with performance requirements. Zustand is a middle ground — Redux-like model with much less boilerplate, good for medium-complexity apps.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border rounded-3 mb-2" style="overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq10">
+            <span class="me-2" style="color:#7c3aed;font-weight:800;">Q10.</span> What is lazy state initialization and when do you use it?
+          </button>
+        </h2>
+        <div id="iq10" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body">
+            <p>Lazy state initialization is the pattern of passing a <strong>function</strong> (not a value) as the initial state argument to <code>useState</code>. React only calls this function on the very first render — subsequent renders ignore it entirely.</p>
+            <p>Without lazy initialization, <code>useState(expensiveCompute())</code> evaluates <code>expensiveCompute()</code> on every render (the result is just discarded after mount). With lazy initialization, <code>useState(() =&gt; expensiveCompute())</code> only calls the function once.</p>
+            <p>Common use cases: reading from <code>localStorage</code>, parsing URL query parameters, building a complex initial data structure (like generating a unique ID with <code>crypto.randomUUID()</code>), or any computation that would be expensive to repeat on every render. If the initial value is a simple literal, lazy initialization has no benefit.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COMMON MISTAKES -->
+  <div class="state-card" data-aos="fade-up">
+    <div class="section-title">
+      <span class="section-number" style="background:linear-gradient(135deg,#ef4444,#f97316);">!</span>
+      Common Mistakes to Avoid
+    </div>
+
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle-fill text-danger me-1"></i>Mistake 1: Mutating State Directly</strong>
+      <p class="mb-1 mt-1" style="font-size:.9rem;">Directly modifying state objects or arrays (e.g., <code>state.items.push(x)</code>, <code>state.user.name = 'Bob'</code>) does not notify React of the change. React uses reference equality — the same object reference means no change detected, so the component never re-renders.</p>
+      <div class="code-block"><pre><span class="cm">// ❌ WRONG — mutates in place, React won't re-render</span>
+state.items.<span class="fn">push</span>(newItem);
+<span class="fn">setState</span>(state); <span class="cm">// same reference!</span>
+
+<span class="cm">// ✅ CORRECT — always create new references</span>
+<span class="fn">setState</span>(prev =&gt; ({ ...prev, items: [...prev.items, newItem] }));</pre></div>
+    </div>
+
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle-fill text-danger me-1"></i>Mistake 2: Reading State Immediately After setState</strong>
+      <p class="mb-1 mt-1" style="font-size:.9rem;">State updates are scheduled — the variable in scope still holds the old value from the current render's closure. Reading state right after <code>setState</code> gives the stale value. Use <code>useEffect</code> to react to state changes, or store the intended next value in a local variable and use that.</p>
+      <div class="code-block"><pre><span class="cm">// ❌ WRONG</span>
+<span class="fn">setCount</span>(count + <span class="num">1</span>);
+<span class="fn">doSomethingWith</span>(count); <span class="cm">// still old count!</span>
+
+<span class="cm">// ✅ CORRECT</span>
+<span class="kw">const</span> next = count + <span class="num">1</span>;
+<span class="fn">setCount</span>(next);
+<span class="fn">doSomethingWith</span>(next); <span class="cm">// use the local variable</span></pre></div>
+    </div>
+
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle-fill text-danger me-1"></i>Mistake 3: Not Using Functional Updates When Depending on Previous State</strong>
+      <p class="mb-1 mt-1" style="font-size:.9rem;">When you call <code>setState(count + 1)</code> multiple times in one handler (or rapid successive calls), they all close over the same stale <code>count</code> value. The result is only <code>count + 1</code>, not <code>count + N</code>. Use the functional updater to ensure each update builds on the latest queued value.</p>
+      <div class="code-block"><pre><span class="cm">// ❌ WRONG — all three use the same stale `count`, result is count + 1</span>
+<span class="fn">setCount</span>(count + <span class="num">1</span>);
+<span class="fn">setCount</span>(count + <span class="num">1</span>);
+<span class="fn">setCount</span>(count + <span class="num">1</span>);
+
+<span class="cm">// ✅ CORRECT — chains on latest queued value, result is count + 3</span>
+<span class="fn">setCount</span>(prev =&gt; prev + <span class="num">1</span>);
+<span class="fn">setCount</span>(prev =&gt; prev + <span class="num">1</span>);
+<span class="fn">setCount</span>(prev =&gt; prev + <span class="num">1</span>);</pre></div>
+    </div>
+
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle-fill text-danger me-1"></i>Mistake 4: Storing Derived Data in State</strong>
+      <p class="mb-1 mt-1" style="font-size:.9rem;">If a value can be computed from existing state or props, do NOT store it in additional state. Having two sources of truth that must be kept in sync is fragile, causes bugs, and requires unnecessary updates. Compute derived values during render instead.</p>
+      <div class="code-block"><pre><span class="cm">// ❌ WRONG — fullName is derived; two states to keep in sync</span>
+<span class="kw">const</span> [firstName, setFirstName] = <span class="fn">useState</span>(<span class="st">''</span>);
+<span class="kw">const</span> [lastName, setLastName] = <span class="fn">useState</span>(<span class="st">''</span>);
+<span class="kw">const</span> [fullName, setFullName] = <span class="fn">useState</span>(<span class="st">''</span>); <span class="cm">// redundant!</span>
+
+<span class="cm">// ✅ CORRECT — compute during render, no extra state needed</span>
+<span class="kw">const</span> [firstName, setFirstName] = <span class="fn">useState</span>(<span class="st">''</span>);
+<span class="kw">const</span> [lastName, setLastName] = <span class="fn">useState</span>(<span class="st">''</span>);
+<span class="kw">const</span> fullName = `${firstName} ${lastName}`; <span class="cm">// derived value</span></pre></div>
+    </div>
+
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle-fill text-danger me-1"></i>Mistake 5: Creating New Object/Array References in Render Body</strong>
+      <p class="mb-1 mt-1" style="font-size:.9rem;">Defining objects or arrays directly in the render body (or in JSX props) creates a new reference on every render. When these are passed as <code>useEffect</code> dependencies, the effect fires on every render — potentially causing infinite loops. Hoist constants outside the component or memoize with <code>useMemo</code>/<code>useCallback</code>.</p>
+      <div class="code-block"><pre><span class="cm">// ❌ WRONG — new array reference every render → infinite loop</span>
+<span class="kw">function</span> <span class="cl">MyComponent</span>() {
+  <span class="kw">const</span> options = [<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>]; <span class="cm">// new reference every render!</span>
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="fn">fetchData</span>(options);
+  }, [options]); <span class="cm">// ❌ triggers every render — infinite loop!</span>
+}
+
+<span class="cm">// ✅ CORRECT — option 1: hoist outside component (if static)</span>
+<span class="kw">const</span> OPTIONS = [<span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>]; <span class="cm">// stable reference — defined once</span>
+<span class="kw">function</span> <span class="cl">MyComponent</span>() {
+  <span class="fn">useEffect</span>(() =&gt; { <span class="fn">fetchData</span>(OPTIONS); }, []);
+}
+
+<span class="cm">// ✅ CORRECT — option 2: useMemo if derived from props/state</span>
+<span class="kw">const</span> options = <span class="fn">useMemo</span>(() =&gt; [a, b, c], [a, b, c]); <span class="cm">// stable if deps unchanged</span></pre></div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer style="background:#0f172a;color:#64748b;padding:2rem 0;margin-top:3rem;text-align:center;border-top:1px solid #1e293b;">
+  <div class="container-xl">
+    <p class="mb-1" style="color:#94a3b8;">React Mastery Hub — Section 7: State Management</p>
+    <div class="d-flex justify-content-center gap-4 mt-2">
+      <a href="react-props.html" style="color:#61dafb;text-decoration:none;">&larr; Props</a>
+      <a href="react-hooks.html" style="color:#61dafb;text-decoration:none;">Next: Hooks &rarr;</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({duration:700,once:true,offset:80});
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

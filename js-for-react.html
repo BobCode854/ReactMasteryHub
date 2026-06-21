@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>JavaScript for React — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-item{background:#111827;border-color:#1e293b;}
+    [data-theme="dark"] .accordion-button{background:#111827;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-button:not(.collapsed){background:#1e293b;color:#61dafb;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .topic-badge{display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;margin-bottom:.5rem;}
+    .concept-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border-radius:50%;font-weight:700;font-size:.85rem;flex-shrink:0;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;font-size:.85rem;padding:.4rem .9rem;">Section 2</span>
+      <span class="badge bg-warning text-dark">Prerequisites</span>
+    </div>
+    <h1 class="fw-900 mb-2" style="font-size:clamp(1.8rem,4vw,2.8rem);">JavaScript for React</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;max-width:600px;">Every JS concept you <strong style="color:#61dafb;">need</strong> to know before writing React. Master these and hooks will click instantly.</p>
+    <div class="d-flex flex-wrap gap-2 mt-3">
+      <span class="topic-badge">Arrow Functions</span>
+      <span class="topic-badge">Destructuring</span>
+      <span class="topic-badge">Spread / Rest</span>
+      <span class="topic-badge">Array Methods</span>
+      <span class="topic-badge">Async/Await</span>
+      <span class="topic-badge">Closures</span>
+      <span class="topic-badge">Modules</span>
+    </div>
+  </div>
+</section>
+
+<div class="container-xl pb-4">
+
+  <!-- 1. Arrow Functions -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">1</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Arrow Functions</h2>
+    </div>
+    <p class="text-muted mb-3">Arrow functions are the default way to write functions in React — they're concise, and they lexically bind <code>this</code>, which is critical for class components and callbacks.</p>
+    <div class="code-block"><pre><span class="cm">// Traditional function</span>
+<span class="kw">function</span> <span class="fn">add</span>(a, b) { <span class="kw">return</span> a + b; }
+
+<span class="cm">// Arrow function — concise</span>
+<span class="kw">const</span> add = (a, b) =&gt; a + b;
+
+<span class="cm">// Single param — no parens needed</span>
+<span class="kw">const</span> double = n =&gt; n * <span class="st">2</span>;
+
+<span class="cm">// In React: concise callback in .map()</span>
+<span class="kw">const</span> doubles = [<span class="st">1</span>, <span class="st">2</span>, <span class="st">3</span>].map(n =&gt; n * <span class="st">2</span>);
+
+<span class="cm">// Arrow function vs regular — 'this' binding matters in class components</span>
+<span class="kw">class</span> <span class="fn">Timer</span> <span class="kw">extends</span> React.Component {
+  <span class="cm">// ❌ Regular function — 'this' is undefined in strict mode</span>
+  <span class="fn">startBad</span>() {
+    setTimeout(<span class="kw">function</span>() {
+      <span class="kw">this</span>.setState({ running: <span class="kw">true</span> }); <span class="cm">// TypeError!</span>
+    }, <span class="st">1000</span>);
+  }
+
+  <span class="cm">// ✅ Arrow function — inherits 'this' from enclosing scope</span>
+  <span class="fn">startGood</span>() {
+    setTimeout(() =&gt; {
+      <span class="kw">this</span>.setState({ running: <span class="kw">true</span> }); <span class="cm">// works correctly</span>
+    }, <span class="st">1000</span>);
+  }
+}</pre></div>
+    <div class="tip-box"><i class="bi bi-lightbulb-fill me-2"></i><strong>React Pattern:</strong> Event handlers in function components should always be arrow functions or named functions — avoid inline <code>function() {}</code> when possible for readability.</div>
+  </div>
+
+  <!-- 2. Destructuring -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">2</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Destructuring</h2>
+    </div>
+    <p class="text-muted mb-3">Destructuring lets you unpack values from objects and arrays into variables. You'll use this <em>constantly</em> in React — props, state, and hooks all use destructuring.</p>
+    <div class="code-block"><pre><span class="cm">// Object destructuring</span>
+<span class="kw">const</span> user = { name: <span class="st">'John'</span>, age: <span class="st">30</span>, role: <span class="st">'admin'</span> };
+<span class="kw">const</span> { name, age, role = <span class="st">'user'</span> } = user;  <span class="cm">// default value for missing keys</span>
+
+<span class="cm">// Rename while destructuring</span>
+<span class="kw">const</span> { name: userName } = user;  <span class="cm">// userName = 'John'</span>
+
+<span class="cm">// In React — props destructuring (preferred pattern)</span>
+<span class="kw">function</span> <span class="fn">Button</span>({ label, onClick, variant = <span class="st">'primary'</span>, disabled = <span class="kw">false</span> }) {
+  <span class="kw">return</span> (
+    &lt;button
+      className={`btn btn-${variant}`}
+      onClick={onClick}
+      disabled={disabled}
+    &gt;
+      {label}
+    &lt;/button&gt;
+  );
+}
+
+<span class="cm">// Array destructuring — useState returns an array!</span>
+<span class="kw">const</span> [count, setCount] = useState(<span class="st">0</span>);
+<span class="kw">const</span> [loading, setLoading] = useState(<span class="kw">false</span>);
+
+<span class="cm">// Skip elements with commas</span>
+<span class="kw">const</span> [, second, , fourth] = [<span class="st">1</span>, <span class="st">2</span>, <span class="st">3</span>, <span class="st">4</span>];
+
+<span class="cm">// Nested destructuring</span>
+<span class="kw">const</span> { address: { city, state } } = person;
+
+<span class="cm">// Function parameter destructuring</span>
+<span class="kw">const</span> <span class="fn">greet</span> = ({ name, age }) =&gt; `${name} is ${age}`;
+<span class="fn">greet</span>(user); <span class="cm">// 'John is 30'</span></pre></div>
+    <div class="concept-box blue">
+      <strong><i class="bi bi-info-circle me-1"></i>Why this matters for React:</strong> Every time you write <code>const [state, setState] = useState()</code>, that's array destructuring. When you write <code>function MyComponent({ title, children })</code>, that's object destructuring on the props argument.
+    </div>
+  </div>
+
+  <!-- 3. Spread Operator -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">3</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Spread Operator <code>...</code></h2>
+    </div>
+    <p class="text-muted mb-3">Spread copies items from an array or object. It's the foundation of <strong>immutable state updates</strong> in React — you never mutate state directly.</p>
+    <div class="code-block"><pre><span class="cm">// Object spread — immutable updates</span>
+<span class="kw">const</span> user = { name: <span class="st">'John'</span>, age: <span class="st">30</span>, city: <span class="st">'NYC'</span> };
+<span class="kw">const</span> updated = { ...user, age: <span class="st">31</span> }; <span class="cm">// { name: 'John', age: 31, city: 'NYC' }</span>
+
+<span class="cm">// In React state — ALWAYS use spread for updates</span>
+<span class="fn">setUser</span>(prev =&gt; ({ ...prev, age: <span class="st">31</span> }));
+
+<span class="cm">// Nested update (one level at a time)</span>
+<span class="fn">setUser</span>(prev =&gt; ({
+  ...prev,
+  address: { ...prev.address, city: <span class="st">'LA'</span> }
+}));
+
+<span class="cm">// Array spread — add item immutably</span>
+<span class="kw">const</span> newItems = [...existingItems, newItem];
+<span class="kw">const</span> prepended = [newItem, ...existingItems];
+
+<span class="cm">// Combine arrays</span>
+<span class="kw">const</span> combined = [...arr1, ...arr2];
+
+<span class="cm">// Remove item immutably (filter is preferred)</span>
+<span class="kw">const</span> withoutItem = items.<span class="fn">filter</span>(item =&gt; item.id !== targetId);
+
+<span class="cm">// Update item in array immutably</span>
+<span class="kw">const</span> updatedItems = items.<span class="fn">map</span>(item =&gt;
+  item.id === targetId ? { ...item, completed: <span class="kw">true</span> } : item
+);
+
+<span class="cm">// Pass all props through to child</span>
+<span class="kw">function</span> <span class="fn">Wrapper</span>(props) {
+  <span class="kw">return</span> &lt;div&gt;&lt;Child {...props} /&gt;&lt;/div&gt;;
+}</pre></div>
+    <div class="mistake-box"><i class="bi bi-x-circle-fill me-2"></i><strong>Common Mistake:</strong> <code>setState({ ...state, newProp })</code> is fine for shallow objects, but for deeply nested state, consider <code>useReducer</code> or a library like Immer to avoid messy nested spread chains.</div>
+  </div>
+
+  <!-- 4. Rest Parameters -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">4</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Rest Parameters <code>...rest</code></h2>
+    </div>
+    <p class="text-muted mb-3">Rest collects remaining items into an array or object. In React, the classic pattern is separating a component's own props from props it should pass down.</p>
+    <div class="code-block"><pre><span class="cm">// Collect remaining array elements</span>
+<span class="kw">const</span> [first, ...rest] = [<span class="st">1</span>, <span class="st">2</span>, <span class="st">3</span>, <span class="st">4</span>, <span class="st">5</span>];
+<span class="cm">// first = 1, rest = [2, 3, 4, 5]</span>
+
+<span class="cm">// Collect remaining object properties</span>
+<span class="kw">const</span> { name, age, ...others } = user;
+<span class="cm">// name = 'John', age = 30, others = { city: 'NYC', role: 'admin' }</span>
+
+<span class="cm">// In React: separate own props from pass-through props</span>
+<span class="kw">function</span> <span class="fn">StyledButton</span>({ variant, className = <span class="st">''</span>, ...restProps }) {
+  <span class="cm">// variant and className used here, everything else passed through</span>
+  <span class="kw">return</span> (
+    &lt;button
+      className={`btn btn-${variant} ${className}`}
+      {...restProps}  <span class="cm">// onClick, disabled, type, aria-*, data-* etc.</span>
+    /&gt;
+  );
+}
+
+<span class="cm">// Usage — any extra prop flows through automatically</span>
+&lt;StyledButton
+  variant=<span class="st">"primary"</span>
+  onClick={handleClick}
+  disabled={isLoading}
+  aria-label=<span class="st">"Submit"</span>
+/&gt;
+
+<span class="cm">// Rest in function parameters</span>
+<span class="kw">function</span> <span class="fn">sum</span>(...numbers) {
+  <span class="kw">return</span> numbers.<span class="fn">reduce</span>((a, b) =&gt; a + b, <span class="st">0</span>);
+}
+<span class="fn">sum</span>(<span class="st">1</span>, <span class="st">2</span>, <span class="st">3</span>, <span class="st">4</span>); <span class="cm">// 10</span></pre></div>
+  </div>
+
+  <!-- 5. Template Literals -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">5</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Template Literals</h2>
+    </div>
+    <p class="text-muted mb-3">Backtick strings that support embedded expressions and multi-line content — used for dynamic classNames, API URLs, and readable string composition in React.</p>
+    <div class="code-block"><pre><span class="cm">// Basic interpolation</span>
+<span class="kw">const</span> greeting = `Hello, ${user.name}! You have ${messages.length} messages.`;
+
+<span class="cm">// Multi-line string</span>
+<span class="kw">const</span> html = `
+  &lt;div class="user-card"&gt;
+    &lt;h2&gt;${user.name}&lt;/h2&gt;
+    &lt;p&gt;${user.bio}&lt;/p&gt;
+  &lt;/div&gt;
+`;
+
+<span class="cm">// Expressions inside ${}</span>
+<span class="kw">const</span> msg = `You have ${count === <span class="st">0</span> ? <span class="st">'no'</span> : count} item${count !== <span class="st">1</span> ? <span class="st">'s'</span> : <span class="st">''</span>}.`;
+
+<span class="cm">// Dynamic API URLs</span>
+<span class="kw">const</span> url = `/api/users/${userId}/posts?page=${page}&amp;limit=${limit}`;
+
+<span class="cm">// Dynamic classNames in React (very common)</span>
+<span class="kw">const</span> className = `btn ${isActive ? <span class="st">'btn-primary'</span> : <span class="st">'btn-secondary'</span>} ${disabled ? <span class="st">'disabled'</span> : <span class="st">''</span>}`;
+
+<span class="cm">// clsx / classnames library is cleaner for complex cases:</span>
+<span class="cm">// import clsx from 'clsx';</span>
+<span class="cm">// const cn = clsx('btn', { 'btn-primary': isActive, 'disabled': disabled });</span></pre></div>
+  </div>
+
+  <!-- 6. Short-Circuit & Ternary -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">6</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Short-Circuit &amp; Ternary — JSX Conditionals</h2>
+    </div>
+    <p class="text-muted mb-3">Since JSX is just JavaScript, you can't use <code>if</code> statements inline. React uses three patterns for conditional rendering.</p>
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <div class="concept-box blue h-100">
+          <strong>Ternary <code>? :</code></strong><br>
+          <small>Render one of two elements</small>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="concept-box green h-100">
+          <strong>AND <code>&amp;&amp;</code></strong><br>
+          <small>Render something or nothing</small>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="concept-box amber h-100">
+          <strong>Nullish <code>??</code></strong><br>
+          <small>Fallback for null/undefined only</small>
+        </div>
+      </div>
+    </div>
+    <div class="code-block"><pre><span class="cm">// Ternary — renders different elements</span>
+{isLoggedIn ? &lt;Dashboard /&gt; : &lt;LoginPage /&gt;}
+
+<span class="cm">// Multi-line ternary for readability</span>
+{isLoading
+  ? &lt;Spinner /&gt;
+  : error
+    ? &lt;ErrorMessage error={error} /&gt;
+    : &lt;DataDisplay data={data} /&gt;
+}
+
+<span class="cm">// && — renders or nothing (short-circuit)</span>
+{hasError &amp;&amp; &lt;ErrorMessage error={error} /&gt;}
+{items.length &gt; <span class="st">0</span> &amp;&amp; &lt;ItemList items={items} /&gt;}
+
+<span class="cm">// ⚠️ Gotcha: 0 && ... renders "0" (falsy non-boolean)</span>
+{items.length &amp;&amp; &lt;List /&gt;}       <span class="cm">// ❌ renders "0" when array is empty!</span>
+{items.length &gt; <span class="st">0</span> &amp;&amp; &lt;List /&gt;}   <span class="cm">// ✅ explicit boolean check</span>
+
+<span class="cm">// Nullish coalescing — fallback only for null/undefined (not 0 or '')</span>
+<span class="kw">const</span> name = user?.name ?? <span class="st">'Guest'</span>;
+<span class="kw">const</span> count = data?.count ?? <span class="st">0</span>;   <span class="cm">// 0 stays 0, null/undefined gets 0</span>
+
+<span class="cm">// Optional chaining — safe property access</span>
+<span class="kw">const</span> city = user?.address?.city;
+<span class="kw">const</span> firstTag = post?.tags?.[<span class="st">0</span>];
+<span class="kw">const</span> price = cart?.getTotal?.();   <span class="cm">// safe method call</span>
+
+<span class="cm">// Combined — very common in React</span>
+<span class="kw">const</span> displayName = user?.profile?.displayName ?? user?.email ?? <span class="st">'Anonymous'</span>;</pre></div>
+    <div class="mistake-box"><i class="bi bi-x-circle-fill me-2"></i><strong>Common Bug:</strong> Using <code>count &amp;&amp; &lt;Component /&gt;</code> where <code>count</code> might be 0 will render the number 0 in your UI. Always use <code>count &gt; 0 &amp;&amp;</code> or convert to boolean: <code>!!count &amp;&amp;</code>.</div>
+  </div>
+
+  <!-- 7. Array Methods -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">7</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Array Methods — The React Toolkit</h2>
+    </div>
+    <p class="text-muted mb-3">These array methods are used <em>everywhere</em> in React. They all return new arrays (non-mutating), which is exactly what immutable state updates require.</p>
+    <div class="code-block"><pre><span class="cm">// .map() — transform every element, returns new array</span>
+<span class="kw">const</span> cards = items.<span class="fn">map</span>(item =&gt; (
+  &lt;Card key={item.id} title={item.title} {...item} /&gt;
+));
+
+<span class="cm">// .filter() — keep matching elements</span>
+<span class="kw">const</span> activeUsers = users.<span class="fn">filter</span>(u =&gt; u.isActive);
+<span class="kw">const</span> searchResults = products.<span class="fn">filter</span>(p =&gt;
+  p.name.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(query.<span class="fn">toLowerCase</span>())
+);
+
+<span class="cm">// .reduce() — accumulate into single value</span>
+<span class="kw">const</span> total = cart.<span class="fn">reduce</span>((sum, item) =&gt; sum + item.price * item.qty, <span class="st">0</span>);
+
+<span class="cm">// Build an object from array (group by category)</span>
+<span class="kw">const</span> byCategory = items.<span class="fn">reduce</span>((acc, item) =&gt; ({
+  ...acc,
+  [item.category]: [...(acc[item.category] || []), item]
+}), {});
+
+<span class="cm">// .find() — first match, or undefined</span>
+<span class="kw">const</span> selectedUser = users.<span class="fn">find</span>(u =&gt; u.id === selectedId);
+
+<span class="cm">// .findIndex() — index of first match</span>
+<span class="kw">const</span> idx = items.<span class="fn">findIndex</span>(i =&gt; i.id === targetId);
+
+<span class="cm">// .some() / .every() — boolean checks</span>
+<span class="kw">const</span> hasAdmin = users.<span class="fn">some</span>(u =&gt; u.role === <span class="st">'admin'</span>);
+<span class="kw">const</span> allVerified = users.<span class="fn">every</span>(u =&gt; u.isVerified);
+
+<span class="cm">// .includes() — for primitives</span>
+<span class="kw">const</span> isAllowed = allowedRoles.<span class="fn">includes</span>(user.role);
+
+<span class="cm">// .flatMap() — flatten + map in one pass</span>
+<span class="kw">const</span> allTags = posts.<span class="fn">flatMap</span>(post =&gt; post.tags);
+
+<span class="cm">// Sort — MUTATES original! Use spread first</span>
+<span class="kw">const</span> sorted = [...users].<span class="fn">sort</span>((a, b) =&gt; a.name.<span class="fn">localeCompare</span>(b.name));</pre></div>
+    <div class="tip-box"><i class="bi bi-lightbulb-fill me-2"></i><strong>Key insight:</strong> <code>map</code>, <code>filter</code>, and <code>reduce</code> all return <em>new</em> arrays without modifying the original — perfect for React's immutable state requirement. <code>sort</code> mutates in-place, so always spread first: <code>[...arr].sort()</code>.</div>
+  </div>
+
+  <!-- 8. Promises & Async/Await -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">8</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Promises &amp; Async/Await</h2>
+    </div>
+    <p class="text-muted mb-3">React apps constantly fetch data from APIs. You need to understand both Promise chains and async/await — the latter is what you'll write day-to-day.</p>
+    <div class="code-block"><pre><span class="cm">// Promise chain (older style)</span>
+<span class="fn">fetch</span>(<span class="st">'/api/users'</span>)
+  .<span class="fn">then</span>(r =&gt; {
+    <span class="kw">if</span> (!r.ok) <span class="kw">throw new</span> <span class="fn">Error</span>(`HTTP ${r.status}`);
+    <span class="kw">return</span> r.<span class="fn">json</span>();
+  })
+  .<span class="fn">then</span>(data =&gt; <span class="fn">setUsers</span>(data))
+  .<span class="fn">catch</span>(err =&gt; <span class="fn">setError</span>(err.message))
+  .<span class="fn">finally</span>(() =&gt; <span class="fn">setLoading</span>(<span class="kw">false</span>));
+
+<span class="cm">// Async/Await — cleaner, use this in React</span>
+<span class="kw">async function</span> <span class="fn">loadUsers</span>() {
+  <span class="kw">try</span> {
+    <span class="fn">setLoading</span>(<span class="kw">true</span>);
+    <span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">'/api/users'</span>);
+    <span class="kw">if</span> (!response.ok) <span class="kw">throw new</span> <span class="fn">Error</span>(`HTTP ${response.status}`);
+    <span class="kw">const</span> data = <span class="kw">await</span> response.<span class="fn">json</span>();
+    <span class="fn">setUsers</span>(data);
+  } <span class="kw">catch</span> (err) {
+    <span class="fn">setError</span>(err.message);
+  } <span class="kw">finally</span> {
+    <span class="fn">setLoading</span>(<span class="kw">false</span>);
+  }
+}
+
+<span class="cm">// useEffect pattern for async data fetching</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="cm">// Cannot make the useEffect callback itself async!</span>
+  <span class="cm">// Define async function inside, then immediately call it.</span>
+  <span class="kw">const</span> <span class="fn">fetchData</span> = <span class="kw">async</span> () =&gt; {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(`/api/posts/${postId}`);
+      <span class="kw">const</span> json = <span class="kw">await</span> res.<span class="fn">json</span>();
+      <span class="fn">setPost</span>(json);
+    } <span class="kw">catch</span> (e) {
+      <span class="fn">setError</span>(e.message);
+    }
+  };
+  <span class="fn">fetchData</span>();
+}, [postId]);
+
+<span class="cm">// Parallel requests — Promise.all() fires both simultaneously</span>
+<span class="kw">const</span> [users, posts] = <span class="kw">await</span> Promise.<span class="fn">all</span>([
+  <span class="fn">fetch</span>(<span class="st">'/api/users'</span>).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>()),
+  <span class="fn">fetch</span>(<span class="st">'/api/posts'</span>).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>()),
+]);
+
+<span class="cm">// Promise.allSettled() — get all results regardless of failures</span>
+<span class="kw">const</span> results = <span class="kw">await</span> Promise.<span class="fn">allSettled</span>([req1, req2, req3]);
+results.<span class="fn">forEach</span>(result =&gt; {
+  <span class="kw">if</span> (result.status === <span class="st">'fulfilled'</span>) console.<span class="fn">log</span>(result.value);
+  <span class="kw">else</span> console.<span class="fn">error</span>(result.reason);
+});</pre></div>
+    <div class="mistake-box"><i class="bi bi-x-circle-fill me-2"></i><strong>Common Mistake:</strong> Writing <code>useEffect(async () => {}, [])</code> — you cannot make the useEffect callback itself async because async functions return a Promise, but useEffect expects either nothing or a cleanup function.</div>
+  </div>
+
+  <!-- 9. Modules -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">9</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">ES Modules — import / export</h2>
+    </div>
+    <p class="text-muted mb-3">React projects are fully modular — every file is a module. Understanding named vs default exports prevents a lot of import errors.</p>
+    <div class="code-block"><pre><span class="cm">// Named Exports — multiple per file</span>
+<span class="kw">export const</span> PI = <span class="st">3.14159</span>;
+<span class="kw">export function</span> <span class="fn">add</span>(a, b) { <span class="kw">return</span> a + b; }
+<span class="kw">export class</span> <span class="fn">Calculator</span> { }
+
+<span class="cm">// Default Export — one per file</span>
+<span class="kw">export default function</span> <span class="fn">App</span>() { <span class="kw">return</span> &lt;div&gt;App&lt;/div&gt;; }
+
+<span class="cm">// Importing</span>
+<span class="kw">import</span> App <span class="kw">from</span> <span class="st">'./App'</span>;               <span class="cm">// default — any name works</span>
+<span class="kw">import</span> { add, PI } <span class="kw">from</span> <span class="st">'./math'</span>;       <span class="cm">// named — must match export name</span>
+<span class="kw">import</span> { add <span class="kw">as</span> sum } <span class="kw">from</span> <span class="st">'./math'</span>;   <span class="cm">// rename on import</span>
+<span class="kw">import</span> * <span class="kw">as</span> utils <span class="kw">from</span> <span class="st">'./utils'</span>;     <span class="cm">// namespace import</span>
+<span class="kw">import</span> App, { helper } <span class="kw">from</span> <span class="st">'./App'</span>;   <span class="cm">// default + named together</span>
+
+<span class="cm">// React / Library imports</span>
+<span class="kw">import</span> React, { useState, useEffect, useCallback } <span class="kw">from</span> <span class="st">'react'</span>;
+<span class="kw">import</span> { BrowserRouter, Routes, Route } <span class="kw">from</span> <span class="st">'react-router-dom'</span>;
+<span class="kw">import</span> { configureStore } <span class="kw">from</span> <span class="st">'@reduxjs/toolkit'</span>;
+
+<span class="cm">// Re-exporting — barrel files (src/components/index.js)</span>
+<span class="kw">export</span> { <span class="kw">default as</span> Button } <span class="kw">from</span> <span class="st">'./Button'</span>;
+<span class="kw">export</span> { <span class="kw">default as</span> Card } <span class="kw">from</span> <span class="st">'./Card'</span>;
+<span class="kw">export</span> { <span class="kw">default as</span> Modal } <span class="kw">from</span> <span class="st">'./Modal'</span>;
+
+<span class="cm">// Then import cleanly from one place:</span>
+<span class="kw">import</span> { Button, Card, Modal } <span class="kw">from</span> <span class="st">'@/components'</span>;</pre></div>
+  </div>
+
+  <!-- 10. Classes -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">10</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Classes — Understanding React Class Components</h2>
+    </div>
+    <p class="text-muted mb-3">Modern React uses function components, but you'll encounter class components in older codebases. Class basics also help you understand Error Boundaries, which still require them.</p>
+    <div class="code-block"><pre><span class="cm">// ES6 Class basics</span>
+<span class="kw">class</span> <span class="fn">Animal</span> {
+  <span class="fn">constructor</span>(name) {
+    <span class="kw">this</span>.name = name;
+  }
+  <span class="fn">speak</span>() {
+    <span class="kw">return</span> `${<span class="kw">this</span>.name} makes a sound.`;
+  }
+}
+
+<span class="kw">class</span> <span class="fn">Dog</span> <span class="kw">extends</span> Animal {
+  <span class="fn">speak</span>() {
+    <span class="kw">return</span> `${<span class="kw">this</span>.name} barks.`;
+  }
+}
+
+<span class="kw">const</span> dog = <span class="kw">new</span> <span class="fn">Dog</span>(<span class="st">'Rex'</span>);
+dog.<span class="fn">speak</span>(); <span class="cm">// "Rex barks."</span>
+
+<span class="cm">// React Class Component structure</span>
+<span class="kw">class</span> <span class="fn">Counter</span> <span class="kw">extends</span> React.Component {
+  <span class="fn">constructor</span>(props) {
+    <span class="kw">super</span>(props);                    <span class="cm">// Always call super(props) first!</span>
+    <span class="kw">this</span>.state = { count: <span class="st">0</span> };      <span class="cm">// Initialize state in constructor</span>
+  }
+
+  <span class="cm">// Arrow class property — auto-binds 'this' (modern pattern)</span>
+  handleClick = () =&gt; {
+    <span class="kw">this</span>.<span class="fn">setState</span>(prev =&gt; ({ count: prev.count + <span class="st">1</span> }));
+  }
+
+  <span class="fn">render</span>() {
+    <span class="kw">return</span> (
+      &lt;button onClick={<span class="kw">this</span>.handleClick}&gt;
+        Count: {<span class="kw">this</span>.state.count}
+      &lt;/button&gt;
+    );
+  }
+}</pre></div>
+    <div class="concept-box purple">
+      <strong><i class="bi bi-info-circle me-1"></i>Modern React:</strong> In 2024+, you'll almost never write class components from scratch. But you need to recognize them in existing code and know that Error Boundaries still <em>require</em> class components as of React 18.
+    </div>
+  </div>
+
+  <!-- 11. Closures -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">11</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Closures — The Key to Understanding Hooks</h2>
+    </div>
+    <p class="text-muted mb-3">A closure is a function that remembers variables from its outer scope. React hooks are built on closures — if you don't get closures, stale state bugs will mystify you.</p>
+    <div class="code-block"><pre><span class="cm">// What is a closure?</span>
+<span class="kw">function</span> <span class="fn">makeCounter</span>() {
+  <span class="kw">let</span> count = <span class="st">0</span>;                   <span class="cm">// 'count' lives in makeCounter's scope</span>
+  <span class="kw">return function</span>() {
+    count++;                         <span class="cm">// inner function CLOSES OVER 'count'</span>
+    <span class="kw">return</span> count;
+  };
+}
+<span class="kw">const</span> counter = <span class="fn">makeCounter</span>();
+counter(); <span class="cm">// 1</span>
+counter(); <span class="cm">// 2</span>
+
+<span class="cm">// Stale Closure Bug in React</span>
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="st">0</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> timer = <span class="fn">setInterval</span>(() =&gt; {
+      <span class="cm">// ❌ 'count' is CLOSED OVER at effect creation time</span>
+      <span class="cm">// It will always be 0 because count is not in deps array</span>
+      console.<span class="fn">log</span>(<span class="st">'count is:'</span>, count); <span class="cm">// Always prints 0!</span>
+    }, <span class="st">1000</span>);
+    <span class="kw">return</span> () =&gt; <span class="fn">clearInterval</span>(timer);
+  }, []); <span class="cm">// empty deps = closure captures initial count = 0</span>
+}
+
+<span class="cm">// Fix #1: Add count to deps array</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="kw">const</span> timer = <span class="fn">setInterval</span>(() =&gt; {
+    console.<span class="fn">log</span>(<span class="st">'count is:'</span>, count); <span class="cm">// ✅ always current</span>
+  }, <span class="st">1000</span>);
+  <span class="kw">return</span> () =&gt; <span class="fn">clearInterval</span>(timer);
+}, [count]); <span class="cm">// ✅ re-runs when count changes</span>
+
+<span class="cm">// Fix #2: Functional update — no closure needed</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="kw">const</span> timer = <span class="fn">setInterval</span>(() =&gt; {
+    <span class="fn">setCount</span>(prev =&gt; prev + <span class="st">1</span>); <span class="cm">// ✅ 'prev' is always latest value</span>
+  }, <span class="st">1000</span>);
+  <span class="kw">return</span> () =&gt; <span class="fn">clearInterval</span>(timer);
+}, []); <span class="cm">// ✅ empty deps is fine — no stale read</span>
+
+<span class="cm">// Fix #3: useRef for mutable values without re-render</span>
+<span class="kw">const</span> countRef = <span class="fn">useRef</span>(count);
+<span class="fn">useEffect</span>(() =&gt; { countRef.current = count; }, [count]);
+
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="kw">const</span> timer = <span class="fn">setInterval</span>(() =&gt; {
+    console.<span class="fn">log</span>(countRef.current); <span class="cm">// ✅ always current — refs are mutable</span>
+  }, <span class="st">1000</span>);
+  <span class="kw">return</span> () =&gt; <span class="fn">clearInterval</span>(timer);
+}, []);</pre></div>
+    <div class="concept-box amber">
+      <strong><i class="bi bi-exclamation-triangle me-1"></i>Mental Model:</strong> Every render creates a new "snapshot" — a closure capturing that render's state values. When a <code>useEffect</code> runs, it captures the state values from <em>that specific render</em>. If state changes, the effect's closure is stale unless you list the value in the deps array.
+    </div>
+  </div>
+
+  <!-- 12. this, bind, arrow functions -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="concept-num">12</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;"><code>this</code>, <code>bind</code>, and Why Arrow Functions Matter</h2>
+    </div>
+    <p class="text-muted mb-3"><code>this</code> in JavaScript is determined by <em>how</em> a function is called, not where it's defined — unless you use an arrow function, which inherits <code>this</code> lexically from its enclosing scope.</p>
+    <div class="code-block"><pre><span class="cm">// 'this' is dynamic in regular functions</span>
+<span class="kw">const</span> obj = {
+  name: <span class="st">'React'</span>,
+  greet: <span class="kw">function</span>() { <span class="kw">return</span> <span class="kw">this</span>.name; }  <span class="cm">// 'this' = obj when called as obj.greet()</span>
+};
+<span class="kw">const</span> greetFn = obj.greet;
+<span class="fn">greetFn</span>(); <span class="cm">// undefined — 'this' is now global/undefined in strict mode</span>
+
+<span class="cm">// bind() — lock 'this' permanently</span>
+<span class="kw">const</span> boundGreet = obj.greet.<span class="fn">bind</span>(obj);
+<span class="fn">boundGreet</span>(); <span class="cm">// 'React' — 'this' is always obj</span>
+
+<span class="cm">// Class event handlers — 3 patterns</span>
+<span class="kw">class</span> <span class="fn">MyButton</span> <span class="kw">extends</span> React.Component {
+  <span class="cm">// Pattern 1: bind in constructor (classic)</span>
+  <span class="fn">constructor</span>(props) {
+    <span class="kw">super</span>(props);
+    <span class="kw">this</span>.handleClick = <span class="kw">this</span>.handleClick.<span class="fn">bind</span>(<span class="kw">this</span>);
+  }
+  <span class="fn">handleClick</span>() { console.<span class="fn">log</span>(<span class="kw">this</span>.props.label); }
+
+  <span class="cm">// Pattern 2: Arrow class field (modern, recommended)</span>
+  handleClick2 = () =&gt; { console.<span class="fn">log</span>(<span class="kw">this</span>.props.label); } <span class="cm">// ✅ always bound</span>
+
+  <span class="fn">render</span>() {
+    <span class="kw">return</span> (
+      &lt;&gt;
+        &lt;button onClick={<span class="kw">this</span>.handleClick}&gt;Click 1&lt;/button&gt;
+        &lt;button onClick={<span class="kw">this</span>.handleClick2}&gt;Click 2&lt;/button&gt;
+        <span class="cm">// Pattern 3: Inline arrow — creates new fn each render (avoid)</span>
+        &lt;button onClick={() =&gt; <span class="kw">this</span>.<span class="fn">handleClick</span>()}&gt;Click 3&lt;/button&gt;
+      &lt;/&gt;
+    );
+  }
+}
+
+<span class="cm">// In function components — no 'this' needed at all!</span>
+<span class="kw">function</span> <span class="fn">FunctionButton</span>({ onClick, label }) {
+  <span class="kw">const</span> <span class="fn">handleClick</span> = () =&gt; {
+    onClick?.();
+  };
+  <span class="kw">return</span> &lt;button onClick={handleClick}&gt;{label}&lt;/button&gt;;
+}</pre></div>
+    <div class="tip-box"><i class="bi bi-lightbulb-fill me-2"></i><strong>Good News:</strong> In modern React with function components, you almost never have to think about <code>this</code>. This is actually one of the biggest reasons the React team moved away from class components.</div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-4" style="font-size:1.4rem;"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions — JavaScript for React</h2>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>What is the difference between <code>var</code>, <code>let</code>, and <code>const</code>? Which do you use in React and why?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>Explain the difference between a regular function and an arrow function. Why does it matter for React event handlers in class components?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>What is destructuring? Show how you would destructure props in a React component, including default values and renaming.</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>What is the spread operator and how is it used for immutable state updates in React? What happens if you mutate state directly?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>Why can't you write <code>useEffect(async () => {}, [])</code> directly? What is the correct pattern for async operations inside useEffect?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>What is a closure? Describe the stale closure bug in React hooks and give three ways to fix it.</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>Explain the difference between <code>||</code> (OR) and <code>??</code> (nullish coalescing). When would you choose one over the other in React?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>Why does <code>{count &amp;&amp; &lt;Component /&gt;}</code> render "0" in the UI when count is 0? How do you fix it?</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center"><span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — From Zero to Architect</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

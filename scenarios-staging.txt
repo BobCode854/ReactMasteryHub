@@ -1,0 +1,1986 @@
+<!-- ACCORDION ITEMS: Tab 14 Interview Scenarios -->
+
+<!-- Q1 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q1-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q1" aria-expanded="false" aria-controls="scenarios-q1">
+      <span class="diff-scenario">Scenario</span>&nbsp; 1. How would you implement infinite scroll in React?
+    </button>
+  </h2>
+  <div id="scenarios-q1" class="accordion-collapse collapse" aria-labelledby="scenarios-q1-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Overview:</strong> Infinite scroll loads more data as the user approaches the bottom of the list, replacing traditional pagination. The core mechanism is detecting when a sentinel element (or the last item) enters the viewport using the <code>IntersectionObserver</code> API.</p>
+
+      <p><strong>State structure:</strong></p>
+      <ul>
+        <li><code>items: T[]</code> — accumulated data</li>
+        <li><code>page: number</code> — current page cursor</li>
+        <li><code>hasMore: boolean</code> — whether the API has more data</li>
+        <li><code>loading: boolean</code> — request in flight</li>
+      </ul>
+
+      <p><strong>Component hierarchy:</strong></p>
+      <ul>
+        <li><code>InfiniteList</code> — owns state, renders list + sentinel</li>
+        <li><code>ListItem</code> — pure display component</li>
+        <li><code>useInfiniteScroll</code> — custom hook encapsulating the observer logic</li>
+      </ul>
+
+      <p><strong>Key implementation:</strong></p>
+<pre class="code-block">// useInfiniteScroll.ts
+import { useEffect, useRef, useCallback } from 'react';
+
+export function useInfiniteScroll(
+  onLoadMore: () => void,
+  hasMore: boolean,
+  loading: boolean
+) {
+  const sentinelRef = useRef&lt;HTMLDivElement | null&gt;(null);
+
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && hasMore && !loading) {
+        onLoadMore();
+      }
+    },
+    [onLoadMore, hasMore, loading]
+  );
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: '200px', // trigger 200px before bottom
+      threshold: 0,
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [handleObserver]);
+
+  return sentinelRef;
+}
+
+// InfiniteList.tsx
+export function InfiniteList() {
+  const [items, setItems] = useState&lt;Item[]&gt;([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const loadMore = useCallback(async () => {
+    setLoading(true);
+    const data = await fetchItems(page);
+    setItems(prev => [...prev, ...data.items]);
+    setHasMore(data.hasMore);
+    setPage(p => p + 1);
+    setLoading(false);
+  }, [page]);
+
+  const sentinelRef = useInfiniteScroll(loadMore, hasMore, loading);
+
+  useEffect(() => { loadMore(); }, []); // initial load
+
+  return (
+    &lt;div&gt;
+      {items.map(item =&gt; &lt;ListItem key={item.id} item={item} /&gt;)}
+      {loading &amp;&amp; &lt;Spinner /&gt;}
+      &lt;div ref={sentinelRef} style={{ height: 1 }} /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Performance considerations:</strong></p>
+      <ul>
+        <li>Virtualise the list with <code>react-window</code> or <code>react-virtual</code> when item count grows large to avoid DOM bloat.</li>
+        <li>Debounce or gate <code>loadMore</code> with the <code>loading</code> flag to prevent double-fetches.</li>
+        <li>Use <code>useCallback</code> on <code>loadMore</code> so the observer is not recreated on every render.</li>
+        <li>For server state, prefer <strong>TanStack Query</strong> (<code>useInfiniteQuery</code>) which handles caching, deduplication, and background refetch automatically.</li>
+      </ul>
+
+      <p><strong>Libraries to consider:</strong> <code>react-query</code> / TanStack Query (useInfiniteQuery), <code>react-window</code>, <code>react-intersection-observer</code> (wrapper around IntersectionObserver).</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q2-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q2" aria-expanded="false" aria-controls="scenarios-q2">
+      <span class="diff-scenario">Scenario</span>&nbsp; 2. How would you build a drag-and-drop sortable list?
+    </button>
+  </h2>
+  <div id="scenarios-q2" class="accordion-collapse collapse" aria-labelledby="scenarios-q2-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Overview:</strong> A sortable list allows users to reorder items via drag-and-drop. The two primary library choices are <strong>dnd-kit</strong> (modern, accessible, pointer + touch) and <strong>react-beautiful-dnd</strong> (older but battle-tested). Building from scratch uses the HTML5 Drag and Drop API.</p>
+
+      <p><strong>State structure:</strong></p>
+      <ul>
+        <li><code>items: T[]</code> — ordered array; reorder by swapping indices on drop</li>
+        <li><code>activeId: string | null</code> — the item being dragged (for visual feedback)</li>
+      </ul>
+
+      <p><strong>dnd-kit approach (recommended):</strong></p>
+<pre class="code-block">import {
+  DndContext, closestCenter, PointerSensor,
+  useSensor, useSensors, DragEndEvent
+} from '@dnd-kit/core';
+import {
+  SortableContext, verticalListSortingStrategy,
+  useSortable, arrayMove
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+function SortableItem({ id, label }: { id: string; label: string }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    &lt;div ref={setNodeRef} style={style} {...attributes} {...listeners}
+      className="sortable-item"&gt;
+      {label}
+    &lt;/div&gt;
+  );
+}
+
+export function SortableList() {
+  const [items, setItems] = useState([
+    { id: '1', label: 'Item A' },
+    { id: '2', label: 'Item B' },
+    { id: '3', label: 'Item C' },
+  ]);
+
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (over &amp;&amp; active.id !== over.id) {
+      setItems(prev =&gt; {
+        const oldIndex = prev.findIndex(i =&gt; i.id === active.id);
+        const newIndex = prev.findIndex(i =&gt; i.id === over.id);
+        return arrayMove(prev, oldIndex, newIndex);
+      });
+    }
+  }
+
+  return (
+    &lt;DndContext sensors={sensors} collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}&gt;
+      &lt;SortableContext items={items.map(i =&gt; i.id)}
+        strategy={verticalListSortingStrategy}&gt;
+        {items.map(item =&gt; (
+          &lt;SortableItem key={item.id} id={item.id} label={item.label} /&gt;
+        ))}
+      &lt;/SortableContext&gt;
+    &lt;/DndContext&gt;
+  );
+}</pre>
+
+      <p><strong>Persisting order:</strong> After <code>handleDragEnd</code>, POST the new ordered IDs to the server. Optimistic update locally first, then confirm or rollback on server error.</p>
+
+      <p><strong>Performance &amp; accessibility:</strong></p>
+      <ul>
+        <li>dnd-kit uses pointer events (not HTML5 DnD) — works on touch devices.</li>
+        <li>Announce drag operations with ARIA live regions for screen readers.</li>
+        <li>Memoize <code>SortableItem</code> with <code>React.memo</code> to avoid re-rendering every item on each drag-over event.</li>
+        <li>For multi-container (Kanban), use <code>DragOverlay</code> for a smooth drag preview.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q3-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q3" aria-expanded="false" aria-controls="scenarios-q3">
+      <span class="diff-scenario">Scenario</span>&nbsp; 3. How would you implement real-time data updates (e.g., a live dashboard)?
+    </button>
+  </h2>
+  <div id="scenarios-q3" class="accordion-collapse collapse" aria-labelledby="scenarios-q3-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Transport options:</strong></p>
+      <ul>
+        <li><strong>WebSocket</strong> — full-duplex, lowest latency, best for high-frequency updates.</li>
+        <li><strong>Server-Sent Events (SSE)</strong> — server-to-client only, auto-reconnect, simpler than WS.</li>
+        <li><strong>Polling</strong> — simplest, highest server load; use as fallback.</li>
+      </ul>
+
+      <p><strong>Custom hook for WebSocket:</strong></p>
+<pre class="code-block">// useWebSocket.ts
+import { useEffect, useRef, useState, useCallback } from 'react';
+
+export function useWebSocket&lt;T&gt;(url: string) {
+  const ws = useRef&lt;WebSocket | null&gt;(null);
+  const [data, setData] = useState&lt;T | null&gt;(null);
+  const [status, setStatus] = useState&lt;'connecting'|'open'|'closed'&gt;('connecting');
+
+  const connect = useCallback(() => {
+    ws.current = new WebSocket(url);
+    ws.current.onopen = () => setStatus('open');
+    ws.current.onmessage = (e) => setData(JSON.parse(e.data) as T);
+    ws.current.onclose = () => {
+      setStatus('closed');
+      setTimeout(connect, 3000); // reconnect after 3s
+    };
+  }, [url]);
+
+  useEffect(() => {
+    connect();
+    return () => {
+      ws.current?.close();
+    };
+  }, [connect]);
+
+  const send = useCallback((msg: unknown) => {
+    ws.current?.send(JSON.stringify(msg));
+  }, []);
+
+  return { data, status, send };
+}
+
+// Dashboard.tsx
+function LiveDashboard() {
+  const { data: metrics } = useWebSocket&lt;DashboardMetrics&gt;(
+    'wss://api.example.com/dashboard'
+  );
+
+  return (
+    &lt;div&gt;
+      &lt;MetricCard label="Active Users" value={metrics?.activeUsers} /&gt;
+      &lt;MetricCard label="Orders/min" value={metrics?.ordersPerMin} /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>State management at scale:</strong> For multiple subscribers to the same WS stream, lift the socket to a Context provider so the connection is shared. Dispatch incoming messages to a Redux slice or Zustand store so any component can subscribe.</p>
+
+      <p><strong>Performance considerations:</strong></p>
+      <ul>
+        <li>Throttle or debounce high-frequency updates (e.g., max 60fps) using <code>requestAnimationFrame</code> or a time-based gate.</li>
+        <li>Use <code>React.memo</code> and selector granularity to avoid re-rendering the entire dashboard on every message.</li>
+        <li>For charts, update data via refs and call the chart library's own update method rather than triggering a React re-render.</li>
+      </ul>
+
+      <p><strong>Libraries:</strong> <code>socket.io-client</code>, <code>@tanstack/react-query</code> with <code>refetchInterval</code> for polling, <code>use-sse</code> for SSE.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q4-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q4" aria-expanded="false" aria-controls="scenarios-q4">
+      <span class="diff-scenario">Scenario</span>&nbsp; 4. Design a multi-step form wizard with validation and back navigation.
+    </button>
+  </h2>
+  <div id="scenarios-q4" class="accordion-collapse collapse" aria-labelledby="scenarios-q4-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>State structure:</strong></p>
+      <ul>
+        <li><code>currentStep: number</code> — 0-indexed active step</li>
+        <li><code>formData: Record&lt;string, unknown&gt;</code> — merged data across all steps</li>
+        <li><code>errors: Record&lt;string, string&gt;</code> — per-field validation errors</li>
+        <li><code>completedSteps: Set&lt;number&gt;</code> — enables step indicator UI</li>
+      </ul>
+
+      <p><strong>Component hierarchy:</strong></p>
+      <ul>
+        <li><code>WizardProvider</code> (Context) — owns state and exposes <code>next</code>, <code>back</code>, <code>updateData</code></li>
+        <li><code>WizardShell</code> — renders step indicator + active step component</li>
+        <li><code>Step1PersonalInfo</code>, <code>Step2Address</code>, <code>Step3Review</code> — individual step forms</li>
+      </ul>
+
+<pre class="code-block">// wizard-context.tsx
+interface WizardState {
+  step: number;
+  data: Partial&lt;FormData&gt;;
+  next: (stepData: Partial&lt;FormData&gt;) => void;
+  back: () => void;
+}
+
+const WizardContext = createContext&lt;WizardState | null&gt;(null);
+
+export function WizardProvider({ children }: { children: React.ReactNode }) {
+  const [step, setStep] = useState(0);
+  const [data, setData] = useState&lt;Partial&lt;FormData&gt;&gt;({});
+
+  const next = (stepData: Partial&lt;FormData&gt;) => {
+    setData(prev =&gt; ({ ...prev, ...stepData }));
+    setStep(s =&gt; s + 1);
+  };
+  const back = () => setStep(s =&gt; Math.max(0, s - 1));
+
+  return (
+    &lt;WizardContext.Provider value={{ step, data, next, back }}&gt;
+      {children}
+    &lt;/WizardContext.Provider&gt;
+  );
+}
+
+// Step1.tsx — using react-hook-form
+function Step1PersonalInfo() {
+  const { data, next } = useWizard();
+  const { register, handleSubmit, formState: { errors } } =
+    useForm({ defaultValues: data });
+
+  return (
+    &lt;form onSubmit={handleSubmit(next)}&gt;
+      &lt;input {...register('firstName', { required: 'Required' })} /&gt;
+      {errors.firstName &amp;&amp; &lt;span&gt;{errors.firstName.message}&lt;/span&gt;}
+      &lt;button type="submit"&gt;Next&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+
+      <p><strong>Validation strategy:</strong> Use <strong>react-hook-form</strong> per step with <strong>Zod</strong> schemas. Each step validates only its own fields before calling <code>next()</code>. Store step data in context so the Review step can display everything.</p>
+
+      <p><strong>Back navigation:</strong> Calling <code>back()</code> decrements the step. Since data is in context, previously entered values are preserved when the user returns to a step (pass <code>defaultValues</code> from context to each form).</p>
+
+      <p><strong>URL sync:</strong> Optionally sync step to URL query param (<code>?step=2</code>) so users can bookmark or share progress.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q5-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q5" aria-expanded="false" aria-controls="scenarios-q5">
+      <span class="diff-scenario">Scenario</span>&nbsp; 5. How would you implement a global notification/toast system?
+    </button>
+  </h2>
+  <div id="scenarios-q5" class="accordion-collapse collapse" aria-labelledby="scenarios-q5-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Design goals:</strong> Any component (or even non-React code like an Axios interceptor) should be able to trigger a toast without prop-drilling.</p>
+
+      <p><strong>Approach — Context + imperative API:</strong></p>
+<pre class="code-block">// toast-context.tsx
+interface Toast { id: string; message: string; type: 'success'|'error'|'info'; }
+
+const ToastContext = createContext&lt;{
+  addToast: (msg: string, type: Toast['type']) =&gt; void;
+} | null&gt;(null);
+
+export function ToastProvider({ children }: { children: React.ReactNode }) {
+  const [toasts, setToasts] = useState&lt;Toast[]&gt;([]);
+
+  const addToast = useCallback((message: string, type: Toast['type']) =&gt; {
+    const id = crypto.randomUUID();
+    setToasts(prev =&gt; [...prev, { id, message, type }]);
+    setTimeout(() =&gt; removeToast(id), 4000); // auto-dismiss
+  }, []);
+
+  const removeToast = useCallback((id: string) =&gt; {
+    setToasts(prev =&gt; prev.filter(t =&gt; t.id !== id));
+  }, []);
+
+  return (
+    &lt;ToastContext.Provider value={{ addToast }}&gt;
+      {children}
+      &lt;ToastContainer toasts={toasts} onDismiss={removeToast} /&gt;
+    &lt;/ToastContext.Provider&gt;
+  );
+}
+
+// ToastContainer renders fixed-position toasts
+function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id:string)=>void }) {
+  return createPortal(
+    &lt;div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 9999 }}&gt;
+      {toasts.map(t =&gt; (
+        &lt;div key={t.id} className={`toast toast-${t.type}`}&gt;
+          {t.message}
+          &lt;button onClick={() =&gt; onDismiss(t.id)}&gt;×&lt;/button&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/div&gt;,
+    document.body
+  );
+}
+
+// Usage
+const { addToast } = useToast();
+addToast('Saved successfully', 'success');</pre>
+
+      <p><strong>Imperative API for non-React code:</strong> Export a singleton event emitter or a plain module with a <code>toast.success()</code> function that dispatches to the context via a custom event on <code>window</code>. The provider listens and calls <code>addToast</code>.</p>
+
+      <p><strong>Animation:</strong> Wrap toasts in a <code>TransitionGroup</code> (react-transition-group) or Framer Motion <code>AnimatePresence</code> for enter/exit animations.</p>
+
+      <p><strong>Libraries:</strong> <code>react-hot-toast</code>, <code>react-toastify</code> — both provide this pattern out of the box.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q6-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q6" aria-expanded="false" aria-controls="scenarios-q6">
+      <span class="diff-scenario">Scenario</span>&nbsp; 6. How would you build a typeahead/autocomplete search component?
+    </button>
+  </h2>
+  <div id="scenarios-q6" class="accordion-collapse collapse" aria-labelledby="scenarios-q6-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Key concerns:</strong> debouncing API calls, keyboard navigation (ARIA combobox pattern), cancelling stale requests, loading/empty states.</p>
+
+<pre class="code-block">function useDebounce&lt;T&gt;(value: T, delay: number): T {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() =&gt; {
+    const id = setTimeout(() =&gt; setDebounced(value), delay);
+    return () =&gt; clearTimeout(id);
+  }, [value, delay]);
+  return debounced;
+}
+
+function Autocomplete({ onSelect }: { onSelect: (item: Item) =&gt; void }) {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState&lt;Item[]&gt;([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [loading, setLoading] = useState(false);
+  const debouncedQuery = useDebounce(query, 300);
+
+  useEffect(() =&gt; {
+    if (!debouncedQuery.trim()) { setResults([]); return; }
+    const controller = new AbortController();
+    setLoading(true);
+    fetchSuggestions(debouncedQuery, controller.signal)
+      .then(setResults)
+      .catch(() =&gt; {}) // aborted requests throw
+      .finally(() =&gt; setLoading(false));
+    return () =&gt; controller.abort();
+  }, [debouncedQuery]);
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'ArrowDown') setActiveIndex(i =&gt; Math.min(i + 1, results.length - 1));
+    if (e.key === 'ArrowUp') setActiveIndex(i =&gt; Math.max(i - 1, 0));
+    if (e.key === 'Enter' &amp;&amp; activeIndex &gt;= 0) onSelect(results[activeIndex]);
+    if (e.key === 'Escape') setResults([]);
+  }
+
+  return (
+    &lt;div role="combobox" aria-expanded={results.length &gt; 0} aria-haspopup="listbox"&gt;
+      &lt;input value={query} onChange={e =&gt; setQuery(e.target.value)}
+        onKeyDown={handleKeyDown} aria-autocomplete="list"
+        aria-activedescendant={activeIndex &gt;= 0 ? `opt-${activeIndex}` : undefined} /&gt;
+      {loading &amp;&amp; &lt;span&gt;Loading...&lt;/span&gt;}
+      &lt;ul role="listbox"&gt;
+        {results.map((item, i) =&gt; (
+          &lt;li key={item.id} id={`opt-${i}`} role="option"
+            aria-selected={i === activeIndex}
+            onClick={() =&gt; onSelect(item)}&gt;
+            {item.label}
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Performance:</strong> The <code>AbortController</code> pattern ensures that if the user types quickly, only the latest request's result is applied. Memoize result list items.</p>
+      <p><strong>Libraries:</strong> <code>downshift</code> (headless), <code>@radix-ui/react-combobox</code>, <code>react-select</code>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q7-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q7" aria-expanded="false" aria-controls="scenarios-q7">
+      <span class="diff-scenario">Scenario</span>&nbsp; 7. How would you implement a data table with sorting, filtering, and pagination?
+    </button>
+  </h2>
+  <div id="scenarios-q7" class="accordion-collapse collapse" aria-labelledby="scenarios-q7-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Two modes:</strong> client-side (all data loaded, filter/sort in JS) vs. server-side (pass sort/filter/page params to API). Choose server-side for large datasets.</p>
+
+      <p><strong>State structure (server-side):</strong></p>
+<pre class="code-block">interface TableState {
+  page: number;
+  pageSize: number;
+  sortBy: string;
+  sortDir: 'asc' | 'desc';
+  filters: Record&lt;string, string&gt;;
+}
+
+function DataTable() {
+  const [tableState, setTableState] = useState&lt;TableState&gt;({
+    page: 1, pageSize: 20, sortBy: 'createdAt', sortDir: 'desc', filters: {}
+  });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['table', tableState],
+    queryFn: () =&gt; fetchTableData(tableState),
+    keepPreviousData: true, // avoids flash on page change
+  });
+
+  const handleSort = (column: string) =&gt;
+    setTableState(prev =&gt; ({
+      ...prev,
+      sortBy: column,
+      sortDir: prev.sortBy === column &amp;&amp; prev.sortDir === 'asc' ? 'desc' : 'asc',
+      page: 1,
+    }));
+
+  const handleFilter = (key: string, value: string) =&gt;
+    setTableState(prev =&gt; ({ ...prev, filters: { ...prev.filters, [key]: value }, page: 1 }));
+
+  return (
+    &lt;div&gt;
+      &lt;FilterBar filters={tableState.filters} onChange={handleFilter} /&gt;
+      &lt;table&gt;
+        &lt;thead&gt;
+          {columns.map(col =&gt; (
+            &lt;th key={col.key} onClick={() =&gt; handleSort(col.key)}&gt;
+              {col.label}
+              {tableState.sortBy === col.key ? (tableState.sortDir === 'asc' ? '↑' : '↓') : ''}
+            &lt;/th&gt;
+          ))}
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          {data?.rows.map(row =&gt; &lt;TableRow key={row.id} row={row} /&gt;)}
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+      &lt;Pagination total={data?.total} page={tableState.page}
+        pageSize={tableState.pageSize}
+        onChange={page =&gt; setTableState(prev =&gt; ({ ...prev, page }))} /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Performance:</strong> <code>keepPreviousData: true</code> in TanStack Query keeps old data visible while new data loads. Memoize <code>TableRow</code>. For very large client-side datasets use <code>@tanstack/react-table</code> (headless) with virtual rows via <code>react-virtual</code>.</p>
+      <p><strong>Libraries:</strong> <code>@tanstack/react-table</code> (TanStack Table v8), AG Grid, MUI DataGrid.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q8-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q8" aria-expanded="false" aria-controls="scenarios-q8">
+      <span class="diff-scenario">Scenario</span>&nbsp; 8. How would you build a modal/dialog system that can be triggered from anywhere?
+    </button>
+  </h2>
+  <div id="scenarios-q8" class="accordion-collapse collapse" aria-labelledby="scenarios-q8-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Pattern — Modal Registry via Context:</strong> Register modal components by name; open by name + props from any component.</p>
+<pre class="code-block">// modal-context.tsx
+type ModalConfig = { component: React.ComponentType&lt;any&gt;; props: Record&lt;string, unknown&gt; };
+
+const ModalContext = createContext&lt;{
+  openModal: (id: string, props?: Record&lt;string, unknown&gt;) =&gt; void;
+  closeModal: (id: string) =&gt; void;
+} | null&gt;(null);
+
+const MODAL_REGISTRY: Record&lt;string, React.ComponentType&lt;any&gt;&gt; = {
+  confirm: ConfirmModal,
+  userEdit: UserEditModal,
+};
+
+export function ModalProvider({ children }: { children: React.ReactNode }) {
+  const [activeModals, setActiveModals] = useState&lt;ModalConfig[]&gt;([]);
+
+  const openModal = useCallback((id: string, props = {}) =&gt; {
+    const component = MODAL_REGISTRY[id];
+    if (!component) throw new Error(`No modal registered: ${id}`);
+    setActiveModals(prev =&gt; [...prev, { component, props }]);
+  }, []);
+
+  const closeModal = useCallback((id: string) =&gt; {
+    setActiveModals(prev =&gt; prev.filter((_, i) =&gt; i !== prev.length - 1));
+  }, []);
+
+  return (
+    &lt;ModalContext.Provider value={{ openModal, closeModal }}&gt;
+      {children}
+      {activeModals.map(({ component: Modal, props }, i) =&gt;
+        createPortal(&lt;Modal key={i} {...props} onClose={() =&gt; closeModal('')} /&gt;, document.body)
+      )}
+    &lt;/ModalContext.Provider&gt;
+  );
+}
+
+// Usage from any component
+const { openModal } = useModal();
+openModal('confirm', { message: 'Delete this item?', onConfirm: handleDelete });</pre>
+      <p><strong>Accessibility:</strong> Modals must trap focus (<code>focus-trap-react</code>), set <code>role="dialog"</code>, <code>aria-modal="true"</code>, and return focus on close. Use <code>@radix-ui/react-dialog</code> for a fully accessible headless implementation.</p>
+      <p><strong>Portal rendering</strong> ensures z-index stacking is not affected by parent CSS.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q9-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q9" aria-expanded="false" aria-controls="scenarios-q9">
+      <span class="diff-scenario">Scenario</span>&nbsp; 9. How would you implement authentication flow with Okta/Auth0?
+    </button>
+  </h2>
+  <div id="scenarios-q9" class="accordion-collapse collapse" aria-labelledby="scenarios-q9-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>PKCE flow overview:</strong> React SPA uses Authorization Code + PKCE. The library handles redirects, token storage, and silent renewal.</p>
+<pre class="code-block">// main.tsx — Okta setup
+import { OktaAuth } from '@okta/okta-auth-js';
+import { Security } from '@okta/okta-react';
+
+const oktaAuth = new OktaAuth({
+  issuer: 'https://your-domain.okta.com/oauth2/default',
+  clientId: import.meta.env.VITE_OKTA_CLIENT_ID,
+  redirectUri: `${window.location.origin}/login/callback`,
+  scopes: ['openid', 'profile', 'email'],
+  pkce: true,
+});
+
+function App() {
+  return (
+    &lt;Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}&gt;
+      &lt;Router&gt;
+        &lt;Route path="/login/callback" element={&lt;LoginCallback /&gt;} /&gt;
+        &lt;Route path="/dashboard" element={&lt;RequiredAuth /&gt;&gt;
+          &lt;Dashboard /&gt;
+        &lt;/Route&gt;
+      &lt;/Router&gt;
+    &lt;/Security&gt;
+  );
+}
+
+// Protected route guard
+function RequiredAuth({ children }: { children: React.ReactNode }) {
+  const { authState } = useOktaAuth();
+  if (!authState?.isAuthenticated) return &lt;Navigate to="/login" /&gt;;
+  return &lt;&gt;{children}&lt;/&gt;;
+}
+
+// Attaching token to API calls
+const { oktaAuth } = useOktaAuth();
+const token = await oktaAuth.getAccessToken();
+axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;</pre>
+      <p><strong>Token refresh:</strong> Okta SDK handles silent token renewal automatically. Set up an Axios interceptor to catch 401s, force a token refresh, and retry the request.</p>
+      <p><strong>Role-based access:</strong> Decode the JWT claims (<code>groups</code> or custom claims) from <code>authState.idToken.claims</code> and store roles in Redux for use in <code>AuthRestricted</code> route wrappers.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q10-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q10" aria-expanded="false" aria-controls="scenarios-q10">
+      <span class="diff-scenario">Scenario</span>&nbsp; 10. How would you build a real-time collaborative editing feature?
+    </button>
+  </h2>
+  <div id="scenarios-q10" class="accordion-collapse collapse" aria-labelledby="scenarios-q10-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Core challenge:</strong> Multiple users editing simultaneously causes conflicts. Two main algorithms solve this: <strong>Operational Transformation (OT)</strong> and <strong>CRDTs</strong> (Conflict-free Replicated Data Types).</p>
+      <p><strong>Architecture:</strong></p>
+      <ul>
+        <li>Client sends operations (not full document) over WebSocket.</li>
+        <li>Server transforms concurrent ops using OT or merges with CRDT logic.</li>
+        <li>All clients receive the transformed op and apply it locally.</li>
+      </ul>
+<pre class="code-block">// Using Yjs (CRDT library) + y-websocket
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket';
+import { useEffect, useRef } from 'react';
+
+function CollaborativeEditor({ docId }: { docId: string }) {
+  const editorRef = useRef&lt;HTMLDivElement&gt;(null);
+
+  useEffect(() =&gt; {
+    const ydoc = new Y.Doc();
+    const provider = new WebsocketProvider(
+      'wss://collab.example.com', docId, ydoc
+    );
+    const ytext = ydoc.getText('content');
+
+    // Awareness = cursor positions of other users
+    provider.awareness.setLocalStateField('user', {
+      name: 'Alice', color: '#ff0000'
+    });
+
+    // Bind to a rich text editor (e.g. Quill, TipTap)
+    const binding = new QuillBinding(ytext, quillInstance, provider.awareness);
+
+    return () =&gt; {
+      binding.destroy();
+      provider.disconnect();
+      ydoc.destroy();
+    };
+  }, [docId]);
+
+  return &lt;div ref={editorRef} /&gt;;
+}</pre>
+      <p><strong>Presence indicators:</strong> Use <code>provider.awareness</code> to broadcast and receive cursor positions and user colors. Render remote cursors as absolutely-positioned overlays in the editor.</p>
+      <p><strong>Libraries:</strong> <code>yjs</code> + <code>y-websocket</code>, <code>ShareDB</code> (OT), <code>liveblocks</code> (hosted CRDT service), TipTap editor (built-in Yjs support).</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q11 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q11-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q11" aria-expanded="false" aria-controls="scenarios-q11">
+      <span class="diff-scenario">Scenario</span>&nbsp; 11. How would you implement a shopping cart with persistence?
+    </button>
+  </h2>
+  <div id="scenarios-q11" class="accordion-collapse collapse" aria-labelledby="scenarios-q11-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>State structure:</strong></p>
+<pre class="code-block">interface CartItem { id: string; name: string; price: number; qty: number; }
+interface CartState { items: CartItem[]; }
+
+// Redux slice with localStorage middleware
+const cartSlice = createSlice({
+  name: 'cart',
+  initialState: loadFromStorage&lt;CartState&gt;('cart', { items: [] }),
+  reducers: {
+    addItem(state, action: PayloadAction&lt;CartItem&gt;) {
+      const existing = state.items.find(i =&gt; i.id === action.payload.id);
+      if (existing) existing.qty += action.payload.qty;
+      else state.items.push(action.payload);
+    },
+    removeItem(state, action: PayloadAction&lt;string&gt;) {
+      state.items = state.items.filter(i =&gt; i.id !== action.payload);
+    },
+    clearCart(state) { state.items = []; },
+  },
+});
+
+// Persist middleware
+const persistMiddleware: Middleware = store =&gt; next =&gt; action =&gt; {
+  const result = next(action);
+  localStorage.setItem('cart', JSON.stringify(store.getState().cart));
+  return result;
+};
+
+function loadFromStorage&lt;T&gt;(key: string, fallback: T): T {
+  try { return JSON.parse(localStorage.getItem(key) ?? '') ?? fallback; }
+  catch { return fallback; }
+}</pre>
+      <p><strong>Derived selectors:</strong></p>
+<pre class="code-block">const selectCartTotal = createSelector(
+  (s: RootState) =&gt; s.cart.items,
+  items =&gt; items.reduce((sum, i) =&gt; sum + i.price * i.qty, 0)
+);</pre>
+      <p><strong>Persistence options:</strong> localStorage for guest carts; sync to server on login so cart survives devices. Use <code>redux-persist</code> for a battle-tested persistence layer that handles hydration, versioning, and migration.</p>
+      <p><strong>Optimistic updates:</strong> For logged-in users, update Redux immediately and fire a background PATCH to the server. On error, rollback the Redux state and show a toast.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q12 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q12-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q12" aria-expanded="false" aria-controls="scenarios-q12">
+      <span class="diff-scenario">Scenario</span>&nbsp; 12. How would you build a file upload component with progress tracking?
+    </button>
+  </h2>
+  <div id="scenarios-q12" class="accordion-collapse collapse" aria-labelledby="scenarios-q12-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Key requirements:</strong> drag-and-drop zone, file type/size validation, per-file progress bars, cancel/retry.</p>
+<pre class="code-block">interface UploadFile {
+  id: string; file: File; progress: number;
+  status: 'pending' | 'uploading' | 'done' | 'error';
+  abortController: AbortController;
+}
+
+function FileUploader() {
+  const [uploads, setUploads] = useState&lt;UploadFile[]&gt;([]);
+
+  const updateFile = (id: string, patch: Partial&lt;UploadFile&gt;) =&gt;
+    setUploads(prev =&gt; prev.map(f =&gt; f.id === id ? { ...f, ...patch } : f));
+
+  async function uploadFile(uf: UploadFile) {
+    updateFile(uf.id, { status: 'uploading' });
+    const formData = new FormData();
+    formData.append('file', uf.file);
+
+    try {
+      await axios.post('/api/upload', formData, {
+        signal: uf.abortController.signal,
+        onUploadProgress: (evt) =&gt; {
+          const progress = Math.round((evt.loaded / (evt.total ?? 1)) * 100);
+          updateFile(uf.id, { progress });
+        },
+      });
+      updateFile(uf.id, { status: 'done', progress: 100 });
+    } catch (e) {
+      if (!axios.isCancel(e)) updateFile(uf.id, { status: 'error' });
+    }
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files).map(file =&gt; ({
+      id: crypto.randomUUID(), file, progress: 0,
+      status: 'pending' as const,
+      abortController: new AbortController(),
+    }));
+    setUploads(prev =&gt; [...prev, ...files]);
+    files.forEach(uploadFile);
+  }
+
+  return (
+    &lt;div onDrop={handleDrop} onDragOver={e =&gt; e.preventDefault()}
+      className="drop-zone"&gt;
+      Drop files here
+      {uploads.map(uf =&gt; (
+        &lt;div key={uf.id}&gt;
+          {uf.file.name} — {uf.status}
+          &lt;progress value={uf.progress} max={100} /&gt;
+          &lt;button onClick={() =&gt; uf.abortController.abort()}&gt;Cancel&lt;/button&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</pre>
+      <p><strong>Chunked uploads:</strong> For large files, split with <code>file.slice(start, end)</code> and upload chunks sequentially or in parallel, tracking chunk-level progress. Use a resumable upload protocol (tus.io) for reliability.</p>
+      <p><strong>Libraries:</strong> <code>react-dropzone</code>, <code>uppy</code>, <code>filepond</code>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q13 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q13-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q13" aria-expanded="false" aria-controls="scenarios-q13">
+      <span class="diff-scenario">Scenario</span>&nbsp; 13. How would you implement a virtualized list for 100,000 items?
+    </button>
+  </h2>
+  <div id="scenarios-q13" class="accordion-collapse collapse" aria-labelledby="scenarios-q13-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>The problem:</strong> Rendering 100,000 DOM nodes causes layout thrashing and extreme memory usage. Virtualization renders only the items visible in the viewport plus a small buffer.</p>
+<pre class="code-block">// react-virtual (TanStack Virtual v3)
+import { useVirtualizer } from '@tanstack/react-virtual';
+
+function VirtualList({ items }: { items: Item[] }) {
+  const parentRef = useRef&lt;HTMLDivElement&gt;(null);
+
+  const virtualizer = useVirtualizer({
+    count: items.length,
+    getScrollElement: () =&gt; parentRef.current,
+    estimateSize: () =&gt; 50,       // estimated row height in px
+    overscan: 10,                  // extra rows above/below viewport
+  });
+
+  return (
+    &lt;div ref={parentRef} style={{ height: '600px', overflowY: 'auto' }}&gt;
+      {/* Total scrollable height */}
+      &lt;div style={{ height: virtualizer.getTotalSize(), position: 'relative' }}&gt;
+        {virtualizer.getVirtualItems().map(vItem =&gt; (
+          &lt;div key={vItem.key}
+            style={{
+              position: 'absolute',
+              top: 0,
+              transform: `translateY(${vItem.start}px)`,
+              height: `${vItem.size}px`,
+              width: '100%',
+            }}&gt;
+            &lt;ListRow item={items[vItem.index]} /&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+      <p><strong>Variable heights:</strong> Use <code>measureElement</code> callback from TanStack Virtual to measure actual row heights after render, enabling accurate scroll calculation for rows with dynamic content.</p>
+      <p><strong>Combining with infinite scroll:</strong> When the last virtual item is near the bottom, trigger <code>fetchNextPage()</code> from TanStack Query's <code>useInfiniteQuery</code>.</p>
+      <p><strong>Libraries:</strong> <code>@tanstack/react-virtual</code>, <code>react-window</code>, <code>react-virtuoso</code> (easiest API for variable heights).</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q14 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q14-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q14" aria-expanded="false" aria-controls="scenarios-q14">
+      <span class="diff-scenario">Scenario</span>&nbsp; 14. How would you build a chart/data visualization component?
+    </button>
+  </h2>
+  <div id="scenarios-q14" class="accordion-collapse collapse" aria-labelledby="scenarios-q14-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Library choice:</strong></p>
+      <ul>
+        <li><strong>Recharts</strong> — React-first, declarative, good for standard charts.</li>
+        <li><strong>Victory</strong> — composable, animatable.</li>
+        <li><strong>D3.js</strong> — maximum flexibility, custom/exotic chart types.</li>
+        <li><strong>Chart.js + react-chartjs-2</strong> — canvas-based, performant for many points.</li>
+      </ul>
+<pre class="code-block">// Recharts example — responsive line chart with real-time data
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid,
+  Tooltip, Legend, ResponsiveContainer
+} from 'recharts';
+
+function MetricsChart({ data }: { data: MetricPoint[] }) {
+  return (
+    &lt;ResponsiveContainer width="100%" height={300}&gt;
+      &lt;LineChart data={data}&gt;
+        &lt;CartesianGrid strokeDasharray="3 3" /&gt;
+        &lt;XAxis dataKey="timestamp"
+          tickFormatter={ts =&gt; new Date(ts).toLocaleTimeString()} /&gt;
+        &lt;YAxis /&gt;
+        &lt;Tooltip /&gt;
+        &lt;Legend /&gt;
+        &lt;Line type="monotone" dataKey="value" stroke="#8884d8"
+          dot={false} isAnimationActive={false} /&gt;
+      &lt;/LineChart&gt;
+    &lt;/ResponsiveContainer&gt;
+  );
+}
+
+// For real-time: disable animation, limit data window
+function LiveChart() {
+  const [points, setPoints] = useState&lt;MetricPoint[]&gt;([]);
+
+  useEffect(() =&gt; {
+    const unsub = subscribeToMetrics(point =&gt; {
+      setPoints(prev =&gt; [...prev.slice(-100), point]); // keep last 100 points
+    });
+    return unsub;
+  }, []);
+
+  return &lt;MetricsChart data={points} /&gt;;
+}</pre>
+      <p><strong>D3 + React pattern:</strong> Use D3 only for math/scale/path calculations; let React own the DOM. This avoids the D3 vs React DOM ownership conflict. Use refs only when D3 must own the DOM (e.g., drag/zoom behaviors).</p>
+      <p><strong>Accessibility:</strong> Add <code>role="img"</code> and <code>aria-label</code> to chart containers. Provide a data table fallback for screen reader users.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q15 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q15-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q15" aria-expanded="false" aria-controls="scenarios-q15">
+      <span class="diff-scenario">Scenario</span>&nbsp; 15. How would you implement a dark mode toggle that persists?
+    </button>
+  </h2>
+  <div id="scenarios-q15" class="accordion-collapse collapse" aria-labelledby="scenarios-q15-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Approach — CSS variables + class on root element:</strong></p>
+<pre class="code-block">// theme-context.tsx
+type Theme = 'light' | 'dark';
+
+function getInitialTheme(): Theme {
+  const stored = localStorage.getItem('theme') as Theme | null;
+  if (stored) return stored;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState&lt;Theme&gt;(getInitialTheme);
+
+  useEffect(() =&gt; {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  // Also respond to OS-level changes
+  useEffect(() =&gt; {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e: MediaQueryListEvent) =&gt;
+      setTheme(e.matches ? 'dark' : 'light');
+    mq.addEventListener('change', handler);
+    return () =&gt; mq.removeEventListener('change', handler);
+  }, []);
+
+  return (
+    &lt;ThemeContext.Provider value={{ theme, toggle: () =&gt;
+      setTheme(t =&gt; t === 'dark' ? 'light' : 'dark') }}&gt;
+      {children}
+    &lt;/ThemeContext.Provider&gt;
+  );
+}
+
+/* globals.css */
+:root { --bg: #ffffff; --text: #000000; }
+:root.dark { --bg: #1a1a1a; --text: #ffffff; }
+body { background: var(--bg); color: var(--text); }</pre>
+      <p><strong>Tailwind approach:</strong> Set <code>darkMode: 'class'</code> in tailwind.config; toggle <code>class="dark"</code> on <code>&lt;html&gt;</code>. Components use <code>dark:bg-gray-900</code> etc.</p>
+      <p><strong>MUI approach:</strong> Pass a dynamic <code>theme</code> object to <code>ThemeProvider</code> based on the mode state. MUI respects <code>createTheme({ palette: { mode: 'dark' } })</code>.</p>
+      <p><strong>Flash prevention:</strong> Inline a blocking script in <code>&lt;head&gt;</code> before React hydrates to read localStorage and set the class synchronously — prevents a flash of the wrong theme on page load.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q16 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q16-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q16" aria-expanded="false" aria-controls="scenarios-q16">
+      <span class="diff-scenario">Scenario</span>&nbsp; 16. How would you build a responsive navigation with mobile drawer?
+    </button>
+  </h2>
+  <div id="scenarios-q16" class="accordion-collapse collapse" aria-labelledby="scenarios-q16-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Pattern:</strong> Horizontal nav on desktop; hamburger + slide-in drawer on mobile. Use a <code>useMediaQuery</code> hook or CSS to determine layout.</p>
+<pre class="code-block">function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() =&gt; window.matchMedia(query).matches);
+  useEffect(() =&gt; {
+    const mq = window.matchMedia(query);
+    const handler = (e: MediaQueryListEvent) =&gt; setMatches(e.matches);
+    mq.addEventListener('change', handler);
+    return () =&gt; mq.removeEventListener('change', handler);
+  }, [query]);
+  return matches;
+}
+
+function Navigation() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const navLinks = [
+    { label: 'Home', path: '/' },
+    { label: 'Products', path: '/products' },
+    { label: 'About', path: '/about' },
+  ];
+
+  if (isMobile) return (
+    &lt;&gt;
+      &lt;button aria-label="Open menu" onClick={() =&gt; setDrawerOpen(true)}&gt;☰&lt;/button&gt;
+      {drawerOpen &amp;&amp; (
+        &lt;&gt;
+          &lt;div className="drawer-backdrop" onClick={() =&gt; setDrawerOpen(false)} /&gt;
+          &lt;nav className="drawer" role="navigation" aria-label="Mobile navigation"&gt;
+            &lt;button aria-label="Close menu" onClick={() =&gt; setDrawerOpen(false)}&gt;✕&lt;/button&gt;
+            {navLinks.map(l =&gt; &lt;Link key={l.path} to={l.path}
+              onClick={() =&gt; setDrawerOpen(false)}&gt;{l.label}&lt;/Link&gt;)}
+          &lt;/nav&gt;
+        &lt;/&gt;
+      )}
+    &lt;/&gt;
+  );
+
+  return (
+    &lt;nav role="navigation" aria-label="Main navigation"&gt;
+      {navLinks.map(l =&gt; &lt;Link key={l.path} to={l.path}&gt;{l.label}&lt;/Link&gt;)}
+    &lt;/nav&gt;
+  );
+}</pre>
+      <p><strong>Accessibility:</strong> Drawer must trap focus when open. Close on <kbd>Escape</kbd>. Return focus to the hamburger button on close. Set <code>aria-expanded</code> on the toggle button.</p>
+      <p><strong>Animation:</strong> Use CSS transitions on <code>transform: translateX</code> for the drawer slide-in. Render the drawer in a portal to avoid z-index issues.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q17 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q17-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q17" aria-expanded="false" aria-controls="scenarios-q17">
+      <span class="diff-scenario">Scenario</span>&nbsp; 17. How would you implement a permissions/role-based access control system?
+    </button>
+  </h2>
+  <div id="scenarios-q17" class="accordion-collapse collapse" aria-labelledby="scenarios-q17-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>RBAC model:</strong> Users have one or more roles; roles have permissions; components/routes check permissions.</p>
+<pre class="code-block">// permissions.ts
+export const PERMISSIONS = {
+  VIEW_REPORTS: 'view:reports',
+  EDIT_USERS: 'edit:users',
+  DELETE_ITEMS: 'delete:items',
+} as const;
+
+const ROLE_PERMISSIONS: Record&lt;string, string[]&gt; = {
+  admin: ['view:reports', 'edit:users', 'delete:items'],
+  manager: ['view:reports'],
+  viewer: [],
+};
+
+// auth-context.tsx
+function AuthProvider() {
+  const { roles } = useUserFromToken(); // decode JWT claims
+  const permissions = useMemo(() =&gt;
+    new Set(roles.flatMap(r =&gt; ROLE_PERMISSIONS[r] ?? [])), [roles]);
+
+  const can = useCallback((permission: string) =&gt;
+    permissions.has(permission), [permissions]);
+
+  return &lt;AuthContext.Provider value={{ roles, can }}&gt;...&lt;/AuthContext.Provider&gt;;
+}
+
+// Can component — renders children only if permitted
+function Can({ permission, children, fallback = null }: {
+  permission: string; children: React.ReactNode; fallback?: React.ReactNode;
+}) {
+  const { can } = useAuth();
+  return can(permission) ? &lt;&gt;{children}&lt;/&gt; : &lt;&gt;{fallback}&lt;/&gt;;
+}
+
+// Protected route wrapper
+function ProtectedRoute({ permission, children }: { permission: string; children: React.ReactNode }) {
+  const { can } = useAuth();
+  if (!can(permission)) return &lt;Navigate to="/unauthorized" /&gt;;
+  return &lt;&gt;{children}&lt;/&gt;;
+}
+
+// Usage
+&lt;Can permission={PERMISSIONS.EDIT_USERS}&gt;
+  &lt;EditUserButton /&gt;
+&lt;/Can&gt;</pre>
+      <p><strong>Important:</strong> Frontend RBAC is UX only — the backend must enforce all permissions. Never trust client-side permission checks for security.</p>
+      <p><strong>Claim-based approach:</strong> For fine-grained permissions, include a <code>permissions</code> array directly in the JWT rather than deriving from roles, eliminating the need for a client-side role-to-permission mapping.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q18 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q18-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q18" aria-expanded="false" aria-controls="scenarios-q18">
+      <span class="diff-scenario">Scenario</span>&nbsp; 18. How would you build a form that auto-saves to the server?
+    </button>
+  </h2>
+  <div id="scenarios-q18" class="accordion-collapse collapse" aria-labelledby="scenarios-q18-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Strategy:</strong> Debounce field changes and PATCH to server. Track save state to show user feedback.</p>
+<pre class="code-block">// useAutosave.ts
+type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+
+export function useAutosave&lt;T&gt;(
+  data: T,
+  saveFn: (data: T) =&gt; Promise&lt;void&gt;,
+  delay = 1000
+) {
+  const [status, setStatus] = useState&lt;SaveStatus&gt;('idle');
+  const latestData = useRef(data);
+  latestData.current = data;
+
+  useEffect(() =&gt; {
+    const id = setTimeout(async () =&gt; {
+      setStatus('saving');
+      try {
+        await saveFn(latestData.current);
+        setStatus('saved');
+        setTimeout(() =&gt; setStatus('idle'), 2000);
+      } catch {
+        setStatus('error');
+      }
+    }, delay);
+    return () =&gt; clearTimeout(id);
+  }, [data, saveFn, delay]); // re-debounces whenever data changes
+
+  return status;
+}
+
+// AutoSaveForm.tsx
+function DocumentEditor({ docId }: { docId: string }) {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+
+  const saveDoc = useCallback(
+    (data: { title: string; body: string }) =&gt;
+      api.patch(`/documents/${docId}`, data),
+    [docId]
+  );
+
+  const status = useAutosave({ title, body }, saveDoc, 800);
+
+  return (
+    &lt;div&gt;
+      &lt;div className="save-indicator"&gt;
+        {status === 'saving' &amp;&amp; 'Saving...'}
+        {status === 'saved' &amp;&amp; 'Saved ✓'}
+        {status === 'error' &amp;&amp; 'Save failed'}
+      &lt;/div&gt;
+      &lt;input value={title} onChange={e =&gt; setTitle(e.target.value)} /&gt;
+      &lt;textarea value={body} onChange={e =&gt; setBody(e.target.value)} /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+      <p><strong>Save on unmount:</strong> Use <code>window.beforeunload</code> or a <code>useEffect</code> cleanup that triggers an immediate (non-debounced) save when the component unmounts or the user navigates away.</p>
+      <p><strong>Conflict resolution:</strong> Include a version/etag in the PATCH request. If the server returns 409 Conflict, show a merge UI.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q19 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q19-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q19" aria-expanded="false" aria-controls="scenarios-q19">
+      <span class="diff-scenario">Scenario</span>&nbsp; 19. How would you implement keyboard navigation for accessibility?
+    </button>
+  </h2>
+  <div id="scenarios-q19" class="accordion-collapse collapse" aria-labelledby="scenarios-q19-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Core principles:</strong> All interactive elements reachable by Tab, logical focus order, keyboard operable with arrow keys where appropriate, visible focus indicators.</p>
+<pre class="code-block">// Custom hook for roving tabindex (arrow key nav in a group)
+function useRovingTabIndex(count: number) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const refs = useRef&lt;(HTMLElement | null)[]&gt;([]);
+
+  function handleKeyDown(e: React.KeyboardEvent, index: number) {
+    let next = index;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      next = (index + 1) % count;
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      next = (index - 1 + count) % count;
+    } else if (e.key === 'Home') {
+      next = 0;
+    } else if (e.key === 'End') {
+      next = count - 1;
+    }
+    setActiveIndex(next);
+    refs.current[next]?.focus();
+  }
+
+  function getTabIndex(index: number) {
+    return index === activeIndex ? 0 : -1;
+  }
+
+  return { getTabIndex, handleKeyDown, refs };
+}
+
+// Accessible toolbar using roving tabindex
+function Toolbar({ tools }: { tools: Tool[] }) {
+  const { getTabIndex, handleKeyDown, refs } = useRovingTabIndex(tools.length);
+
+  return (
+    &lt;div role="toolbar" aria-label="Formatting tools"&gt;
+      {tools.map((tool, i) =&gt; (
+        &lt;button key={tool.id}
+          ref={el =&gt; { refs.current[i] = el; }}
+          tabIndex={getTabIndex(i)}
+          onKeyDown={e =&gt; handleKeyDown(e, i)}
+          aria-label={tool.label}
+          aria-pressed={tool.active}&gt;
+          {tool.icon}
+        &lt;/button&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</pre>
+      <p><strong>Focus management in modals:</strong> On open, focus the first focusable element. On close, return focus to the trigger element. Use <code>focus-trap-react</code> or <code>@radix-ui</code> primitives.</p>
+      <p><strong>Skip links:</strong> Add a visually hidden "Skip to main content" link at the top of the page that becomes visible on focus, allowing keyboard users to bypass navigation.</p>
+      <p><strong>Testing:</strong> Use <code>axe-core</code> / <code>@axe-core/react</code> in development for automated ARIA violation detection.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q20 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q20-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q20" aria-expanded="false" aria-controls="scenarios-q20">
+      <span class="diff-scenario">Scenario</span>&nbsp; 20. How would you build a notification badge counter that updates in real time?
+    </button>
+  </h2>
+  <div id="scenarios-q20" class="accordion-collapse collapse" aria-labelledby="scenarios-q20-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Architecture:</strong> Notification count stored in Redux/Zustand; updated via WebSocket push or polling. Badge renders derived count.</p>
+<pre class="code-block">// notificationsSlice.ts
+const notificationsSlice = createSlice({
+  name: 'notifications',
+  initialState: { items: [] as Notification[], unreadCount: 0 },
+  reducers: {
+    addNotification(state, action: PayloadAction&lt;Notification&gt;) {
+      state.items.unshift(action.payload);
+      if (!action.payload.read) state.unreadCount++;
+    },
+    markAllRead(state) {
+      state.items.forEach(n =&gt; { n.read = true; });
+      state.unreadCount = 0;
+    },
+  },
+});
+
+// WebSocket listener (in root component or middleware)
+function NotificationListener() {
+  const dispatch = useDispatch();
+  useEffect(() =&gt; {
+    const ws = new WebSocket('wss://api.example.com/notifications');
+    ws.onmessage = (e) =&gt; dispatch(addNotification(JSON.parse(e.data)));
+    return () =&gt; ws.close();
+  }, [dispatch]);
+  return null;
+}
+
+// Badge component
+function NotificationBell() {
+  const unreadCount = useSelector(s =&gt; s.notifications.unreadCount);
+  return (
+    &lt;button aria-label={`Notifications, ${unreadCount} unread`}&gt;
+      🔔
+      {unreadCount &gt; 0 &amp;&amp; (
+        &lt;span className="badge" aria-hidden="true"&gt;
+          {unreadCount &gt; 99 ? '99+' : unreadCount}
+        &lt;/span&gt;
+      )}
+    &lt;/button&gt;
+  );
+}</pre>
+      <p><strong>Browser tab badge:</strong> Update <code>document.title</code> to include the count (<code>"(3) App Name"</code>) so users see updates even when the tab is not active.</p>
+      <p><strong>Browser Notifications API:</strong> For desktop push, request <code>Notification.requestPermission()</code> and use <code>new Notification(...)</code> to show OS-level notifications when the tab is not focused.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q21 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q21-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q21" aria-expanded="false" aria-controls="scenarios-q21">
+      <span class="diff-scenario">Scenario</span>&nbsp; 21. How would you implement a PDF viewer in React?
+    </button>
+  </h2>
+  <div id="scenarios-q21" class="accordion-collapse collapse" aria-labelledby="scenarios-q21-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Options:</strong></p>
+      <ul>
+        <li><strong>Native browser:</strong> <code>&lt;iframe src="file.pdf"&gt;</code> — simplest, but no programmatic control.</li>
+        <li><strong>react-pdf (pdfjs-dist):</strong> Renders each page to Canvas, full control, works everywhere.</li>
+        <li><strong>Google Docs Viewer:</strong> Embed via iframe with a URL — no library needed, but requires public URL.</li>
+      </ul>
+<pre class="code-block">import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+
+// Required: point pdfjs to its worker
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url,
+).toString();
+
+function PDFViewer({ url }: { url: string }) {
+  const [numPages, setNumPages] = useState(0);
+  const [page, setPage] = useState(1);
+  const [scale, setScale] = useState(1.0);
+  const containerRef = useRef&lt;HTMLDivElement&gt;(null);
+
+  return (
+    &lt;div ref={containerRef}&gt;
+      &lt;div className="pdf-controls"&gt;
+        &lt;button onClick={() =&gt; setPage(p =&gt; Math.max(1, p - 1))}&gt;Prev&lt;/button&gt;
+        &lt;span&gt;{page} / {numPages}&lt;/span&gt;
+        &lt;button onClick={() =&gt; setPage(p =&gt; Math.min(numPages, p + 1))}&gt;Next&lt;/button&gt;
+        &lt;button onClick={() =&gt; setScale(s =&gt; s + 0.2)}&gt;Zoom In&lt;/button&gt;
+        &lt;button onClick={() =&gt; setScale(s =&gt; Math.max(0.4, s - 0.2))}&gt;Zoom Out&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;Document file={url} onLoadSuccess={({ numPages }) =&gt; setNumPages(numPages)}&gt;
+        &lt;Page pageNumber={page} scale={scale} /&gt;
+      &lt;/Document&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+      <p><strong>Performance:</strong> Virtualise page rendering — only render the visible page plus one above/below. For large PDFs, lazy-load pages on scroll using IntersectionObserver. The pdfjs worker runs off the main thread so parsing doesn't block the UI.</p>
+      <p><strong>Thumbnail sidebar:</strong> Render all pages at a very low scale (<code>scale=0.15</code>) in a scrollable sidebar. Click to jump to that page in the main viewer.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q22 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q22-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q22" aria-expanded="false" aria-controls="scenarios-q22">
+      <span class="diff-scenario">Scenario</span>&nbsp; 22. How would you build a code editor component (like CodeMirror)?
+    </button>
+  </h2>
+  <div id="scenarios-q22" class="accordion-collapse collapse" aria-labelledby="scenarios-q22-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Options:</strong> CodeMirror 6, Monaco Editor (VS Code's engine), or Ace Editor.</p>
+<pre class="code-block">// Monaco Editor in React (via @monaco-editor/react)
+import Editor, { OnMount } from '@monaco-editor/react';
+import * as monaco from 'monaco-editor';
+import { useRef } from 'react';
+
+function CodeEditor({
+  value, onChange, language = 'typescript'
+}: {
+  value: string;
+  onChange: (v: string) =&gt; void;
+  language?: string;
+}) {
+  const editorRef = useRef&lt;monaco.editor.IStandaloneCodeEditor | null&gt;(null);
+
+  const handleMount: OnMount = (editor, monaco) =&gt; {
+    editorRef.current = editor;
+
+    // Add custom action: Ctrl+S to save
+    editor.addAction({
+      id: 'save',
+      label: 'Save',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
+      run: () =&gt; console.log('Save triggered'),
+    });
+
+    // Configure TypeScript language service
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2020,
+      strict: true,
+    });
+  };
+
+  return (
+    &lt;Editor
+      height="400px"
+      language={language}
+      value={value}
+      onChange={v =&gt; onChange(v ?? '')}
+      onMount={handleMount}
+      options={{
+        minimap: { enabled: false },
+        fontSize: 14,
+        lineNumbers: 'on',
+        wordWrap: 'on',
+        automaticLayout: true, // resizes on container change
+      }}
+    /&gt;
+  );
+}</pre>
+      <p><strong>CodeMirror 6 pattern:</strong> More lightweight than Monaco. Build an EditorView in a <code>useEffect</code>, store it in a ref, and dispatch transactions to update value. Clean up with <code>view.destroy()</code> on unmount.</p>
+      <p><strong>Performance:</strong> Monaco is ~4MB — load it lazily with <code>React.lazy</code> + Vite's dynamic import. The <code>@monaco-editor/react</code> loader handles this via CDN by default.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q23 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q23-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q23" aria-expanded="false" aria-controls="scenarios-q23">
+      <span class="diff-scenario">Scenario</span>&nbsp; 23. How would you implement undo/redo for a drawing canvas?
+    </button>
+  </h2>
+  <div id="scenarios-q23" class="accordion-collapse collapse" aria-labelledby="scenarios-q23-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Pattern — immutable history stack:</strong> Store snapshots of the canvas state (list of shapes/strokes) in a past/future stacks. Each action pushes a new snapshot onto past.</p>
+<pre class="code-block">interface HistoryState&lt;T&gt; {
+  past: T[];
+  present: T;
+  future: T[];
+}
+
+function useHistory&lt;T&gt;(initial: T) {
+  const [history, setHistory] = useState&lt;HistoryState&lt;T&gt;&gt;({
+    past: [], present: initial, future: []
+  });
+
+  const set = useCallback((newPresent: T) =&gt; {
+    setHistory(h =&gt; ({
+      past: [...h.past, h.present],
+      present: newPresent,
+      future: [], // clear redo stack on new action
+    }));
+  }, []);
+
+  const undo = useCallback(() =&gt; {
+    setHistory(h =&gt; {
+      if (h.past.length === 0) return h;
+      const previous = h.past[h.past.length - 1];
+      return {
+        past: h.past.slice(0, -1),
+        present: previous,
+        future: [h.present, ...h.future],
+      };
+    });
+  }, []);
+
+  const redo = useCallback(() =&gt; {
+    setHistory(h =&gt; {
+      if (h.future.length === 0) return h;
+      const next = h.future[0];
+      return {
+        past: [...h.past, h.present],
+        present: next,
+        future: h.future.slice(1),
+      };
+    });
+  }, []);
+
+  return { state: history.present, set, undo, redo,
+           canUndo: history.past.length &gt; 0,
+           canRedo: history.future.length &gt; 0 };
+}
+
+// In the canvas component
+function DrawingCanvas() {
+  const { state: strokes, set, undo, redo, canUndo, canRedo } =
+    useHistory&lt;Stroke[]&gt;([]);
+
+  function handleMouseUp(newStroke: Stroke) {
+    set([...strokes, newStroke]); // commit completed stroke
+  }
+
+  useEffect(() =&gt; {
+    const handleKey = (e: KeyboardEvent) =&gt; {
+      if ((e.ctrlKey || e.metaKey) &amp;&amp; e.key === 'z') {
+        e.shiftKey ? redo() : undo();
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () =&gt; window.removeEventListener('keydown', handleKey);
+  }, [undo, redo]);
+}</pre>
+      <p><strong>Memory optimisation:</strong> Instead of storing full snapshots, store command objects (delta-based) and replay them forward/backward. Cap history depth (e.g., 50 steps).</p>
+      <p><strong>Redux Toolkit alternative:</strong> <code>redux-undo</code> wraps any reducer with undo/redo for free.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q24 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q24-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q24" aria-expanded="false" aria-controls="scenarios-q24">
+      <span class="diff-scenario">Scenario</span>&nbsp; 24. How would you build a dashboard with resizable and draggable widgets?
+    </button>
+  </h2>
+  <div id="scenarios-q24" class="accordion-collapse collapse" aria-labelledby="scenarios-q24-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Library: react-grid-layout</strong> — the de-facto standard for this pattern.</p>
+<pre class="code-block">import GridLayout, { Layout } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+
+const defaultLayout: Layout[] = [
+  { i: 'sales', x: 0, y: 0, w: 6, h: 4 },
+  { i: 'users', x: 6, y: 0, w: 6, h: 4 },
+  { i: 'orders', x: 0, y: 4, w: 4, h: 3 },
+];
+
+function Dashboard() {
+  const [layout, setLayout] = useState(defaultLayout);
+
+  // Persist layout changes
+  const handleLayoutChange = (newLayout: Layout[]) =&gt; {
+    setLayout(newLayout);
+    localStorage.setItem('dashboardLayout', JSON.stringify(newLayout));
+  };
+
+  return (
+    &lt;GridLayout
+      layout={layout}
+      cols={12}
+      rowHeight={80}
+      width={1200}
+      onLayoutChange={handleLayoutChange}
+      draggableHandle=".widget-handle"&gt;
+
+      &lt;div key="sales"&gt;
+        &lt;div className="widget-handle"&gt;⠿ Sales&lt;/div&gt;
+        &lt;SalesChart /&gt;
+      &lt;/div&gt;
+      &lt;div key="users"&gt;
+        &lt;div className="widget-handle"&gt;⠿ Users&lt;/div&gt;
+        &lt;UsersChart /&gt;
+      &lt;/div&gt;
+    &lt;/GridLayout&gt;
+  );
+}</pre>
+      <p><strong>Add/remove widgets:</strong> Manage a set of active widget IDs in state. Adding appends a new layout item with a default position. Removing filters it out.</p>
+      <p><strong>Responsive breakpoints:</strong> Use <code>ResponsiveGridLayout</code> from <code>react-grid-layout</code> with separate layout configs per breakpoint (<code>lg</code>, <code>md</code>, <code>sm</code>).</p>
+      <p><strong>Performance:</strong> Wrap each widget in <code>React.memo</code> — layout changes should not re-render widget content if data hasn't changed.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q25 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q25-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q25" aria-expanded="false" aria-controls="scenarios-q25">
+      <span class="diff-scenario">Scenario</span>&nbsp; 25. How would you implement a chat UI with WebSocket messages?
+    </button>
+  </h2>
+  <div id="scenarios-q25" class="accordion-collapse collapse" aria-labelledby="scenarios-q25-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Architecture:</strong></p>
+      <ul>
+        <li>WebSocket connection per chat room, managed in a custom hook.</li>
+        <li>Messages stored in Redux slice keyed by room ID.</li>
+        <li>Virtualized message list (messages can grow very long).</li>
+        <li>Auto-scroll to bottom on new message unless user has scrolled up.</li>
+      </ul>
+<pre class="code-block">function useChatRoom(roomId: string) {
+  const dispatch = useDispatch();
+  const ws = useRef&lt;WebSocket | null&gt;(null);
+
+  useEffect(() =&gt; {
+    ws.current = new WebSocket(`wss://chat.example.com/rooms/${roomId}`);
+    ws.current.onmessage = (e) =&gt; {
+      dispatch(messageReceived({ roomId, message: JSON.parse(e.data) }));
+    };
+    return () =&gt; ws.current?.close();
+  }, [roomId, dispatch]);
+
+  const sendMessage = useCallback((text: string) =&gt; {
+    ws.current?.send(JSON.stringify({ type: 'message', text }));
+    // Optimistic: add to store immediately
+    dispatch(messageSent({ roomId, text, tempId: crypto.randomUUID() }));
+  }, [roomId, dispatch]);
+
+  return { sendMessage };
+}
+
+// Auto-scroll hook
+function useAutoScroll(messages: Message[]) {
+  const bottomRef = useRef&lt;HTMLDivElement&gt;(null);
+  const [userScrolledUp, setUserScrolledUp] = useState(false);
+
+  useEffect(() =&gt; {
+    if (!userScrolledUp) {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, userScrolledUp]);
+
+  function handleScroll(e: React.UIEvent&lt;HTMLDivElement&gt;) {
+    const el = e.currentTarget;
+    const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight &lt; 50;
+    setUserScrolledUp(!isAtBottom);
+  }
+
+  return { bottomRef, handleScroll };
+}</pre>
+      <p><strong>Typing indicators:</strong> Send a <code>typing</code> event over WS on each keystroke (debounced). Server broadcasts to other participants. Display "Alice is typing..." from incoming typing events with a timeout to clear.</p>
+      <p><strong>Optimistic messages:</strong> Assign a temp ID; replace with server ID in the <code>messageConfirmed</code> action. Show a "failed" state if the WS message is not confirmed within a timeout.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q26 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q26-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q26" aria-expanded="false" aria-controls="scenarios-q26">
+      <span class="diff-scenario">Scenario</span>&nbsp; 26. How would you build a calendar/date picker component from scratch?
+    </button>
+  </h2>
+  <div id="scenarios-q26" class="accordion-collapse collapse" aria-labelledby="scenarios-q26-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>State structure:</strong></p>
+      <ul>
+        <li><code>viewMonth: Date</code> — month/year currently displayed</li>
+        <li><code>selectedDate: Date | null</code> — selected value</li>
+        <li><code>focusedDate: Date</code> — keyboard navigation cursor</li>
+      </ul>
+<pre class="code-block">function useDatePicker(initialDate?: Date) {
+  const [viewMonth, setViewMonth] = useState(
+    startOfMonth(initialDate ?? new Date())
+  );
+  const [selected, setSelected] = useState&lt;Date | null&gt;(initialDate ?? null);
+  const [focused, setFocused] = useState(initialDate ?? new Date());
+
+  // Generate 6-row grid (42 cells)
+  const calendarDays = useMemo(() =&gt; {
+    const start = startOfWeek(viewMonth); // Sunday
+    return Array.from({ length: 42 }, (_, i) =&gt; addDays(start, i));
+  }, [viewMonth]);
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    const moves: Record&lt;string, number&gt; = {
+      ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7,
+    };
+    if (moves[e.key] !== undefined) {
+      e.preventDefault();
+      const next = addDays(focused, moves[e.key]);
+      setFocused(next);
+      if (!isSameMonth(next, viewMonth)) setViewMonth(startOfMonth(next));
+    }
+    if (e.key === 'Enter' || e.key === ' ') setSelected(focused);
+  }
+
+  return { calendarDays, viewMonth, selected, focused,
+           setSelected, setViewMonth, handleKeyDown };
+}
+
+function Calendar({ onChange }: { onChange: (d: Date) =&gt; void }) {
+  const { calendarDays, viewMonth, selected, focused,
+          setSelected, setViewMonth, handleKeyDown } = useDatePicker();
+
+  return (
+    &lt;div role="grid" aria-label="Calendar" onKeyDown={handleKeyDown}&gt;
+      &lt;div className="calendar-header"&gt;
+        &lt;button onClick={() =&gt; setViewMonth(subMonths(viewMonth, 1))}&gt;◀&lt;/button&gt;
+        &lt;span&gt;{format(viewMonth, 'MMMM yyyy')}&lt;/span&gt;
+        &lt;button onClick={() =&gt; setViewMonth(addMonths(viewMonth, 1))}&gt;▶&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div className="calendar-grid"&gt;
+        {calendarDays.map(day =&gt; (
+          &lt;button key={day.toISOString()}
+            role="gridcell"
+            tabIndex={isSameDay(day, focused) ? 0 : -1}
+            aria-selected={selected ? isSameDay(day, selected) : false}
+            aria-current={isToday(day) ? 'date' : undefined}
+            onClick={() =&gt; { setSelected(day); onChange(day); }}&gt;
+            {format(day, 'd')}
+          &lt;/button&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+      <p><strong>Libraries to reach for:</strong> <code>date-fns</code> (arithmetic), <code>@mui/x-date-pickers</code>, <code>react-day-picker</code> (headless-friendly).</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q27 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q27-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q27" aria-expanded="false" aria-controls="scenarios-q27">
+      <span class="diff-scenario">Scenario</span>&nbsp; 27. How would you implement image cropping and upload?
+    </button>
+  </h2>
+  <div id="scenarios-q27" class="accordion-collapse collapse" aria-labelledby="scenarios-q27-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Flow:</strong> User selects file → preview in cropper → user adjusts crop area → canvas renders cropped image → upload as Blob.</p>
+<pre class="code-block">import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+
+function ImageCropper({ onUpload }: { onUpload: (blob: Blob) =&gt; void }) {
+  const [src, setSrc] = useState('');
+  const [crop, setCrop] = useState&lt;Crop&gt;({ unit: '%', width: 80,
+    height: 80, x: 10, y: 10 });
+  const [completedCrop, setCompletedCrop] = useState&lt;PixelCrop | null&gt;(null);
+  const imgRef = useRef&lt;HTMLImageElement&gt;(null);
+
+  function handleFileChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () =&gt; setSrc(reader.result as string);
+    reader.readAsDataURL(file);
+  }
+
+  async function handleCropAndUpload() {
+    if (!completedCrop || !imgRef.current) return;
+    const canvas = document.createElement('canvas');
+    const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
+    const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
+    canvas.width = completedCrop.width * scaleX;
+    canvas.height = completedCrop.height * scaleY;
+    const ctx = canvas.getContext('2d')!;
+    ctx.drawImage(
+      imgRef.current,
+      completedCrop.x * scaleX, completedCrop.y * scaleY,
+      completedCrop.width * scaleX, completedCrop.height * scaleY,
+      0, 0, canvas.width, canvas.height
+    );
+    canvas.toBlob(blob =&gt; { if (blob) onUpload(blob); }, 'image/jpeg', 0.9);
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;input type="file" accept="image/*" onChange={handleFileChange} /&gt;
+      {src &amp;&amp; (
+        &lt;ReactCrop crop={crop} onChange={setCrop}
+          onComplete={setCompletedCrop} aspect={1}&gt;
+          &lt;img ref={imgRef} src={src} alt="Crop source" /&gt;
+        &lt;/ReactCrop&gt;
+      )}
+      &lt;button onClick={handleCropAndUpload}&gt;Upload Cropped Image&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+      <p><strong>Libraries:</strong> <code>react-image-crop</code>, <code>cropperjs</code> / <code>react-cropper</code>. For advanced editing (rotate, zoom), <code>react-avatar-editor</code>.</p>
+      <p><strong>Performance:</strong> Use <code>createObjectURL</code> instead of <code>readAsDataURL</code> for the preview — it's faster and doesn't bloat the DOM with base64 strings. Revoke the URL on unmount with <code>URL.revokeObjectURL</code>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q28 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q28-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q28" aria-expanded="false" aria-controls="scenarios-q28">
+      <span class="diff-scenario">Scenario</span>&nbsp; 28. How would you build an analytics event tracking system?
+    </button>
+  </h2>
+  <div id="scenarios-q28" class="accordion-collapse collapse" aria-labelledby="scenarios-q28-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Design goals:</strong> Components should not know about analytics implementation. Events should be typed. Tracking should not block the UI thread.</p>
+<pre class="code-block">// analytics.ts — thin abstraction layer
+type EventPayload = Record&lt;string, unknown&gt;;
+
+interface AnalyticsProvider {
+  track(event: string, props?: EventPayload): void;
+  identify(userId: string, traits?: EventPayload): void;
+  page(name: string, props?: EventPayload): void;
+}
+
+class Analytics implements AnalyticsProvider {
+  private providers: AnalyticsProvider[];
+  constructor(providers: AnalyticsProvider[]) {
+    this.providers = providers;
+  }
+  track(event: string, props?: EventPayload) {
+    this.providers.forEach(p =&gt; p.track(event, props));
+  }
+  identify(userId: string, traits?: EventPayload) {
+    this.providers.forEach(p =&gt; p.identify(userId, traits));
+  }
+  page(name: string, props?: EventPayload) {
+    this.providers.forEach(p =&gt; p.page(name, props));
+  }
+}
+
+// Typed events
+export const events = {
+  BUTTON_CLICKED: 'button_clicked',
+  PRODUCT_VIEWED: 'product_viewed',
+  CHECKOUT_STARTED: 'checkout_started',
+} as const;
+
+// React integration
+const AnalyticsContext = createContext&lt;Analytics | null&gt;(null);
+
+export function useAnalytics() {
+  const ctx = useContext(AnalyticsContext);
+  if (!ctx) throw new Error('Missing AnalyticsProvider');
+  return ctx;
+}
+
+// Track hook for components
+export function useTrackEvent() {
+  const analytics = useAnalytics();
+  return useCallback((event: string, props?: EventPayload) =&gt; {
+    analytics.track(event, props);
+  }, [analytics]);
+}
+
+// Page tracking via router
+function PageTracker() {
+  const analytics = useAnalytics();
+  const location = useLocation();
+  useEffect(() =&gt; {
+    analytics.page(location.pathname);
+  }, [location.pathname, analytics]);
+  return null;
+}
+
+// Usage
+const track = useTrackEvent();
+&lt;button onClick={() =&gt; { track(events.BUTTON_CLICKED, { label: 'Buy Now' }); }}&gt;
+  Buy Now
+&lt;/button&gt;</pre>
+      <p><strong>Batching and performance:</strong> Queue events in memory and flush to the server in batches (every 5 seconds or when the page unloads via <code>sendBeacon</code>). This avoids a network request per click.</p>
+      <p><strong>Libraries:</strong> Segment (<code>analytics.js</code>), Mixpanel, Amplitude — all support this thin wrapper pattern.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q29 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q29-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q29" aria-expanded="false" aria-controls="scenarios-q29">
+      <span class="diff-scenario">Scenario</span>&nbsp; 29. How would you implement feature flags that can be toggled without redeployment?
+    </button>
+  </h2>
+  <div id="scenarios-q29" class="accordion-collapse collapse" aria-labelledby="scenarios-q29-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Architecture:</strong> Feature flags are fetched at app boot from a remote config service. UI responds to flag changes without a deploy.</p>
+<pre class="code-block">// feature-flags.ts
+interface FeatureFlags {
+  newCheckout: boolean;
+  betaDashboard: boolean;
+  maintenanceMode: boolean;
+}
+
+const DEFAULT_FLAGS: FeatureFlags = {
+  newCheckout: false,
+  betaDashboard: false,
+  maintenanceMode: false,
+};
+
+const FlagContext = createContext&lt;FeatureFlags&gt;(DEFAULT_FLAGS);
+
+export function FeatureFlagProvider({ children }: { children: React.ReactNode }) {
+  const [flags, setFlags] = useState&lt;FeatureFlags&gt;(DEFAULT_FLAGS);
+
+  useEffect(() =&gt; {
+    // Fetch from config service (or LaunchDarkly, Flagsmith, etc.)
+    fetch('/api/feature-flags')
+      .then(r =&gt; r.json())
+      .then(setFlags)
+      .catch(() =&gt; {}); // fall back to defaults
+
+    // Optional: SSE for live flag updates without polling
+    const es = new EventSource('/api/feature-flags/stream');
+    es.onmessage = (e) =&gt; setFlags(JSON.parse(e.data));
+    return () =&gt; es.close();
+  }, []);
+
+  return &lt;FlagContext.Provider value={flags}&gt;{children}&lt;/FlagContext.Provider&gt;;
+}
+
+export function useFlag&lt;K extends keyof FeatureFlags&gt;(flag: K): FeatureFlags[K] {
+  return useContext(FlagContext)[flag];
+}
+
+// Feature gate component
+export function Feature({ flag, children, fallback = null }: {
+  flag: keyof FeatureFlags;
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}) {
+  const enabled = useFlag(flag);
+  return enabled ? &lt;&gt;{children}&lt;/&gt; : &lt;&gt;{fallback}&lt;/&gt;;
+}
+
+// Usage
+&lt;Feature flag="newCheckout" fallback={&lt;OldCheckout /&gt;}&gt;
+  &lt;NewCheckout /&gt;
+&lt;/Feature&gt;</pre>
+      <p><strong>User targeting:</strong> Pass user context (ID, groups, email domain) to the flag service at evaluation time to enable percentage rollouts and A/B testing.</p>
+      <p><strong>Managed services:</strong> LaunchDarkly, Flagsmith, Unleash, GrowthBook — all provide a React SDK with a nearly identical <code>useFlag</code> API pattern.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q30 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="scenarios-q30-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenarios-q30" aria-expanded="false" aria-controls="scenarios-q30">
+      <span class="diff-scenario">Scenario</span>&nbsp; 30. How would you architect a React micro-frontend that shares state with other micro-frontends?
+    </button>
+  </h2>
+  <div id="scenarios-q30" class="accordion-collapse collapse" aria-labelledby="scenarios-q30-heading" data-bs-parent="#acc-scenarios">
+    <div class="accordion-body">
+      <p><strong>Micro-frontend architecture overview:</strong> Each MFE is independently deployed and rendered. They are composed in a Shell application. The challenge is sharing state without coupling.</p>
+
+      <p><strong>Module Federation (Webpack 5 / Vite):</strong> Each MFE exposes and/or consumes shared modules. React, Redux store, and shared components can be declared as singletons.</p>
+<pre class="code-block">// shell/webpack.config.js (Module Federation)
+new ModuleFederationPlugin({
+  name: 'shell',
+  remotes: {
+    cartMFE: 'cartMFE@https://cart.example.com/remoteEntry.js',
+    catalogMFE: 'catalogMFE@https://catalog.example.com/remoteEntry.js',
+  },
+  shared: {
+    react: { singleton: true, requiredVersion: '^18.0.0' },
+    'react-dom': { singleton: true },
+    '@reduxjs/toolkit': { singleton: true }, // shared store
+  },
+});
+
+// cart-mfe/webpack.config.js
+new ModuleFederationPlugin({
+  name: 'cartMFE',
+  filename: 'remoteEntry.js',
+  exposes: { './Cart': './src/Cart' },
+  shared: { react: { singleton: true } },
+});
+
+// Shell composes the MFEs
+const CartMFE = React.lazy(() =&gt; import('cartMFE/Cart'));
+
+function Shell() {
+  return (
+    &lt;Provider store={sharedStore}&gt; {/* shared Redux store */}
+      &lt;Suspense fallback={&lt;Spinner /&gt;}&gt;
+        &lt;CartMFE /&gt;
+      &lt;/Suspense&gt;
+    &lt;/Provider&gt;
+  );
+}</pre>
+
+      <p><strong>State sharing strategies:</strong></p>
+      <ul>
+        <li><strong>Shared Redux store via Module Federation</strong> — strong coupling, but real-time sync.</li>
+        <li><strong>Custom Events / postMessage</strong> — loose coupling; MFEs broadcast events (<code>window.dispatchEvent(new CustomEvent('cart:updated', { detail }))</code>) and others listen. No shared library needed.</li>
+        <li><strong>URL as shared state</strong> — route params visible to all MFEs loaded on the same page.</li>
+        <li><strong>Shared BFF (Backend for Frontend)</strong> — MFEs independently fetch from the same server, relying on server state as the source of truth. No client-side sharing needed.</li>
+      </ul>
+
+      <p><strong>Framework-agnostic communication (recommended for heterogeneous MFEs):</strong> Use a tiny publish/subscribe event bus exposed on a shared global object (<code>window.__eventBus</code>) or injected via Module Federation. Each MFE subscribes to topics it cares about without knowing about others.</p>
+
+      <p><strong>Routing:</strong> The Shell owns the router. Each MFE receives its base path as a prop and renders its own sub-routes using React Router's <code>basename</code> option.</p>
+
+      <p><strong>Deployment:</strong> Each MFE is deployed independently to its own CDN path. The shell fetches the remote entry URLs from a manifest service so new MFE versions are picked up without redeploying the shell.</p>
+    </div>
+  </div>
+</div>

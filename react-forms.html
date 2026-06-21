@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Forms — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--text:#f1f5f9;--border:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;}
+    .content-section{background:#fff;border-radius:16px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-section{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-redux.html">Redux</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;border:1px solid #61dafb;font-size:.85rem;">Section 10</span>
+      <span class="text-white-50">React Mastery Hub</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.5rem;">React Forms</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;">Controlled forms, uncontrolled refs, React Hook Form, and validation patterns</p>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+
+  <!-- Controlled Forms -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-sliders me-2 text-primary"></i>Controlled Forms</h2>
+    <p class="text-muted mb-3">In controlled forms, React state is the single source of truth for every input. Each change goes through <code>setState</code>, giving you full control for real-time validation and conditional UI.</p>
+    <div class="concept-box blue mb-3">
+      <strong>Key idea:</strong> <code>value={state}</code> + <code>onChange</code> handler — React "owns" the input value.
+    </div>
+    <pre class="code-block"><span class="kw">function</span> <span class="fn">LoginForm</span>() {
+  <span class="kw">const</span> [formData, setFormData] = <span class="fn">useState</span>({ email: <span class="st">''</span>, password: <span class="st">''</span> });
+  <span class="kw">const</span> [errors, setErrors] = <span class="fn">useState</span>({});
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">false</span>);
+
+  <span class="kw">const</span> <span class="fn">validate</span> = () => {
+    <span class="kw">const</span> errs = {};
+    <span class="kw">if</span> (!formData.email.<span class="fn">includes</span>(<span class="st">'@'</span>)) errs.email = <span class="st">'Invalid email'</span>;
+    <span class="kw">if</span> (formData.password.length &lt; 8) errs.password = <span class="st">'Min 8 characters'</span>;
+    <span class="kw">return</span> errs;
+  };
+
+  <span class="kw">const</span> <span class="fn">handleChange</span> = (e) => {
+    <span class="kw">const</span> { name, value } = e.target;
+    <span class="fn">setFormData</span>(prev => ({ ...prev, [name]: value }));
+    <span class="kw">if</span> (errors[name]) <span class="fn">setErrors</span>(prev => ({ ...prev, [name]: <span class="st">''</span> }));
+  };
+
+  <span class="kw">const</span> <span class="fn">handleSubmit</span> = <span class="kw">async</span> (e) => {
+    e.<span class="fn">preventDefault</span>();
+    <span class="kw">const</span> errs = <span class="fn">validate</span>();
+    <span class="kw">if</span> (Object.<span class="fn">keys</span>(errs).length) { <span class="fn">setErrors</span>(errs); <span class="kw">return</span>; }
+    <span class="fn">setLoading</span>(<span class="kw">true</span>);
+    <span class="kw">await</span> <span class="fn">loginAPI</span>(formData);
+    <span class="fn">setLoading</span>(<span class="kw">false</span>);
+  };
+
+  <span class="kw">return</span> (
+    &lt;form <span class="fn">onSubmit</span>={handleSubmit}&gt;
+      &lt;input name=<span class="st">"email"</span> value={formData.email} <span class="fn">onChange</span>={handleChange} /&gt;
+      {errors.email &amp;&amp; &lt;span className=<span class="st">"text-danger"</span>&gt;{errors.email}&lt;/span&gt;}
+      &lt;input name=<span class="st">"password"</span> type=<span class="st">"password"</span> value={formData.password} <span class="fn">onChange</span>={handleChange} /&gt;
+      {errors.password &amp;&amp; &lt;span className=<span class="st">"text-danger"</span>&gt;{errors.password}&lt;/span&gt;}
+      &lt;button type=<span class="st">"submit"</span> disabled={loading}&gt;
+        {loading ? <span class="st">'Logging in...'</span> : <span class="st">'Login'</span>}
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+  </div>
+
+  <!-- Uncontrolled Forms -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-link-45deg me-2 text-success"></i>Uncontrolled Forms with useRef</h2>
+    <p class="text-muted mb-3">Uncontrolled forms let the DOM manage input values. You read them on submit via refs — useful for simple forms, file inputs, or integrating with non-React libraries.</p>
+    <div class="concept-box green mb-3">
+      <strong>When to use:</strong> Quick forms with no real-time validation, file uploads, or third-party DOM integrations.
+    </div>
+    <pre class="code-block"><span class="kw">function</span> <span class="fn">QuickForm</span>() {
+  <span class="kw">const</span> nameRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> emailRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+
+  <span class="kw">const</span> <span class="fn">handleSubmit</span> = (e) => {
+    e.<span class="fn">preventDefault</span>();
+    <span class="kw">const</span> data = {
+      name: nameRef.current.value,
+      email: emailRef.current.value,
+    };
+    console.<span class="fn">log</span>(data);
+  };
+
+  <span class="kw">return</span> (
+    &lt;form <span class="fn">onSubmit</span>={handleSubmit}&gt;
+      &lt;input ref={nameRef} defaultValue=<span class="st">""</span> /&gt;
+      &lt;input ref={emailRef} type=<span class="st">"email"</span> /&gt;
+      &lt;button type=<span class="st">"submit"</span>&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+  </div>
+
+  <!-- React Hook Form -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-lightning-fill me-2 text-warning"></i>React Hook Form</h2>
+    <p class="text-muted mb-3">React Hook Form minimises re-renders by using uncontrolled inputs under the hood while exposing a clean, declarative validation API. It's the performance-first choice for complex forms.</p>
+    <div class="concept-box amber mb-3">
+      <strong>Performance:</strong> RHF only re-renders the field that changed — not the entire form — making it 10-20x faster than fully controlled forms for large forms.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useForm } <span class="kw">from</span> <span class="st">'react-hook-form'</span>;
+
+<span class="kw">function</span> <span class="fn">RegistrationForm</span>() {
+  <span class="kw">const</span> {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    watch,
+    reset
+  } = <span class="fn">useForm</span>();
+
+  <span class="kw">const</span> password = <span class="fn">watch</span>(<span class="st">'password'</span>);
+
+  <span class="kw">const</span> <span class="fn">onSubmit</span> = <span class="kw">async</span> (data) => {
+    <span class="kw">await</span> <span class="fn">registerUser</span>(data);
+    <span class="fn">reset</span>();
+  };
+
+  <span class="kw">return</span> (
+    &lt;form <span class="fn">onSubmit</span>={<span class="fn">handleSubmit</span>(onSubmit)}&gt;
+      &lt;input
+        {...<span class="fn">register</span>(<span class="st">'email'</span>, {
+          required: <span class="st">'Email required'</span>,
+          pattern: { value: /^\S+@\S+$/i, message: <span class="st">'Invalid email'</span> }
+        })}
+      /&gt;
+      {errors.email &amp;&amp; &lt;span&gt;{errors.email.message}&lt;/span&gt;}
+
+      &lt;input
+        type=<span class="st">"password"</span>
+        {...<span class="fn">register</span>(<span class="st">'password'</span>, {
+          required: <span class="kw">true</span>,
+          minLength: { value: 8, message: <span class="st">'Min 8 chars'</span> }
+        })}
+      /&gt;
+
+      &lt;input
+        type=<span class="st">"password"</span>
+        {...<span class="fn">register</span>(<span class="st">'confirmPassword'</span>, {
+          validate: value => value === password || <span class="st">'Passwords must match'</span>
+        })}
+      /&gt;
+
+      &lt;button type=<span class="st">"submit"</span> disabled={isSubmitting}&gt;
+        {isSubmitting ? <span class="st">'Registering...'</span> : <span class="st">'Register'</span>}
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-table me-2 text-info"></i>Form Library Comparison</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Feature</th>
+            <th>Controlled</th>
+            <th>Uncontrolled</th>
+            <th>React Hook Form</th>
+            <th>Formik</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Re-renders</strong></td>
+            <td><span class="badge bg-danger">Every keystroke</span></td>
+            <td><span class="badge bg-success">Only on submit</span></td>
+            <td><span class="badge bg-success">Per-field only</span></td>
+            <td><span class="badge bg-warning text-dark">Many re-renders</span></td>
+          </tr>
+          <tr>
+            <td><strong>Setup complexity</strong></td>
+            <td>Low</td>
+            <td>Very Low</td>
+            <td>Low</td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td><strong>Validation</strong></td>
+            <td>Manual</td>
+            <td>Manual</td>
+            <td>Built-in + Yup/Zod</td>
+            <td>Built-in + Yup</td>
+          </tr>
+          <tr>
+            <td><strong>Bundle size</strong></td>
+            <td>0 KB</td>
+            <td>0 KB</td>
+            <td>~9 KB</td>
+            <td>~15 KB</td>
+          </tr>
+          <tr>
+            <td><strong>Real-time validation</strong></td>
+            <td><i class="bi bi-check-circle-fill text-success"></i> Yes</td>
+            <td><i class="bi bi-x-circle-fill text-danger"></i> No</td>
+            <td><i class="bi bi-check-circle-fill text-success"></i> Yes</td>
+            <td><i class="bi bi-check-circle-fill text-success"></i> Yes</td>
+          </tr>
+          <tr>
+            <td><strong>TypeScript support</strong></td>
+            <td>Manual types</td>
+            <td>Manual types</td>
+            <td><i class="bi bi-check-circle-fill text-success"></i> Excellent</td>
+            <td><i class="bi bi-check-circle-fill text-success"></i> Good</td>
+          </tr>
+          <tr>
+            <td><strong>Best for</strong></td>
+            <td>Simple forms, full control</td>
+            <td>Quick forms, no validation</td>
+            <td>Large / complex forms</td>
+            <td>Wizard forms</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tips & Mistakes -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-lightbulb-fill me-2 text-warning"></i>Tips &amp; Common Mistakes</h2>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="tip-box">
+          <strong><i class="bi bi-check2-circle me-1"></i>Always call e.preventDefault()</strong><br/>
+          Without it, the browser reloads the page on form submit — the most common beginner mistake.
+        </div>
+        <div class="tip-box">
+          <strong><i class="bi bi-check2-circle me-1"></i>Use name attribute on inputs</strong><br/>
+          In controlled forms, <code>name</code> lets a single handler manage all fields: <code>setFormData(prev =&gt; ({...prev, [e.target.name]: e.target.value}))</code>.
+        </div>
+        <div class="tip-box">
+          <strong><i class="bi bi-check2-circle me-1"></i>Validate on blur for better UX</strong><br/>
+          Show errors when the user leaves a field (<code>onBlur</code>), not while they're still typing.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mistake-box">
+          <strong><i class="bi bi-x-circle me-1"></i>Don't set value without onChange</strong><br/>
+          A controlled input with <code>value</code> but no <code>onChange</code> becomes read-only and throws a React warning.
+        </div>
+        <div class="mistake-box">
+          <strong><i class="bi bi-x-circle me-1"></i>Avoid mixing controlled &amp; uncontrolled</strong><br/>
+          Switching an input from controlled to uncontrolled (or vice versa) at runtime causes React warnings and unpredictable behaviour.
+        </div>
+        <div class="mistake-box">
+          <strong><i class="bi bi-x-circle me-1"></i>Don't forget to reset after submit</strong><br/>
+          Failing to clear form state after a successful submission leaves stale data in the form.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the difference between a controlled and an uncontrolled component?</div>
+    <div class="concept-box purple mb-3">
+      A <strong>controlled component</strong> has its value managed by React state — every change flows through <code>setState</code>. An <strong>uncontrolled component</strong> stores its own value in the DOM; you read it via a <code>ref</code> when needed (e.g., on submit).
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Why does React Hook Form outperform Formik for large forms?</div>
+    <div class="concept-box purple mb-3">
+      RHF uses uncontrolled inputs and only triggers a re-render for the specific field that changed. Formik subscribes all fields to a shared Formik state object, causing the entire form to re-render on every keystroke.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you handle cross-field validation (e.g., confirm password)?</div>
+    <div class="concept-box purple mb-3">
+      With RHF, use <code>watch('password')</code> to read the password field value, then pass a <code>validate</code> function to the confirm-password field that compares the two values. With Yup, use <code>.oneOf([Yup.ref('password')])</code>.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>When would you choose uncontrolled inputs over controlled?</div>
+    <div class="concept-box purple mb-3">
+      Uncontrolled inputs are preferred for: file inputs (the browser controls <code>FileList</code>), simple one-off forms with no real-time validation, and integrating with third-party DOM libraries that manipulate the input directly.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you prevent a form from submitting when validation fails?</div>
+    <div class="concept-box purple mb-3">
+      Call <code>e.preventDefault()</code> to suppress the native submit, then run your validation. If errors exist, update error state and <code>return</code> early. With RHF, <code>handleSubmit</code> automatically prevents submission if any registered validation rule fails.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you integrate Zod or Yup schema validation with React Hook Form?</div>
+    <div class="concept-box purple mb-3">
+      Install the corresponding resolver (<code>@hookform/resolvers/zod</code> or <code>/yup</code>) and pass it as the <code>resolver</code> option to <code>useForm</code>: <code>useForm(&#123; resolver: zodResolver(schema) &#125;)</code>. RHF will run the schema against the full form object on submit and on each field change.
+    </div>
+  </div>
+
+</div>
+
+<footer class="py-4 mt-2" style="background:#0f172a;color:#64748b;">
+  <div class="container-xl text-center">
+    <span>React Mastery Hub &mdash; Section 10: Forms</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

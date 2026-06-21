@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>API Integration — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--text:#f1f5f9;--border:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;}
+    .content-section{background:#fff;border-radius:16px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-section{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+    .skeleton{background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-redux.html">Redux</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;border:1px solid #61dafb;font-size:.85rem;">Section 12</span>
+      <span class="text-white-50">React Mastery Hub</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.5rem;">API Integration</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;">Fetch, Axios, React Query, error boundaries, and loading state patterns</p>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+
+  <!-- Fetch with useEffect -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-arrow-down-circle me-2 text-primary"></i>Fetch with useEffect</h2>
+    <p class="text-muted mb-3">The foundational pattern — use <code>useEffect</code> to trigger a fetch when the component mounts. Always include an AbortController to cancel in-flight requests when the component unmounts.</p>
+    <div class="concept-box red mb-3">
+      <strong>Memory leak warning:</strong> Without cleanup, a fetch that resolves after unmount will call <code>setState</code> on an unmounted component. The <code>AbortController</code> prevents this.
+    </div>
+    <pre class="code-block"><span class="kw">function</span> <span class="fn">UsersList</span>() {
+  <span class="kw">const</span> [users, setUsers] = <span class="fn">useState</span>([]);
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);
+  <span class="kw">const</span> [error, setError] = <span class="fn">useState</span>(<span class="kw">null</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> controller = <span class="kw">new</span> <span class="fn">AbortController</span>();
+
+    <span class="fn">fetch</span>(<span class="st">'https://jsonplaceholder.typicode.com/users'</span>, {
+      signal: controller.signal
+    })
+      .<span class="fn">then</span>(res =&gt; {
+        <span class="kw">if</span> (!res.ok) <span class="kw">throw new</span> <span class="fn">Error</span>(`HTTP ${res.status}`);
+        <span class="kw">return</span> res.<span class="fn">json</span>();
+      })
+      .<span class="fn">then</span>(data =&gt; { <span class="fn">setUsers</span>(data); <span class="fn">setLoading</span>(<span class="kw">false</span>); })
+      .<span class="fn">catch</span>(err =&gt; {
+        <span class="kw">if</span> (err.name !== <span class="st">'AbortError'</span>) {
+          <span class="fn">setError</span>(err.message);
+          <span class="fn">setLoading</span>(<span class="kw">false</span>);
+        }
+      });
+
+    <span class="kw">return</span> () =&gt; controller.<span class="fn">abort</span>(); <span class="cm">// cleanup on unmount</span>
+  }, []);
+
+  <span class="kw">if</span> (loading) <span class="kw">return</span> &lt;div&gt;Loading...&lt;/div&gt;;
+  <span class="kw">if</span> (error) <span class="kw">return</span> &lt;div&gt;Error: {error}&lt;/div&gt;;
+  <span class="kw">return</span> &lt;ul&gt;{users.<span class="fn">map</span>(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;;
+}</pre>
+  </div>
+
+  <!-- Axios -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-plug-fill me-2 text-warning"></i>Axios Setup + Interceptors</h2>
+    <p class="text-muted mb-3">Axios interceptors centralise cross-cutting concerns — auth token injection, error handling, and response transformation — so every API call benefits automatically.</p>
+    <pre class="code-block"><span class="cm">// api/axios.js — shared axios instance</span>
+<span class="kw">import</span> axios <span class="kw">from</span> <span class="st">'axios'</span>;
+
+<span class="kw">const</span> api = axios.<span class="fn">create</span>({
+  baseURL: process.env.REACT_APP_API_URL,
+  timeout: 10000,
+  headers: { <span class="st">'Content-Type'</span>: <span class="st">'application/json'</span> },
+});
+
+<span class="cm">// Request interceptor — inject auth token</span>
+api.interceptors.request.<span class="fn">use</span>(config =&gt; {
+  <span class="kw">const</span> token = localStorage.<span class="fn">getItem</span>(<span class="st">'token'</span>);
+  <span class="kw">if</span> (token) config.headers.Authorization = `Bearer ${token}`;
+  <span class="kw">return</span> config;
+});
+
+<span class="cm">// Response interceptor — handle 401 globally</span>
+api.interceptors.response.<span class="fn">use</span>(
+  response =&gt; response.data, <span class="cm">// unwrap .data automatically</span>
+  error =&gt; {
+    <span class="kw">if</span> (error.response?.status === 401) {
+      localStorage.<span class="fn">removeItem</span>(<span class="st">'token'</span>);
+      window.location.href = <span class="st">'/login'</span>;
+    }
+    <span class="kw">return</span> Promise.<span class="fn">reject</span>(error);
+  }
+);
+
+<span class="kw">export default</span> api;</pre>
+  </div>
+
+  <!-- React Query -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-stars me-2 text-success"></i>React Query (TanStack Query) — Modern Standard</h2>
+    <p class="text-muted mb-3">React Query handles loading, error, caching, background refetching, and optimistic updates — eliminating most manual <code>useEffect</code> data-fetching code.</p>
+    <div class="concept-box green mb-3">
+      <strong>Why React Query?</strong> It replaces ~50 lines of manual fetch boilerplate with 3 lines, adds automatic background refetching, cache invalidation, and deduplication of identical requests.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useQuery, useMutation, useQueryClient } <span class="kw">from</span> <span class="st">'@tanstack/react-query'</span>;
+
+<span class="cm">// Read data — handles loading, error, caching, background refetch</span>
+<span class="kw">function</span> <span class="fn">UsersList</span>() {
+  <span class="kw">const</span> { data: users, isLoading, error } = <span class="fn">useQuery</span>({
+    queryKey: [<span class="st">'users'</span>],
+    queryFn: () =&gt; api.<span class="fn">get</span>(<span class="st">'/users'</span>),
+    staleTime: 5 * 60 * 1000, <span class="cm">// 5 minutes before background refetch</span>
+  });
+
+  <span class="kw">if</span> (isLoading) <span class="kw">return</span> &lt;Spinner /&gt;;
+  <span class="kw">if</span> (error) <span class="kw">return</span> &lt;Error message={error.message} /&gt;;
+  <span class="kw">return</span> &lt;UserList users={users} /&gt;;
+}
+
+<span class="cm">// Write data — mutation with automatic cache invalidation</span>
+<span class="kw">function</span> <span class="fn">CreateUser</span>() {
+  <span class="kw">const</span> queryClient = <span class="fn">useQueryClient</span>();
+
+  <span class="kw">const</span> mutation = <span class="fn">useMutation</span>({
+    mutationFn: (newUser) =&gt; api.<span class="fn">post</span>(<span class="st">'/users'</span>, newUser),
+    onSuccess: () =&gt; {
+      queryClient.<span class="fn">invalidateQueries</span>([<span class="st">'users'</span>]); <span class="cm">// refetch list automatically</span>
+    },
+  });
+
+  <span class="kw">return</span> (
+    &lt;button <span class="fn">onClick</span>={() =&gt; mutation.<span class="fn">mutate</span>({ name: <span class="st">'John'</span>, email: <span class="st">'j@email.com'</span> })}&gt;
+      {mutation.isPending ? <span class="st">'Creating...'</span> : <span class="st">'Create User'</span>}
+    &lt;/button&gt;
+  );
+}</pre>
+  </div>
+
+  <!-- Error Boundaries -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-shield-exclamation me-2 text-danger"></i>Error Handling Patterns</h2>
+    <p class="text-muted mb-3">Error Boundaries catch JavaScript errors anywhere in the component tree and display a fallback UI instead of crashing the whole app. They only work with class components or the <code>react-error-boundary</code> library.</p>
+    <pre class="code-block"><span class="cm">// Class-based Error Boundary</span>
+<span class="kw">class</span> <span class="fn">ErrorBoundary</span> <span class="kw">extends</span> React.Component {
+  state = { hasError: <span class="kw">false</span>, error: <span class="kw">null</span> };
+
+  <span class="kw">static</span> <span class="fn">getDerivedStateFromError</span>(error) {
+    <span class="kw">return</span> { hasError: <span class="kw">true</span>, error };
+  }
+
+  <span class="fn">componentDidCatch</span>(error, info) {
+    <span class="fn">logErrorToService</span>(error, info); <span class="cm">// send to Sentry / DataDog</span>
+  }
+
+  <span class="fn">render</span>() {
+    <span class="kw">if</span> (<span class="kw">this</span>.state.hasError) {
+      <span class="kw">return</span> &lt;ErrorFallback
+        error={<span class="kw">this</span>.state.error}
+        reset={() =&gt; <span class="kw">this</span>.<span class="fn">setState</span>({ hasError: <span class="kw">false</span> })}
+      /&gt;;
+    }
+    <span class="kw">return this</span>.props.children;
+  }
+}
+
+<span class="cm">// Modern alternative — react-error-boundary library</span>
+<span class="kw">import</span> { ErrorBoundary } <span class="kw">from</span> <span class="st">'react-error-boundary'</span>;
+
+&lt;ErrorBoundary
+  fallbackRender={({ error, resetErrorBoundary }) =&gt; (
+    &lt;div&gt;
+      &lt;p&gt;Something went wrong: {error.message}&lt;/p&gt;
+      &lt;button <span class="fn">onClick</span>={resetErrorBoundary}&gt;Try again&lt;/button&gt;
+    &lt;/div&gt;
+  )}
+  onError={(error, info) =&gt; <span class="fn">logError</span>(error, info)}
+&gt;
+  &lt;MyComponent /&gt;
+&lt;/ErrorBoundary&gt;</pre>
+  </div>
+
+  <!-- Loading States -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-hourglass-split me-2 text-info"></i>Loading States + Skeleton UI</h2>
+    <p class="text-muted mb-3">Skeleton screens feel faster than spinners because they show the layout structure while data loads — reducing perceived wait time.</p>
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <div class="concept-box blue">
+          <strong>Spinner — for short waits (&lt;1s)</strong>
+          <div class="mt-2 d-flex align-items-center gap-2">
+            <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+            <span>Loading users...</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <strong>Skeleton — for content-heavy pages</strong>
+          <div class="mt-2">
+            <div class="skeleton mb-2" style="height:16px;width:70%;"></div>
+            <div class="skeleton mb-2" style="height:16px;width:90%;"></div>
+            <div class="skeleton" style="height:16px;width:55%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <pre class="code-block"><span class="cm">// Skeleton component pattern</span>
+<span class="kw">function</span> <span class="fn">UserCardSkeleton</span>() {
+  <span class="kw">return</span> (
+    &lt;div className=<span class="st">"card p-3"</span>&gt;
+      &lt;div className=<span class="st">"skeleton mb-2"</span> style={{ height: <span class="st">'20px'</span>, width: <span class="st">'60%'</span> }} /&gt;
+      &lt;div className=<span class="st">"skeleton mb-2"</span> style={{ height: <span class="st">'14px'</span>, width: <span class="st">'80%'</span> }} /&gt;
+      &lt;div className=<span class="st">"skeleton"</span> style={{ height: <span class="st">'14px'</span>, width: <span class="st">'40%'</span> }} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+<span class="kw">function</span> <span class="fn">UserPage</span>() {
+  <span class="kw">const</span> { data, isLoading } = <span class="fn">useQuery</span>({ queryKey: [<span class="st">'users'</span>], queryFn: <span class="fn">fetchUsers</span> });
+
+  <span class="kw">if</span> (isLoading) {
+    <span class="kw">return</span> (
+      &lt;div className=<span class="st">"row g-3"</span>&gt;
+        {[...Array(6)].<span class="fn">map</span>((_, i) =&gt; &lt;UserCardSkeleton key={i} /&gt;)}
+      &lt;/div&gt;
+    );
+  }
+
+  <span class="kw">return</span> &lt;UserGrid users={data} /&gt;;
+}</pre>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Why do you need to return a cleanup function from useEffect when fetching data?</div>
+    <div class="concept-box purple mb-3">
+      Without cleanup, if the component unmounts while a fetch is in flight, the <code>.then()</code> callback will still execute and call <code>setState</code> on an unmounted component — causing a memory leak warning. Returning <code>() =&gt; controller.abort()</code> cancels the pending request on unmount.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What does staleTime do in React Query?</div>
+    <div class="concept-box purple mb-3">
+      <code>staleTime</code> defines how long (in ms) cached data is considered "fresh." During this window, React Query serves the cache without a background refetch. After it expires, data becomes "stale" and will be refetched in the background on next access. Default is 0 (always stale).
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the difference between Error Boundaries and try/catch?</div>
+    <div class="concept-box purple mb-3">
+      <code>try/catch</code> handles errors in imperative code (event handlers, async functions). Error Boundaries catch errors that occur during rendering, in lifecycle methods, and in constructors of the whole child tree — which <code>try/catch</code> cannot do. They complement each other: use both.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do Axios interceptors differ from writing wrapper functions?</div>
+    <div class="concept-box purple mb-3">
+      Interceptors run automatically for every request/response through the Axios instance — you write the logic once and it applies globally. Wrapper functions require every caller to remember to call them. Interceptors also have access to request config and can modify or cancel requests before they're sent.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>When should you use React Query vs useEffect for data fetching?</div>
+    <div class="concept-box purple mb-3">
+      Use React Query for any server state — data that lives on a server and needs to be synchronised. Use <code>useEffect</code> only for simple, one-off fetches in small apps or when adding React Query is overhead. React Query's caching, deduplication, background refetch, and mutation support make it the better default for production apps.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does React Query handle cache invalidation after a mutation?</div>
+    <div class="concept-box purple mb-3">
+      In the <code>onSuccess</code> callback of <code>useMutation</code>, call <code>queryClient.invalidateQueries(['key'])</code>. This marks the cached data as stale and triggers a background refetch for any active subscribers of that query key, keeping the UI in sync without a manual page refresh.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is optimistic updating and how do you implement it?</div>
+    <div class="concept-box purple mb-3">
+      Optimistic updating immediately updates the UI as if the mutation succeeded, then rolls back if the server returns an error. In React Query, use <code>onMutate</code> to update the cache before the request, save the previous value as a snapshot, and use <code>onError</code> to roll back to the snapshot with <code>queryClient.setQueryData</code>.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Why are skeleton screens better than spinners for perceived performance?</div>
+    <div class="concept-box purple mb-3">
+      Skeleton screens give users an immediate visual representation of the content's structure, reducing uncertainty and perceived wait time. A blank screen with a spinner gives no indication of what will appear — the brain registers more "waiting." Skeletons also prevent layout shift when real content loads.
+    </div>
+  </div>
+
+</div>
+
+<footer class="py-4 mt-2" style="background:#0f172a;color:#64748b;">
+  <div class="container-xl text-center">
+    <span>React Mastery Hub &mdash; Section 12: API Integration</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

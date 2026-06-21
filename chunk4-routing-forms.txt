@@ -1,0 +1,1534 @@
+<div class="tab-pane fade" id="tab-routing" role="tabpanel">
+  <div class="accordion" id="acc-routing">
+
+    <!-- routing-q1 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q1">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q1" aria-expanded="false" aria-controls="routing-q1">
+          <span class="badge bg-success me-2">Easy</span> 1. What is React Router?
+        </button>
+      </h2>
+      <div id="routing-q1" class="accordion-collapse collapse" aria-labelledby="heading-routing-q1" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>React Router is the standard routing library for React applications, enabling client-side navigation without full page reloads. It maps URL paths to React components, so different URLs display different components while keeping the page alive. React Router v6 is the current major version, introducing a redesigned API with simpler nested routing, improved relative paths, data loading (loaders/actions), and the <code>createBrowserRouter</code> data router API. It uses the browser's History API to manipulate the URL and listen for navigation events. React Router is maintained by the Remix team and is the foundation for the Remix full-stack framework.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q2 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q2">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q2" aria-expanded="false" aria-controls="routing-q2">
+          <span class="badge bg-success me-2">Easy</span> 2. What is the difference between BrowserRouter and HashRouter?
+        </button>
+      </h2>
+      <div id="routing-q2" class="accordion-collapse collapse" aria-labelledby="heading-routing-q2" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>BrowserRouter</code> uses the HTML5 History API (<code>pushState</code>, <code>replaceState</code>, <code>popstate</code> event) to create clean URLs like <code>/users/profile</code>. <code>HashRouter</code> uses the URL hash fragment (the <code>#</code> part) to create URLs like <code>/#/users/profile</code>. BrowserRouter produces cleaner, more professional-looking URLs and is the standard choice for modern web apps. HashRouter is useful when you cannot configure the server to serve the app from arbitrary paths — since the hash is never sent to the server, all hash-based routes work without server configuration. For production apps deployed to a server that can be configured for SPA routing (redirecting all paths to index.html), always prefer BrowserRouter.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q3 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q3">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q3" aria-expanded="false" aria-controls="routing-q3">
+          <span class="badge bg-success me-2">Easy</span> 3. What is a Route in React Router v6?
+        </button>
+      </h2>
+      <div id="routing-q3" class="accordion-collapse collapse" aria-labelledby="heading-routing-q3" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>A <code>Route</code> is a React Router component that renders its element when its <code>path</code> matches the current URL. In React Router v6, routes are declared as JSX using <code>&lt;Route path="..." element={&lt;Component /&gt;} /&gt;</code> inside a <code>&lt;Routes&gt;</code> container. The <code>Routes</code> component always renders only the best matching route (unlike v5's <code>Switch</code>). Routes can be nested to create hierarchical URL structures. Route paths support dynamic segments (<code>:paramName</code>), optional segments, wildcards (<code>*</code>), and index routes. Routes can also have <code>loader</code> and <code>action</code> functions (data router API, v6.4+) for co-locating data fetching with routing.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q4 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q4">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q4" aria-expanded="false" aria-controls="routing-q4">
+          <span class="badge bg-success me-2">Easy</span> 4. What is the Link component?
+        </button>
+      </h2>
+      <div id="routing-q4" class="accordion-collapse collapse" aria-labelledby="heading-routing-q4" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>Link</code> is React Router's navigation component that renders an accessible <code>&lt;a&gt;</code> tag but handles clicks to trigger client-side navigation (using <code>history.pushState</code>) instead of a full page reload. Using <code>&lt;Link to="/path"&gt;</code> instead of <code>&lt;a href="/path"&gt;</code> is essential for SPA navigation — anchor tags cause a full page reload, destroying React state. <code>NavLink</code> is a specialized version of Link that adds an <code>active</code> class (or custom styling) when its <code>to</code> path matches the current URL, useful for navigation menus. Both Link and NavLink accept relative paths (resolved from the current route) and absolute paths (starting with <code>/</code>).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q5 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q5">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q5" aria-expanded="false" aria-controls="routing-q5">
+          <span class="badge bg-success me-2">Easy</span> 5. What is useNavigate?
+        </button>
+      </h2>
+      <div id="routing-q5" class="accordion-collapse collapse" aria-labelledby="heading-routing-q5" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>useNavigate()</code> returns a function that programmatically navigates to a different route — the hook-based replacement for v5's <code>useHistory</code>. The navigate function accepts a path string or a delta number (e.g., <code>navigate(-1)</code> for back, <code>navigate(1)</code> for forward). You can also pass an options object with <code>{ replace: true }</code> to replace the current history entry instead of pushing a new one, and <code>{ state: {...} }</code> to pass state to the destination route. <code>useNavigate</code> is used for programmatic navigation after async operations (e.g., navigate to <code>/dashboard</code> after a successful login), form submissions, and conditional redirects.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q6 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q6">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q6" aria-expanded="false" aria-controls="routing-q6">
+          <span class="badge bg-success me-2">Easy</span> 6. What is useParams?
+        </button>
+      </h2>
+      <div id="routing-q6" class="accordion-collapse collapse" aria-labelledby="heading-routing-q6" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>useParams()</code> returns an object of key/value pairs of the dynamic route parameters from the current URL. If a route is defined as <code>path="/users/:userId/posts/:postId"</code> and the current URL is <code>/users/42/posts/7</code>, then <code>useParams()</code> returns <code>{ userId: '42', postId: '7' }</code>. Note that all parameter values are strings — parse them to numbers if needed. <code>useParams</code> is used inside components that are rendered by a route with dynamic segments. It must be called inside a component that is a descendant of the matching Route; calling it outside the router or in a component that is not a route descendant returns an empty object.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q7 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q7">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q7" aria-expanded="false" aria-controls="routing-q7">
+          <span class="badge bg-success me-2">Easy</span> 7. What is useSearchParams?
+        </button>
+      </h2>
+      <div id="routing-q7" class="accordion-collapse collapse" aria-labelledby="heading-routing-q7" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>useSearchParams()</code> returns a pair <code>[searchParams, setSearchParams]</code> similar to useState, for reading and updating the URL query string. <code>searchParams</code> is a <code>URLSearchParams</code> instance with methods like <code>.get('key')</code>, <code>.getAll('key')</code>, <code>.has('key')</code>. <code>setSearchParams</code> updates the query string, either replacing it entirely or merging with the current params. URL query parameters are ideal for pagination, filters, and sort state that should be shareable via URL. Unlike useState, query params persist across page refreshes and can be bookmarked or shared. Use them for any UI state that users might want to bookmark or share.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q8 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q8">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q8" aria-expanded="false" aria-controls="routing-q8">
+          <span class="badge bg-success me-2">Easy</span> 8. What is useLocation?
+        </button>
+      </h2>
+      <div id="routing-q8" class="accordion-collapse collapse" aria-labelledby="heading-routing-q8" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>useLocation()</code> returns the current location object containing <code>{ pathname, search, hash, state, key }</code>. <code>pathname</code> is the URL path (e.g., <code>/users/42</code>), <code>search</code> is the query string (e.g., <code>?tab=profile</code>), <code>hash</code> is the fragment (e.g., <code>#section1</code>), and <code>state</code> is navigation state passed via <code>navigate('/path', { state: {...} })</code> or <code>&lt;Link state={...}&gt;</code>. <code>useLocation</code> is useful for detecting route changes (in useEffect dependencies), reading navigation state passed from a previous route, implementing analytics page view tracking, and animating route transitions by comparing previous and current paths.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q9 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q9">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q9" aria-expanded="false" aria-controls="routing-q9">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 9. What are nested routes in React Router v6?
+        </button>
+      </h2>
+      <div id="routing-q9" class="accordion-collapse collapse" aria-labelledby="heading-routing-q9" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>Nested routes allow child routes to render within a parent route's layout, creating hierarchical URL structures where the parent's UI persists while only the child content changes. In React Router v6, you nest routes by placing <code>&lt;Route&gt;</code> elements inside other <code>&lt;Route&gt;</code> elements in your route config. The parent route renders an <code>&lt;Outlet&gt;</code> component that acts as a placeholder where the matching child route's element renders. For example, <code>/dashboard</code> renders <code>DashboardLayout</code> with an <code>&lt;Outlet&gt;</code>, and <code>/dashboard/users</code> renders <code>UserList</code> inside that layout. This eliminates the need for route-level layout HOCs and makes the relationship between routes and layouts explicit in the route config.</p>
+<pre class="code-block">// Route configuration with nesting
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+
+function AppLayout() {
+  return (
+    &lt;div&gt;
+      &lt;Header /&gt;
+      &lt;Outlet /&gt; {/* child route renders here */}
+      &lt;Footer /&gt;
+    &lt;/div&gt;
+  );
+}
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: &lt;AppLayout /&gt;,
+    children: [
+      { index: true, element: &lt;Home /&gt; },
+      {
+        path: 'users',
+        element: &lt;UsersLayout /&gt;,
+        children: [
+          { index: true, element: &lt;UserList /&gt; },
+          { path: ':userId', element: &lt;UserDetail /&gt; },
+        ],
+      },
+    ],
+  },
+]);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q10 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q10">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q10" aria-expanded="false" aria-controls="routing-q10">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 10. What is the Outlet component?
+        </button>
+      </h2>
+      <div id="routing-q10" class="accordion-collapse collapse" aria-labelledby="heading-routing-q10" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>&lt;Outlet&gt;</code> is a React Router v6 component that renders the matching child route's element within the parent route's component. It is the mechanism that makes nested routes work — the parent route component places <code>&lt;Outlet&gt;</code> exactly where it wants child route content to appear. The parent route's surrounding UI (navigation, sidebar, header) persists across child route changes; only the Outlet's content changes. You can also pass a <code>context</code> prop to <code>&lt;Outlet&gt;</code> and access it in child routes using the <code>useOutletContext</code> hook — a lightweight way to share data from parent routes to child routes without prop drilling or Context.</p>
+<pre class="code-block">function DashboardLayout() {
+  const [user] = React.useState(getCurrentUser());
+  return (
+    &lt;div className="dashboard"&gt;
+      &lt;aside&gt;&lt;DashboardSidebar /&gt;&lt;/aside&gt;
+      &lt;main&gt;
+        {/* Child route renders here; DashboardSidebar persists */}
+        &lt;Outlet context={{ user }} /&gt;
+      &lt;/main&gt;
+    &lt;/div&gt;
+  );
+}
+
+function UserSettings() {
+  const { user } = useOutletContext(); // access parent's context
+  return &lt;div&gt;Settings for {user.name}&lt;/div&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q11 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q11">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q11" aria-expanded="false" aria-controls="routing-q11">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 11. What is a layout route?
+        </button>
+      </h2>
+      <div id="routing-q11" class="accordion-collapse collapse" aria-labelledby="heading-routing-q11" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>A layout route is a route that exists solely to wrap its children in a shared layout (header, sidebar, footer) without being associated with any specific URL path segment. In React Router v6, a layout route has no <code>path</code> prop (or uses <code>path="/"</code> at the root level) and its <code>element</code> contains the layout component with an <code>&lt;Outlet&gt;</code>. All child routes inherit the layout without modifying the URL. Layout routes allow you to group routes that share a visual shell — for example, all authenticated routes might be wrapped in an <code>AuthenticatedLayout</code>, and all admin routes in an <code>AdminLayout</code>, each handling their own access control, without duplicating those concerns in each individual route's component.</p>
+<pre class="code-block">const router = createBrowserRouter([
+  {
+    // Layout route: no path, just provides the shell
+    element: &lt;AuthenticatedLayout /&gt;,
+    loader: requireAuth,  // redirect if not logged in
+    children: [
+      { path: '/dashboard', element: &lt;Dashboard /&gt; },
+      { path: '/profile', element: &lt;Profile /&gt; },
+      { path: '/settings', element: &lt;Settings /&gt; },
+    ],
+  },
+  { path: '/login', element: &lt;Login /&gt; },
+]);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q12 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q12">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q12" aria-expanded="false" aria-controls="routing-q12">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 12. What is an index route?
+        </button>
+      </h2>
+      <div id="routing-q12" class="accordion-collapse collapse" aria-labelledby="heading-routing-q12" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>An index route is a child route with <code>index: true</code> (or <code>&lt;Route index&gt;</code>) that renders when the parent route's URL matches exactly — it is the "default" child. Without an index route, the parent's <code>&lt;Outlet&gt;</code> would render nothing when the URL matches the parent exactly. For example, if the parent is <code>path="/dashboard"</code>, the index route renders at exactly <code>/dashboard</code>; navigating to <code>/dashboard/settings</code> renders the <code>settings</code> child instead. Index routes allow you to show a default view (like a welcome message or summary) when no specific child route is selected, rather than an empty Outlet. They are commonly used for tabs, sections, and default landing pages within a nested route structure.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q13 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q13">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q13" aria-expanded="false" aria-controls="routing-q13">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 13. How do you implement protected routes?
+        </button>
+      </h2>
+      <div id="routing-q13" class="accordion-collapse collapse" aria-labelledby="heading-routing-q13" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>Protected routes redirect unauthenticated users to the login page before allowing access. In React Router v6, the cleanest approach uses a layout route with an authentication check: create a component that checks auth state (from Context, Redux, or a hook) and either renders <code>&lt;Outlet&gt;</code> (authenticated) or <code>&lt;Navigate to="/login" replace&gt;</code> (not authenticated). Alternatively, use the <code>loader</code> function in the data router API — the loader runs before rendering and can redirect. The <code>replace</code> option in Navigate replaces the login URL in history so the user can't navigate "back" to the protected page after logging out.</p>
+<pre class="code-block">// Layout route approach
+function RequireAuth() {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) return &lt;FullPageSpinner /&gt;;
+  if (!user) {
+    // Save the intended destination and redirect to login
+    return &lt;Navigate to="/login" state={{ from: location }} replace /&gt;;
+  }
+  return &lt;Outlet /&gt;;
+}
+
+// After login, redirect back to intended destination
+function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname ?? '/dashboard';
+
+  const handleLogin = async (credentials) =&gt; {
+    await loginAPI(credentials);
+    navigate(from, { replace: true });
+  };
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q14 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q14">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q14" aria-expanded="false" aria-controls="routing-q14">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 14. How do you implement lazy loading with React Router?
+        </button>
+      </h2>
+      <div id="routing-q14" class="accordion-collapse collapse" aria-labelledby="heading-routing-q14" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>Lazy loading with React Router uses <code>React.lazy()</code> for component lazy loading and <code>Suspense</code> for the loading state. Wrap the lazy-loaded route element in a Suspense boundary — often placed around the <code>&lt;Routes&gt;</code> container. With React Router v6.4's data router API, each route can also have a lazy <code>loader</code> function or the route config itself can use dynamic imports in the <code>lazy</code> property, which loads the component and its loader together when the route is first navigated to. Using route-level code splitting means each page's JavaScript is only loaded when the user navigates to it, significantly reducing the initial bundle.</p>
+<pre class="code-block">import { lazy, Suspense } from 'react';
+import { createBrowserRouter } from 'react-router-dom';
+
+// Option 1: React.lazy with Suspense
+const Dashboard = lazy(() =&gt; import('./pages/Dashboard'));
+const Settings = lazy(() =&gt; import('./pages/Settings'));
+
+// Option 2: React Router v6.4 lazy route property (loads component + loader together)
+const router = createBrowserRouter([
+  {
+    path: '/dashboard',
+    lazy: async () =&gt; {
+      const { DashboardPage, loader } = await import('./pages/Dashboard');
+      return { Component: DashboardPage, loader };
+    },
+  },
+]);
+
+// Option 1 usage with Suspense wrapper
+&lt;Suspense fallback={&lt;PageSpinner /&gt;}&gt;
+  &lt;Routes&gt;
+    &lt;Route path="/dashboard" element={&lt;Dashboard /&gt;} /&gt;
+    &lt;Route path="/settings" element={&lt;Settings /&gt;} /&gt;
+  &lt;/Routes&gt;
+&lt;/Suspense&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q15 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q15">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q15" aria-expanded="false" aria-controls="routing-q15">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 15. What is the Navigate component?
+        </button>
+      </h2>
+      <div id="routing-q15" class="accordion-collapse collapse" aria-labelledby="heading-routing-q15" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>&lt;Navigate to="path"&gt;</code> is a component that triggers a redirect when rendered. It is the declarative way to redirect in JSX — you render it conditionally and when it renders, React Router performs the navigation. It is the v6 replacement for v5's <code>&lt;Redirect&gt;</code>. The <code>to</code> prop accepts a path string, an object <code>{ pathname, search, hash, state }</code>, or a delta number. The <code>replace</code> prop (boolean) controls whether to replace the current history entry (preventing back navigation to the redirected route). Navigate is typically used in conditional rendering: <code>if (!user) return &lt;Navigate to="/login" replace /&gt;</code>. For programmatic navigation (inside event handlers or effects), use the <code>useNavigate</code> hook instead.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q16 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q16">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q16" aria-expanded="false" aria-controls="routing-q16">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 16. What are route loaders in React Router v6.4+?
+        </button>
+      </h2>
+      <div id="routing-q16" class="accordion-collapse collapse" aria-labelledby="heading-routing-q16" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>Route loaders are functions attached to routes via the <code>loader</code> property that fetch data for the route before it renders. When a user navigates to a route, React Router calls the route's loader function first and awaits its result. The component then receives this data via <code>useLoaderData()</code> hook without needing a useEffect-based fetch. This eliminates the "fetch-on-render" waterfall (where a component renders, then fetches, then shows data) by moving data fetching to the navigation phase — React Router starts the fetch as soon as navigation begins, in parallel with loading the JavaScript bundle. Loaders can also return <code>redirect()</code> responses to perform conditional redirects based on data (e.g., redirecting to onboarding if the user has no profile).</p>
+<pre class="code-block">import { createBrowserRouter, useLoaderData, redirect } from 'react-router-dom';
+
+// Loader: runs before the component renders
+async function userLoader({ params }) {
+  const user = await fetchUser(params.userId);
+  if (!user) throw new Response('Not Found', { status: 404 });
+  return user; // returned value is available via useLoaderData()
+}
+
+function UserProfile() {
+  const user = useLoaderData(); // data from loader — no loading state needed!
+  return &lt;div&gt;{user.name}&lt;/div&gt;;
+}
+
+const router = createBrowserRouter([
+  { path: '/users/:userId', element: &lt;UserProfile /&gt;, loader: userLoader },
+]);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q17 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q17">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q17" aria-expanded="false" aria-controls="routing-q17">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 17. What are route actions in React Router v6.4+?
+        </button>
+      </h2>
+      <div id="routing-q17" class="accordion-collapse collapse" aria-labelledby="heading-routing-q17" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>Route actions are functions attached to routes via the <code>action</code> property that handle form submissions and data mutations. When a <code>&lt;Form method="post"&gt;</code> (React Router's Form component) is submitted, React Router calls the current route's action function with the form data. The action receives <code>{ request, params }</code> — <code>request</code> is a standard web <code>Request</code> object with the form data accessible via <code>request.formData()</code>. After the action completes, React Router automatically revalidates all active loaders to refresh data. Actions can return data (accessible via <code>useActionData()</code>) or <code>redirect()</code> responses. This pattern (forms &rarr; actions &rarr; loader revalidation) is the full-stack web model popularized by Remix, enabling progressively enhanced forms.</p>
+<pre class="code-block">import { Form, useActionData, redirect } from 'react-router-dom';
+
+async function createUserAction({ request }) {
+  const formData = await request.formData();
+  const name = formData.get('name');
+  const email = formData.get('email');
+
+  try {
+    await createUser({ name, email });
+    return redirect('/users'); // revalidates all loaders automatically
+  } catch (error) {
+    return { error: error.message }; // returned to component via useActionData
+  }
+}
+
+function CreateUserForm() {
+  const actionData = useActionData();
+  return (
+    &lt;Form method="post"&gt;
+      &lt;input name="name" /&gt;
+      &lt;input name="email" type="email" /&gt;
+      {actionData?.error &amp;&amp; &lt;p&gt;{actionData.error}&lt;/p&gt;}
+      &lt;button type="submit"&gt;Create User&lt;/button&gt;
+    &lt;/Form&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q18 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q18">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q18" aria-expanded="false" aria-controls="routing-q18">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 18. What is the useLoaderData hook?
+        </button>
+      </h2>
+      <div id="routing-q18" class="accordion-collapse collapse" aria-labelledby="heading-routing-q18" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>useLoaderData()</code> returns the data returned by the current route's <code>loader</code> function. It is only available in components rendered by routes that have a <code>loader</code> property in the data router configuration (created with <code>createBrowserRouter</code> or <code>createMemoryRouter</code>). The data is available synchronously — no loading states needed because React Router waits for the loader to complete before rendering the route component. If the loader threw or returned an error response, the route's <code>errorElement</code> renders instead. The type of <code>useLoaderData</code> in TypeScript can be annotated with the loader's return type: <code>const data = useLoaderData() as Awaited&lt;ReturnType&lt;typeof myLoader&gt;&gt;</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q19 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q19">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q19" aria-expanded="false" aria-controls="routing-q19">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 19. What is error handling in React Router v6?
+        </button>
+      </h2>
+      <div id="routing-q19" class="accordion-collapse collapse" aria-labelledby="heading-routing-q19" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>React Router v6 has two layers of error handling: the <code>errorElement</code> on routes catches errors thrown by loaders, actions, and rendering within that route; React Error Boundaries catch JavaScript errors during rendering. The <code>errorElement</code> component uses <code>useRouteError()</code> to access the thrown error or Response object. If a loader throws <code>new Response('Not Found', { status: 404 })</code>, the errorElement receives a Response and can display a 404 page. If a route throws during render, the nearest ancestor route with an <code>errorElement</code> catches it. This provides granular error handling — a broken widget shows its own error UI without affecting the rest of the page.</p>
+<pre class="code-block">import { useRouteError, isRouteErrorResponse } from 'react-router-dom';
+
+function ErrorPage() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    // HTTP error from a loader/action: Response with status
+    return (
+      &lt;div&gt;
+        &lt;h1&gt;{error.status} {error.statusText}&lt;/h1&gt;
+        &lt;p&gt;{error.data}&lt;/p&gt;
+      &lt;/div&gt;
+    );
+  }
+  // JavaScript error thrown during render
+  return &lt;div&gt;Unexpected error: {error?.message}&lt;/div&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q20 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q20">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q20" aria-expanded="false" aria-controls="routing-q20">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 20. What is the errorElement in route config?
+        </button>
+      </h2>
+      <div id="routing-q20" class="accordion-collapse collapse" aria-labelledby="heading-routing-q20" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>The <code>errorElement</code> property in a route configuration specifies the React element to render when the route's loader throws, the route's action throws, or the route component throws during rendering. It is the data-router equivalent of an error boundary, but integrated with React Router's routing and data loading lifecycle. Each route can have its own <code>errorElement</code>, providing granular error UIs. If a route has no <code>errorElement</code>, the error bubbles up to the nearest ancestor route that has one. The root route typically has a catch-all <code>errorElement</code> that handles any unhandled errors anywhere in the route tree. Inside the error element, <code>useRouteError()</code> provides access to the thrown error.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q21 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q21">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q21" aria-expanded="false" aria-controls="routing-q21">
+          <span class="badge bg-danger me-2">Hard</span> 21. How does client-side routing work under the hood?
+        </button>
+      </h2>
+      <div id="routing-q21" class="accordion-collapse collapse" aria-labelledby="heading-routing-q21" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>Client-side routing intercepts navigation events and updates the URL without triggering a full page reload. When a user clicks a <code>&lt;Link&gt;</code>, React Router calls <code>event.preventDefault()</code> to stop the browser's default navigation, then calls <code>history.pushState(null, '', path)</code> to update the URL bar without reloading. The router's internal listener detects this state change via a custom history library (the <code>history</code> package) and updates its internal <code>location</code> state. React re-renders the component tree with the new location, and <code>&lt;Routes&gt;</code> matches the new path to its route configuration, rendering the appropriate component. For browser back/forward navigation, the <code>popstate</code> event fires, the history library detects it, and the router updates accordingly. The key insight: all navigation is just state management — the URL is state, and route components are derived from that state.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q22 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q22">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q22" aria-expanded="false" aria-controls="routing-q22">
+          <span class="badge bg-danger me-2">Hard</span> 22. What is the History API and how does React Router use it?
+        </button>
+      </h2>
+      <div id="routing-q22" class="accordion-collapse collapse" aria-labelledby="heading-routing-q22" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>The browser History API provides <code>history.pushState(state, title, url)</code> (add entry without reload), <code>history.replaceState(state, title, url)</code> (replace current entry without reload), and the <code>popstate</code> event (fires on back/forward navigation). React Router wraps this API in its <code>history</code> library to provide a consistent interface for BrowserRouter, HashRouter, and MemoryRouter. When you call <code>navigate('/path')</code>, React Router calls <code>history.pushState</code>. When you call <code>navigate('/path', { replace: true })</code>, it calls <code>history.replaceState</code>. <code>BrowserRouter</code> uses <code>pushState</code>/<code>replaceState</code>; <code>HashRouter</code> uses <code>location.hash</code> changes; <code>MemoryRouter</code> maintains an in-memory array (for testing or non-browser environments like React Native). The router subscribes to history changes and updates its internal state, causing re-renders.</p>
+<pre class="code-block">// What React Router does internally (simplified)
+function createBrowserHistory() {
+  let listeners = [];
+  const history = {
+    push(to) {
+      window.history.pushState({ key: createKey() }, '', to);
+      notifyListeners();
+    },
+    replace(to) {
+      window.history.replaceState({ key: createKey() }, '', to);
+      notifyListeners();
+    },
+    listen(fn) { listeners.push(fn); return () =&gt; { listeners = listeners.filter(l =&gt; l !== fn); }; },
+  };
+  window.addEventListener('popstate', notifyListeners); // back/forward buttons
+  return history;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q23 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q23">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q23" aria-expanded="false" aria-controls="routing-q23">
+          <span class="badge bg-danger me-2">Hard</span> 23. How do you implement breadcrumbs with React Router?
+        </button>
+      </h2>
+      <div id="routing-q23" class="accordion-collapse collapse" aria-labelledby="heading-routing-q23" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>Breadcrumbs display the navigation path from the root to the current page. With React Router v6, use <code>useMatches()</code> (data router) which returns all currently matched routes with their data. Each route can export a <code>handle</code> object with breadcrumb information: <code>handle: { crumb: 'Users' }</code> or <code>handle: { crumb: ({ data }) =&gt; data.user.name }</code>. Then build the breadcrumb component by mapping over the matched routes and calling their <code>handle.crumb</code> function. Without data router, use <code>useLocation</code> and parse the pathname into segments, mapping each to a route's display name from a route configuration object.</p>
+<pre class="code-block">// Route configuration with breadcrumb handles
+const router = createBrowserRouter([
+  { path: '/', handle: { crumb: () =&gt; &lt;Link to="/"&gt;Home&lt;/Link&gt; },
+    children: [
+      { path: 'users', handle: { crumb: () =&gt; &lt;Link to="/users"&gt;Users&lt;/Link&gt; },
+        children: [
+          { path: ':userId', handle: { crumb: ({ data }) =&gt; data.user.name },
+            loader: userLoader, element: &lt;UserDetail /&gt; },
+        ],
+      },
+    ],
+  },
+]);
+
+function Breadcrumbs() {
+  const matches = useMatches();
+  const crumbs = matches
+    .filter(m =&gt; m.handle?.crumb)
+    .map(m =&gt; m.handle.crumb(m));
+
+  return (
+    &lt;nav aria-label="breadcrumb"&gt;
+      {crumbs.map((crumb, i) =&gt; &lt;span key={i}&gt;{i &gt; 0 &amp;&amp; ' &gt; '}{crumb}&lt;/span&gt;)}
+    &lt;/nav&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q24 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q24">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q24" aria-expanded="false" aria-controls="routing-q24">
+          <span class="badge bg-danger me-2">Hard</span> 24. How do you animate route transitions?
+        </button>
+      </h2>
+      <div id="routing-q24" class="accordion-collapse collapse" aria-labelledby="heading-routing-q24" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>Animating route transitions requires detecting the current and previous routes and applying enter/exit animations. The standard approach uses <code>framer-motion</code>'s <code>AnimatePresence</code> component which tracks when components mount/unmount and plays exit animations before the component is removed. The key challenge: React Router unmounts the old route component immediately when the route changes; <code>AnimatePresence</code> solves this by delaying unmount until the exit animation completes. Wrap Routes in <code>AnimatePresence</code> with <code>mode="wait"</code> (unmount old before mounting new) or <code>mode="sync"</code> (both animate simultaneously). Each route component wraps its content in a <code>motion.div</code> with <code>initial</code>, <code>animate</code>, and <code>exit</code> animation properties.</p>
+<pre class="code-block">import { AnimatePresence, motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
+
+const pageVariants = {
+  initial: { opacity: 0, x: -20 },
+  in: { opacity: 1, x: 0 },
+  out: { opacity: 0, x: 20 },
+};
+
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    &lt;AnimatePresence mode="wait"&gt;
+      {/* key forces remount on route change, enabling exit animation */}
+      &lt;Routes location={location} key={location.pathname}&gt;
+        &lt;Route path="/home" element={
+          &lt;motion.div variants={pageVariants} initial="initial" animate="in" exit="out"
+            transition={{ duration: 0.3 }}&gt;
+            &lt;HomePage /&gt;
+          &lt;/motion.div&gt;
+        } /&gt;
+      &lt;/Routes&gt;
+    &lt;/AnimatePresence&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q25 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q25">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q25" aria-expanded="false" aria-controls="routing-q25">
+          <span class="badge bg-danger me-2">Hard</span> 25. How do you handle 404 routes in React Router v6?
+        </button>
+      </h2>
+      <div id="routing-q25" class="accordion-collapse collapse" aria-labelledby="heading-routing-q25" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>In React Router v6, a wildcard route <code>path="*"</code> catches all unmatched paths and renders a 404 component. It should be placed last within its <code>&lt;Routes&gt;</code> container since React Router v6 uses best-match ranking (not order). For nested routing, a <code>path="*"</code> at a deeply nested level catches paths that start with the parent but don't match any children. With the data router API, you can also throw a 404 Response from a loader when a resource is not found — <code>throw new Response('Not Found', { status: 404 })</code> — and handle it in the route's <code>errorElement</code>. This co-locates the 404 logic with the data that determines whether something exists.</p>
+<pre class="code-block">// Simple wildcard 404
+&lt;Routes&gt;
+  &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
+  &lt;Route path="/users" element={&lt;Users /&gt;} /&gt;
+  &lt;Route path="*" element={&lt;NotFound /&gt;} /&gt; {/* catches everything else */}
+&lt;/Routes&gt;
+
+// Data router: 404 from loader
+async function userLoader({ params }) {
+  const user = await fetchUser(params.userId);
+  if (!user) {
+    throw new Response('User not found', { status: 404 });
+  }
+  return user;
+}
+
+// The route's errorElement handles it
+function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error) &amp;&amp; error.status === 404) {
+    return &lt;NotFoundPage /&gt;;
+  }
+  throw error; // re-throw other errors
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q26 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q26">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q26" aria-expanded="false" aria-controls="routing-q26">
+          <span class="badge bg-danger me-2">Hard</span> 26. What is the difference between relative and absolute paths in React Router v6?
+        </button>
+      </h2>
+      <div id="routing-q26" class="accordion-collapse collapse" aria-labelledby="heading-routing-q26" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>In React Router v6, paths starting with <code>/</code> are absolute (resolved from the root); paths without <code>/</code> are relative (resolved from the current route's path). This is a significant improvement over v5 where all paths were effectively absolute. Relative paths in <code>&lt;Link to="edit"&gt;</code> resolve relative to the nearest matched route's path — if you're on <code>/users/42</code>, <code>&lt;Link to="edit"&gt;</code> navigates to <code>/users/42/edit</code>. Relative paths make it much easier to move nested route trees around without updating every link. The <code>..</code> segment means "go up one route level" (not one URL segment — it's route-relative, not path-relative). The <code>relative</code> prop on Link controls whether to resolve relative to the route hierarchy (<code>"route"</code>, default) or the URL path (<code>"path"</code>).</p>
+<pre class="code-block">// Inside a route matching /users/:userId
+// Absolute: always goes to /settings
+&lt;Link to="/settings"&gt;Settings&lt;/Link&gt;
+
+// Relative: resolves to /users/42/edit (from current route /users/:userId)
+&lt;Link to="edit"&gt;Edit&lt;/Link&gt;
+
+// Up one route level: goes to /users (parent route)
+&lt;Link to=".."&gt;Back to Users&lt;/Link&gt;
+
+// relative="path": resolve relative to URL path (not route hierarchy)
+// From /users/42, ".." with relative="path" goes to /users
+&lt;Link to=".." relative="path"&gt;Back&lt;/Link&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q27 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q27">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q27" aria-expanded="false" aria-controls="routing-q27">
+          <span class="badge bg-danger me-2">Hard</span> 27. How do you pass data between routes?
+        </button>
+      </h2>
+      <div id="routing-q27" class="accordion-collapse collapse" aria-labelledby="heading-routing-q27" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>React Router provides multiple ways to pass data between routes. (1) URL parameters (<code>/users/:id</code>) — best for identifying a resource; use <code>useParams</code> to read. (2) Query parameters (<code>/search?q=foo&amp;page=2</code>) — best for optional, shareable state like filters and pagination; use <code>useSearchParams</code>. (3) Navigation state (<code>navigate('/path', { state: { from: 'dashboard' } })</code>) — transient data not visible in URL; use <code>useLocation().state</code>. This data is lost on refresh. (4) Route loaders (data router API) — load data server-side before render; use <code>useLoaderData</code>. (5) Global state (Context, Redux, Zustand) — for persistent data that should survive navigation. Choose based on: should it be shareable via URL? (params/query); is it ephemeral? (navigation state); does it need to persist? (global state).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q28 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q28">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q28" aria-expanded="false" aria-controls="routing-q28">
+          <span class="badge bg-danger me-2">Hard</span> 28. How do you implement multi-level nested routes?
+        </button>
+      </h2>
+      <div id="routing-q28" class="accordion-collapse collapse" aria-labelledby="heading-routing-q28" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>Multi-level nested routes are built by nesting <code>&lt;Route&gt;</code> elements (JSX API) or route config objects (data router API) multiple levels deep, with each level rendering an <code>&lt;Outlet&gt;</code> in the appropriate position. The URL builds up cumulatively: <code>/app/admin/users/42/edit</code> maps to App &gt; Admin &gt; Users &gt; UserDetail &gt; EditForm, each rendering the next level in their Outlet. Each Outlet renders only its direct child route, not all descendants. When navigating between sibling routes at any level, only the portion of the tree below the common ancestor re-renders — the layout components above remain mounted. The route config can become complex; organizing it into separate files per feature (with the data router's array-of-objects API) is cleaner than JSX nesting beyond 3 levels.</p>
+<pre class="code-block">const router = createBrowserRouter([
+  {
+    path: '/app',
+    element: &lt;AppLayout /&gt;,         // renders &lt;Outlet /&gt; for admin/user routes
+    children: [
+      {
+        path: 'admin',
+        element: &lt;AdminLayout /&gt;,    // renders &lt;Outlet /&gt; for admin features
+        loader: requireAdmin,
+        children: [
+          {
+            path: 'users',
+            element: &lt;UserManagement /&gt;, // renders &lt;Outlet /&gt; for user detail
+            children: [
+              { index: true, element: &lt;UserList /&gt; },
+              {
+                path: ':userId',
+                element: &lt;UserDetail /&gt;,
+                loader: userLoader,
+                children: [
+                  { path: 'edit', element: &lt;EditUser /&gt;, action: editUserAction },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q29 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q29">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q29" aria-expanded="false" aria-controls="routing-q29">
+          <span class="badge bg-danger me-2">Hard</span> 29. What is the difference between push and replace in navigation?
+        </button>
+      </h2>
+      <div id="routing-q29" class="accordion-collapse collapse" aria-labelledby="heading-routing-q29" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p><code>history.pushState</code> (used by <code>navigate('/path')</code> default) adds a new entry to the browser's history stack — the user can click "Back" to return to the previous URL. <code>history.replaceState</code> (used by <code>navigate('/path', { replace: true })</code>) replaces the current history entry instead of adding a new one — the back button goes to the page before the replaced entry. Use <code>replace: true</code> for: login redirects (so the user can't "back" to the login page after logging in), wizard steps where going back should show a different step (not replay the transition), error pages (so refreshing stays on the error page), and authentication guards (the <code>/login</code> entry replaces the protected URL the user tried to access). Using push everywhere leads to a cluttered history that confuses the back button behavior.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- routing-q30 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-routing-q30">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#routing-q30" aria-expanded="false" aria-controls="routing-q30">
+          <span class="badge bg-danger me-2">Hard</span> 30. How do you scroll to top on route change?
+        </button>
+      </h2>
+      <div id="routing-q30" class="accordion-collapse collapse" aria-labelledby="heading-routing-q30" data-bs-parent="#acc-routing">
+        <div class="accordion-body">
+          <p>By default, React Router does not scroll to the top on route changes because the previous scroll position might be intentional (e.g., navigating back should restore position). React Router v6.4+ data router includes <code>&lt;ScrollRestoration /&gt;</code> which automatically saves and restores scroll position per-route — scroll to top on new navigations, restore position on back/forward. Without the data router, implement a <code>ScrollToTop</code> component that watches <code>useLocation()</code> and calls <code>window.scrollTo(0, 0)</code> in a <code>useEffect</code> dependency on <code>pathname</code>. For fragment scrolling (<code>/page#section</code>), React Router v6 handles hash navigation automatically with <code>&lt;ScrollRestoration /&gt;</code>.</p>
+<pre class="code-block">// Data router approach — automatic scroll restoration
+import { ScrollRestoration } from 'react-router-dom';
+
+function Layout() {
+  return (
+    &lt;div&gt;
+      &lt;Header /&gt;
+      &lt;Outlet /&gt;
+      &lt;ScrollRestoration /&gt; {/* place once in root layout */}
+    &lt;/div&gt;
+  );
+}
+
+// Manual approach for legacy/non-data-router apps
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  React.useEffect(() =&gt; {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+  return null;
+}
+// Render inside Router: &lt;ScrollToTop /&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="tab-pane fade" id="tab-forms" role="tabpanel">
+  <div class="accordion" id="acc-forms">
+
+    <!-- forms-q1 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q1">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q1" aria-expanded="false" aria-controls="forms-q1">
+          <span class="badge bg-success me-2">Easy</span> 1. What is a controlled form input in React?
+        </button>
+      </h2>
+      <div id="forms-q1" class="accordion-collapse collapse" aria-labelledby="heading-forms-q1" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>A controlled input is a form element whose value is fully managed by React state. The input's <code>value</code> prop is set to a state variable, and an <code>onChange</code> handler updates that state on every user keystroke. React state is the single source of truth — the input can only display what the state says. This gives complete programmatic control: you can validate each character, format input as the user types (e.g., phone number formatting), derive values (e.g., set a "full name" field from first + last name), and reset the form by resetting state. The trade-off is that every keystroke causes a state update and potentially a re-render, which is fine for most forms but can be a consideration for forms with many fields.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q2 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q2">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q2" aria-expanded="false" aria-controls="forms-q2">
+          <span class="badge bg-success me-2">Easy</span> 2. What is an uncontrolled form input?
+        </button>
+      </h2>
+      <div id="forms-q2" class="accordion-collapse collapse" aria-labelledby="heading-forms-q2" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>An uncontrolled input manages its own value internally in the DOM, not in React state. You read the value using a <code>ref</code> when needed (typically on form submission), rather than tracking it on every change. This matches the traditional HTML form model. Uncontrolled inputs are simpler to set up for basic forms and avoid the re-render overhead of tracking each keystroke. You can set an initial value using <code>defaultValue</code> (not <code>value</code>) for text inputs, or <code>defaultChecked</code> for checkboxes. React Hook Form uses uncontrolled inputs by default to maximize performance — it only reads values when submitting, reducing the number of re-renders dramatically compared to fully controlled forms.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q3 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q3">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q3" aria-expanded="false" aria-controls="forms-q3">
+          <span class="badge bg-success me-2">Easy</span> 3. What is the onChange handler for inputs?
+        </button>
+      </h2>
+      <div id="forms-q3" class="accordion-collapse collapse" aria-labelledby="heading-forms-q3" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>The <code>onChange</code> event handler fires every time the input's value changes — on every keystroke for text inputs, on selection change for selects, and on check/uncheck for checkboxes. In React, <code>onChange</code> behaves differently from the native DOM <code>change</code> event: React's <code>onChange</code> fires on every change (like the DOM's <code>input</code> event), not just when focus leaves the field. The event handler receives a synthetic event with <code>event.target.value</code> (for text inputs) or <code>event.target.checked</code> (for checkboxes). For controlled inputs, <code>onChange</code> must update the state variable that controls the <code>value</code> prop, otherwise the input becomes read-only (the value can't be typed into).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q4 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q4">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q4" aria-expanded="false" aria-controls="forms-q4">
+          <span class="badge bg-success me-2">Easy</span> 4. How do you handle form submission in React?
+        </button>
+      </h2>
+      <div id="forms-q4" class="accordion-collapse collapse" aria-labelledby="heading-forms-q4" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Form submission is handled by attaching an <code>onSubmit</code> handler to the <code>&lt;form&gt;</code> element. The handler receives a synthetic form event; you should call <code>event.preventDefault()</code> to stop the browser's default behavior of submitting the form and reloading the page. For controlled forms, the field values are already in state and can be read directly. For uncontrolled forms, read values from refs or <code>new FormData(event.target)</code>. After collecting the data, you typically dispatch a Redux action, call an API, or update context. React Hook Form's <code>handleSubmit</code> wraps your submit handler and only calls it after validation passes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q5 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q5">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q5" aria-expanded="false" aria-controls="forms-q5">
+          <span class="badge bg-success me-2">Easy</span> 5. What is the ref approach for reading input values?
+        </button>
+      </h2>
+      <div id="forms-q5" class="accordion-collapse collapse" aria-labelledby="heading-forms-q5" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>The ref approach for reading input values involves attaching a <code>useRef</code> to an input element and reading <code>inputRef.current.value</code> when needed — typically on form submission. This is the uncontrolled input pattern. You initialize the ref with <code>const inputRef = useRef(null)</code>, attach it to the input with <code>&lt;input ref={inputRef}&gt;</code>, and access the current DOM value with <code>inputRef.current.value</code> inside event handlers. You can also use <code>new FormData(formRef.current)</code> on a form ref to collect all field values at once. This approach is simpler for basic forms, doesn't trigger re-renders on each keystroke, and is how React Hook Form works internally.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q6 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q6">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q6" aria-expanded="false" aria-controls="forms-q6">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 6. What is React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q6" class="accordion-collapse collapse" aria-labelledby="heading-forms-q6" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>React Hook Form (RHF) is a performant, flexible form management library that uses uncontrolled inputs by default to minimize re-renders. It provides a <code>useForm()</code> hook that returns <code>register</code>, <code>handleSubmit</code>, <code>watch</code>, <code>formState</code>, <code>setValue</code>, <code>reset</code>, and other utilities. The <code>register</code> function connects uncontrolled inputs to RHF's tracking system without React state, resulting in near-zero re-renders during typing. Validation can be defined inline (in the register call), using Yup/Zod schemas via resolvers, or with custom validator functions. RHF has excellent TypeScript support, built-in DevTools, and a large ecosystem of UI library integrations. It is the most popular React form library and is recommended by the React team as well as frameworks like Next.js.</p>
+<pre class="code-block">import { useForm } from 'react-hook-form';
+
+function LoginForm() {
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+
+  const onSubmit = async (data) =&gt; {
+    await loginAPI(data.email, data.password);
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit(onSubmit)}&gt;
+      &lt;input {...register('email', { required: 'Email is required', pattern: { value: /\S+@\S+/, message: 'Invalid email' } })} /&gt;
+      {errors.email &amp;&amp; &lt;p&gt;{errors.email.message}&lt;/p&gt;}
+
+      &lt;input type="password" {...register('password', { required: true, minLength: 8 })} /&gt;
+      {errors.password &amp;&amp; &lt;p&gt;Password must be 8+ characters&lt;/p&gt;}
+
+      &lt;button type="submit" disabled={isSubmitting}&gt;Login&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q7 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q7">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q7" aria-expanded="false" aria-controls="forms-q7">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 7. What are the benefits of React Hook Form over controlled inputs?
+        </button>
+      </h2>
+      <div id="forms-q7" class="accordion-collapse collapse" aria-labelledby="heading-forms-q7" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>React Hook Form significantly outperforms fully controlled forms in several ways. Performance: since inputs are uncontrolled by default, there are zero re-renders during typing — a 50-field form with controlled inputs re-renders 50 fields on every keystroke; RHF renders only fields with validation errors. Built-in validation: RHF provides a rich validation API (<code>required</code>, <code>min</code>/<code>max</code>, <code>pattern</code>, <code>validate</code> functions) without external libraries. Schema validation integration: <code>@hookform/resolvers</code> connects Yup, Zod, Joi, and other schema validators. Less boilerplate: no need to write <code>useState</code> and <code>onChange</code> handlers for every field. Good TypeScript support: the form's type is inferred from your schema. Form state management: <code>formState</code> provides <code>isDirty</code>, <code>isValid</code>, <code>isSubmitting</code>, <code>errors</code>, and <code>dirtyFields</code> without extra state.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q8 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q8">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q8" aria-expanded="false" aria-controls="forms-q8">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 8. What is the register function in React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q8" class="accordion-collapse collapse" aria-labelledby="heading-forms-q8" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>The <code>register(fieldName, options)</code> function from <code>useForm()</code> is the primary way to connect a native input to React Hook Form's tracking system. It returns an object <code>{ name, ref, onChange, onBlur }</code> that you spread onto the input element with <code>{...register('fieldName')}</code>. RHF uses the <code>ref</code> to access the DOM element directly (uncontrolled pattern) and the <code>onChange</code>/<code>onBlur</code> to update its internal state only when needed for validation. The <code>options</code> object defines validation rules: <code>required</code>, <code>min</code>, <code>max</code>, <code>minLength</code>, <code>maxLength</code>, <code>pattern</code>, <code>validate</code> (custom function). Validation errors are stored in <code>formState.errors[fieldName]</code> as objects with <code>message</code> and <code>type</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q9 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q9">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q9" aria-expanded="false" aria-controls="forms-q9">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 9. What is the handleSubmit function in React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q9" class="accordion-collapse collapse" aria-labelledby="heading-forms-q9" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p><code>handleSubmit(onValid, onInvalid?)</code> is a higher-order function that wraps your form submission handler. It intercepts the form's <code>onSubmit</code> event, runs all registered validations, and only calls <code>onValid</code> if all fields pass validation (passing the form data as a typed object). If validation fails, it calls <code>onInvalid</code> (optional) with the errors and focuses the first invalid field. <code>handleSubmit</code> automatically handles calling <code>event.preventDefault()</code>. The <code>onValid</code> callback receives the form data as a plain object with field names as keys. It handles async submit functions — <code>isSubmitting</code> in <code>formState</code> is <code>true</code> while the handler's Promise is pending, allowing you to disable the submit button.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q10 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q10">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q10" aria-expanded="false" aria-controls="forms-q10">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 10. What is the watch function in React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q10" class="accordion-collapse collapse" aria-labelledby="heading-forms-q10" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p><code>watch(fieldName?)</code> subscribes to a specific field's (or all fields') value changes and returns the current value. Unlike state-based forms where values are always available, RHF's uncontrolled approach requires explicit watching to read a value during render. Calling <code>watch('email')</code> makes the component re-render whenever the <code>email</code> field changes. Watching without arguments (<code>watch()</code>) returns all current values and causes re-renders on any field change. For performance-sensitive scenarios, use <code>getValues</code> (no subscription, no re-render) if you only need the value at a point in time (like in an onClick handler). Use <code>watch</code> for: conditional rendering based on field values, dependent field logic, real-time value display.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q11 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q11">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q11" aria-expanded="false" aria-controls="forms-q11">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 11. What is the setValue function in React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q11" class="accordion-collapse collapse" aria-labelledby="heading-forms-q11" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p><code>setValue(fieldName, value, options?)</code> programmatically sets the value of a registered field. It updates the underlying DOM input value and optionally triggers validation and marks the field as dirty. This is useful for: populating form fields from API data (pre-filling an edit form), setting a dependent field's value when another field changes (e.g., setting city when state is selected), programmatic value transforms, and integration with custom components that expose their value via callbacks rather than DOM events. The <code>options</code> object accepts <code>{ shouldValidate: true, shouldDirty: true, shouldTouch: true }</code> to control whether to trigger validation and update the dirty/touched state.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q12 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q12">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q12" aria-expanded="false" aria-controls="forms-q12">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 12. What is form validation in React?
+        </button>
+      </h2>
+      <div id="forms-q12" class="accordion-collapse collapse" aria-labelledby="heading-forms-q12" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Form validation is the process of verifying that user input meets defined criteria before processing or submitting it. There are multiple validation strategies: HTML5 native validation (using <code>required</code>, <code>min</code>, <code>max</code>, <code>pattern</code> attributes on inputs), controlled validation (checking values in <code>onChange</code> or <code>onSubmit</code> handlers and setting error state), and schema-based validation (Yup/Zod schemas validated via React Hook Form resolvers). Validation can happen at different times: on each keystroke (real-time, can be annoying), on blur (when focus leaves a field), on submit (only show errors after attempted submission), or a combination. React Hook Form's <code>mode</code> option controls this: <code>'onChange'</code>, <code>'onBlur'</code>, <code>'onSubmit'</code> (default), or <code>'all'</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q13 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q13">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q13" aria-expanded="false" aria-controls="forms-q13">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 13. How do you implement custom validation in React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q13" class="accordion-collapse collapse" aria-labelledby="heading-forms-q13" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Custom validation in React Hook Form is implemented using the <code>validate</code> option in <code>register</code>. The <code>validate</code> value can be a single function or an object of named validator functions. Each validator receives the current field value and returns <code>true</code> (valid) or a string error message (invalid). Validators can be async (returning a Promise) for cases like username availability checks. You access the entire form's values using the <code>validate</code> function's second argument or by calling <code>getValues()</code> inside the validator — useful for cross-field validation (e.g., "confirm password must match password").</p>
+<pre class="code-block">const { register, formState: { errors } } = useForm();
+
+&lt;input
+  {...register('username', {
+    required: 'Username is required',
+    minLength: { value: 3, message: 'Min 3 characters' },
+    validate: {
+      noSpaces: (v) =&gt; !/\s/.test(v) || 'No spaces allowed',
+      uniqueUsername: async (v) =&gt; {
+        const available = await checkUsernameAvailable(v);
+        return available || 'Username is already taken';
+      },
+    },
+  })}
+/&gt;
+{errors.username &amp;&amp; &lt;p&gt;{errors.username.message}&lt;/p&gt;}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q14 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q14">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q14" aria-expanded="false" aria-controls="forms-q14">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 14. What is Zod and how do you integrate it with React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q14" class="accordion-collapse collapse" aria-labelledby="heading-forms-q14" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Zod is a TypeScript-first schema declaration and validation library that lets you define data shapes with full type inference. A Zod schema acts as both a type definition and a runtime validator — when you infer the TypeScript type from a Zod schema (<code>z.infer&lt;typeof schema&gt;</code>), your form data is automatically typed. Integration with React Hook Form uses <code>@hookform/resolvers/zod</code>: pass <code>zodResolver(schema)</code> as the <code>resolver</code> option to <code>useForm</code>. RHF then uses Zod to validate the entire form on submit, mapping Zod errors to RHF's <code>formState.errors</code> structure. This is the recommended approach for form validation: define the schema once, get TypeScript types and runtime validation from the same source of truth.</p>
+<pre class="code-block">import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+
+const schema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  age: z.number().min(18, 'Must be 18 or older'),
+});
+
+type FormData = z.infer&lt;typeof schema&gt;;
+
+function SignupForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm&lt;FormData&gt;({
+    resolver: zodResolver(schema),
+  });
+
+  return (
+    &lt;form onSubmit={handleSubmit(console.log)}&gt;
+      &lt;input {...register('email')} /&gt;
+      {errors.email &amp;&amp; &lt;p&gt;{errors.email.message}&lt;/p&gt;}
+      &lt;input type="password" {...register('password')} /&gt;
+      &lt;button type="submit"&gt;Sign Up&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q15 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q15">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q15" aria-expanded="false" aria-controls="forms-q15">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 15. What is Yup and how does it compare to Zod?
+        </button>
+      </h2>
+      <div id="forms-q15" class="accordion-collapse collapse" aria-labelledby="heading-forms-q15" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Yup is a JavaScript schema validation library (predates TypeScript) that defines schemas using a fluent chainable API. It has been the dominant React form validation library for years, especially paired with Formik. Compared to Zod: Yup uses chainable methods (<code>yup.string().email().required()</code>) while Zod uses method chaining on types (<code>z.string().email()</code>); Zod has better TypeScript integration (full type inference from the start) while Yup's TypeScript support was added later and is less seamless; Zod is generally considered the modern standard for new TypeScript projects while Yup remains common in existing Formik-based codebases; both integrate with React Hook Form via <code>@hookform/resolvers</code>. Zod is preferred for new projects; Yup is fine for existing Formik/Yup setups.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q16 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q16">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q16" aria-expanded="false" aria-controls="forms-q16">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 16. How do you handle file uploads in React?
+        </button>
+      </h2>
+      <div id="forms-q16" class="accordion-collapse collapse" aria-labelledby="heading-forms-q16" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>File uploads in React use an <code>&lt;input type="file"&gt;</code> which is inherently uncontrolled — you cannot set its value via <code>value</code> prop. The file object is read from <code>event.target.files[0]</code> in an <code>onChange</code> handler and stored in state (as a <code>File</code> object, not a path). To display a preview, create an object URL with <code>URL.createObjectURL(file)</code> and use it as an <code>&lt;img src&gt;</code>. To upload, create a <code>FormData</code> object, append the file, and send via fetch/axios with <code>Content-Type: multipart/form-data</code> (or let the browser set this automatically). Clean up object URLs with <code>URL.revokeObjectURL()</code> to prevent memory leaks. For drag-and-drop, use a library like <code>react-dropzone</code>.</p>
+<pre class="code-block">function FileUpload() {
+  const [file, setFile] = React.useState(null);
+  const [preview, setPreview] = React.useState(null);
+  const [uploading, setUploading] = React.useState(false);
+
+  const handleFileChange = (e) =&gt; {
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) return;
+    setFile(selectedFile);
+    setPreview(URL.createObjectURL(selectedFile)); // create preview URL
+  };
+
+  React.useEffect(() =&gt; {
+    return () =&gt; { if (preview) URL.revokeObjectURL(preview); }; // cleanup
+  }, [preview]);
+
+  const handleUpload = async () =&gt; {
+    if (!file) return;
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    await fetch('/api/upload', { method: 'POST', body: formData });
+    setUploading(false);
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;input type="file" accept="image/*" onChange={handleFileChange} /&gt;
+      {preview &amp;&amp; &lt;img src={preview} alt="preview" style={{ width: 200 }} /&gt;}
+      &lt;button onClick={handleUpload} disabled={!file || uploading}&gt;Upload&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q17 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q17">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q17" aria-expanded="false" aria-controls="forms-q17">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 17. How do you implement a multi-step form?
+        </button>
+      </h2>
+      <div id="forms-q17" class="accordion-collapse collapse" aria-labelledby="heading-forms-q17" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>A multi-step form breaks a long form into sequential steps, showing one step at a time. The implementation involves: state to track the current step, a central state object accumulating all field data across steps, conditional rendering to show the current step's fields, "Next" and "Back" navigation that updates the step index, and a final submit on the last step. React Hook Form can be used per-step with <code>getValues()</code> to accumulate data, or with a single form context if preferred. For complex wizards, use <code>useReducer</code> with a state machine (current step + accumulated data). The URL can reflect the current step using query params (<code>?step=2</code>) so users can bookmark or share in-progress forms.</p>
+<pre class="code-block">function MultiStepForm() {
+  const [step, setStep] = React.useState(1);
+  const [formData, setFormData] = React.useState({});
+  const methods = useForm({ defaultValues: formData });
+
+  const saveAndNext = (data) =&gt; {
+    setFormData(prev =&gt; ({ ...prev, ...data }));
+    setStep(s =&gt; s + 1);
+  };
+
+  const handleFinalSubmit = (data) =&gt; {
+    const allData = { ...formData, ...data };
+    submitForm(allData);
+  };
+
+  return (
+    &lt;FormProvider {...methods}&gt;
+      {step === 1 &amp;&amp; &lt;StepOne onNext={methods.handleSubmit(saveAndNext)} /&gt;}
+      {step === 2 &amp;&amp; &lt;StepTwo onNext={methods.handleSubmit(saveAndNext)} onBack={() =&gt; setStep(1)} /&gt;}
+      {step === 3 &amp;&amp; &lt;StepThree onSubmit={methods.handleSubmit(handleFinalSubmit)} onBack={() =&gt; setStep(2)} /&gt;}
+    &lt;/FormProvider&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q18 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q18">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q18" aria-expanded="false" aria-controls="forms-q18">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 18. How do you reset a form in React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q18" class="accordion-collapse collapse" aria-labelledby="heading-forms-q18" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>React Hook Form provides a <code>reset(values?, options?)</code> function that resets the entire form to its default values (or to new provided values). Calling <code>reset()</code> without arguments resets to the <code>defaultValues</code> specified in <code>useForm</code>. Calling <code>reset(newValues)</code> resets to the provided values — useful for pre-filling an edit form with data fetched from an API. The <code>options</code> object can control which parts of <code>formState</code> to reset (<code>keepErrors</code>, <code>keepDirty</code>, <code>keepTouched</code>, etc.). After a successful form submission, calling <code>reset()</code> is the standard pattern to clear the form. For async default values (fetched data), use the <code>useEffect</code> + <code>reset</code> pattern: when the fetched data arrives, call <code>reset(fetchedData)</code> to populate the form.</p>
+<pre class="code-block">const { register, handleSubmit, reset, formState } = useForm({
+  defaultValues: { name: '', email: '' }
+});
+
+// Reset to defaults after submit
+const onSubmit = async (data) =&gt; {
+  await saveData(data);
+  reset(); // back to { name: '', email: '' }
+};
+
+// Reset with new values (pre-filling edit form)
+React.useEffect(() =&gt; {
+  if (user) reset({ name: user.name, email: user.email });
+}, [user, reset]);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q19 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q19">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q19" aria-expanded="false" aria-controls="forms-q19">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 19. What is the Controller component in React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q19" class="accordion-collapse collapse" aria-labelledby="heading-forms-q19" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p><code>Controller</code> is a wrapper component from React Hook Form for integrating controlled third-party UI components that don't expose a native DOM ref (like React Select, Material-UI inputs, date pickers, or custom components). Since <code>register</code> relies on a native DOM ref, it doesn't work with components that manage their own state internally. <code>Controller</code> takes a <code>name</code> (field name), <code>control</code> (from <code>useForm</code>), <code>rules</code> (validation), and a <code>render</code> prop — a function that receives <code>{ field, fieldState }</code> and returns the controlled component. The <code>field</code> object contains <code>{ name, value, onChange, onBlur, ref }</code> that you spread onto the component's props.</p>
+<pre class="code-block">import { Controller, useForm } from 'react-hook-form';
+import Select from 'react-select';
+
+function MyForm() {
+  const { control, handleSubmit } = useForm();
+
+  return (
+    &lt;form onSubmit={handleSubmit(console.log)}&gt;
+      &lt;Controller
+        name="country"
+        control={control}
+        rules={{ required: 'Country is required' }}
+        render={({ field, fieldState }) =&gt; (
+          &lt;div&gt;
+            &lt;Select
+              {...field}
+              options={countryOptions}
+              placeholder="Select country..."
+            /&gt;
+            {fieldState.error &amp;&amp; &lt;p&gt;{fieldState.error.message}&lt;/p&gt;}
+          &lt;/div&gt;
+        )}
+      /&gt;
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q20 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q20">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q20" aria-expanded="false" aria-controls="forms-q20">
+          <span class="badge bg-warning text-dark me-2">Medium</span> 20. What is useFieldArray in React Hook Form?
+        </button>
+      </h2>
+      <div id="forms-q20" class="accordion-collapse collapse" aria-labelledby="heading-forms-q20" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p><code>useFieldArray({ control, name })</code> is a hook for managing arrays of fields in a form — like a list of addresses, product line items, or team members that can be added, removed, or reordered dynamically. It returns an <code>{ fields, append, prepend, remove, insert, update, move, swap }</code> API. <code>fields</code> is the array of field objects with stable <code>id</code> values (use as keys in JSX). The array operations handle all the complexity of updating nested array state in RHF's internal model. Each field in the array can have multiple sub-fields. This replaces the complex manual state management pattern of handling arrays of form data.</p>
+<pre class="code-block">import { useFieldArray, useForm } from 'react-hook-form';
+
+function TeamForm() {
+  const { control, register, handleSubmit } = useForm({
+    defaultValues: { members: [{ name: '', role: '' }] }
+  });
+  const { fields, append, remove } = useFieldArray({ control, name: 'members' });
+
+  return (
+    &lt;form onSubmit={handleSubmit(console.log)}&gt;
+      {fields.map((field, index) =&gt; (
+        &lt;div key={field.id}&gt;
+          &lt;input {...register(`members.${index}.name`)} placeholder="Name" /&gt;
+          &lt;input {...register(`members.${index}.role`)} placeholder="Role" /&gt;
+          &lt;button type="button" onClick={() =&gt; remove(index)}&gt;Remove&lt;/button&gt;
+        &lt;/div&gt;
+      ))}
+      &lt;button type="button" onClick={() =&gt; append({ name: '', role: '' })}&gt;Add Member&lt;/button&gt;
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q21 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q21">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q21" aria-expanded="false" aria-controls="forms-q21">
+          <span class="badge bg-danger me-2">Hard</span> 21. How do you handle async validation (e.g., check if username is taken)?
+        </button>
+      </h2>
+      <div id="forms-q21" class="accordion-collapse collapse" aria-labelledby="heading-forms-q21" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Async validation checks server-side constraints that can't be done client-side — like username uniqueness, email availability, or domain verification. In React Hook Form, the <code>validate</code> option accepts async functions that return a Promise resolving to <code>true</code> or an error string. The challenge is performance: you don't want an API call on every keystroke. Debounce the validation: use <code>mode: 'onBlur'</code> in useForm to only validate when the user leaves the field, or combine with a debounced custom validator. A <code>useRef</code> flag (<code>isChecking</code>) prevents duplicate concurrent requests. Show a "checking..." indicator using <code>formState.isValidating</code>. Rate limit with a debounce inside the validator using a module-level timer variable.</p>
+<pre class="code-block">import { useForm } from 'react-hook-form';
+
+let debounceTimer;
+
+function SignupForm() {
+  const { register, formState: { errors, isValidating } } = useForm({ mode: 'onChange' });
+
+  const checkUsername = (value) =&gt;
+    new Promise((resolve) =&gt; {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(async () =&gt; {
+        const available = await checkUsernameAPI(value);
+        resolve(available ? true : 'Username already taken');
+      }, 500); // debounce 500ms
+    });
+
+  return (
+    &lt;form&gt;
+      &lt;input {...register('username', {
+        required: 'Required',
+        minLength: { value: 3, message: 'Min 3 chars' },
+        validate: { available: checkUsername },
+      })} /&gt;
+      {isValidating &amp;&amp; &lt;span&gt;Checking...&lt;/span&gt;}
+      {errors.username &amp;&amp; &lt;p&gt;{errors.username.message}&lt;/p&gt;}
+    &lt;/form&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q22 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q22">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q22" aria-expanded="false" aria-controls="forms-q22">
+          <span class="badge bg-danger me-2">Hard</span> 22. How do you implement dependent field validation?
+        </button>
+      </h2>
+      <div id="forms-q22" class="accordion-collapse collapse" aria-labelledby="heading-forms-q22" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Dependent field validation means one field's validity depends on another field's value — "confirm password must match password" being the classic example. In React Hook Form, access other field values inside a <code>validate</code> function using <code>getValues()</code>. For Zod schemas, use <code>.refine()</code> at the object level (after both fields are defined) to add cross-field validation. For Yup, use <code>yup.ref()</code> to reference another field. When the first field changes, you must re-validate the dependent field manually by calling <code>trigger('confirmPassword')</code> in the first field's <code>onChange</code> handler, otherwise the dependent field won't re-validate when the source changes.</p>
+<pre class="code-block">// Zod approach — cleanest for multiple cross-field validations
+const schema = z.object({
+  password: z.string().min(8),
+  confirmPassword: z.string(),
+  startDate: z.date(),
+  endDate: z.date(),
+})
+.refine(data =&gt; data.password === data.confirmPassword, {
+  message: 'Passwords must match',
+  path: ['confirmPassword'], // attach error to this field
+})
+.refine(data =&gt; data.endDate &gt; data.startDate, {
+  message: 'End date must be after start date',
+  path: ['endDate'],
+});
+
+// RHF with getValues approach
+const { register, getValues, trigger } = useForm();
+&lt;input {...register('password', {
+  onChange: () =&gt; trigger('confirmPassword'), // re-validate confirm when password changes
+})} /&gt;
+&lt;input {...register('confirmPassword', {
+  validate: (v) =&gt; v === getValues('password') || 'Passwords must match',
+})} /&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q23 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q23">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q23" aria-expanded="false" aria-controls="forms-q23">
+          <span class="badge bg-danger me-2">Hard</span> 23. How do you handle form state with Redux?
+        </button>
+      </h2>
+      <div id="forms-q23" class="accordion-collapse collapse" aria-labelledby="heading-forms-q23" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Handling form state in Redux is generally discouraged — forms benefit from fast local state (every keystroke should not dispatch a Redux action) and Redux state is overkill for form-local concerns. However, there are legitimate cases: multi-page checkout forms where form state must persist across navigation; forms where external Redux state (like loaded entity data) needs to pre-fill fields; and forms where submitted data needs to be in Redux. The recommended approach: use React Hook Form or local state for the interactive form experience, and only dispatch to Redux on successful submission. If pre-filling from Redux is needed, use the <code>reset()</code> function or <code>defaultValues</code> from the Redux store. Avoid the anti-pattern of putting raw form field values in Redux.</p>
+<pre class="code-block">// Pattern: form state local, submit to Redux
+function EditUserForm({ userId }) {
+  const user = useSelector(selectUserById(userId));
+  const dispatch = useDispatch();
+  const { register, handleSubmit, reset } = useForm();
+
+  // Pre-fill from Redux when data arrives
+  React.useEffect(() =&gt; {
+    if (user) reset({ name: user.name, email: user.email });
+  }, [user, reset]);
+
+  const onSubmit = async (data) =&gt; {
+    // Dispatch to Redux on submit — not on every keystroke
+    await dispatch(updateUser({ id: userId, ...data }));
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit(onSubmit)}&gt;
+      &lt;input {...register('name')} /&gt;
+      &lt;input {...register('email')} /&gt;
+      &lt;button type="submit"&gt;Save&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q24 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q24">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q24" aria-expanded="false" aria-controls="forms-q24">
+          <span class="badge bg-danger me-2">Hard</span> 24. What are the performance considerations for large forms?
+        </button>
+      </h2>
+      <div id="forms-q24" class="accordion-collapse collapse" aria-labelledby="heading-forms-q24" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Large forms (20+ fields) can become slow if using fully controlled inputs because each keystroke triggers a state update and re-render of the entire form. Optimizations: (1) Use React Hook Form (uncontrolled by default) which avoids re-renders during typing and only re-renders when validation errors change; (2) If using controlled inputs, split the form into smaller sub-components with <code>React.memo</code> so only the changed field's component re-renders; (3) Use <code>mode: 'onBlur'</code> in RHF to validate on focus loss rather than on every keystroke; (4) Virtualize long dynamic lists (<code>useFieldArray</code> with 100+ items); (5) Debounce expensive operations like async validation; (6) Use <code>shouldUnregister: false</code> (RHF default) to keep field values when the field unmounts (multi-step forms); (7) Avoid <code>watch()</code> for all fields — use <code>getValues()</code> when you only need values at submit time.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q25 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q25">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q25" aria-expanded="false" aria-controls="forms-q25">
+          <span class="badge bg-danger me-2">Hard</span> 25. How do you implement a drag-and-drop file upload?
+        </button>
+      </h2>
+      <div id="forms-q25" class="accordion-collapse collapse" aria-labelledby="heading-forms-q25" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Drag-and-drop file upload requires handling the <code>dragover</code>, <code>dragenter</code>, <code>dragleave</code>, and <code>drop</code> events on a drop zone container. Call <code>event.preventDefault()</code> on <code>dragover</code> to allow dropping. On <code>drop</code>, get the files from <code>event.dataTransfer.files</code>. Display a visual "active" state during drag by tracking dragover state. Libraries like <code>react-dropzone</code> handle all this complexity with accessibility (keyboard support, screen reader announcements) and multiple file support. For progress indication, use XMLHttpRequest instead of fetch (XHR has an <code>upload.onprogress</code> event); or use axios with its <code>onUploadProgress</code> config option.</p>
+<pre class="code-block">import { useDropzone } from 'react-dropzone';
+
+function DropZone({ onUpload }) {
+  const [uploading, setUploading] = React.useState(false);
+  const [progress, setProgress] = React.useState(0);
+
+  const onDrop = React.useCallback(async (acceptedFiles) =&gt; {
+    setUploading(true);
+    const formData = new FormData();
+    acceptedFiles.forEach(file =&gt; formData.append('files', file));
+    await axios.post('/api/upload', formData, {
+      onUploadProgress: (e) =&gt; setProgress(Math.round((e.loaded * 100) / e.total)),
+    });
+    setUploading(false);
+    onUpload?.();
+  }, [onUpload]);
+
+  const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({
+    onDrop, accept: { 'image/*': [], 'application/pdf': [] }, maxFiles: 5,
+  });
+
+  return (
+    &lt;div {...getRootProps()} className={isDragActive ? 'dropzone active' : 'dropzone'}&gt;
+      &lt;input {...getInputProps()} /&gt;
+      {isDragActive ? &lt;p&gt;Drop files here...&lt;/p&gt; : &lt;p&gt;Drag files or click to select&lt;/p&gt;}
+      {uploading &amp;&amp; &lt;progress value={progress} max={100} /&gt;}
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q26 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q26">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q26" aria-expanded="false" aria-controls="forms-q26">
+          <span class="badge bg-danger me-2">Hard</span> 26. How do you preserve form state across route navigation?
+        </button>
+      </h2>
+      <div id="forms-q26" class="accordion-collapse collapse" aria-labelledby="heading-forms-q26" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>By default, navigating away from a route unmounts the form component, losing all form state. To preserve it: (1) Lift form state to a parent component or global state (Context, Redux, Zustand) that persists across navigation — pass the saved data back as <code>defaultValues</code> when remounting; (2) Use React Router's navigation state: on navigate away, save current form values to <code>navigate('/route', { state: { formData } })</code>; (3) Use React Hook Form's <code>shouldUnregister: false</code> — fields preserve their values even when unmounted from a multi-step form; (4) Store in localStorage (<code>useLocalStorage</code> hook) for persistence that survives tab closes; (5) Use Remix's or Next.js's Server Actions which submit to a server, preserving state server-side. The best pattern for a multi-step form: use a parent component's state as the accumulator, passing values into each step as <code>defaultValues</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q27 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q27">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q27" aria-expanded="false" aria-controls="forms-q27">
+          <span class="badge bg-danger me-2">Hard</span> 27. How do you implement auto-save functionality?
+        </button>
+      </h2>
+      <div id="forms-q27" class="accordion-collapse collapse" aria-labelledby="heading-forms-q27" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Auto-save saves form data automatically as the user makes changes, without requiring an explicit save action. The implementation: watch form values (RHF's <code>watch()</code> or controlled state), debounce the changes (don't save on every keystroke — wait 1-2 seconds after the user stops), and call the save API when the debounced value updates. Indicate save status with a "Saved" / "Saving..." message. Handle errors gracefully (the user may be offline). Key considerations: debounce carefully — too short = too many API calls; too long = data loss risk. Use an AbortController to cancel the in-flight save request if a new change comes in before the previous save completes.</p>
+<pre class="code-block">function AutoSavingEditor({ documentId, initialContent }) {
+  const [content, setContent] = React.useState(initialContent);
+  const [saveStatus, setSaveStatus] = React.useState('saved'); // 'saved' | 'saving' | 'error'
+  const debouncedContent = useDebounce(content, 1500);
+  const isFirstRender = React.useRef(true);
+
+  React.useEffect(() =&gt; {
+    if (isFirstRender.current) { isFirstRender.current = false; return; } // skip initial render
+    if (!debouncedContent) return;
+    setSaveStatus('saving');
+    saveDocument(documentId, debouncedContent)
+      .then(() =&gt; setSaveStatus('saved'))
+      .catch(() =&gt; setSaveStatus('error'));
+  }, [debouncedContent, documentId]);
+
+  return (
+    &lt;div&gt;
+      &lt;textarea value={content} onChange={e =&gt; { setContent(e.target.value); setSaveStatus('typing'); }} /&gt;
+      &lt;span&gt;{saveStatus === 'saving' ? 'Saving...' : saveStatus === 'error' ? 'Save failed' : 'Saved'}&lt;/span&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q28 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q28">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q28" aria-expanded="false" aria-controls="forms-q28">
+          <span class="badge bg-danger me-2">Hard</span> 28. What is the difference between form-level and field-level validation?
+        </button>
+      </h2>
+      <div id="forms-q28" class="accordion-collapse collapse" aria-labelledby="heading-forms-q28" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Field-level validation validates each field independently as it changes, providing immediate feedback per field without requiring the entire form to be valid. It runs the validator for a single field when that field changes or loses focus. Form-level validation validates the entire form object at once — typically at submit time or when any field changes — and can access all field values simultaneously, enabling cross-field validation (e.g., end date &gt; start date, password === confirmPassword). Form-level validation is generally cleaner with schema validators (Zod, Yup) that validate the entire shape at once. React Hook Form supports both: <code>validate</code> in <code>register</code> options is field-level; using a <code>resolver</code> (<code>zodResolver</code>, <code>yupResolver</code>) is form-level. For most production forms, a form-level schema resolver with field-level display of errors is the cleanest pattern.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q29 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q29">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q29" aria-expanded="false" aria-controls="forms-q29">
+          <span class="badge bg-danger me-2">Hard</span> 29. How do you handle form accessibility (a11y)?
+        </button>
+      </h2>
+      <div id="forms-q29" class="accordion-collapse collapse" aria-labelledby="heading-forms-q29" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>Accessible forms require: (1) <code>&lt;label&gt;</code> elements associated with each input via <code>htmlFor</code> + <code>id</code> (or wrapping the input); (2) Error messages announced to screen readers via <code>aria-describedby</code> linking the input to its error element; (3) <code>aria-invalid="true"</code> on inputs with errors so screen readers announce the invalid state; (4) Focus management — when validation fails on submit, move focus to the first invalid field; (5) Required fields indicated via <code>aria-required="true"</code> or the <code>required</code> attribute; (6) Clear, plain-language error messages (not just "invalid", but "Email must contain @"); (7) Keyboard navigation — all interactive elements must be reachable via Tab; (8) Avoid relying on color alone to indicate errors — use icons, text, and sufficient contrast. React Hook Form integrates well with aria attributes; use the <code>aria-invalid</code> prop conditionally based on <code>formState.errors</code>.</p>
+<pre class="code-block">function AccessibleInput({ name, label, register, error }) {
+  const id = `field-${name}`;
+  const errorId = `${id}-error`;
+
+  return (
+    &lt;div&gt;
+      &lt;label htmlFor={id}&gt;{label}&lt;/label&gt;
+      &lt;input
+        id={id}
+        {...register(name)}
+        aria-invalid={error ? 'true' : 'false'}
+        aria-describedby={error ? errorId : undefined}
+        aria-required="true"
+      /&gt;
+      {error &amp;&amp; (
+        &lt;p id={errorId} role="alert" aria-live="polite"&gt;
+          {error.message}
+        &lt;/p&gt;
+      )}
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- forms-q30 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading-forms-q30">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#forms-q30" aria-expanded="false" aria-controls="forms-q30">
+          <span class="badge bg-danger me-2">Hard</span> 30. How do you implement a WYSIWYG editor in React?
+        </button>
+      </h2>
+      <div id="forms-q30" class="accordion-collapse collapse" aria-labelledby="heading-forms-q30" data-bs-parent="#acc-forms">
+        <div class="accordion-body">
+          <p>WYSIWYG (What You See Is What You Get) editors are complex components that render formatted text in a <code>contentEditable</code> div. In React, you integrate third-party editor libraries since building one from scratch is extremely complex. Popular options: TipTap (headless, based on ProseMirror, excellent React integration with hooks API), Quill (mature, widely used, requires a wrapper component), Slate.js (highly customizable, React-native), Draft.js (Facebook, unmaintained), and TinyMCE/CKEditor (full-featured commercial options). The integration challenge: these editors are controlled differently from standard inputs; use <code>Controller</code> from React Hook Form to wrap them. The editor's value is typically HTML or JSON; handle this by converting between formats for storage and display.</p>
+<pre class="code-block">// TipTap integration with React Hook Form
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { Controller } from 'react-hook-form';
+
+function RichTextEditor({ name, control, defaultValue = '' }) {
+  return (
+    &lt;Controller
+      name={name}
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field }) =&gt; {
+        const editor = useEditor({
+          extensions: [StarterKit],
+          content: field.value,
+          onUpdate: ({ editor }) =&gt; field.onChange(editor.getHTML()),
+        });
+        return (
+          &lt;div className="editor-wrapper"&gt;
+            &lt;MenuBar editor={editor} /&gt;
+            &lt;EditorContent editor={editor} /&gt;
+          &lt;/div&gt;
+        );
+      }}
+    /&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,1112 @@
+<div class="tab-pane fade" id="tab-performance" role="tabpanel">
+  <div class="accordion" id="acc-performance">
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q1">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is React.memo?
+        </button>
+      </h2>
+      <div id="performance-q1" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          React.memo is a higher-order component that memoizes a functional component — it prevents unnecessary re-renders by shallowly comparing the previous and new props. If the props haven't changed (shallow equality), React skips rendering the component and reuses the last rendered output. It is the functional component equivalent of <code>shouldComponentUpdate</code> or <code>PureComponent</code> for class components. Use React.memo when a component renders frequently with the same props, especially in lists where a parent re-renders but many children don't actually change. The performance gain is only realized when the component's render cost is higher than the cost of the shallow prop comparison — wrapping every component in memo is not recommended.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q2">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the difference between useMemo and useCallback?
+        </button>
+      </h2>
+      <div id="performance-q2" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Both <code>useMemo</code> and <code>useCallback</code> are memoization hooks, but they memoize different things. <code>useMemo(() =&gt; computeExpensiveValue(a, b), [a, b])</code> memoizes the return value of a computation — the function runs once when dependencies change, and the cached result is returned otherwise. <code>useCallback((e) =&gt; handleEvent(e), [dependency])</code> memoizes the function reference itself — the same function object is returned on re-renders when dependencies haven't changed. A shorthand: <code>useCallback(fn, deps)</code> is equivalent to <code>useMemo(() =&gt; fn, deps)</code>. Use <code>useMemo</code> for expensive calculations; use <code>useCallback</code> for stable function references passed to memoized child components or used in dependency arrays.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q3">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;When should you use React.memo?
+        </button>
+      </h2>
+      <div id="performance-q3" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Use <code>React.memo</code> when: (1) a component is a pure function of its props (same props always produce the same output); (2) the component renders often with identical props (e.g., list items in a frequently-updating list); (3) the component has a non-trivial render cost. Avoid memo when: the component always receives new props on each render (memo overhead without benefit); the component is cheap to render (the comparison overhead outweighs savings); or the component has complex props that are always new objects (reference comparison always fails). Profile with React DevTools before adding memo — don't optimize preemptively.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q4">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is code splitting in React?
+        </button>
+      </h2>
+      <div id="performance-q4" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Code splitting is the practice of splitting your JavaScript bundle into smaller chunks that are loaded on demand, rather than loading all code upfront. This reduces the initial bundle size, speeds up the first meaningful paint, and defers loading code that is not needed immediately. In React, <code>React.lazy()</code> combined with <code>&lt;Suspense&gt;</code> enables component-level code splitting. Webpack (and Vite) automatically create separate chunks for each <code>React.lazy()</code> import. Route-level code splitting (lazy loading each page component) is the most impactful approach since page components are the largest distinct chunks and each page is only visited by a subset of users at any given time.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q5">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is React.lazy?
+        </button>
+      </h2>
+      <div id="performance-q5" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          <code>React.lazy(() =&gt; import('./MyComponent'))</code> enables lazy loading of a component — the component's code is loaded on demand when the component is first rendered, not at initial bundle load time. The <code>import()</code> call returns a Promise that resolves to a module with a default export. <code>React.lazy</code> must be used inside a <code>&lt;Suspense&gt;</code> boundary that provides a fallback UI while the lazy component loads. Lazy loading is most effective for route-level components (entire pages), heavy feature components (rich text editors, chart libraries), and components below the fold that users may never see. In React 18, <code>lazy</code> also supports Server Components.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q6">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is Suspense in React?
+        </button>
+      </h2>
+      <div id="performance-q6" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          <code>&lt;Suspense fallback={&lt;Spinner /&gt;}&gt;</code> is a React component that catches "pending" states from lazy-loaded components (and in React 18, from async data sources via <code>use()</code>). When a child component is loading (a lazy import is in flight), Suspense renders the <code>fallback</code> prop instead of the children. When the lazy component finishes loading, Suspense replaces the fallback with the actual content. Suspense enables declarative loading states — you specify the loading UI in one place (the Suspense boundary) rather than having every component manage its own loading state. Multiple Suspense boundaries with granular fallbacks create a progressive loading experience.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q7">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;How does React's reconciliation algorithm work?
+        </button>
+      </h2>
+      <div id="performance-q7" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          React's reconciliation algorithm (the "diffing" algorithm) determines the minimal set of DOM changes needed to update the UI when state or props change. When state changes, React creates a new virtual DOM tree and compares it to the previous one. The algorithm applies two heuristics to keep the comparison O(n) rather than O(n³): (1) Elements of different types produce entirely different subtrees — if a <code>&lt;div&gt;</code> changes to a <code>&lt;span&gt;</code>, the entire subtree is destroyed and rebuilt; (2) List items with stable <code>key</code> props are matched across renders — React uses keys to identify which items were added, removed, or moved. Without keys, list reconciliation falls back to index-based comparison, causing incorrect updates when items are reordered. Understanding reconciliation is essential for optimizing performance: avoid changing element types unnecessarily, and always provide stable keys for list items.
+          <pre class="code-block">// Keys tell React which list item is which
+// Bad: using index as key (React can't detect reorders)
+{items.map((item, index) =&gt; (
+  &lt;ListItem key={index} item={item} /&gt;
+))}
+
+// Good: using stable unique ID
+{items.map(item =&gt; (
+  &lt;ListItem key={item.id} item={item} /&gt;
+))}
+
+// Why it matters: if you prepend an item to the list with index keys,
+// React sees all keys changed (0,1,2 -&gt; 0,1,2,3)
+// and re-renders all items. With item.id keys,
+// React sees only one new item added and keeps existing ones unmounted.</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q8">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is virtualization and why is it important?
+        </button>
+      </h2>
+      <div id="performance-q8" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Virtualization (also called windowing) is a technique where only the DOM nodes for visible items in a long list are rendered — items that are off-screen are not mounted in the DOM. Instead of rendering 10,000 list items (10,000 DOM nodes), a virtualized list only renders ~20-30 items that are visible in the viewport. As the user scrolls, DOM nodes are recycled — off-screen items are unmounted and their DOM nodes are reused for newly visible items. This dramatically reduces initial render time, memory usage, and scroll performance for large datasets. The most popular virtualization libraries for React are <code>react-virtual</code> (by TanStack), <code>react-window</code> (lighter), and <code>react-virtualized</code> (full-featured). Virtualization is essential for rendering tables or lists with hundreds or thousands of rows.
+          <pre class="code-block">import { useVirtualizer } from '@tanstack/react-virtual';
+
+function VirtualList({ items }) {
+  const parentRef = React.useRef(null);
+
+  const virtualizer = useVirtualizer({
+    count: items.length,
+    getScrollElement: () =&gt; parentRef.current,
+    estimateSize: () =&gt; 50, // estimated row height in px
+  });
+
+  return (
+    &lt;div ref={parentRef} style={{ height: '400px', overflow: 'auto' }}&gt;
+      {/* Total height spacer so scrollbar is accurate */}
+      &lt;div style={{ height: virtualizer.getTotalSize() + 'px', position: 'relative' }}&gt;
+        {virtualizer.getVirtualItems().map(virtualItem =&gt; (
+          &lt;div
+            key={virtualItem.key}
+            style={{ position: 'absolute', top: virtualItem.start, width: '100%' }}
+          &gt;
+            {items[virtualItem.index].name}
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q9">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is React Profiler?
+        </button>
+      </h2>
+      <div id="performance-q9" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          The React Profiler is a built-in DevTools panel and a <code>&lt;Profiler&gt;</code> component that measures how often components render and what the "cost" of each render is. In the DevTools, the Profiler records a session, showing a flame chart of render times — bars show which components rendered, for how long, and why they rendered. This is invaluable for identifying performance bottlenecks. The programmatic <code>&lt;Profiler id="MyComponent" onRender={callback}&gt;</code> component calls the callback with timing information (phase, actualDuration, baseDuration, startTime) on every commit. Use the Profiler to: identify slow components before memoizing, confirm that memoization is actually preventing re-renders, and find unexpected re-renders caused by new object/function references.
+          <pre class="code-block">import { Profiler } from 'react';
+
+function onRenderCallback(
+  id,           // the "id" prop of the Profiler tree
+  phase,        // "mount" or "update"
+  actualDuration, // time spent rendering
+  baseDuration,   // estimated time without memoization
+  startTime,
+  commitTime
+) {
+  console.log(`${id} ${phase}: actual=${actualDuration}ms, base=${baseDuration}ms`);
+}
+
+function App() {
+  return (
+    &lt;Profiler id="ProductList" onRender={onRenderCallback}&gt;
+      &lt;ProductList /&gt;
+    &lt;/Profiler&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q10">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What are the main causes of unnecessary re-renders?
+        </button>
+      </h2>
+      <div id="performance-q10" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          The most common causes of unnecessary re-renders are: (1) New object/array/function references — <code>const style = { color: 'red' }</code> inside render creates a new object reference every render, causing memoized children to re-render; (2) Context value changes — putting a new object literal in <code>&lt;Context.Provider value={{ a, b }}&gt;</code> creates a new reference every render, causing all consumers to re-render even if a and b haven't changed; (3) State updates with the same value — <code>setState(sameValue)</code> still triggers a re-render in React 17 (React 18 bails out for same primitive values); (4) Parent re-renders propagating to children — children without memo re-render whenever the parent does; (5) Improper key usage — changing keys causes components to unmount and remount. Use React DevTools Profiler to diagnose which of these applies.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q11">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you memoize expensive calculations?
+        </button>
+      </h2>
+      <div id="performance-q11" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          <code>useMemo(() =&gt; expensiveCalculation(input), [input])</code> memoizes the result — the calculation only re-runs when <code>input</code> changes, returning the cached value on other renders. This is useful for: sorting/filtering large arrays, complex mathematical computations, creating derived data from large datasets, and building objects for Context.Provider values. The key question is "is this actually expensive?" Sorting 1000 items takes ~1ms — likely not worth memoizing. Parsing and transforming a 50,000-row dataset might be. Always measure with the Profiler before adding useMemo — premature memoization adds complexity and the overhead of the dependency comparison.
+          <pre class="code-block">function ProductList({ products, searchTerm, sortBy }) {
+  // Memoize expensive filter + sort operation
+  const filteredAndSorted = React.useMemo(() =&gt; {
+    console.log('Computing filtered+sorted list...'); // only logs when deps change
+    return products
+      .filter(p =&gt; p.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      .sort((a, b) =&gt; {
+        if (sortBy === 'price') return a.price - b.price;
+        if (sortBy === 'name') return a.name.localeCompare(b.name);
+        return 0;
+      });
+  }, [products, searchTerm, sortBy]);
+  // filteredAndSorted is the same array reference as long as dependencies don't change
+
+  return &lt;ul&gt;{filteredAndSorted.map(p =&gt; &lt;ProductItem key={p.id} product={p} /&gt;)}&lt;/ul&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q12">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the React DevTools Profiler's "why did this render?" feature?
+        </button>
+      </h2>
+      <div id="performance-q12" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          The React DevTools Profiler "Why did this render?" feature (available when you click on a component in the flame chart) shows the specific reason a component re-rendered: which props changed, which state changed, or whether a hook (context, state, reducer) caused the update. It compares the previous and current values to tell you exactly which data changed. This is invaluable for diagnosing unexpected re-renders — often you discover that a memoized component is still re-rendering because a function prop has a new reference (needs <code>useCallback</code>) or because a context value is a new object on every render (needs its own memo). Enable "Record why each component rendered" in the Profiler settings for this information.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q13">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you optimize Context to avoid unnecessary re-renders?
+        </button>
+      </h2>
+      <div id="performance-q13" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Every component that calls <code>useContext(MyContext)</code> re-renders whenever the Context's <code>value</code> changes (by reference). Common optimization strategies: (1) Split contexts — separate frequently-changing values from stable values into different context providers; (2) Memoize the value — <code>const value = useMemo(() =&gt; ({ user, logout }), [user])</code> to prevent new object references; (3) Context + reducer — use <code>useReducer</code> for the state and expose the dispatch separately (dispatch is stable, so a separate dispatch context prevents re-renders on state changes); (4) Use a context selector — libraries like <code>use-context-selector</code> add React Redux-like selector support to Context. The most scalable solution for complex shared state is usually Redux or Zustand rather than Context.
+          <pre class="code-block">// Split context: stable values vs frequently-changing values
+const UserContext = React.createContext(null);
+const UserDispatchContext = React.createContext(null);
+
+function UserProvider({ children }) {
+  const [user, dispatch] = React.useReducer(userReducer, initialUser);
+
+  // user changes often; dispatch is stable (never changes)
+  return (
+    &lt;UserDispatchContext.Provider value={dispatch}&gt;
+      &lt;UserContext.Provider value={user}&gt;
+        {children}
+      &lt;/UserContext.Provider&gt;
+    &lt;/UserDispatchContext.Provider&gt;
+  );
+}
+
+// Components that only dispatch won't re-render when user state changes
+function LogoutButton() {
+  const dispatch = React.useContext(UserDispatchContext); // stable!
+  return &lt;button onClick={() =&gt; dispatch({ type: 'LOGOUT' })}&gt;Logout&lt;/button&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q14">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is lazy loading images and how do you implement it in React?
+        </button>
+      </h2>
+      <div id="performance-q14" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Lazy loading images defers loading images that are off-screen until the user scrolls near them. This reduces initial page load time and network bandwidth for images the user may never see. The modern approach uses the native <code>loading="lazy"</code> attribute on <code>&lt;img&gt;</code> tags — supported by all modern browsers, no JavaScript required. For custom lazy loading (with custom thresholds, custom placeholders, or blur-up effects), use the <code>IntersectionObserver</code> API in a custom hook. Libraries like <code>react-lazyload</code> and <code>react-intersection-observer</code> provide React abstractions. For Next.js, the built-in <code>&lt;Image&gt;</code> component handles lazy loading, size optimization, and modern format conversion automatically.
+          <pre class="code-block">// Native lazy loading (simplest — use this first)
+&lt;img src={product.imageUrl} alt={product.name} loading="lazy" /&gt;
+
+// Custom lazy loading with IntersectionObserver
+function LazyImage({ src, alt, placeholder }) {
+  const imgRef = React.useRef(null);
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  React.useEffect(() =&gt; {
+    const observer = new IntersectionObserver(
+      ([entry]) =&gt; { if (entry.isIntersecting) { setIsVisible(true); observer.disconnect(); } },
+      { rootMargin: '200px' } // start loading 200px before visible
+    );
+    if (imgRef.current) observer.observe(imgRef.current);
+    return () =&gt; observer.disconnect();
+  }, []);
+
+  return (
+    &lt;img
+      ref={imgRef}
+      src={isVisible ? src : placeholder ?? 'data:image/svg+xml,...'}
+      alt={alt}
+    /&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q15">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is Concurrent Mode in React 18?
+        </button>
+      </h2>
+      <div id="performance-q15" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Concurrent Mode is React 18's ability to prepare multiple versions of the UI simultaneously and interrupt, pause, or abandon renders that are no longer needed. Before Concurrent Mode (React 17 and earlier), rendering was synchronous — once React started rendering a component tree, it ran to completion, potentially blocking the main thread and making the UI unresponsive. In Concurrent Mode, React can pause work, work on higher-priority updates first (e.g., a keypress) before finishing lower-priority work (e.g., a heavy list re-render), and discard partial renders if the data changes again. This is the foundation for features like <code>startTransition</code>, <code>useDeferredValue</code>, and Suspense for data fetching. Concurrent Mode is opt-in via <code>ReactDOM.createRoot</code> (instead of the legacy <code>ReactDOM.render</code>).
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q16">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is startTransition?
+        </button>
+      </h2>
+      <div id="performance-q16" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          <code>startTransition(callback)</code> (React 18+) marks state updates inside the callback as "transitions" — non-urgent updates that can be interrupted by more urgent updates (like user input). It is used when you have a state update that triggers a slow render and you want typing/clicking to remain responsive while it processes. The wrapped updates have lower priority than default updates. React can interrupt a transition render to process a higher-priority update (e.g., a new keystroke), then resume or restart the transition. This eliminates the typing lag that occurs when filtering a large list — typing is always instantly responsive, and the list update happens in the background. React 18 also provides the <code>useTransition</code> hook which gives an <code>isPending</code> boolean for showing a loading indicator during the transition.
+          <pre class="code-block">import { startTransition, useTransition } from 'react';
+
+// startTransition directly
+function SearchPage() {
+  const [query, setQuery] = React.useState('');
+  const [results, setResults] = React.useState([]);
+
+  const handleSearch = (e) =&gt; {
+    setQuery(e.target.value); // urgent: update input immediately
+    startTransition(() =&gt; {
+      setResults(computeHeavyFilteredResults(e.target.value)); // non-urgent
+    });
+  };
+  return &lt;input value={query} onChange={handleSearch} /&gt;;
+}
+
+// useTransition: also gives isPending
+function SearchWithSpinner() {
+  const [isPending, startTransition] = useTransition();
+  const [results, setResults] = React.useState([]);
+
+  const handleSearch = (query) =&gt; {
+    startTransition(() =&gt; setResults(computeHeavyResults(query)));
+  };
+  return &lt;&gt;{isPending &amp;&amp; &lt;Spinner /&gt;}&lt;ResultList results={results} /&gt;&lt;/&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q17">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is useDeferredValue?
+        </button>
+      </h2>
+      <div id="performance-q17" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          <code>useDeferredValue(value)</code> (React 18+) returns a deferred version of the provided value — it lags behind the actual value during high-priority renders, allowing the UI to show a slightly stale version while React processes the urgent update. It is the "pull" alternative to <code>startTransition</code> (which is "push"): instead of wrapping the setter, you wrap the value at the consuming end. Use it when you don't control the state update (e.g., a third-party component triggers the update). The deferred value stays the same reference during urgent updates, which means <code>React.memo</code>-wrapped components that receive the deferred value won't re-render during the urgent update — they update during the background render.
+          <pre class="code-block">function SearchResults({ query }) {
+  const deferredQuery = useDeferredValue(query);
+  // query is the urgent/current value (typing is instant)
+  // deferredQuery lags behind — the heavy filter runs with the deferred value
+
+  const isStale = deferredQuery !== query;
+
+  const filteredItems = React.useMemo(
+    () =&gt; heavyFilter(allItems, deferredQuery),
+    [deferredQuery] // only re-runs when deferred value updates
+  );
+
+  return (
+    &lt;div style={{ opacity: isStale ? 0.7 : 1 }}&gt; {/* visual stale indicator */}
+      {filteredItems.map(item =&gt; &lt;Item key={item.id} item={item} /&gt;)}
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q18">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is time slicing?
+        </button>
+      </h2>
+      <div id="performance-q18" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Time slicing is an internal React mechanism (part of Concurrent Mode) where React breaks up large rendering work into small units ("slices") and executes them over multiple frames, yielding control back to the browser between slices. Instead of blocking the main thread for 200ms rendering a massive component tree, React renders a portion, yields to allow the browser to handle user events and paint, then resumes. This keeps the UI at 60fps (or higher) even during complex renders. Time slicing is automatic in React 18 with <code>createRoot</code> — you don't need to do anything to enable it. It works in conjunction with <code>startTransition</code> and <code>useDeferredValue</code> which designate which updates can be time-sliced (transitions) vs which must be synchronous (urgent updates).
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q19">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you measure web vitals in a React app?
+        </button>
+      </h2>
+      <div id="performance-q19" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Web Vitals are Google's metrics for user experience: LCP (Largest Contentful Paint — loading), FID/INP (First Input Delay/Interaction to Next Paint — interactivity), CLS (Cumulative Layout Shift — visual stability), FCP (First Contentful Paint), and TTFB (Time to First Byte). In React apps, use the <code>web-vitals</code> library to measure them in the browser and report to an analytics endpoint. Create React App (before Vite became standard) included <code>reportWebVitals()</code> for this. For Next.js, override the <code>reportWebVitals</code> export in <code>_app.tsx</code>. For Vite + React, add the <code>web-vitals</code> package manually and call the measurement functions in your app's entry point.
+          <pre class="code-block">import { onCLS, onFID, onFCP, onLCP, onTTFB, onINP } from 'web-vitals';
+
+function sendToAnalytics(metric) {
+  // Send to your analytics platform
+  console.log(metric); // { name, value, id, entries }
+  fetch('/api/analytics', {
+    method: 'POST',
+    body: JSON.stringify({ name: metric.name, value: metric.value }),
+    keepalive: true, // ensures the request completes even if page unloads
+  });
+}
+
+// Measure all core web vitals
+onCLS(sendToAnalytics);
+onFID(sendToAnalytics);
+onFCP(sendToAnalytics);
+onLCP(sendToAnalytics);
+onTTFB(sendToAnalytics);
+onINP(sendToAnalytics);</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q20">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is bundle analysis and how do you do it for a React app?
+        </button>
+      </h2>
+      <div id="performance-q20" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Bundle analysis visualizes what JavaScript code is included in your production bundle and what proportion each dependency takes up, helping identify unexpectedly large packages to optimize or replace. For Vite: use the <code>rollup-plugin-visualizer</code> plugin which generates an interactive treemap showing bundle composition. For webpack (Create React App, Next.js): use <code>webpack-bundle-analyzer</code>. The output shows your code vs dependencies, how much gzip savings are possible, and surprises like accidentally importing a large library (e.g., importing all of lodash instead of just the function you need). Common findings: moment.js (huge — replace with date-fns), importing full icon libraries instead of individual icons, un-tree-shaken UI component libraries, and duplicate versions of the same package.
+          <pre class="code-block">// vite.config.ts — add bundle visualizer
+import { visualizer } from 'rollup-plugin-visualizer';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    visualizer({
+      open: true,       // auto-open after build
+      filename: 'stats.html',
+      gzipSize: true,   // show gzip sizes
+      brotliSize: true, // show brotli sizes
+    }),
+  ],
+});
+
+// Run: npm run build
+// Opens stats.html with interactive treemap
+
+// Common fix: tree-shake icon imports
+// Bad: imports ALL icons (huge bundle)
+import { MdHome, MdSearch } from 'react-icons/md';
+// Good: import from subpath (only the icon you need)
+import MdHome from 'react-icons/md/MdHome';</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q21">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is streaming SSR in React 18?
+        </button>
+      </h2>
+      <div id="performance-q21" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Streaming SSR (Server-Side Rendering) in React 18 allows the server to send HTML to the browser in chunks as it's generated, rather than waiting for the entire page to be rendered before sending anything. The browser can start parsing and displaying the initial HTML while React is still generating the rest. Combined with Suspense boundaries, React can stream the parts of the page that are ready immediately (navigation, headers, cached content) and stream in the rest as data becomes available. This dramatically improves Time to First Byte (TTFB) and First Contentful Paint (FCP) for data-heavy pages. React 18's <code>renderToPipeableStream</code> (Node.js) and <code>renderToReadableStream</code> (Edge/Deno) APIs power streaming SSR. Next.js 13+ App Router uses this by default.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q22">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement route-based code splitting?
+        </button>
+      </h2>
+      <div id="performance-q22" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Route-based code splitting is the most impactful code-splitting strategy — each route (page) is loaded in its own separate chunk, so users only download the code for pages they visit. Implement it with <code>React.lazy()</code> for each route component and <code>&lt;Suspense&gt;</code> around the <code>&lt;Routes&gt;</code>. The initial bundle only contains the app shell and the code for the first route. Navigating to a new route triggers a dynamic import for that route's bundle. For React Router v6, wrap the lazy route component in <code>&lt;Suspense fallback={&lt;PageSkeleton /&gt;}&gt;</code>. For Next.js App Router, each page file is automatically code-split. Combining route splitting with prefetching (loading the next likely page's bundle on hover or in the background) eliminates loading states during navigation.
+          <pre class="code-block">import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Each lazy import creates a separate bundle chunk
+const LiveYard = lazy(() =&gt; import('./views/LiveYard'));
+const TrailerCheckin = lazy(() =&gt; import('./views/TrailerCheckin'));
+const Metrics = lazy(() =&gt; import('./views/Metrics'));
+const TruckSchedule = lazy(() =&gt; import('./views/TruckSchedule'));
+
+function App() {
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;Suspense fallback={&lt;PageLoadingSpinner /&gt;}&gt;
+        &lt;Routes&gt;
+          &lt;Route path="/yard" element={&lt;LiveYard /&gt;} /&gt;
+          &lt;Route path="/yard/trailer-checkin" element={&lt;TrailerCheckin /&gt;} /&gt;
+          &lt;Route path="/metrics" element={&lt;Metrics /&gt;} /&gt;
+          &lt;Route path="/truck-schedule" element={&lt;TruckSchedule /&gt;} /&gt;
+        &lt;/Routes&gt;
+      &lt;/Suspense&gt;
+    &lt;/BrowserRouter&gt;
+  );
+}
+// Vite/webpack creates: main.js, LiveYard.[hash].js, TrailerCheckin.[hash].js, etc.</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q23">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you identify and fix performance bottlenecks with React DevTools?
+        </button>
+      </h2>
+      <div id="performance-q23" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Performance investigation workflow: (1) Open React DevTools → Profiler tab → click "Record"; (2) Perform the slow interaction; (3) Stop recording; (4) Examine the flame chart — wide bars indicate slow renders; (5) Click a bar to see "why did this render?" — look for prop changes that shouldn't be changing (new object/function references); (6) Check the "ranked" chart to see the slowest renders by actual duration; (7) Fix: wrap slow components with <code>React.memo</code>, stabilize function/object props with <code>useCallback</code>/<code>useMemo</code>, split contexts, or use virtualization for long lists. Repeat the Profiler recording after fixes to confirm improvement. Also use Chrome DevTools Performance tab for JavaScript execution profiling (total JS time, garbage collection, long tasks).
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q24">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the cost of inline functions in JSX?
+        </button>
+      </h2>
+      <div id="performance-q24" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Inline functions in JSX create a new function reference on every render: <code>&lt;Button onClick={() =&gt; handleClick(id)} /&gt;</code>. If <code>Button</code> is wrapped in <code>React.memo</code>, this new reference causes it to re-render on every parent render (defeating memo). The solutions: (1) <code>useCallback</code> to memoize the function; (2) Extract the handler outside the component if it doesn't depend on closure variables; (3) Pass an ID and use a stable context/dispatch rather than per-item callbacks. However, the actual performance cost of new function objects is minimal for non-memoized components — React's rendering cost typically dominates. Only optimize inline functions when they are props to <code>React.memo</code>-wrapped components or are in <code>useEffect</code> dependency arrays where new references cause effect re-runs.
+          <pre class="code-block">// Problem: new function reference breaks React.memo
+const MemoButton = React.memo(({ onClick, label }) =&gt; {
+  console.log('Button rendered');
+  return &lt;button onClick={onClick}&gt;{label}&lt;/button&gt;;
+});
+
+function Parent({ id }) {
+  const [count, setCount] = React.useState(0);
+
+  // Bad: new function reference every render → MemoButton re-renders every time
+  return &lt;MemoButton onClick={() =&gt; handleClick(id)} label="Click" /&gt;;
+}
+
+function ParentFixed({ id }) {
+  const [count, setCount] = React.useState(0);
+
+  // Good: stable reference — MemoButton skips re-render when count changes
+  const handleClick = React.useCallback(() =&gt; doSomething(id), [id]);
+
+  return &lt;MemoButton onClick={handleClick} label="Click" /&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q25">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement Intersection Observer for performance?
+        </button>
+      </h2>
+      <div id="performance-q25" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          <code>IntersectionObserver</code> allows you to detect when elements enter or leave the viewport without polling (no continuous scroll event listeners). Performance use cases: lazy loading images/components, infinite scroll pagination, triggering animations when elements become visible, and analytics (tracking which sections users see). The API is asynchronous and doesn't block the main thread. A React custom hook wrapping IntersectionObserver is the idiomatic pattern. Clean up the observer in the effect's cleanup function. For simpler cases, the <code>react-intersection-observer</code> library provides a clean hook API.
+          <pre class="code-block">function useIntersectionObserver(options = {}) {
+  const [isVisible, setIsVisible] = React.useState(false);
+  const elementRef = React.useRef(null);
+
+  React.useEffect(() =&gt; {
+    const element = elementRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(([entry]) =&gt; {
+      setIsVisible(entry.isIntersecting);
+    }, {
+      threshold: options.threshold ?? 0,
+      rootMargin: options.rootMargin ?? '0px',
+    });
+
+    observer.observe(element);
+    return () =&gt; observer.unobserve(element);
+  }, [options.threshold, options.rootMargin]);
+
+  return [elementRef, isVisible];
+}
+
+// Usage: load component only when it enters viewport
+function LazySection({ children }) {
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
+  return (
+    &lt;div ref={ref}&gt;
+      {isVisible ? children : &lt;div style={{ height: '400px' }} /&gt;}
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q26">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is server-side rendering (SSR) and its performance benefits?
+        </button>
+      </h2>
+      <div id="performance-q26" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          SSR renders React components to HTML on the server before sending to the browser. Performance benefits: (1) Faster First Contentful Paint (FCP) — the browser receives HTML immediately rather than an empty shell that requires JavaScript to populate; (2) Better SEO — search engine crawlers receive fully rendered HTML; (3) Better performance on low-power devices — less JavaScript parsing and execution needed for initial render; (4) Reduced Cumulative Layout Shift (CLS) — content is already in the HTML so there's no post-JS-load layout shift. SSR trade-offs: Time to First Byte (TTFB) is slower (server must render before responding); server infrastructure is required; Time to Interactive (TTI) can be poor if a large JavaScript bundle needs to hydrate the SSR HTML. Next.js, Remix, and Astro are the primary React SSR frameworks.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q27">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the difference between SSR, SSG, and ISR?
+        </button>
+      </h2>
+      <div id="performance-q27" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          SSR (Server-Side Rendering): renders the page on the server for each request — fresh data every time, slower TTFB, requires Node.js server. SSG (Static Site Generation): renders pages at build time — the HTML is pre-generated and served from a CDN; blazing-fast (no server compute), but data is only as fresh as the last build. ISR (Incremental Static Regeneration): Next.js's hybrid approach — pages are statically generated but automatically regenerated in the background after a configured time period (revalidate interval) or on-demand via a webhook; combines SSG's speed with data freshness. The right choice: SSG for marketing pages, documentation, and blogs; SSR for dashboards and user-specific data; ISR for product catalogs and content sites where some staleness is acceptable.
+          <pre class="code-block">// Next.js App Router examples
+
+// SSG (default for Server Components with no dynamic data)
+export default async function ProductsPage() {
+  const products = await fetch('https://api.example.com/products').then(r =&gt; r.json());
+  return &lt;ProductList products={products} /&gt;;
+}
+
+// SSG with revalidation (ISR) — regenerate at most every 60 seconds
+export const revalidate = 60;
+export default async function ProductsPage() { /* same as above */ }
+
+// SSR (no caching, fetch fresh data every request)
+export const dynamic = 'force-dynamic'; // or: export const revalidate = 0;
+export default async function DashboardPage() {
+  const data = await fetch('...', { cache: 'no-store' }).then(r =&gt; r.json());
+  return &lt;Dashboard data={data} /&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q28">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement memoization for a component that receives complex props?
+        </button>
+      </h2>
+      <div id="performance-q28" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          When a component receives object or array props, React.memo's shallow comparison will always see new references (since the parent creates new object/array literals on each render). Solutions: (1) Memoize the props in the parent with <code>useMemo</code>; (2) Lift the data out of the render function (module-level constants, Context, Redux state — all stable references); (3) Provide a custom comparator to React.memo: <code>React.memo(Component, (prevProps, nextProps) =&gt; deepEqual(prevProps, nextProps))</code> — be careful, deep comparison is expensive and can negate the benefit; (4) Restructure props to primitives (pass <code>id</code> and look up the data in the child rather than passing the whole object). The cleanest solution is usually memoizing in the parent.
+          <pre class="code-block">// Parent creating new object reference on every render
+function ParentBad() {
+  return &lt;MemoChild config={{ theme: 'dark', size: 'large' }} /&gt;; // new object every render!
+}
+
+// Fix 1: Lift to module level (if config is static)
+const config = { theme: 'dark', size: 'large' };
+function ParentFixed1() {
+  return &lt;MemoChild config={config} /&gt;; // same reference always
+}
+
+// Fix 2: useMemo if config depends on state
+function ParentFixed2({ theme, size }) {
+  const config = React.useMemo(() =&gt; ({ theme, size }), [theme, size]);
+  return &lt;MemoChild config={config} /&gt;; // stable reference when theme/size unchanged
+}
+
+// Fix 3: custom comparator
+const MemoChild = React.memo(Child, (prev, next) =&gt;
+  prev.config.theme === next.config.theme &amp;&amp; prev.config.size === next.config.size
+);</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q29">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the Largest Contentful Paint (LCP) and how do you improve it in React?
+        </button>
+      </h2>
+      <div id="performance-q29" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Largest Contentful Paint measures how long it takes for the largest visible content element (image, video, text block) to render on screen. Good LCP is under 2.5 seconds. In React apps, common LCP culprits are: large hero images (not preloaded, served in wrong format), render-blocking JavaScript (large synchronous bundle), client-side rendering with empty initial HTML (SSR solves this), and fonts not preloaded. Improvements: preload the LCP image with <code>&lt;link rel="preload" as="image"&gt;</code>, use SSR or SSG to serve pre-rendered HTML, reduce JavaScript bundle size (code splitting), use WebP/AVIF image formats, add <code>fetchpriority="high"</code> to the LCP image, and use a CDN. Next.js <code>&lt;Image&gt;</code> with <code>priority={true}</code> automatically adds preloading for above-the-fold images.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q30">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is Cumulative Layout Shift (CLS) and how do you prevent it in React?
+        </button>
+      </h2>
+      <div id="performance-q30" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Cumulative Layout Shift measures unexpected movement of visible page content — elements shifting position after the initial render. Good CLS is under 0.1. In React apps, CLS is commonly caused by: images without explicit width/height (browser doesn't know their size until loaded and shifts layout); ads or embeds injected without reserved space; dynamically injected content above existing content; and fonts swapping and causing text reflow. Fixes: always specify <code>width</code> and <code>height</code> (or <code>aspect-ratio</code>) on images; use CSS <code>min-height</code> to reserve space for dynamically loaded content; use <code>font-display: optional</code> or <code>font-display: swap</code> carefully; avoid injecting content above existing content. In React, use skeleton loading screens with fixed dimensions rather than showing nothing.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q31">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is hydration and how do you optimize hydration performance?
+        </button>
+      </h2>
+      <div id="performance-q31" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Hydration is the process where React attaches event listeners and sets up state to an existing server-rendered HTML DOM — making static HTML interactive. Full hydration (React 17/early React 18) re-renders the entire component tree on the client to "attach" it — expensive for large apps. React 18 introduced partial hydration and selective hydration: with Suspense boundaries, React hydrates interactive parts of the page first (the parts users can interact with) and defers hydrating off-screen content. Hydration performance improvements: (1) Progressive hydration — manually control what hydrates and when with lazy loading; (2) Islands architecture (Astro, Fresh) — only hydrate truly interactive components, serve the rest as static HTML; (3) React Server Components — server components produce no client JavaScript and are never hydrated; (4) Reduce component tree depth to reduce hydration work.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q32">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the islands architecture in React?
+        </button>
+      </h2>
+      <div id="performance-q32" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          The Islands Architecture (popularized by Astro) is a rendering pattern where the page is mostly static HTML with isolated "islands" of interactivity. The static portions are never hydrated (no JavaScript needed) — they're just HTML. Only the interactive islands are hydrated with React. This produces dramatically smaller JavaScript payloads than traditional React SSR (where the entire page is hydrated). In the React ecosystem: Astro can render React components as islands; Next.js App Router's Server Components achieve a similar effect (server components produce zero client JavaScript). The mental model: think of the page as a static ocean with interactive islands rather than a JavaScript-driven SPA. This is ideal for content-heavy sites (marketing, documentation, e-commerce product pages) where most content is static.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q33">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement progressive image loading (blur-up) in React?
+        </button>
+      </h2>
+      <div id="performance-q33" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Progressive image loading (blur-up) shows a tiny blurry placeholder image while the full-size image loads, then fades to the full image. The technique: generate a tiny (~20px) version of the image as a base64 data URL; render it as the <code>src</code> with CSS <code>filter: blur(10px)</code> and <code>scale(1.1)</code> to hide the pixelation; load the full image in the background; when it loads, swap the src and fade in the full image. This is how Medium and many modern sites handle image loading. Next.js <code>&lt;Image&gt;</code> with <code>placeholder="blur"</code> does this automatically. For custom implementation, use the IntersectionObserver to only load the full image when the placeholder is visible.
+          <pre class="code-block">function ProgressiveImage({ src, placeholder, alt, ...props }) {
+  const [imgSrc, setImgSrc] = React.useState(placeholder); // start with tiny placeholder
+  const [isLoaded, setIsLoaded] = React.useState(false);
+
+  React.useEffect(() =&gt; {
+    const img = new Image();
+    img.src = src;
+    img.onload = () =&gt; {
+      setImgSrc(src);
+      setIsLoaded(true);
+    };
+  }, [src]);
+
+  return (
+    &lt;img
+      src={imgSrc}
+      alt={alt}
+      style={{
+        filter: isLoaded ? 'none' : 'blur(8px)',
+        transform: isLoaded ? 'scale(1)' : 'scale(1.05)',
+        transition: 'filter 0.3s ease, transform 0.3s ease',
+      }}
+      {...props}
+    /&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q34">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is tree shaking and how does it affect React app performance?
+        </button>
+      </h2>
+      <div id="performance-q34" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Tree shaking is the process where bundlers (Webpack, Vite/Rollup) analyze module imports and remove code that is never imported (dead code elimination). It works on ES modules (<code>import</code>/<code>export</code> syntax) because static analysis can determine which exports are used. For React apps, tree shaking is crucial for keeping bundle sizes small. Common tree-shaking pitfalls: importing from CommonJS modules (can't be tree-shaken); using default imports from libraries that export everything (e.g., <code>import _ from 'lodash'</code> imports ALL of lodash); side-effect imports (<code>import 'some-library'</code> defeats shaking); and libraries that don't ship ES modules (check the <code>module</code> field in package.json). Always import named exports: <code>import { debounce } from 'lodash-es'</code> imports only debounce.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q35">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you optimize rendering performance for forms with many fields?
+        </button>
+      </h2>
+      <div id="performance-q35" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Forms with many controlled inputs can become slow when every keystroke triggers state updates that cause all fields to re-render. Optimization strategies: (1) Uncontrolled inputs with refs — avoid React state entirely for large forms; (2) React Hook Form — designed for performance, it uses uncontrolled inputs internally and only re-renders the specific field that changed and the submit button; (3) Field-level state isolation — each field manages its own state, parent only collects values on submit; (4) Debounce validation — don't validate on every keystroke for expensive async validation; (5) Memoize field components with <code>React.memo</code> — prevent other fields from re-rendering when one field changes. React Hook Form is the best solution for complex forms as it combines minimal re-renders with a developer-friendly API.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q36">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the difference between paint and layout in browser rendering?
+        </button>
+      </h2>
+      <div id="performance-q36" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          The browser rendering pipeline: JavaScript → Style → Layout → Paint → Composite. Layout (also called "reflow") recalculates the geometry of elements — positions and sizes. It is triggered by property reads like <code>offsetWidth</code>, <code>scrollTop</code>, <code>getBoundingClientRect()</code> or by DOM mutations that affect size/position. Paint fills in pixels for each element — colors, backgrounds, text. Compositing combines painted layers. Layout and Paint are expensive; Compositing is cheap. CSS properties that only affect compositing (<code>transform</code>, <code>opacity</code>) animate without Layout or Paint — this is why CSS transitions should use <code>transform</code> and <code>opacity</code> rather than <code>top</code>/<code>left</code>/<code>width</code>. In React, frequent style changes via inline styles or className toggling can trigger unnecessary Layout and Paint — batch DOM mutations and use CSS custom properties or CSS classes for performance.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q37">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is content delivery network (CDN) and how do you use it for React apps?
+        </button>
+      </h2>
+      <div id="performance-q37" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          A CDN is a distributed network of servers that caches and serves static assets (JavaScript bundles, images, fonts) from locations geographically close to the user. For React apps: build output (JS, CSS, HTML) is uploaded to or synced with a CDN; the CDN serves assets with aggressive cache headers (<code>Cache-Control: public, max-age=31536000, immutable</code> for content-hashed filenames); users download assets from the nearest CDN edge node rather than your origin server, reducing latency. Vite's build output includes content-hashed filenames for all assets (e.g., <code>main.3f4d2a.js</code>), enabling permanent caching — the hash changes only when content changes, so browsers cache indefinitely and get fresh versions when code changes. Popular CDNs: Cloudflare, AWS CloudFront, Vercel Edge Network, Fastly.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q38">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement request waterfall prevention in React?
+        </button>
+      </h2>
+      <div id="performance-q38" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Request waterfalls occur when components sequentially fetch data that could be fetched in parallel — each fetch must complete before the next starts, adding latency equal to the sum of all requests. Common patterns: parent component fetches user data → renders child → child fetches user's posts → renders grandchild → grandchild fetches post comments. Solutions: (1) Parallel fetching — <code>Promise.all([fetchUser(), fetchPosts(), fetchComments()])</code> in one effect; (2) React Query's <code>useQueries</code> for parallel queries; (3) Fetch at the route level (loaders) — gather all data before rendering the component tree; (4) Relay/GraphQL — fetch the entire component tree's data requirements in one query; (5) React Server Components — server-side rendering eliminates client-server waterfalls for SSR scenarios.
+          <pre class="code-block">// Bad: waterfall (3 sequential requests)
+function UserProfile({ userId }) {
+  const { data: user } = useQuery(['user', userId], fetchUser);
+  const { data: posts } = useQuery(['posts', userId], () =&gt; fetchPosts(userId), {
+    enabled: !!user, // waits for user before starting
+  });
+  const { data: followers } = useQuery(['followers', userId], () =&gt; fetchFollowers(userId), {
+    enabled: !!user, // also waits for user
+  });
+}
+
+// Good: parallel requests (posts and followers start together)
+function UserProfileFixed({ userId }) {
+  const { data: user } = useQuery(['user', userId], fetchUser);
+
+  // Both start simultaneously once userId is available
+  const [{ data: posts }, { data: followers }] = useQueries({
+    queries: [
+      { queryKey: ['posts', userId], queryFn: () =&gt; fetchPosts(userId) },
+      { queryKey: ['followers', userId], queryFn: () =&gt; fetchFollowers(userId) },
+    ],
+  });
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q39">
+          <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;You notice that your React app becomes sluggish after navigating between pages several times. How would you diagnose and fix it?
+        </button>
+      </h2>
+      <div id="performance-q39" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          This symptom — degradation over time with navigation — suggests either a memory leak (increasing heap usage) or accumulated subscriptions/intervals not being cleaned up. Diagnosis workflow: (1) Open Chrome DevTools → Performance tab → take a heap snapshot before navigation, navigate multiple times, take another snapshot, compare; if heap grows linearly, you have a memory leak; (2) Check the Memory tab's timeline for sawtooth patterns (GC collecting) vs steady upward growth; (3) In React DevTools, check if components that should unmount are still mounted (subscriptions keeping references alive). Common causes: <code>useEffect</code> not cleaning up event listeners, WebSocket connections not closed on unmount, intervals not cleared, React Query <code>QueryClient</code> holding references to large datasets, and missing <code>key</code> props causing components to not remount on navigation. Fix each by adding proper cleanup functions to effects. React 18's StrictMode double-invokes effects in development to expose missing cleanup — it's your first line of defense.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q40">
+          <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;Your list component renders 10,000 items and the page freezes on first load. What approaches would you use?
+        </button>
+      </h2>
+      <div id="performance-q40" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          A list with 10,000 DOM nodes will freeze on render because the browser must create thousands of DOM elements simultaneously — this is a browser limitation, not a React limitation. The primary solution is virtualization: use <code>@tanstack/react-virtual</code> or <code>react-window</code> to render only visible items (~20-30 at a time). Additional strategies: pagination (server-side) — don't load all 10,000 items at once; progressive loading — render 50 items, add more as the user scrolls (infinite scroll); <code>React.memo</code> on list items to prevent re-renders when the list is filtered/sorted without changing individual items; debounce filtering to avoid expensive re-renders on every keystroke; <code>startTransition</code> for filter/sort state updates to keep the UI responsive during re-renders. Virtualization alone typically solves the problem — it reduces 10,000 DOM nodes to ~30, making initial render nearly instantaneous.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q41">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the useMemo hook's relationship with referential equality?
+        </button>
+      </h2>
+      <div id="performance-q41" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          <code>useMemo</code> preserves referential equality of its return value between renders when dependencies haven't changed. This is the key insight: <code>useMemo(() =&gt; ({ a, b }), [a, b])</code> returns the same object reference as long as <code>a</code> and <code>b</code> are unchanged. Without useMemo, <code>{ a, b }</code> creates a new object on every render — a different reference even if the values are the same. This matters for: Context values (new reference triggers all consumer re-renders), props to memoized children (new reference defeats React.memo), and useEffect dependencies (new reference triggers effect on every render). The mental model: useMemo is not only for computation performance — it's for reference stability. Stabilizing references is often more important than skipping expensive calculations.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q42">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How does React batch state updates and why does it matter for performance?
+        </button>
+      </h2>
+      <div id="performance-q42" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          React batches multiple state updates in the same event handler into a single re-render — calling <code>setA(1); setB(2)</code> in a click handler triggers one re-render, not two. In React 17, batching only happened inside React event handlers (synthetic events). In React 18 with <code>createRoot</code>, batching happens automatically everywhere — inside setTimeout, Promise callbacks, and native event listeners. This is "automatic batching." For performance, this means fewer re-renders when multiple state updates happen close together. To opt out of batching (force a synchronous re-render between updates), use <code>ReactDOM.flushSync(() =&gt; setState(value))</code>. Batching is why you should never rely on reading state immediately after setting it — the update is asynchronous.
+          <pre class="code-block">// React 18: automatic batching everywhere
+function handleAsync() {
+  setTimeout(() =&gt; {
+    setCount(c =&gt; c + 1); // React 17: immediate re-render
+    setFlag(true);         // React 17: second re-render
+    // React 18: batched — single re-render for both!
+  }, 100);
+}
+
+// Opt out of batching with flushSync
+import { flushSync } from 'react-dom';
+function handleClick() {
+  flushSync(() =&gt; setCount(c =&gt; c + 1)); // forces immediate re-render
+  // DOM is updated here before the next line
+  flushSync(() =&gt; setFlag(true)); // another immediate re-render
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q43">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is React Server Components and how do they improve performance?
+        </button>
+      </h2>
+      <div id="performance-q43" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          React Server Components (RSC) are components that run exclusively on the server — their code is never sent to the browser. They can access databases, file systems, and server-only APIs directly. Their output (a serialized React element tree, not HTML) is streamed to the client, where Client Components are hydrated. Performance benefits: (1) Zero bundle size — RSC code is never included in the client JavaScript bundle; (2) Direct data access — no client-server round trip for data fetching; (3) Automatic code splitting — RSC boundaries naturally split the bundle; (4) Streaming — RSC output streams to the client progressively. The trade-off: RSCs can't use state, effects, or browser APIs. The RSC architecture in Next.js 13+ App Router (where all components are server by default) represents a significant paradigm shift in React performance optimization.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q44">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the key prop's role in performance?
+        </button>
+      </h2>
+      <div id="performance-q44" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          The <code>key</code> prop helps React identify which items in a list have changed between renders, enabling efficient reconciliation. With stable, unique keys, React can correctly match old and new list items — it only re-renders items with changed props, moves (not recreates) items that have reordered, and correctly mounts/unmounts items added or removed. With index-based keys, any addition, removal, or reordering causes incorrect matching — React re-renders all subsequent items and can cause state bugs (e.g., an input's value belonging to item A being shown for item B after a deletion). The <code>key</code> prop also serves as a "reset" mechanism: changing a component's key forces it to fully unmount and remount — a useful pattern for resetting component state when an ID changes.
+          <pre class="code-block">// Key as a reset mechanism — resets form when userId changes
+function UserForm({ userId }) {
+  // Changing userId changes the key, which forces UserFormFields to remount
+  // All internal state (form fields, validation) is cleared automatically
+  return &lt;UserFormFields key={userId} userId={userId} /&gt;;
+}
+
+// Without key reset, you'd need a useEffect to clear state on userId change
+// With key, the component lifecycle handles it naturally</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q45">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you optimize images for a React production app?
+        </button>
+      </h2>
+      <div id="performance-q45" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Image optimization is often the single largest performance win in web apps. Strategies: (1) Format — use WebP (30-50% smaller than JPEG) or AVIF (newer, even smaller); (2) Responsive images — serve different sizes for different screen densities using <code>srcset</code> and <code>sizes</code>; (3) Compression — compress images with tools like Squoosh, sharp, or imagemin; (4) Lazy loading — use <code>loading="lazy"</code> or IntersectionObserver; (5) Correct dimensions — never serve a 2000x2000 image for a 100x100 display; (6) CDN with image transformation — Cloudinary, Imgix, and Cloudflare Images can transform and optimize images on the fly; (7) Next.js <code>&lt;Image&gt;</code> — handles all of the above automatically (format conversion, responsive sizes, lazy loading, size optimization). The impact: properly optimized images can reduce page weight by 60-80%.
+          <pre class="code-block">// Responsive image with srcset (no library needed)
+&lt;img
+  src="/images/hero-800.webp"
+  srcSet="/images/hero-400.webp 400w, /images/hero-800.webp 800w, /images/hero-1200.webp 1200w"
+  sizes="(max-width: 600px) 400px, (max-width: 1000px) 800px, 1200px"
+  alt="Hero image"
+  loading="eager"
+  fetchpriority="high"
+/&gt;
+
+// Next.js Image (handles everything automatically)
+import Image from 'next/image';
+&lt;Image
+  src="/images/hero.jpg"
+  width={1200}
+  height={600}
+  alt="Hero"
+  priority   // preloads for LCP images
+  placeholder="blur"
+/&gt;</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q46">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is tree shaking vs dead code elimination?
+        </button>
+      </h2>
+      <div id="performance-q46" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          These terms are related but distinct. Dead code elimination is the general concept of removing unused code — any bundler/minifier may do this for variables, functions, or imports that are never referenced within a module. Tree shaking is specifically about eliminating unused exports from ES modules — analyzing the import/export graph to find entire modules (or exports within modules) that are imported nowhere and removing them from the bundle. Tree shaking requires ES module syntax (<code>import</code>/<code>export</code>) because it needs static analysis (you can't analyze dynamic <code>require()</code>). Rollup pioneered tree shaking; Webpack and Vite also implement it. For React apps: import named exports from utility libraries, ensure your dependencies ship ES modules (check <code>"module"</code> or <code>"exports"</code> in package.json), and use <code>"sideEffects": false</code> in your own package.json if your library is side-effect free.
+          <pre class="code-block">// Dead code elimination: minifier removes unreachable code
+function getDiscount(type) {
+  if (type === 'vip') return 0.2;
+  // The else branch below is dead code if type is always 'vip'
+  else return 0.1;
+}
+
+// Tree shaking: unused named export removed from bundle
+// utils.js exports: add, subtract, multiply, divide
+import { add } from './utils'; // only 'add' ends up in bundle; others are shaken out
+
+// Ensure sideEffects: false in package.json for your library
+// so bundlers know it's safe to drop unused exports
+// package.json: { "sideEffects": false }</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q47">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you handle font loading performance in React?
+        </button>
+      </h2>
+      <div id="performance-q47" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          Font loading affects FCP (First Contentful Paint) and CLS (Cumulative Layout Shift). Best practices: (1) Preload critical fonts: <code>&lt;link rel="preload" as="font" href="font.woff2" crossorigin&gt;</code>; (2) Use <code>font-display: swap</code> to show text with a fallback font immediately, swap in the web font when loaded — prevents invisible text; (3) Use <code>font-display: optional</code> for non-critical fonts — only use the web font if it loads within a tight deadline; (4) Subset fonts — include only the characters you need using tools like <code>glyphhanger</code> or Google Fonts API <code>&amp;text=</code> parameter; (5) Use variable fonts — one font file for multiple weights/styles; (6) Self-host fonts — avoids third-party DNS lookups and gives you full control over caching. In Next.js, the <code>next/font</code> package handles all of this automatically with zero-layout-shift font loading.
+          <pre class="code-block">/* In index.html or document head — preload the font the page uses most */
+&lt;link
+  rel="preload"
+  href="/fonts/inter-var.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/&gt;
+
+/* In CSS */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-var.woff2') format('woff2');
+  font-weight: 100 900; /* variable font range */
+  font-display: swap; /* show fallback immediately, swap when loaded */
+}
+
+// Next.js next/font (zero CLS, automatic subsetting)
+import { Inter } from 'next/font/google';
+const inter = Inter({ subsets: ['latin'], display: 'swap' });
+export default function Layout({ children }) {
+  return &lt;html className={inter.className}&gt;{children}&lt;/html&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q48">
+          <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;A component re-renders every time the parent renders even though its props haven't changed. How do you fix this?
+        </button>
+      </h2>
+      <div id="performance-q48" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          When a component re-renders despite unchanged props, the issue is almost always that the parent is creating new references for objects, arrays, or functions on every render — even if the values are logically the same. Diagnosis: wrap the component in <code>React.memo</code> and check if it still re-renders (using React DevTools "why did this render?"). Common culprits: inline arrow function props (<code>onClick={() =&gt; fn(id)}</code>), inline object props (<code>style={{ color: 'red' }}</code>), inline array props (<code>items={[1, 2, 3]}</code>). Fixes: <code>useCallback</code> for function props, <code>useMemo</code> for object/array props, or lifting the values outside the component if they're static. If the component doesn't receive props but still re-renders, check for Context consumption (<code>useContext</code> re-renders when context value changes) — split the context or use a selector.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q49">
+          <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;Your React app has a Time to Interactive of 8 seconds on mobile. What is your optimization strategy?
+        </button>
+      </h2>
+      <div id="performance-q49" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          TTI of 8 seconds on mobile indicates too much JavaScript blocking the main thread. Investigation and fix order: (1) Run a Lighthouse audit — it identifies the most impactful issues; (2) Bundle analysis — run <code>rollup-plugin-visualizer</code> to find large dependencies (is moment.js included? Full lodash? An un-code-split page?); (3) Code splitting — implement route-based lazy loading if not done; (4) Defer non-critical JavaScript — use <code>startTransition</code> for non-urgent renders, ensure polyfills are only served to browsers that need them; (5) Remove unused dependencies — check for duplicate libraries; (6) SSR or SSG — if the app is client-only, switching to SSR dramatically improves FCP and TTI; (7) Prefetch critical assets — preload key scripts and fonts; (8) Use <code>performance.mark</code> and Long Task API to identify specific blocking work. Mobile CPUs are 3-5x slower than desktop — always test with throttling.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q50">
+          <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;You're building a real-time dashboard that updates every second. How do you prevent it from being sluggish?
+        </button>
+      </h2>
+      <div id="performance-q50" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+        <div class="accordion-body">
+          A real-time dashboard updating every second creates performance pressure because frequent re-renders can accumulate. Key strategies: (1) Normalize updates — only update the components whose data actually changed; use Redux or Zustand with fine-grained selectors so components subscribe to only their slice of data; (2) <code>React.memo</code> on all dashboard widgets — prevent the unchanged widgets from re-rendering; (3) <code>useDeferredValue</code> for derived charts/aggregations — high-frequency raw data updates are urgent, but re-computing complex visualizations can be deferred; (4) Throttle WebSocket updates — if data arrives faster than 60fps, accumulate updates and apply them in batches at animation frame rate using <code>requestAnimationFrame</code>; (5) Canvas rendering for heavy visualizations — React doesn't re-render canvas content; use imperative canvas APIs for real-time charts; (6) <code>startTransition</code> for layout rearrangements — smooth widget reordering without frame drops; (7) Virtualization for data tables — only render visible rows even as data streams in.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

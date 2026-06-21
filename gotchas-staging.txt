@@ -1,0 +1,1012 @@
+<!-- ACCORDION ITEMS: Tab 15 Common Mistakes & Gotchas -->
+
+<!-- Q1 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q1-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q1" aria-expanded="false" aria-controls="gotchas-q1">
+      <span class="diff-hard">Tricky</span>&nbsp; 1. Why does useState setter not immediately update the value you read after calling it?
+    </button>
+  </h2>
+  <div id="gotchas-q1" class="accordion-collapse collapse" aria-labelledby="gotchas-q1-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> <code>setState</code> does not mutate the current closure's variable. It schedules a re-render. The new state value only becomes available in the <em>next</em> render's closure. Reading the variable right after calling the setter still reads the stale value from the current render's closure.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function Counter() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+    console.log(count); // STILL 0 — reads stale closure value
+    setCount(count + 1); // ALSO adds 1, not 2 — same stale `count`
+  }
+}</pre>
+
+      <p><strong>Fixed — use the functional updater form for derived updates:</strong></p>
+<pre class="code-block">function handleClick() {
+  setCount(prev =&gt; prev + 1); // React passes the latest state
+  setCount(prev =&gt; prev + 1); // This correctly becomes +2 total
+
+  // If you need the value after setting, derive it yourself:
+  const nextCount = count + 1;
+  setCount(nextCount);
+  console.log(nextCount); // correct
+}</pre>
+
+      <p><strong>Why functional updater works:</strong> React batches state updates and processes the updater queue in order. Each updater receives the result of the previous one, so chained functional updates compose correctly even when batched.</p>
+
+      <p><strong>React 18 note:</strong> React 18 batches ALL setState calls (including inside setTimeout, promises, and event handlers) by default via Automatic Batching. This means a single re-render happens for multiple setStates called synchronously, making the stale-closure issue even more pronounced if you rely on reading state immediately after setting.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q2-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q2" aria-expanded="false" aria-controls="gotchas-q2">
+      <span class="diff-hard">Tricky</span>&nbsp; 2. Why does <code>0 &amp;&amp; &lt;Component /&gt;</code> render "0" instead of nothing?
+    </button>
+  </h2>
+  <div id="gotchas-q2" class="accordion-collapse collapse" aria-labelledby="gotchas-q2-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> JavaScript's <code>&amp;&amp;</code> operator returns the first falsy value it encounters — it does NOT return <code>false</code>, it returns the actual value. When the left side is <code>0</code> (falsy), JS short-circuits and returns <code>0</code>. React renders numbers, including <code>0</code>, as text nodes in the DOM.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function Cart({ itemCount }: { itemCount: number }) {
+  return (
+    &lt;div&gt;
+      {itemCount &amp;&amp; &lt;span&gt;{itemCount} items&lt;/span&gt;}
+      {/* When itemCount is 0: renders "0" as a text node in the DOM */}
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Fixed:</strong></p>
+<pre class="code-block">// Option 1: convert to boolean explicitly
+{!!itemCount &amp;&amp; &lt;span&gt;{itemCount} items&lt;/span&gt;}
+
+// Option 2: ternary (always the safest)
+{itemCount &gt; 0 ? &lt;span&gt;{itemCount} items&lt;/span&gt; : null}
+
+// Option 3: Boolean() cast
+{Boolean(itemCount) &amp;&amp; &lt;span&gt;{itemCount} items&lt;/span&gt;}</pre>
+
+      <p><strong>Same bug with other falsy numbers:</strong> <code>NaN</code> is also a number, but React renders nothing for <code>NaN</code> — only <code>0</code> is problematic because it is both falsy AND a renderable number. Always use a boolean check (<code>&gt; 0</code>, <code>!= null</code>, <code>!!</code>) when the left side of <code>&amp;&amp;</code> might be <code>0</code>.</p>
+
+      <p><strong>TypeScript note:</strong> If you type <code>itemCount</code> as <code>number</code> and use <code>&amp;&amp;</code>, TypeScript will not warn you about this — it is valid JS. ESLint's <code>@typescript-eslint/no-unnecessary-condition</code> rule can catch it in some configurations.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q3-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q3" aria-expanded="false" aria-controls="gotchas-q3">
+      <span class="diff-hard">Tricky</span>&nbsp; 3. Why does using array index as key cause bugs?
+    </button>
+  </h2>
+  <div id="gotchas-q3" class="accordion-collapse collapse" aria-labelledby="gotchas-q3-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> React uses <code>key</code> to match rendered elements between renders. When items are reordered or removed, index-based keys cause React to think an element at index 2 is still "the same" element — even if it now represents a different item. This preserves stale component state and triggers subtle bugs with controlled inputs, animations, and focus.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">// List: ['Alice', 'Bob', 'Carol'] — indices 0, 1, 2
+// User removes 'Alice'
+// New list: ['Bob', 'Carol'] — still indices 0, 1
+// React sees: key=0 existed before AND now — it's "the same" component
+// But it now shows 'Bob', and any state (e.g., an input value)
+// that was inside the Alice component is incorrectly preserved for Bob
+
+function TodoList({ todos }: { todos: Todo[] }) {
+  return (
+    &lt;ul&gt;
+      {todos.map((todo, index) =&gt; (
+        &lt;TodoItem key={index} todo={todo} /&gt; // BUG when list can reorder/delete
+      ))}
+    &lt;/ul&gt;
+  );
+}</pre>
+
+      <p><strong>Fixed:</strong></p>
+<pre class="code-block">// Use a stable, unique ID from the data
+{todos.map(todo =&gt; (
+  &lt;TodoItem key={todo.id} todo={todo} /&gt;
+))}
+
+// If your data has no ID, generate one on creation (not in render):
+const newTodo = { id: crypto.randomUUID(), text: 'Buy milk' };</pre>
+
+      <p><strong>When index as key IS safe:</strong> Only use index as key when the list is static (never reordered, filtered, or items removed), the items have no state, and the list is never reversed. Even then, prefer real IDs.</p>
+
+      <p><strong>Classic symptom:</strong> An input inside a list item retains its typed value after the list is filtered — the input's internal state stayed with the key, not the item identity.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q4-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q4" aria-expanded="false" aria-controls="gotchas-q4">
+      <span class="diff-hard">Tricky</span>&nbsp; 4. What is the stale closure problem in useEffect?
+    </button>
+  </h2>
+  <div id="gotchas-q4" class="accordion-collapse collapse" aria-labelledby="gotchas-q4-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> <code>useEffect</code>'s callback (and any functions created inside it) closes over variables from the render in which they were created. If the effect's dependency array is missing or incomplete, the callback holds onto stale values from the original render even as state/props update.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function Timer() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() =&gt; {
+    const id = setInterval(() =&gt; {
+      setCount(count + 1); // STALE: `count` is always 0 from first render
+    }, 1000);
+    return () =&gt; clearInterval(id);
+  }, []); // empty deps — effect never re-runs, closure never refreshes
+
+  return &lt;div&gt;{count}&lt;/div&gt;; // always shows 1, never 2, 3, 4...
+}</pre>
+
+      <p><strong>Fixed — functional updater form:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  const id = setInterval(() =&gt; {
+    setCount(prev =&gt; prev + 1); // no closure over `count` — reads latest state
+  }, 1000);
+  return () =&gt; clearInterval(id);
+}, []); // safe with empty deps now</pre>
+
+      <p><strong>Fixed — add the dep and clean up on change:</strong></p>
+<pre class="code-block">// Add count to deps — interval resets every second (often not what you want)
+useEffect(() =&gt; {
+  const id = setInterval(() =&gt; {
+    setCount(count + 1);
+  }, 1000);
+  return () =&gt; clearInterval(id); // clears and recreates each render
+}, [count]);</pre>
+
+      <p><strong>Ref workaround (for callbacks):</strong></p>
+<pre class="code-block">// useEvent pattern — always-fresh callback, stable reference
+const onTick = useRef(() =&gt; {});
+onTick.current = () =&gt; setCount(count + 1); // fresh on every render
+
+useEffect(() =&gt; {
+  const id = setInterval(() =&gt; onTick.current(), 1000);
+  return () =&gt; clearInterval(id);
+}, []); // stable — no stale closure</pre>
+
+      <p>The ESLint rule <code>react-hooks/exhaustive-deps</code> detects missing dependencies and is the primary tool for avoiding this bug.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q5-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q5" aria-expanded="false" aria-controls="gotchas-q5">
+      <span class="diff-hard">Tricky</span>&nbsp; 5. Why do objects and arrays in dependency arrays cause infinite loops?
+    </button>
+  </h2>
+  <div id="gotchas-q5" class="accordion-collapse collapse" aria-labelledby="gotchas-q5-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> React compares dependency array values with <code>Object.is</code> (reference equality). Every render creates a new object or array literal at a new memory address, so the reference is always "different" — even if the contents are identical. This causes the effect to re-run every render, which often triggers a state update, causing another render — infinite loop.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function MyComponent({ userId }: { userId: string }) {
+  // New object created every render — new reference every time
+  const options = { userId, includeDeleted: false };
+
+  useEffect(() =&gt; {
+    fetchData(options); // runs on EVERY render — infinite if fetchData sets state
+  }, [options]); // options reference changes every render
+}</pre>
+
+      <p><strong>Fixed — move the object inside the effect:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  const options = { userId, includeDeleted: false }; // defined inside — no dep needed
+  fetchData(options);
+}, [userId]); // only primitive in deps</pre>
+
+      <p><strong>Fixed — useMemo to stabilize the reference:</strong></p>
+<pre class="code-block">const options = useMemo(
+  () =&gt; ({ userId, includeDeleted: false }),
+  [userId] // only new reference when userId changes
+);
+
+useEffect(() =&gt; { fetchData(options); }, [options]); // now stable</pre>
+
+      <p><strong>Same problem with functions:</strong> Functions defined in the component body are also new references each render. Wrap them in <code>useCallback</code> to stabilize:</p>
+<pre class="code-block">// Broken: new fetchData reference each render
+const fetchData = () =&gt; api.get(`/users/${userId}`);
+useEffect(() =&gt; { fetchData(); }, [fetchData]); // infinite loop
+
+// Fixed:
+const fetchData = useCallback(() =&gt; api.get(`/users/${userId}`), [userId]);
+useEffect(() =&gt; { fetchData(); }, [fetchData]); // stable</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q6-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q6" aria-expanded="false" aria-controls="gotchas-q6">
+      <span class="diff-hard">Tricky</span>&nbsp; 6. Why does async directly in useEffect cause problems?
+    </button>
+  </h2>
+  <div id="gotchas-q6" class="accordion-collapse collapse" aria-labelledby="gotchas-q6-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> <code>useEffect</code> expects its callback to return either nothing or a cleanup function (a synchronous function). An <code>async</code> function always returns a Promise — not a cleanup function. React ignores the returned Promise and cannot properly call any cleanup, leading to potential memory leaks and React warnings.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">// React warns: useEffect must not return a Promise
+useEffect(async () =&gt; {
+  const data = await fetchUser(userId);
+  setUser(data); // may set state on unmounted component
+}, [userId]);</pre>
+
+      <p><strong>Fixed — define async function inside, call it immediately:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  let cancelled = false;
+
+  async function load() {
+    try {
+      const data = await fetchUser(userId);
+      if (!cancelled) setUser(data); // guard against unmount
+    } catch (err) {
+      if (!cancelled) setError(err);
+    }
+  }
+
+  load();
+
+  return () =&gt; { cancelled = true; }; // cleanup runs synchronously on unmount
+}, [userId]);</pre>
+
+      <p><strong>Fixed — AbortController pattern:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  const controller = new AbortController();
+
+  fetch(`/api/users/${userId}`, { signal: controller.signal })
+    .then(r =&gt; r.json())
+    .then(data =&gt; setUser(data))
+    .catch(err =&gt; {
+      if (err.name !== 'AbortError') setError(err);
+    });
+
+  return () =&gt; controller.abort(); // cancel in-flight request on cleanup
+}, [userId]);</pre>
+
+      <p><strong>Best practice:</strong> Use TanStack Query (<code>useQuery</code>) which handles all of this — cancellation, deduplication, error handling, loading state — so you almost never need raw <code>useEffect</code> for data fetching.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q7-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q7" aria-expanded="false" aria-controls="gotchas-q7">
+      <span class="diff-hard">Tricky</span>&nbsp; 7. Why does setting state in useEffect without guards cause infinite loops?
+    </button>
+  </h2>
+  <div id="gotchas-q7" class="accordion-collapse collapse" aria-labelledby="gotchas-q7-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> Setting state causes a re-render. If the effect that sets state has that state variable (or no guard) in its dependency array, the cycle is: render → effect runs → setState → re-render → effect runs again → infinite loop.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function MyComponent() {
+  const [data, setData] = useState(null);
+
+  useEffect(() =&gt; {
+    // No dependency array = runs after EVERY render
+    fetchData().then(setData); // setting data causes re-render → reruns effect
+  }); // missing deps array = infinite loop
+}
+
+// Also broken with the wrong dep:
+useEffect(() =&gt; {
+  const processed = process(data);
+  setData(processed); // `data` in deps → changes data → reruns effect → ...
+}, [data]); // infinite loop</pre>
+
+      <p><strong>Fixed — correct dependency array:</strong></p>
+<pre class="code-block">// Fetch once on mount — empty deps
+useEffect(() =&gt; {
+  fetchData().then(setData);
+}, []); // no dependencies — runs once
+
+// Derive state without effect — use useMemo instead
+const processed = useMemo(() =&gt; process(data), [data]);
+// No effect needed — no infinite loop possible</pre>
+
+      <p><strong>Fixed — conditional guard inside effect:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  if (!data) { // only run when data is falsy — breaks the loop
+    fetchData().then(setData);
+  }
+}, [data]);</pre>
+
+      <p><strong>Rule of thumb:</strong> If you find yourself writing <code>useEffect(() =&gt; { setState(...) }, [state])</code>, you almost certainly need <code>useMemo</code> or a different data flow instead of an effect.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q8-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q8" aria-expanded="false" aria-controls="gotchas-q8">
+      <span class="diff-hard">Tricky</span>&nbsp; 8. Why does mutating state directly (instead of using setState) not trigger re-renders?
+    </button>
+  </h2>
+  <div id="gotchas-q8" class="accordion-collapse collapse" aria-labelledby="gotchas-q8-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> React determines whether to re-render by comparing the previous state reference to the new one using <code>Object.is</code>. When you mutate an object directly, the reference stays the same — so React sees "old reference === new reference" and skips the re-render entirely. The data changed, but React has no idea.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">const [user, setUser] = useState({ name: 'Alice', age: 30 });
+
+function handleBirthday() {
+  user.age += 1;        // Direct mutation — reference unchanged
+  setUser(user);        // Passes the SAME reference — React bails out
+  // Component does NOT re-render
+}
+
+// Also broken with arrays:
+const [items, setItems] = useState(['a', 'b']);
+function addItem() {
+  items.push('c');      // Mutation
+  setItems(items);      // Same reference — no re-render
+}</pre>
+
+      <p><strong>Fixed — always return a new reference:</strong></p>
+<pre class="code-block">// Object: spread to create a new reference
+function handleBirthday() {
+  setUser(prev =&gt; ({ ...prev, age: prev.age + 1 }));
+}
+
+// Array: use non-mutating methods
+function addItem() {
+  setItems(prev =&gt; [...prev, 'c']);
+}
+
+function removeItem(index: number) {
+  setItems(prev =&gt; prev.filter((_, i) =&gt; i !== index));
+}
+
+function updateItem(index: number, value: string) {
+  setItems(prev =&gt; prev.map((item, i) =&gt; i === index ? value : item));
+}</pre>
+
+      <p><strong>Immer (via Redux Toolkit):</strong> Immer wraps your mutations in a proxy and produces a new immutable reference for you, making it safe to write mutation-style code:</p>
+<pre class="code-block">import produce from 'immer';
+
+setUser(produce(draft =&gt; {
+  draft.age += 1; // Immer handles creating the new reference
+}));</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q9-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q9" aria-expanded="false" aria-controls="gotchas-q9">
+      <span class="diff-hard">Tricky</span>&nbsp; 9. What is the "lost update" problem when updating state based on previous state?
+    </button>
+  </h2>
+  <div id="gotchas-q9" class="accordion-collapse collapse" aria-labelledby="gotchas-q9-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> When multiple setState calls in the same synchronous block all read the same stale closure value for the current state, they all produce the same "next" value. The last write wins, and earlier updates are silently discarded.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function Counter() {
+  const [count, setCount] = useState(0);
+
+  function handleTripleIncrement() {
+    setCount(count + 1); // count is 0 → schedules update to 1
+    setCount(count + 1); // count is STILL 0 → schedules update to 1 again
+    setCount(count + 1); // count is STILL 0 → schedules update to 1 again
+    // Result: count becomes 1, not 3 — two updates are LOST
+  }
+}
+
+// Also broken with async:
+async function fetchAndAdd() {
+  const a = await fetchValueA(); // takes 100ms
+  const b = await fetchValueB(); // takes 100ms
+  // Both awaits use `count` from the original render
+  setCount(count + a); // lost
+  setCount(count + b); // only this survives
+}</pre>
+
+      <p><strong>Fixed — functional updater form:</strong></p>
+<pre class="code-block">function handleTripleIncrement() {
+  setCount(prev =&gt; prev + 1); // prev is always the latest queued value
+  setCount(prev =&gt; prev + 1); // prev is now 1
+  setCount(prev =&gt; prev + 1); // prev is now 2
+  // Result: count correctly becomes 3
+}
+
+// Fixed async — batch the final update:
+async function fetchAndAdd() {
+  const [a, b] = await Promise.all([fetchValueA(), fetchValueB()]);
+  setCount(prev =&gt; prev + a + b); // single functional update with latest state
+}</pre>
+
+      <p><strong>Rule:</strong> Any time you derive new state from the previous value, always use the functional updater form <code>setState(prev =&gt; ...)</code> instead of reading the state variable directly.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q10-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q10" aria-expanded="false" aria-controls="gotchas-q10">
+      <span class="diff-hard">Tricky</span>&nbsp; 10. Why do synthetic events become nullified in async callbacks (React 16 and below)?
+    </button>
+  </h2>
+  <div id="gotchas-q10" class="accordion-collapse collapse" aria-labelledby="gotchas-q10-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism (React 16 and below):</strong> React pooled SyntheticEvent objects for performance — after the event handler returned, React would null out all event properties and return the event object to the pool. If you referenced the event asynchronously (inside a setTimeout, Promise callback, etc.), all properties would be <code>null</code>.</p>
+
+      <p><strong>Broken (React 16):</strong></p>
+<pre class="code-block">function handleChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
+  setTimeout(() =&gt; {
+    console.log(e.target.value); // NULL in React 16 — event was pooled and cleared
+  }, 100);
+
+  somePromise.then(() =&gt; {
+    setState(e.target.value); // NULL — async access after event handler returned
+  });
+}</pre>
+
+      <p><strong>Fixed (React 16) — read the value synchronously and close over it:</strong></p>
+<pre class="code-block">function handleChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
+  const value = e.target.value; // Read synchronously before returning
+
+  setTimeout(() =&gt; {
+    console.log(value); // safe — primitive captured in closure
+  }, 100);
+}
+
+// OR: call e.persist() to opt-out of pooling in React 16
+function handleChange(e: React.ChangeEvent&lt;HTMLInputElement&gt;) {
+  e.persist(); // remove from pool
+  setTimeout(() =&gt; console.log(e.target.value), 100); // now safe
+}</pre>
+
+      <p><strong>React 17+ fix:</strong> React 17 removed event pooling entirely. <code>e.persist()</code> is now a no-op. Async access to synthetic events works fine in React 17+. However, this is still a common interview question and the fix (capturing the value synchronously) remains a good practice that makes code explicit and clear.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q11 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q11-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q11" aria-expanded="false" aria-controls="gotchas-q11">
+      <span class="diff-hard">Tricky</span>&nbsp; 11. Why does creating a component inside another component's render cause it to remount every render?
+    </button>
+  </h2>
+  <div id="gotchas-q11" class="accordion-collapse collapse" aria-labelledby="gotchas-q11-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> React identifies component types by reference. When you define a component function inside a render (or inside another component's function body), a new function reference is created on every render. React sees a "different" component type each time, unmounts the old tree, and mounts a completely fresh one — resetting all state, refs, and triggering redundant lifecycle effects.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function Parent({ filter }: { filter: string }) {
+  // NEW function reference created on every Parent render
+  function ChildInput({ value }: { value: string }) {
+    const [text, setText] = useState(value);
+    return &lt;input value={text} onChange={e =&gt; setText(e.target.value)} /&gt;;
+  }
+
+  return (
+    &lt;div&gt;
+      {/* React sees a different component type each render → remounts */}
+      {/* State inside ChildInput is lost on every Parent re-render */}
+      &lt;ChildInput value={filter} /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Fixed — define components at module scope:</strong></p>
+<pre class="code-block">// Defined OUTSIDE Parent — stable reference across renders
+function ChildInput({ value }: { value: string }) {
+  const [text, setText] = useState(value);
+  return &lt;input value={text} onChange={e =&gt; setText(e.target.value)} /&gt;;
+}
+
+function Parent({ filter }: { filter: string }) {
+  return (
+    &lt;div&gt;
+      &lt;ChildInput value={filter} /&gt; {/* stable type reference — no remount */}
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>ESLint detection:</strong> The <code>react/no-unstable-nested-components</code> ESLint rule catches this pattern and warns you. Enable it in your config to prevent this class of bug.</p>
+
+      <p><strong>Render prop / children pattern:</strong> If you need to pass contextual data to the inner component, pass it as props from the outer one — not by defining the component inside the render.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q12 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q12-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q12" aria-expanded="false" aria-controls="gotchas-q12">
+      <span class="diff-hard">Tricky</span>&nbsp; 12. What is the double render in React 18 StrictMode and why is it intentional?
+    </button>
+  </h2>
+  <div id="gotchas-q12" class="accordion-collapse collapse" aria-labelledby="gotchas-q12-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> In React 18 development mode with <code>&lt;StrictMode&gt;</code>, React intentionally mounts every component twice (render → unmount → remount) and calls <code>useEffect</code> twice (setup → cleanup → setup). This is not a bug — it simulates what will happen with React's upcoming "Offscreen" (Activity) feature, where components may be hidden and restored without being destroyed.</p>
+
+      <p><strong>What you observe:</strong></p>
+<pre class="code-block">function MyComponent() {
+  useEffect(() =&gt; {
+    console.log('Effect ran'); // prints TWICE in dev StrictMode
+    return () =&gt; console.log('Cleanup ran'); // prints once between the two
+  }, []);
+
+  // Also: component function body runs twice per render in dev
+  console.log('Rendering'); // prints twice
+}</pre>
+
+      <p><strong>What StrictMode reveals:</strong></p>
+      <ul>
+        <li>Effects that do not clean up subscriptions, timers, or DOM mutations properly will break visibly.</li>
+        <li>Components that make non-idempotent API calls in <code>useEffect</code> (e.g., <code>POST</code> on mount) will make two requests in dev.</li>
+        <li>State that depends on the component only mounting once will be incorrect.</li>
+      </ul>
+
+      <p><strong>Correct effect structure that passes StrictMode:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  const subscription = subscribe(handler);
+  // Cleanup must reverse EVERYTHING setup does
+  return () =&gt; subscription.unsubscribe();
+}, []);
+
+// API calls: use a cancelled flag
+useEffect(() =&gt; {
+  let cancelled = false;
+  fetchData().then(data =&gt; { if (!cancelled) setData(data); });
+  return () =&gt; { cancelled = true; };
+}, []);</pre>
+
+      <p><strong>Production note:</strong> The double invocation ONLY happens in development with <code>&lt;StrictMode&gt;</code>. Production builds mount once. If your app breaks in StrictMode but works in production, it means your effects are not idempotent and you have a latent bug that will surface with the Offscreen feature.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q13 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q13-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q13" aria-expanded="false" aria-controls="gotchas-q13">
+      <span class="diff-hard">Tricky</span>&nbsp; 13. Why does useEffect run after every render when dependencies include an object or function?
+    </button>
+  </h2>
+  <div id="gotchas-q13" class="accordion-collapse collapse" aria-labelledby="gotchas-q13-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> React uses <code>Object.is</code> to compare each dep value between renders. Objects and functions defined inline in the component body are recreated at new memory addresses on every render — so the comparison always returns <code>false</code>, and the effect always re-runs.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function UserProfile({ userId }: { userId: string }) {
+  const config = { timeout: 5000, retries: 3 }; // new reference every render
+  const onSuccess = (data: User) =&gt; setUser(data); // new reference every render
+
+  useEffect(() =&gt; {
+    fetchUser(userId, config, onSuccess);
+  }, [config, onSuccess]); // always different → runs every render
+}</pre>
+
+      <p><strong>Fixed — stabilize with useMemo / useCallback:</strong></p>
+<pre class="code-block">function UserProfile({ userId }: { userId: string }) {
+  const config = useMemo(() =&gt; ({ timeout: 5000, retries: 3 }), []);
+  // [] = stable across all renders — same reference always
+
+  const onSuccess = useCallback((data: User) =&gt; setUser(data), []);
+
+  useEffect(() =&gt; {
+    fetchUser(userId, config, onSuccess);
+  }, [userId, config, onSuccess]); // stable refs — runs only when userId changes
+}</pre>
+
+      <p><strong>Better fix — move object inside effect:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  const config = { timeout: 5000, retries: 3 }; // defined inside — no dep needed
+  fetchUser(userId).then(setUser);
+}, [userId]); // only primitive in deps</pre>
+
+      <p><strong>Prefer primitives in deps:</strong> Whenever possible, put only primitive values (string, number, boolean) in dependency arrays. This sidesteps the reference-equality problem entirely.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q14 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q14-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q14" aria-expanded="false" aria-controls="gotchas-q14">
+      <span class="diff-hard">Tricky</span>&nbsp; 14. What is the React "key" foot-gun — using unstable keys to force component remounts?
+    </button>
+  </h2>
+  <div id="gotchas-q14" class="accordion-collapse collapse" aria-labelledby="gotchas-q14-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The foot-gun in two forms:</strong></p>
+      <p><strong>Form 1 — accidentally unstable keys (causes performance issues):</strong> Generating keys dynamically with <code>Math.random()</code> or <code>Date.now()</code> inside render means the key changes every render, forcing React to destroy and recreate the entire subtree instead of updating it.</p>
+<pre class="code-block">// Broken: new key every render = full remount every render
+{items.map(item =&gt; (
+  &lt;Item key={Math.random()} item={item} /&gt; // NEVER do this
+))}
+
+// Broken: same consequence with Date.now()
+{items.map(item =&gt; (
+  &lt;Item key={`${item.id}-${Date.now()}`} item={item} /&gt;
+))}</pre>
+
+      <p><strong>Form 2 — intentionally using key to force reset (a valid but sharp tool):</strong> Changing a component's key is React's official mechanism to completely reset a component's state. This is useful but dangerous if done accidentally.</p>
+<pre class="code-block">// This technique is legitimate when you explicitly want to reset child state:
+function ProfilePage({ userId }: { userId: string }) {
+  // When userId changes, UserForm remounts fresh (state cleared)
+  return &lt;UserForm key={userId} /&gt;;
+}
+
+// Foot-gun: accidentally placed on wrong level
+function Parent({ filter }: { filter: string }) {
+  // Entire expensive subtree remounts on every filter change
+  return &lt;ExpensiveTree key={filter} data={data} /&gt;; // probably not intended
+}</pre>
+
+      <p><strong>Fixed — use stable, meaningful keys:</strong></p>
+<pre class="code-block">// Always use stable, data-derived IDs
+{items.map(item =&gt; &lt;Item key={item.id} item={item} /&gt;)}
+
+// When resetting state intentionally, use key only at the component
+// boundary that should reset — not at a parent that re-renders frequently</pre>
+
+      <p><strong>Key as a reset mechanism — the correct use case:</strong> When a form should reset when a prop changes (e.g., editing a different entity), placing <code>key={entityId}</code> on the form is cleaner than manually calling <code>reset()</code> in a <code>useEffect</code>. Just be deliberate about it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q15 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q15-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q15" aria-expanded="false" aria-controls="gotchas-q15">
+      <span class="diff-hard">Tricky</span>&nbsp; 15. Why does React.memo not work when you pass a new object/array every render as a prop?
+    </button>
+  </h2>
+  <div id="gotchas-q15" class="accordion-collapse collapse" aria-labelledby="gotchas-q15-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> <code>React.memo</code> does a shallow comparison of props using <code>Object.is</code>. If any prop is an object or array created inline, it will always be a new reference on each parent render — so the memo comparison fails and the component re-renders as if there were no memo at all.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">const ExpensiveList = React.memo(({ items, config }: Props) =&gt; {
+  // Expensive render...
+  return &lt;ul&gt;{items.map(i =&gt; &lt;li key={i.id}&gt;{i.name}&lt;/li&gt;)}&lt;/ul&gt;;
+});
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; setCount(c =&gt; c + 1)}&gt;{count}&lt;/button&gt;
+      {/* New array reference every render — memo is bypassed */}
+      &lt;ExpensiveList items={[{ id: 1, name: 'Alice' }]} config={{ limit: 10 }} /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Fixed — stabilize props with useMemo/useCallback:</strong></p>
+<pre class="code-block">function Parent() {
+  const [count, setCount] = useState(0);
+
+  const items = useMemo(() =&gt; [{ id: 1, name: 'Alice' }], []);
+  const config = useMemo(() =&gt; ({ limit: 10 }), []);
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; setCount(c =&gt; c + 1)}&gt;{count}&lt;/button&gt;
+      &lt;ExpensiveList items={items} config={config} /&gt; {/* stable refs */}
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Custom comparator:</strong> As a last resort, pass a custom comparison function to <code>React.memo</code>:</p>
+<pre class="code-block">const ExpensiveList = React.memo(
+  ({ items }: Props) =&gt; &lt;ul&gt;...&lt;/ul&gt;,
+  (prev, next) =&gt; prev.items.length === next.items.length
+    &amp;&amp; prev.items.every((item, i) =&gt; item.id === next.items[i]?.id)
+);</pre>
+      <p>Use this sparingly — a buggy comparator is worse than no memo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q16 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q16-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q16" aria-expanded="false" aria-controls="gotchas-q16">
+      <span class="diff-hard">Tricky</span>&nbsp; 16. What is the context re-render problem — every consumer re-renders when any context value changes?
+    </button>
+  </h2>
+  <div id="gotchas-q16" class="accordion-collapse collapse" aria-labelledby="gotchas-q16-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> When a Context's value changes, React re-renders ALL components that call <code>useContext</code> for that context — even if the specific part of the value they use hasn't changed. There is no built-in selector mechanism for Context (unlike Redux's <code>useSelector</code>).</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">// Single context with many unrelated values
+const AppContext = createContext({
+  user: null,
+  theme: 'light',
+  notifications: [],
+  cartCount: 0,
+});
+
+// Updating cartCount causes ALL consumers to re-render:
+// - Header (uses user) &lt;- unnecessary re-render
+// - Sidebar (uses theme) &lt;- unnecessary re-render
+// - NotificationBell (uses notifications) &lt;- unnecessary re-render
+// - CartIcon (uses cartCount) &lt;- correct re-render</pre>
+
+      <p><strong>Fixed — split contexts by concern:</strong></p>
+<pre class="code-block">// Split into small, focused contexts
+const UserContext = createContext(null);
+const ThemeContext = createContext('light');
+const NotificationContext = createContext([]);
+const CartContext = createContext(0);
+
+// Now updating cart only re-renders CartContext consumers</pre>
+
+      <p><strong>Fixed — memoize the context value:</strong></p>
+<pre class="code-block">function AppProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [theme, setTheme] = useState('light');
+
+  // Without useMemo: new object every render → all consumers re-render
+  const value = useMemo(() =&gt; ({ user, theme, setUser, setTheme }),
+    [user, theme]);
+
+  return &lt;AppContext.Provider value={value}&gt;{children}&lt;/AppContext.Provider&gt;;
+}</pre>
+
+      <p><strong>For granular subscriptions:</strong> Use Zustand, Jotai, or Redux with <code>useSelector</code> — they support subscribing to only a slice of the global state, so re-renders are scoped to what actually changed. Context is excellent for slow-changing, app-wide values (theme, auth user) but poor for high-frequency state.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q17 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q17-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q17" aria-expanded="false" aria-controls="gotchas-q17">
+      <span class="diff-hard">Tricky</span>&nbsp; 17. Why does reading ref.current in the render function cause problems?
+    </button>
+  </h2>
+  <div id="gotchas-q17" class="accordion-collapse collapse" aria-labelledby="gotchas-q17-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> <code>useRef</code> returns a mutable box — mutating <code>ref.current</code> does NOT trigger a re-render. Reading <code>ref.current</code> during render means React's output depends on a value that can change silently, breaking the deterministic render principle. This leads to stale UI, inconsistencies in StrictMode (double render may show different values), and subtle bugs with concurrent features.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function VideoPlayer({ isPlaying }: { isPlaying: boolean }) {
+  const playerRef = useRef(null);
+  const isPlayingRef = useRef(false);
+
+  // Somewhere an effect updates: isPlayingRef.current = isPlaying;
+
+  // BAD: render reads a ref — output is not reliably tied to React's state
+  return (
+    &lt;div&gt;
+      &lt;video ref={playerRef} /&gt;
+      {isPlayingRef.current ? 'Playing' : 'Paused'} {/* stale / unpredictable */}
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Fixed — use state for values that affect rendering; use refs for values that don't:</strong></p>
+<pre class="code-block">// Use state — triggers re-render and React tracks it
+const [isPlaying, setIsPlaying] = useState(false);
+
+return (
+  &lt;div&gt;
+    &lt;video ref={playerRef} /&gt;
+    {isPlaying ? 'Playing' : 'Paused'} {/* driven by state — always correct */}
+  &lt;/div&gt;
+);
+
+// Refs are correct for: DOM nodes, timers, previous values,
+// mutable variables that DON'T need to trigger a re-render
+const timerRef = useRef&lt;ReturnType&lt;typeof setTimeout&gt; | null&gt;(null);
+const prevValueRef = useRef(value); // track previous without re-render</pre>
+
+      <p><strong>Exception — reading ref.current in event handlers is fine:</strong> Event handlers run after render and are not part of the render output. Reading <code>ref.current</code> in a click handler or effect is safe and intended.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q18 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q18-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q18" aria-expanded="false" aria-controls="gotchas-q18">
+      <span class="diff-hard">Tricky</span>&nbsp; 18. What is the race condition problem with multiple rapid state updates?
+    </button>
+  </h2>
+  <div id="gotchas-q18" class="accordion-collapse collapse" aria-labelledby="gotchas-q18-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> When async requests are fired in quick succession (e.g., rapid search input), responses can arrive out of order. The last-fired request may resolve before an earlier one, causing the UI to briefly show the correct result, then overwrite it with a stale response from the earlier, slower request.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function SearchResults({ query }: { query: string }) {
+  const [results, setResults] = useState([]);
+
+  useEffect(() =&gt; {
+    // User types "r", then "re", then "rea" quickly
+    // Request for "r" is slow, request for "rea" is fast
+    // "rea" results arrive first → setResults(reaResults)
+    // "r" results arrive later → setResults(rResults) ← STALE! overwrites correct data
+    fetch(`/api/search?q=${query}`)
+      .then(r =&gt; r.json())
+      .then(setResults); // no guard — always updates
+  }, [query]);
+}</pre>
+
+      <p><strong>Fixed — AbortController (cancels the previous request):</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  const controller = new AbortController();
+
+  fetch(`/api/search?q=${query}`, { signal: controller.signal })
+    .then(r =&gt; r.json())
+    .then(setResults)
+    .catch(err =&gt; {
+      if (err.name !== 'AbortError') setError(err);
+      // AbortError is expected — ignore it
+    });
+
+  return () =&gt; controller.abort(); // cancel previous request when query changes
+}, [query]);</pre>
+
+      <p><strong>Fixed — ignore stale responses with a flag:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  let stale = false;
+
+  fetch(`/api/search?q=${query}`)
+    .then(r =&gt; r.json())
+    .then(data =&gt; {
+      if (!stale) setResults(data); // only update if this is still the latest request
+    });
+
+  return () =&gt; { stale = true; }; // mark as stale when effect re-runs
+}, [query]);</pre>
+
+      <p><strong>TanStack Query handles this automatically:</strong> <code>useQuery</code> with <code>queryKey: ['search', query]</code> cancels in-flight requests when the key changes and only applies results for the current query.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q19 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q19-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q19" aria-expanded="false" aria-controls="gotchas-q19">
+      <span class="diff-hard">Tricky</span>&nbsp; 19. Why does fetch in useEffect without abort/cleanup cause memory leaks?
+    </button>
+  </h2>
+  <div id="gotchas-q19" class="accordion-collapse collapse" aria-labelledby="gotchas-q19-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> When a component unmounts while a fetch is in flight, the Promise's <code>.then()</code> callback still runs after unmounting. Inside that callback, calling <code>setState</code> on an unmounted component triggers React's warning: <em>"Can't perform a React state update on an unmounted component."</em> The component's closure is kept alive in memory until the Promise resolves, preventing garbage collection — a memory leak.</p>
+
+      <p><strong>Broken:</strong></p>
+<pre class="code-block">function UserProfile({ userId }: { userId: string }) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() =&gt; {
+    // No cleanup — if component unmounts before fetch completes:
+    // 1. setUser is called on unmounted component → React warning
+    // 2. Closure (including setUser, component instance) stays in memory
+    fetch(`/api/users/${userId}`)
+      .then(r =&gt; r.json())
+      .then(data =&gt; setUser(data)); // LEAK if component already unmounted
+  }, [userId]);
+}</pre>
+
+      <p><strong>Fixed — AbortController:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  const controller = new AbortController();
+
+  fetch(`/api/users/${userId}`, { signal: controller.signal })
+    .then(r =&gt; r.json())
+    .then(data =&gt; setUser(data))
+    .catch(err =&gt; {
+      if (err.name !== 'AbortError') setError(err);
+    });
+
+  // Cleanup: abort the fetch when component unmounts
+  return () =&gt; controller.abort();
+}, [userId]);</pre>
+
+      <p><strong>Fixed — ignore flag:</strong></p>
+<pre class="code-block">useEffect(() =&gt; {
+  let alive = true;
+
+  fetch(`/api/users/${userId}`)
+    .then(r =&gt; r.json())
+    .then(data =&gt; {
+      if (alive) setUser(data); // skip setState if unmounted
+    });
+
+  return () =&gt; { alive = false; };
+}, [userId]);</pre>
+
+      <p><strong>Same issue with subscriptions:</strong> WebSocket listeners, event listeners, and setIntervals added in useEffect without cleanup all leak in the same way. Always return a cleanup function that tears down side effects.</p>
+
+      <p><strong>React 18 note:</strong> The warning "Can't perform state update on unmounted component" was removed in React 18 (it was generating false positives). However, the memory leak and potential bugs are still real and should be fixed regardless.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q20 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="gotchas-q20-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gotchas-q20" aria-expanded="false" aria-controls="gotchas-q20">
+      <span class="diff-hard">Tricky</span>&nbsp; 20. What is the "flashing content" problem with useLayoutEffect vs useEffect?
+    </button>
+  </h2>
+  <div id="gotchas-q20" class="accordion-collapse collapse" aria-labelledby="gotchas-q20-heading" data-bs-parent="#acc-gotchas">
+    <div class="accordion-body">
+      <p><strong>The mechanism:</strong> <code>useEffect</code> fires <em>after</em> the browser has painted the screen. If you read a DOM measurement and update state inside <code>useEffect</code>, the sequence is: render → browser paints first render → effect runs → state changes → re-render → browser paints second render. The user briefly sees the first render (wrong layout/position) before seeing the second — a visual flash.</p>
+
+      <p><strong>Broken — using useEffect for DOM measurements:</strong></p>
+<pre class="code-block">function Tooltip({ anchor }: { anchor: HTMLElement }) {
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
+  useEffect(() =&gt; {
+    // Fires AFTER paint — user sees tooltip at (0,0) for a flash
+    const rect = anchor.getBoundingClientRect();
+    setPosition({ top: rect.bottom, left: rect.left });
+  }, [anchor]);
+
+  return (
+    &lt;div style={{ position: 'fixed', ...position }}&gt;
+      Tooltip content
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Fixed — useLayoutEffect fires synchronously after DOM mutations, before paint:</strong></p>
+<pre class="code-block">function Tooltip({ anchor }: { anchor: HTMLElement }) {
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
+  useLayoutEffect(() =&gt; {
+    // Fires BEFORE the browser paints — no visible flash
+    const rect = anchor.getBoundingClientRect();
+    setPosition({ top: rect.bottom, left: rect.left });
+  }, [anchor]);
+
+  return (
+    &lt;div style={{ position: 'fixed', ...position }}&gt;
+      Tooltip content
+    &lt;/div&gt;
+  );
+}</pre>
+
+      <p><strong>Execution order comparison:</strong></p>
+<pre class="code-block">// useEffect:
+// 1. React renders (virtual DOM diff)
+// 2. React commits to real DOM
+// 3. Browser PAINTS (user sees screen)
+// 4. useEffect callback runs
+
+// useLayoutEffect:
+// 1. React renders (virtual DOM diff)
+// 2. React commits to real DOM
+// 3. useLayoutEffect callback runs (synchronously — blocks paint)
+// 4. Browser PAINTS (user sees screen)</pre>
+
+      <p><strong>When to use each:</strong></p>
+      <ul>
+        <li>Use <code>useEffect</code> for the vast majority of cases: data fetching, subscriptions, event listeners, logging.</li>
+        <li>Use <code>useLayoutEffect</code> only when you need to read DOM layout (dimensions, positions) and synchronously update state before the browser paints, to avoid visual flicker.</li>
+        <li><strong>Caution:</strong> <code>useLayoutEffect</code> runs synchronously and blocks the browser paint. Heavy computation inside it will delay rendering. Keep it fast.</li>
+        <li><strong>SSR:</strong> <code>useLayoutEffect</code> does not run on the server and produces a warning in SSR environments. Use <code>useEffect</code> or a conditional check (<code>typeof window !== 'undefined'</code>) for SSR-compatible code.</li>
+      </ul>
+    </div>
+  </div>
+</div>

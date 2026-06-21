@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>TypeScript with React — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card,.card{border-radius:14px;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .code-block .tp{color:#fb923c;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+    .badge-section{display:inline-block;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;font-size:.75rem;font-weight:700;padding:.3rem .8rem;border-radius:20px;letter-spacing:.05em;margin-bottom:.5rem;}
+    .sub-heading{font-size:1.1rem;font-weight:700;color:#1d4ed8;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+    [data-theme="dark"] .sub-heading{color:#60a5fa;}
+    .ts-badge{display:inline-block;background:#3b82f6;color:#fff;font-size:.7rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;margin-right:.4rem;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <span class="badge-section">Section 19</span>
+        <h1 class="fw-900 mt-2 mb-3" style="font-size:2.6rem;">TypeScript with React</h1>
+        <p class="lead mb-0" style="color:#94a3b8;">Add type safety to your React apps — typed props, state, refs, events, custom hooks, generic components, and Redux with TypeScript.</p>
+      </div>
+      <div class="col-lg-4 text-end d-none d-lg-block">
+        <span style="font-size:5rem;font-weight:900;color:rgba(59,130,246,.3);font-family:'JetBrains Mono',monospace;">TS</span>
+      </div>
+    </div>
+    <div class="row mt-4 g-3">
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">Typed Props</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">useState / useRef</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">Event Types</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">Generic Components</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">Redux TS</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- Why TypeScript -->
+  <div class="content-card">
+    <div class="concept-box blue">
+      <strong><i class="bi bi-info-circle me-2"></i>Why TypeScript with React?</strong>
+      <div class="row g-3 mt-1">
+        <div class="col-md-3 text-center">
+          <i class="bi bi-bug-fill text-danger d-block" style="font-size:1.5rem;"></i>
+          <small><strong>Catch errors at compile time</strong> before they reach users</small>
+        </div>
+        <div class="col-md-3 text-center">
+          <i class="bi bi-lightbulb-fill text-warning d-block" style="font-size:1.5rem;"></i>
+          <small><strong>Autocomplete + IntelliSense</strong> in your editor</small>
+        </div>
+        <div class="col-md-3 text-center">
+          <i class="bi bi-book-fill text-primary d-block" style="font-size:1.5rem;"></i>
+          <small><strong>Self-documenting</strong> interfaces replace many comments</small>
+        </div>
+        <div class="col-md-3 text-center">
+          <i class="bi bi-arrow-repeat text-success d-block" style="font-size:1.5rem;"></i>
+          <small><strong>Safe refactoring</strong> — compiler flags all broken usages</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Setup -->
+    <div class="sub-heading"><i class="bi bi-terminal"></i> Setting Up TypeScript</div>
+    <div class="code-block"><span class="cm"># New project with TypeScript template</span>
+npm create vite@latest my-app -- --template react-ts
+
+<span class="cm"># Add TypeScript to an existing React project</span>
+npm install typescript @types/react @types/react-dom
+
+<span class="cm"># Generate tsconfig.json</span>
+npx tsc --init</div>
+
+    <div class="tip-box">
+      <strong><i class="bi bi-gear me-1"></i> Key tsconfig settings for React:</strong> Set <code>"jsx": "react-jsx"</code>, <code>"strict": true</code>, <code>"moduleResolution": "bundler"</code>. Enable <code>"noImplicitAny": true</code> and <code>"strictNullChecks": true</code> for maximum safety.
+    </div>
+  </div>
+
+  <!-- Component Props -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-box"></i> Component Props with TypeScript</div>
+    <p class="text-secondary mb-3">Define an <code>interface</code> or <code>type</code> for your component's props. Use <code>?</code> for optional props and provide defaults with destructuring.</p>
+
+    <div class="code-block"><span class="cm">// Interface for props</span>
+<span class="kw">interface</span> <span class="tp">ButtonProps</span> {
+  label: <span class="tp">string</span>;
+  onClick: () =&gt; <span class="tp">void</span>;
+  variant?: <span class="st">'primary'</span> | <span class="st">'secondary'</span> | <span class="st">'danger'</span>; <span class="cm">// union type</span>
+  disabled?: <span class="tp">boolean</span>;
+  loading?: <span class="tp">boolean</span>;
+  className?: <span class="tp">string</span>;
+  children?: React.<span class="tp">ReactNode</span>;
+}
+
+<span class="kw">const</span> <span class="fn">Button</span>: React.<span class="tp">FC</span>&lt;<span class="tp">ButtonProps</span>&gt; = ({
+  label,
+  onClick,
+  variant = <span class="st">'primary'</span>,
+  disabled = <span class="kw">false</span>,
+  loading = <span class="kw">false</span>,
+}) =&gt; {
+  <span class="kw">return</span> (
+    &lt;button
+      className={<span class="st">`btn btn-${variant}`</span>}
+      onClick={onClick}
+      disabled={disabled || loading}
+    &gt;
+      {loading ? &lt;<span class="fn">Spinner</span> size=<span class="st">"sm"</span> /&gt; : label}
+    &lt;/button&gt;
+  );
+};
+
+<span class="cm">// Alternative: function declaration (often preferred over React.FC)</span>
+<span class="kw">function</span> <span class="fn">Button</span>({ label, onClick, variant = <span class="st">'primary'</span> }: <span class="tp">ButtonProps</span>) {
+  <span class="kw">return</span> &lt;button className={<span class="st">`btn btn-${variant}`</span>} onClick={onClick}&gt;{label}&lt;/button&gt;;
+}</div>
+
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box green mb-0">
+          <div class="fw-700 mb-1">interface vs type</div>
+          <small><strong>interface</strong> — better for component props, supports extends/merging. <strong>type</strong> — better for unions, intersections, and complex computed types. Both work; be consistent in your codebase.</small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box amber mb-0">
+          <div class="fw-700 mb-1">React.FC vs function declaration</div>
+          <small><strong>React.FC</strong> adds implicit <code>children</code> prop (pre-v18). <strong>Function declaration</strong> is more explicit and avoids this. Modern React prefers explicit function declarations.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- useState and useRef -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-braces-asterisk"></i> useState &amp; useRef with TypeScript</div>
+
+    <div class="code-block"><span class="cm">// Primitive types — TypeScript infers these automatically</span>
+<span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>&lt;<span class="tp">number</span>&gt;(<span class="st">0</span>);
+<span class="kw">const</span> [name, setName] = <span class="fn">useState</span>&lt;<span class="tp">string</span>&gt;(<span class="st">''</span>);
+
+<span class="cm">// Object state — needs explicit interface</span>
+<span class="kw">interface</span> <span class="tp">User</span> {
+  id: <span class="tp">number</span>;
+  name: <span class="tp">string</span>;
+  email: <span class="tp">string</span>;
+  role: <span class="st">'admin'</span> | <span class="st">'user'</span>;
+}
+
+<span class="cm">// Nullable state — when user might not be loaded yet</span>
+<span class="kw">const</span> [user, setUser] = <span class="fn">useState</span>&lt;<span class="tp">User</span> | <span class="tp">null</span>&gt;(<span class="kw">null</span>);
+
+<span class="cm">// Array state</span>
+<span class="kw">const</span> [items, setItems] = <span class="fn">useState</span>&lt;<span class="tp">User</span>[]&gt;([]);
+
+<span class="cm">// useRef — specify the DOM element type</span>
+<span class="kw">const</span> inputRef = <span class="fn">useRef</span>&lt;<span class="tp">HTMLInputElement</span>&gt;(<span class="kw">null</span>);
+<span class="kw">const</span> divRef = <span class="fn">useRef</span>&lt;<span class="tp">HTMLDivElement</span>&gt;(<span class="kw">null</span>);
+<span class="kw">const</span> formRef = <span class="fn">useRef</span>&lt;<span class="tp">HTMLFormElement</span>&gt;(<span class="kw">null</span>);
+<span class="kw">const</span> buttonRef = <span class="fn">useRef</span>&lt;<span class="tp">HTMLButtonElement</span>&gt;(<span class="kw">null</span>);
+
+<span class="cm">// Mutable ref (not a DOM node — no null initial value needed)</span>
+<span class="kw">const</span> timerRef = <span class="fn">useRef</span>&lt;<span class="tp">ReturnType</span>&lt;<span class="kw">typeof</span> setTimeout&gt;&gt;();
+
+<span class="cm">// Access DOM element safely</span>
+<span class="kw">const</span> <span class="fn">focusInput</span> = () =&gt; {
+  inputRef.current?.<span class="fn">focus</span>(); <span class="cm">// optional chaining because ref might be null</span>
+};</div>
+  </div>
+
+  <!-- Custom Hook with TypeScript -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-hook"></i> Custom Hook with TypeScript</div>
+    <p class="text-secondary mb-3">Generic custom hooks are one of the most powerful TypeScript + React combinations. The hook infers the exact type of data based on usage.</p>
+
+    <div class="code-block"><span class="kw">interface</span> <span class="tp">FetchState</span>&lt;<span class="tp">T</span>&gt; {
+  data: <span class="tp">T</span> | <span class="tp">null</span>;
+  loading: <span class="tp">boolean</span>;
+  error: <span class="tp">string</span> | <span class="tp">null</span>;
+}
+
+<span class="kw">function</span> <span class="fn">useFetch</span>&lt;<span class="tp">T</span>&gt;(url: <span class="tp">string</span>): <span class="tp">FetchState</span>&lt;<span class="tp">T</span>&gt; {
+  <span class="kw">const</span> [state, setState] = <span class="fn">useState</span>&lt;<span class="tp">FetchState</span>&lt;<span class="tp">T</span>&gt;&gt;({
+    data: <span class="kw">null</span>,
+    loading: <span class="kw">true</span>,
+    error: <span class="kw">null</span>,
+  });
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="fn">fetch</span>(url)
+      .<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>())
+      .<span class="fn">then</span>((data: <span class="tp">T</span>) =&gt; <span class="fn">setState</span>({ data, loading: <span class="kw">false</span>, error: <span class="kw">null</span> }))
+      .<span class="fn">catch</span>(err =&gt; <span class="fn">setState</span>({ data: <span class="kw">null</span>, loading: <span class="kw">false</span>, error: err.message }));
+  }, [url]);
+
+  <span class="kw">return</span> state;
+}
+
+<span class="cm">// Usage — fully typed! data is User[] | null</span>
+<span class="kw">const</span> { data, loading, error } = <span class="fn">useFetch</span>&lt;<span class="tp">User</span>[]&gt;(<span class="st">'/api/users'</span>);
+<span class="kw">const</span> { data: product } = <span class="fn">useFetch</span>&lt;<span class="tp">Product</span>&gt;(<span class="st">`/api/products/${id}`</span>);</div>
+  </div>
+
+  <!-- Event Types -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-lightning"></i> Event Types</div>
+    <p class="text-secondary mb-3">React provides typed event objects for every DOM event. The generic parameter specifies which element the event came from.</p>
+
+    <div class="code-block"><span class="cm">// Click events</span>
+<span class="kw">const</span> <span class="fn">handleClick</span> = (e: React.<span class="tp">MouseEvent</span>&lt;<span class="tp">HTMLButtonElement</span>&gt;) =&gt; {
+  console.<span class="fn">log</span>(e.currentTarget.value);
+};
+
+<span class="cm">// Input change events</span>
+<span class="kw">const</span> <span class="fn">handleChange</span> = (e: React.<span class="tp">ChangeEvent</span>&lt;<span class="tp">HTMLInputElement</span>&gt;) =&gt; {
+  <span class="fn">setValue</span>(e.target.value);
+};
+
+<span class="cm">// Select change</span>
+<span class="kw">const</span> <span class="fn">handleSelect</span> = (e: React.<span class="tp">ChangeEvent</span>&lt;<span class="tp">HTMLSelectElement</span>&gt;) =&gt; {};
+
+<span class="cm">// Form submit</span>
+<span class="kw">const</span> <span class="fn">handleSubmit</span> = (e: React.<span class="tp">FormEvent</span>&lt;<span class="tp">HTMLFormElement</span>&gt;) =&gt; {
+  e.<span class="fn">preventDefault</span>();
+};
+
+<span class="cm">// Keyboard events</span>
+<span class="kw">const</span> <span class="fn">handleKeyDown</span> = (e: React.<span class="tp">KeyboardEvent</span>&lt;<span class="tp">HTMLInputElement</span>&gt;) =&gt; {
+  <span class="kw">if</span> (e.key === <span class="st">'Enter'</span>) <span class="fn">handleSubmit</span>();
+};
+
+<span class="cm">// Drag events</span>
+<span class="kw">const</span> <span class="fn">handleDrop</span> = (e: React.<span class="tp">DragEvent</span>&lt;<span class="tp">HTMLDivElement</span>&gt;) =&gt; {};
+
+<span class="cm">// Focus events</span>
+<span class="kw">const</span> <span class="fn">handleFocus</span> = (e: React.<span class="tp">FocusEvent</span>&lt;<span class="tp">HTMLInputElement</span>&gt;) =&gt; {};</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-table"></i> Event Type Quick Reference</div>
+    <div class="table-responsive">
+      <table class="table table-bordered" style="font-size:.84rem;">
+        <thead class="table-dark"><tr><th>Event</th><th>React Type</th><th>Common Element</th></tr></thead>
+        <tbody>
+          <tr><td>Click</td><td><code>React.MouseEvent&lt;T&gt;</code></td><td><code>HTMLButtonElement</code></td></tr>
+          <tr><td>Change</td><td><code>React.ChangeEvent&lt;T&gt;</code></td><td><code>HTMLInputElement</code></td></tr>
+          <tr><td>Submit</td><td><code>React.FormEvent&lt;T&gt;</code></td><td><code>HTMLFormElement</code></td></tr>
+          <tr><td>KeyDown/Up</td><td><code>React.KeyboardEvent&lt;T&gt;</code></td><td><code>HTMLInputElement</code></td></tr>
+          <tr><td>Focus/Blur</td><td><code>React.FocusEvent&lt;T&gt;</code></td><td><code>HTMLInputElement</code></td></tr>
+          <tr><td>Drag</td><td><code>React.DragEvent&lt;T&gt;</code></td><td><code>HTMLDivElement</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Generic Components -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-diagram-2"></i> Generic Components</div>
+    <p class="text-secondary mb-3">Generic components work with any data type while retaining full type safety. Perfect for reusable data display components like lists, tables, and selects.</p>
+
+    <div class="code-block"><span class="kw">interface</span> <span class="tp">ListProps</span>&lt;<span class="tp">T</span>&gt; {
+  items: <span class="tp">T</span>[];
+  renderItem: (item: <span class="tp">T</span>) =&gt; React.<span class="tp">ReactNode</span>;
+  keyExtractor: (item: <span class="tp">T</span>) =&gt; <span class="tp">string</span> | <span class="tp">number</span>;
+  emptyMessage?: <span class="tp">string</span>;
+}
+
+<span class="kw">function</span> <span class="fn">List</span>&lt;<span class="tp">T</span>&gt;({ items, renderItem, keyExtractor, emptyMessage = <span class="st">'No items'</span> }: <span class="tp">ListProps</span>&lt;<span class="tp">T</span>&gt;) {
+  <span class="kw">if</span> (items.length === <span class="st">0</span>) <span class="kw">return</span> &lt;p&gt;{emptyMessage}&lt;/p&gt;;
+  <span class="kw">return</span> (
+    &lt;ul&gt;
+      {items.<span class="fn">map</span>(item =&gt; (
+        &lt;li key={<span class="fn">keyExtractor</span>(item)}&gt;{<span class="fn">renderItem</span>(item)}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+<span class="cm">// TypeScript knows exactly what type "user" is in renderItem</span>
+&lt;<span class="fn">List</span>&lt;<span class="tp">User</span>&gt;
+  items={users}
+  renderItem={user =&gt; &lt;<span class="fn">UserCard</span> {...user} /&gt;}
+  keyExtractor={user =&gt; user.id}
+/&gt;
+
+<span class="cm">// Reuse with a different type</span>
+&lt;<span class="fn">List</span>&lt;<span class="tp">Product</span>&gt;
+  items={products}
+  renderItem={product =&gt; &lt;span&gt;{product.name}&lt;/span&gt;}
+  keyExtractor={product =&gt; product.sku}
+  emptyMessage=<span class="st">"No products available"</span>
+/&gt;</div>
+  </div>
+
+  <!-- Redux with TypeScript -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-box-seam"></i> Redux with TypeScript</div>
+    <p class="text-secondary mb-3">Redux Toolkit is built with TypeScript. Use typed hooks (<code>useAppSelector</code>, <code>useAppDispatch</code>) to get full type inference from your store.</p>
+
+    <div class="code-block"><span class="cm">// store.ts — set up typed hooks</span>
+<span class="kw">import</span> { configureStore } <span class="kw">from</span> <span class="st">'@reduxjs/toolkit'</span>;
+<span class="kw">import type</span> { TypedUseSelectorHook } <span class="kw">from</span> <span class="st">'react-redux'</span>;
+<span class="kw">import</span> { useDispatch, useSelector } <span class="kw">from</span> <span class="st">'react-redux'</span>;
+
+<span class="kw">export const</span> store = <span class="fn">configureStore</span>({ reducer: { auth, users } });
+
+<span class="kw">export type</span> <span class="tp">RootState</span> = ReturnType&lt;<span class="kw">typeof</span> store.getState&gt;;
+<span class="kw">export type</span> <span class="tp">AppDispatch</span> = <span class="kw">typeof</span> store.dispatch;
+
+<span class="cm">// Typed hooks — use these everywhere instead of plain useSelector/useDispatch</span>
+<span class="kw">export const</span> useAppDispatch = () =&gt; <span class="fn">useDispatch</span>&lt;<span class="tp">AppDispatch</span>&gt;();
+<span class="kw">export const</span> useAppSelector: <span class="tp">TypedUseSelectorHook</span>&lt;<span class="tp">RootState</span>&gt; = useSelector;
+
+<span class="cm">// authSlice.ts — fully typed slice</span>
+<span class="kw">interface</span> <span class="tp">AuthState</span> {
+  user: <span class="tp">User</span> | <span class="tp">null</span>;
+  loading: <span class="tp">boolean</span>;
+  error: <span class="tp">string</span> | <span class="tp">null</span>;
+}
+
+<span class="kw">const</span> authSlice = <span class="fn">createSlice</span>({
+  name: <span class="st">'auth'</span>,
+  initialState: { user: <span class="kw">null</span>, loading: <span class="kw">false</span>, error: <span class="kw">null</span> } <span class="kw">as</span> <span class="tp">AuthState</span>,
+  reducers: {
+    <span class="fn">setUser</span>: (state, action: PayloadAction&lt;<span class="tp">User</span>&gt;) =&gt; {
+      state.user = action.payload;
+    },
+  },
+});
+
+<span class="cm">// In a component — fully type-safe</span>
+<span class="kw">const</span> user = <span class="fn">useAppSelector</span>(state =&gt; state.auth.user); <span class="cm">// User | null</span>
+<span class="kw">const</span> dispatch = <span class="fn">useAppDispatch</span>();
+<span class="fn">dispatch</span>(setUser({ id: <span class="st">1</span>, name: <span class="st">'John'</span>, email: <span class="st">'j@j.com'</span>, role: <span class="st">'admin'</span> }));</div>
+  </div>
+
+  <!-- TypeScript Gotchas -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-exclamation-triangle"></i> TypeScript Gotchas</div>
+
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle me-1"></i> Using <code>any</code> kills type safety</strong> — <code>const data: any = response</code> opts out of all TypeScript benefits. Use <code>unknown</code> instead and narrow the type, or define the proper interface.
+    </div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle me-1"></i> Non-null assertion overuse</strong> — <code>inputRef.current!.focus()</code> (the <code>!</code>) tells TS "trust me, it's not null." If you're wrong, you get a runtime error. Use optional chaining <code>?.</code> instead.
+    </div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle me-1"></i> Forgetting to type useReducer</strong> — Without typing, the reducer state and action types default to <code>any</code>. Always type the state interface and a discriminated union for actions.
+    </div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle me-1"></i> Type assertions instead of type guards</strong> — <code>const user = data as User</code> bypasses type checking. Use a type guard function: <code>function isUser(x: unknown): x is User { return typeof (x as User).id === 'number'; }</code>
+    </div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-x-circle me-1"></i> Missing return type on async functions</strong> — TypeScript can infer most return types, but async functions returning complex objects benefit from explicit annotations: <code>async function getUser(): Promise&lt;User&gt;</code>
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-chat-left-quote"></i> Interview Questions</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the difference between <code>interface</code> and <code>type</code> in TypeScript? When do you prefer each?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you type a React component's props? What's the difference between <code>React.FC</code> and a plain function declaration?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you type <code>useState</code> when the initial value is <code>null</code>? Why is explicit typing important in this case?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What are generic components in TypeScript? Give a real example of when you'd use one.</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you handle event types in TypeScript? How do you type an <code>onChange</code> handler for an input element?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is a type guard? How do you use one to narrow a type from <code>unknown</code> to a specific interface?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you set up typed Redux hooks (<code>useAppSelector</code>, <code>useAppDispatch</code>)? Why are they better than the plain versions?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the danger of using the non-null assertion operator (<code>!</code>) and the <code>any</code> type? What are the safer alternatives?</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+    <div class="mt-2 d-flex justify-content-center gap-3 flex-wrap">
+      <a href="index.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Home</a>
+      <a href="react-hooks.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Hooks</a>
+      <a href="react-redux.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Redux</a>
+      <a href="react-interview.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Interview</a>
+      <a href="react-projects.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

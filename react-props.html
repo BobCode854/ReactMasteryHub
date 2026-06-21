@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Props — Section 6 — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;background:var(--bg,#f0f4ff);color:var(--text,#1e293b);}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--surface2:#1e293b;--text:#f1f5f9;--text-muted:#94a3b8;--border:#1e293b;}
+    .concept-box{border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fde68a;}
+    [data-theme="dark"] .concept-box.red{background:#450a0a;border-color:#ef4444;color:#fecaca;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.83rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;} .code-block .fn{color:#60a5fa;} .code-block .st{color:#86efac;}
+    .code-block .cm{color:#64748b;font-style:italic;} .code-block .cl{color:#f9a8d4;} .code-block .num{color:#fb923c;}
+    .code-block .attr{color:#fbbf24;} .code-block .tag{color:#f87171;} .code-block .op{color:#e2e8f0;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3.5rem 0 2.5rem;margin-bottom:2rem;}
+    .prop-card{border-radius:16px;padding:2rem;margin-bottom:2rem;border:1px solid rgba(0,0,0,.08);background:#fff;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+    [data-theme="dark"] .prop-card{background:#111827;border-color:#1e293b;}
+    .drill-level{border-radius:10px;padding:1rem;text-align:center;font-weight:600;}
+    .drill-arrow{font-size:1.5rem;text-align:center;color:#64748b;margin:.5rem 0;}
+    .section-label{display:inline-block;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border-radius:8px;padding:.25rem .75rem;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.75rem;}
+    .prop-card h2{font-weight:800;margin-bottom:1.2rem;}
+    .key-rule{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem 0;border-bottom:1px solid rgba(0,0,0,.06);}
+    .key-rule:last-child{border-bottom:none;}
+    [data-theme="dark"] .key-rule{border-color:rgba(255,255,255,.06);}
+    .rule-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.7rem;margin-top:.1rem;}
+    .accordion-button:not(.collapsed){background:#eff6ff;color:#1d4ed8;}
+    [data-theme="dark"] .accordion-button:not(.collapsed){background:#1e3a5f;color:#bfdbfe;}
+    [data-theme="dark"] .accordion-item{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-button{background:#111827;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-button::after{filter:invert(1);}
+    [data-theme="dark"] .accordion-collapse{background:#111827;}
+    .answer-text{color:#374151;line-height:1.8;}
+    [data-theme="dark"] .answer-text{color:#d1d5db;}
+    .drill-diagram{border-radius:12px;padding:1.5rem;background:#f8fafc;border:1px solid #e2e8f0;}
+    [data-theme="dark"] .drill-diagram{background:#0f172a;border-color:#1e293b;}
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-components.html">Components</a></li>
+        <li class="nav-item"><a class="nav-link active" href="react-props.html">Props</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="section-hero" style="padding-top:5rem;">
+  <div class="container-xl">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb" style="opacity:.7;">
+        <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none" style="color:#61dafb;">Home</a></li>
+        <li class="breadcrumb-item active text-white">Section 6: Props</li>
+      </ol>
+    </nav>
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge" style="background:#61dafb;color:#0f172a;font-size:.85rem;padding:.5rem 1rem;">Section 6</span>
+      <span class="badge bg-primary">Props Deep Dive</span>
+    </div>
+    <h1 class="fw-900 display-5 mb-2">React Props</h1>
+    <p class="lead mb-0" style="opacity:.8;max-width:600px;">Master how data flows in React — props basics, default props, prop drilling, PropTypes validation, children, and the Render Props pattern.</p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="container-xl pb-5">
+
+  <!-- ========== SECTION 1: PROPS BASICS ========== -->
+  <div class="prop-card" data-aos="fade-up">
+    <span class="section-label">Section 6.1</span>
+    <h2><i class="bi bi-arrow-right-circle-fill me-2" style="color:#3b82f6;"></i>Props Basics</h2>
+
+    <div class="concept-box blue mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <i class="bi bi-info-circle-fill mt-1" style="color:#3b82f6;flex-shrink:0;"></i>
+        <div>
+          <strong>What are Props?</strong>
+          <p class="mb-0 mt-1">Props (short for <em>properties</em>) are the mechanism for passing data from a parent component to a child component. Props are <strong>READ-ONLY</strong> — a child component must never modify its own props. This enforces <strong>unidirectional data flow</strong>, making React apps predictable and easier to debug.</p>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-block"><code><span class="cm">// ─────────────────────────────────────────────────────
+// Parent passes props to ProductCard
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">ShopPage</span>() {
+  <span class="kw">const</span> handleAdd = (id) =&gt; console.log(<span class="st">'Added:'</span>, id);
+
+  <span class="kw">return</span> (
+    <span class="tag">&lt;ProductCard</span>
+      <span class="attr">name</span>=<span class="st">"React Course"</span>
+      <span class="attr">price</span>={<span class="num">49</span>}
+      <span class="attr">inStock</span>={<span class="kw">true</span>}
+      <span class="attr">tags</span>={[<span class="st">'frontend'</span>, <span class="st">'javascript'</span>]}
+      <span class="attr">onAddToCart</span>={() =&gt; handleAdd(product.id)}
+    <span class="tag">/&gt;</span>
+  );
+}
+
+<span class="cm">// ─────────────────────────────────────────────────────
+// Child receives and destructures props
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">ProductCard</span>({ name, price, inStock, tags, onAddToCart }) {
+  <span class="kw">return</span> (
+    <span class="tag">&lt;div</span> <span class="attr">className</span>={`card ${inStock ? <span class="st">''</span> : <span class="st">'out-of-stock'</span>}`}&gt;
+      <span class="tag">&lt;h3&gt;</span>{name}<span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;p&gt;</span>${price}<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;div&gt;</span>
+        {tags.map(tag =&gt; (
+          <span class="tag">&lt;span</span> <span class="attr">key</span>={tag} <span class="attr">className</span>=<span class="st">"badge"</span><span class="tag">&gt;</span>{tag}<span class="tag">&lt;/span&gt;</span>
+        ))}
+      <span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;button</span> <span class="attr">onClick</span>={onAddToCart} <span class="attr">disabled</span>={!inStock}<span class="tag">&gt;</span>
+        {inStock ? <span class="st">'Add to Cart'</span> : <span class="st">'Out of Stock'</span>}
+      <span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}</code></pre>
+
+    <div class="tip-box mb-4">
+      <div class="d-flex align-items-start gap-2">
+        <i class="bi bi-lightbulb-fill mt-1" style="color:#22c55e;flex-shrink:0;"></i>
+        <div>
+          <strong>Pro Tip:</strong> Props can be any JavaScript type: strings, numbers, booleans, arrays, objects, functions, even JSX elements. Functions as props are called <em>"callback props"</em> and enable <strong>child-to-parent communication</strong> — the child calls the function, which updates state in the parent.
+        </div>
+      </div>
+    </div>
+
+    <h5 class="fw-700 mb-3">Key Rules of Props</h5>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="key-rule">
+          <div class="rule-icon" style="background:#dbeafe;"><i class="bi bi-lock-fill" style="color:#3b82f6;font-size:.65rem;"></i></div>
+          <div><strong>Immutable</strong> — Never mutate props directly. Use state in the parent and pass it down as updated props.</div>
+        </div>
+        <div class="key-rule">
+          <div class="rule-icon" style="background:#dcfce7;"><i class="bi bi-arrow-down" style="color:#22c55e;font-size:.65rem;"></i></div>
+          <div><strong>Unidirectional Flow</strong> — Data always flows from parent → child, never the other way around.</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="key-rule">
+          <div class="rule-icon" style="background:#fef3c7;"><i class="bi bi-asterisk" style="color:#d97706;font-size:.65rem;"></i></div>
+          <div><strong>Any JS Type</strong> — Pass strings, numbers, booleans, arrays, objects, or functions.</div>
+        </div>
+        <div class="key-rule">
+          <div class="rule-icon" style="background:#f5f3ff;"><i class="bi bi-distribute-horizontal" style="color:#7c3aed;font-size:.65rem;"></i></div>
+          <div><strong>Spread Operator</strong> — Use <code>{...props}</code> to forward all props from parent to child efficiently.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SECTION 2: DEFAULT PROPS ========== -->
+  <div class="prop-card" data-aos="fade-up">
+    <span class="section-label">Section 6.2</span>
+    <h2><i class="bi bi-toggles me-2" style="color:#22c55e;"></i>Default Props</h2>
+
+    <div class="concept-box green mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <i class="bi bi-check-circle-fill mt-1" style="color:#22c55e;flex-shrink:0;"></i>
+        <div>
+          <strong>Default Props via Destructuring</strong>
+          <p class="mb-0 mt-1">The modern way to define default prop values is directly in the function parameter destructuring using the <code>=</code> assignment syntax. This is clean, explicit, and works with TypeScript. The older <code>Component.defaultProps</code> static property is deprecated in React 18.3+.</p>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-block"><code><span class="cm">// ─────────────────────────────────────────────────────
+// Button component with default props via destructuring
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">Button</span>({
+  label = <span class="st">'Click Me'</span>,
+  variant = <span class="st">'primary'</span>,
+  size = <span class="st">'md'</span>,
+  disabled = <span class="kw">false</span>,
+  onClick = () =&gt; {}
+}) {
+  <span class="kw">return</span> (
+    <span class="tag">&lt;button</span>
+      <span class="attr">className</span>={`btn btn-${variant} btn-${size}`}
+      <span class="attr">disabled</span>={disabled}
+      <span class="attr">onClick</span>={onClick}
+    <span class="tag">&gt;</span>
+      {label}
+    <span class="tag">&lt;/button&gt;</span>
+  );
+}
+
+<span class="cm">// ─────────────────────────────────────────────────────
+// Usage — only override what you need
+// ─────────────────────────────────────────────────────</span>
+<span class="tag">&lt;Button</span> <span class="attr">label</span>=<span class="st">"Save"</span> <span class="attr">variant</span>=<span class="st">"success"</span> <span class="tag">/&gt;</span>
+
+<span class="cm">// Uses ALL defaults: "Click Me", primary, md, enabled</span>
+<span class="tag">&lt;Button /&gt;</span>
+
+<span class="cm">// Disabled state — other props still use their defaults</span>
+<span class="tag">&lt;Button</span> <span class="attr">label</span>=<span class="st">"Processing..."</span> <span class="attr">disabled</span>={<span class="kw">true</span>} <span class="tag">/&gt;</span>
+
+<span class="cm">// ─────────────────────────────────────────────────────
+// TypeScript typed version with defaults
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">interface</span> <span class="cl">ButtonProps</span> {
+  label?: <span class="kw">string</span>;
+  variant?: <span class="st">'primary'</span> | <span class="st">'secondary'</span> | <span class="st">'success'</span> | <span class="st">'danger'</span>;
+  size?: <span class="st">'sm'</span> | <span class="st">'md'</span> | <span class="st">'lg'</span>;
+  disabled?: <span class="kw">boolean</span>;
+  onClick?: () =&gt; <span class="kw">void</span>;
+}
+
+<span class="kw">function</span> <span class="fn">Button</span>({
+  label = <span class="st">'Click Me'</span>,
+  variant = <span class="st">'primary'</span>,
+  size = <span class="st">'md'</span>,
+  disabled = <span class="kw">false</span>,
+  onClick = () =&gt; {}
+}: <span class="cl">ButtonProps</span>) {
+  <span class="cm">/* same body as above */</span>
+}</code></pre>
+
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box amber">
+          <strong><i class="bi bi-exclamation-triangle-fill me-1" style="color:#d97706;"></i>Avoid: .defaultProps</strong>
+          <p class="mb-0 mt-1 small">The <code>Component.defaultProps = {...}</code> pattern is deprecated in React 18.3 and will be removed in a future version. Migrate to destructuring defaults.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <strong><i class="bi bi-check2-circle me-1" style="color:#22c55e;"></i>Prefer: Destructuring Defaults</strong>
+          <p class="mb-0 mt-1 small">Defaults live right where the parameters are declared — easier to read, TypeScript-friendly, and aligned with modern React conventions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SECTION 3: PROP DRILLING ========== -->
+  <div class="prop-card" data-aos="fade-up">
+    <span class="section-label">Section 6.3</span>
+    <h2><i class="bi bi-diagram-3-fill me-2" style="color:#ef4444;"></i>Prop Drilling — Problem &amp; Solutions</h2>
+
+    <div class="concept-box red mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <i class="bi bi-exclamation-octagon-fill mt-1" style="color:#ef4444;flex-shrink:0;"></i>
+        <div>
+          <strong>The Problem — Prop Drilling</strong>
+          <p class="mb-0 mt-1">Passing props through multiple component layers that don't need the data, just to get it to a deeply nested component. This creates tight coupling, makes refactoring painful, and pollutes intermediate components with props they never use.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Diagram -->
+    <div class="drill-diagram mb-4">
+      <p class="text-center fw-700 mb-3" style="color:#6366f1;">Prop Drilling — Visualized</p>
+      <div class="row g-2 align-items-center justify-content-center">
+        <div class="col-auto text-center">
+          <div class="drill-level" style="background:#dbeafe;color:#1d4ed8;min-width:140px;">
+            <i class="bi bi-house-fill me-1"></i> App
+            <div class="small fw-normal mt-1">Has <code>user</code> state</div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="drill-arrow">&#8595; <span class="small text-danger fw-600">passes user</span></div>
+        </div>
+        <div class="col-auto text-center">
+          <div class="drill-level" style="background:#fef3c7;color:#92400e;min-width:140px;">
+            <i class="bi bi-layout-split me-1"></i> Layout
+            <div class="small fw-normal mt-1">Doesn't need <code>user</code></div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="drill-arrow">&#8595; <span class="small text-danger fw-600">passes user</span></div>
+        </div>
+        <div class="col-auto text-center">
+          <div class="drill-level" style="background:#fef3c7;color:#92400e;min-width:140px;">
+            <i class="bi bi-layout-sidebar me-1"></i> Sidebar
+            <div class="small fw-normal mt-1">Doesn't need <code>user</code></div>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="drill-arrow">&#8595; <span class="small text-danger fw-600">passes user</span></div>
+        </div>
+        <div class="col-auto text-center">
+          <div class="drill-level" style="background:#dcfce7;color:#15803d;min-width:140px;">
+            <i class="bi bi-person-circle me-1"></i> UserMenu
+            <div class="small fw-normal mt-1">Finally needs <code>user</code></div>
+          </div>
+        </div>
+      </div>
+      <p class="text-center mt-3 mb-0 small" style="color:#ef4444;"><i class="bi bi-x-circle-fill me-1"></i>Layout and Sidebar are polluted with a prop they never use</p>
+    </div>
+
+    <div class="concept-box green mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <i class="bi bi-check-circle-fill mt-1" style="color:#22c55e;flex-shrink:0;"></i>
+        <div>
+          <strong>The Solutions</strong>
+          <ul class="mb-0 mt-1">
+            <li><strong>Context API</strong> — Built-in React solution for global/shared state. Best for: auth, theme, locale.</li>
+            <li><strong>Redux / Zustand / Jotai</strong> — External state management. Best for: large-scale, complex state.</li>
+            <li><strong>Component Composition</strong> — Restructure to avoid the need to drill by lifting rendering closer to the consumer.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-block"><code><span class="cm">// ─────────────────────────────────────────────────────
+// Solution 1: Context API — eliminates drilling entirely
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">import</span> { createContext, useContext, useState } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">const</span> <span class="cl">UserContext</span> = createContext(<span class="kw">null</span>);
+
+<span class="cm">// Provider at top level — wraps the whole tree</span>
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">const</span> [user, setUser] = useState({ name: <span class="st">'John'</span>, role: <span class="st">'admin'</span> });
+  <span class="kw">return</span> (
+    <span class="tag">&lt;UserContext.Provider</span> <span class="attr">value</span>={user}<span class="tag">&gt;</span>
+      <span class="tag">&lt;Layout /&gt;</span>  <span class="cm">{/* No longer needs user prop! */}</span>
+    <span class="tag">&lt;/UserContext.Provider&gt;</span>
+  );
+}
+
+<span class="cm">// Layout — clean, no user prop at all</span>
+<span class="kw">function</span> <span class="fn">Layout</span>() {
+  <span class="kw">return</span> <span class="tag">&lt;Sidebar /&gt;</span>;  <span class="cm">{/* No user prop needed */}</span>
+}
+
+<span class="cm">// Consumer anywhere in the tree — no drilling!</span>
+<span class="kw">function</span> <span class="fn">UserMenu</span>() {
+  <span class="kw">const</span> user = <span class="fn">useContext</span>(<span class="cl">UserContext</span>);  <span class="cm">// directly from context</span>
+  <span class="kw">return</span> <span class="tag">&lt;div&gt;</span>Welcome, {user.name} ({user.role})<span class="tag">&lt;/div&gt;</span>;
+}
+
+<span class="cm">// ─────────────────────────────────────────────────────
+// Solution 2: Component Composition — pass components, not data
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">const</span> user = { name: <span class="st">'John'</span>, role: <span class="st">'admin'</span> };
+  <span class="cm">// Compose the full tree here, where user is available</span>
+  <span class="kw">return</span> (
+    <span class="tag">&lt;Layout</span>
+      <span class="attr">sidebar</span>={<span class="tag">&lt;UserMenu</span> <span class="attr">user</span>={user} <span class="tag">/&gt;</span>}
+    <span class="tag">/&gt;</span>
+  );
+}
+
+<span class="cm">// Layout only passes through the already-composed sidebar</span>
+<span class="kw">function</span> <span class="fn">Layout</span>({ sidebar }) {
+  <span class="kw">return</span> <span class="tag">&lt;div&gt;</span>{sidebar}<span class="tag">&lt;/div&gt;</span>;  <span class="cm">{/* No knowledge of user! */}</span>
+}</code></pre>
+  </div>
+
+  <!-- ========== SECTION 4: PROPTYPES VALIDATION ========== -->
+  <div class="prop-card" data-aos="fade-up">
+    <span class="section-label">Section 6.4</span>
+    <h2><i class="bi bi-shield-check-fill me-2" style="color:#d97706;"></i>PropTypes Validation</h2>
+
+    <div class="concept-box amber mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <i class="bi bi-shield-exclamation mt-1" style="color:#d97706;flex-shrink:0;"></i>
+        <div>
+          <strong>Runtime vs. Static Type Checking</strong>
+          <p class="mb-0 mt-1">PropTypes provide <strong>runtime type checking</strong> for props. They generate console warnings in development when wrong types are passed. <strong>TypeScript</strong> is the modern alternative — it provides <em>static</em> type checking at compile time, catching errors before you even run the app. New projects should prefer TypeScript.</p>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-block"><code><span class="cm">// ─────────────────────────────────────────────────────
+// PropTypes — runtime validation (JavaScript projects)
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">import</span> PropTypes <span class="kw">from</span> <span class="st">'prop-types'</span>;
+
+<span class="kw">function</span> <span class="fn">UserProfile</span>({ name, age, email, role, address, onUpdate, tags }) {
+  <span class="kw">return</span> <span class="tag">&lt;div&gt;</span>...<span class="tag">&lt;/div&gt;</span>;
+}
+
+<span class="cl">UserProfile</span>.propTypes = {
+  name:     PropTypes.string.isRequired,          <span class="cm">// required string</span>
+  age:      PropTypes.number,                      <span class="cm">// optional number</span>
+  email:    PropTypes.string.isRequired,           <span class="cm">// required string</span>
+  role:     PropTypes.oneOf([<span class="st">'admin'</span>, <span class="st">'user'</span>, <span class="st">'moderator'</span>]),  <span class="cm">// enum</span>
+  address:  PropTypes.shape({                      <span class="cm">// nested object</span>
+    street:  PropTypes.string,
+    city:    PropTypes.string.isRequired,
+    country: PropTypes.string.isRequired,
+  }),
+  onUpdate: PropTypes.func,                        <span class="cm">// function callback</span>
+  tags:     PropTypes.arrayOf(PropTypes.string),   <span class="cm">// array of strings</span>
+};
+
+<span class="cl">UserProfile</span>.defaultProps = {
+  age:      <span class="num">0</span>,
+  role:     <span class="st">'user'</span>,
+  onUpdate: () =&gt; {},
+  tags:     [],
+};
+
+<span class="cm">// ─────────────────────────────────────────────────────
+// TypeScript Alternative — PREFERRED for new projects
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">interface</span> <span class="cl">UserProfileProps</span> {
+  name: <span class="kw">string</span>;                                    <span class="cm">// required by default</span>
+  age?: <span class="kw">number</span>;                                   <span class="cm">// optional (? suffix)</span>
+  email: <span class="kw">string</span>;
+  role?: <span class="st">'admin'</span> | <span class="st">'user'</span> | <span class="st">'moderator'</span>;        <span class="cm">// union type</span>
+  address?: {
+    street?: <span class="kw">string</span>;
+    city: <span class="kw">string</span>;
+    country: <span class="kw">string</span>;
+  };
+  onUpdate?: () =&gt; <span class="kw">void</span>;
+  tags?: <span class="kw">string</span>[];
+}
+
+<span class="kw">function</span> <span class="fn">UserProfile</span>({
+  name,
+  age = <span class="num">0</span>,
+  email,
+  role = <span class="st">'user'</span>,
+  address,
+  onUpdate = () =&gt; {},
+  tags = [],
+}: <span class="cl">UserProfileProps</span>) {
+  <span class="kw">return</span> <span class="tag">&lt;div&gt;</span>...<span class="tag">&lt;/div&gt;</span>;
+}
+
+<span class="cm">// Compile-time error — caught before running!</span>
+<span class="tag">&lt;UserProfile</span> <span class="attr">name</span>={<span class="num">42</span>} <span class="tag">/&gt;</span>  <span class="cm">// Error: Type 'number' is not assignable to 'string'</span></code></pre>
+
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box amber">
+          <p class="fw-700 mb-2"><i class="bi bi-clock-history me-1"></i>PropTypes</p>
+          <ul class="small mb-0">
+            <li>Runtime checking (development only)</li>
+            <li>Errors shown in browser console</li>
+            <li>Good for legacy JS codebases</li>
+            <li>Separate <code>prop-types</code> package needed</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box blue">
+          <p class="fw-700 mb-2"><i class="bi bi-lightning-fill me-1" style="color:#3b82f6;"></i>TypeScript</p>
+          <ul class="small mb-0">
+            <li>Compile-time static checking</li>
+            <li>Errors caught in your editor instantly</li>
+            <li>Recommended for all new React projects</li>
+            <li>Zero runtime overhead</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SECTION 5: CHILDREN PROPS ========== -->
+  <div class="prop-card" data-aos="fade-up">
+    <span class="section-label">Section 6.5</span>
+    <h2><i class="bi bi-boxes me-2" style="color:#7c3aed;"></i>Children Props</h2>
+
+    <div class="concept-box purple mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <i class="bi bi-braces-asterisk mt-1" style="color:#7c3aed;flex-shrink:0;"></i>
+        <div>
+          <strong>The Special <code>children</code> Prop</strong>
+          <p class="mb-0 mt-1">The special <code>children</code> prop contains whatever is between your component's opening and closing tags. It can be text, JSX elements, or even functions. This is the foundation of <strong>composition</strong> — the React way to build flexible, reusable wrapper components without knowing in advance what they'll contain.</p>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-block"><code><span class="cm">// ─────────────────────────────────────────────────────
+// Flexible wrapper component using children
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">Card</span>({ children, title, className, footer }) {
+  <span class="kw">return</span> (
+    <span class="tag">&lt;div</span> <span class="attr">className</span>={`card ${className || <span class="st">''</span>}`}<span class="tag">&gt;</span>
+      {title &amp;&amp; (
+        <span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="st">"card-header"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;h3&gt;</span>{title}<span class="tag">&lt;/h3&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+      )}
+      <span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="st">"card-body"</span><span class="tag">&gt;</span>
+        {children}  <span class="cm">{/* renders whatever is passed between tags */}</span>
+      <span class="tag">&lt;/div&gt;</span>
+      {footer &amp;&amp; (
+        <span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="st">"card-footer"</span><span class="tag">&gt;</span>{footer}<span class="tag">&lt;/div&gt;</span>
+      )}
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}
+
+<span class="cm">// Pass ANY JSX as children — Card doesn't care</span>
+<span class="tag">&lt;Card</span>
+  <span class="attr">title</span>=<span class="st">"User Profile"</span>
+  <span class="attr">className</span>=<span class="st">"shadow-lg"</span>
+  <span class="attr">footer</span>={<span class="tag">&lt;button&gt;</span>View All<span class="tag">&lt;/button&gt;</span>}
+<span class="tag">&gt;</span>
+  <span class="tag">&lt;Avatar</span> <span class="attr">src</span>={user.photo} <span class="tag">/&gt;</span>
+  <span class="tag">&lt;h4&gt;</span>{user.name}<span class="tag">&lt;/h4&gt;</span>
+  <span class="tag">&lt;p&gt;</span>{user.bio}<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;button&gt;</span>Follow<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/Card&gt;</span>
+
+<span class="cm">// ─────────────────────────────────────────────────────
+// React.Children utilities for advanced child manipulation
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">import</span> React <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">List</span>({ children }) {
+  <span class="kw">return</span> (
+    <span class="tag">&lt;ul&gt;</span>
+      {React.Children.map(children, (child, index) =&gt; (
+        <span class="tag">&lt;li</span> <span class="attr">key</span>={index}<span class="tag">&gt;</span>{child}<span class="tag">&lt;/li&gt;</span>
+      ))}
+    <span class="tag">&lt;/ul&gt;</span>
+  );
+}
+
+<span class="cm">// React.Children API:</span>
+React.Children.map(children, fn)     <span class="cm">// iterate, returns new array</span>
+React.Children.forEach(children, fn) <span class="cm">// iterate, no return</span>
+React.Children.count(children)       <span class="cm">// number of children</span>
+React.Children.only(children)        <span class="cm">// assert single child</span>
+React.Children.toArray(children)     <span class="cm">// flatten to array with keys</span>
+
+<span class="cm">// ─────────────────────────────────────────────────────
+// TypeScript: type the children prop explicitly
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">interface</span> <span class="cl">CardProps</span> {
+  children: React.<span class="cl">ReactNode</span>;      <span class="cm">// accepts any renderable content</span>
+  title?: <span class="kw">string</span>;
+  footer?: React.<span class="cl">ReactNode</span>;
+}
+
+<span class="cm">// React.ReactNode types:
+// - React.ReactElement  — JSX element
+// - React.ReactChild    — element, string, or number
+// - React.ReactNode     — anything React can render (most permissive)</span></code></pre>
+
+    <div class="concept-box purple">
+      <strong>3 Key Use Cases for <code>children</code></strong>
+      <ol class="mb-0 mt-2">
+        <li><strong>Layout Wrappers</strong> — Modal, Card, Panel, Drawer — provide the chrome, let caller provide the content.</li>
+        <li><strong>HOC-style wrappers</strong> — AuthGuard, ErrorBoundary — wrap behavior around any child tree.</li>
+        <li><strong>Slot-based composition</strong> — Pass multiple named regions (header, footer, sidebar) as separate props, each accepting JSX.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ========== SECTION 6: RENDER PROPS ========== -->
+  <div class="prop-card" data-aos="fade-up">
+    <span class="section-label">Section 6.6</span>
+    <h2><i class="bi bi-arrow-repeat me-2" style="color:#3b82f6;"></i>Render Props Pattern</h2>
+
+    <div class="concept-box blue mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <i class="bi bi-code-slash mt-1" style="color:#3b82f6;flex-shrink:0;"></i>
+        <div>
+          <strong>What is the Render Props Pattern?</strong>
+          <p class="mb-0 mt-1">Render Props is a pattern where a prop is a function that returns JSX. The component calls this function to determine what to render, sharing its internal state/logic with the caller. It enables powerful code reuse without Higher-Order Components (HOCs). Today, it has been largely <em>superseded</em> by custom hooks — but you'll still encounter it in many codebases.</p>
+        </div>
+      </div>
+    </div>
+
+    <pre class="code-block"><code><span class="cm">// ─────────────────────────────────────────────────────
+// DataFetcher — uses render prop to share data logic
+// The component handles fetch state; caller controls UI
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">DataFetcher</span>({ url, render }) {
+  <span class="kw">const</span> [data, setData] = useState(<span class="kw">null</span>);
+  <span class="kw">const</span> [loading, setLoading] = useState(<span class="kw">true</span>);
+  <span class="kw">const</span> [error, setError] = useState(<span class="kw">null</span>);
+
+  useEffect(() =&gt; {
+    setLoading(<span class="kw">true</span>);
+    fetch(url)
+      .then(r =&gt; r.json())
+      .then(d =&gt; { setData(d); setLoading(<span class="kw">false</span>); })
+      .catch(err =&gt; { setError(err.message); setLoading(<span class="kw">false</span>); });
+  }, [url]);
+
+  <span class="cm">// Calls the render prop function — consumer controls rendering</span>
+  <span class="kw">return</span> render({ data, loading, error });
+}
+
+<span class="cm">// ─────────────────────────────────────────────────────
+// Usage — consumer gets full control over what renders
+// ─────────────────────────────────────────────────────</span>
+<span class="tag">&lt;DataFetcher</span>
+  <span class="attr">url</span>=<span class="st">"/api/users"</span>
+  <span class="attr">render</span>={({ data, loading, error }) =&gt; {
+    <span class="kw">if</span> (loading) <span class="kw">return</span> <span class="tag">&lt;Spinner /&gt;</span>;
+    <span class="kw">if</span> (error)   <span class="kw">return</span> <span class="tag">&lt;ErrorMessage</span> <span class="attr">message</span>={error} <span class="tag">/&gt;</span>;
+    <span class="kw">return</span> <span class="tag">&lt;UserList</span> <span class="attr">users</span>={data} <span class="tag">/&gt;</span>;
+  }}
+<span class="tag">/&gt;</span>
+
+<span class="cm">// Alternative: children as a function (same pattern, different prop name)</span>
+<span class="tag">&lt;DataFetcher</span> <span class="attr">url</span>=<span class="st">"/api/users"</span><span class="tag">&gt;</span>
+  {({ data, loading, error }) =&gt; (
+    loading ? <span class="tag">&lt;Spinner /&gt;</span> : <span class="tag">&lt;UserList</span> <span class="attr">users</span>={data} <span class="tag">/&gt;</span>
+  )}
+<span class="tag">&lt;/DataFetcher&gt;</span>
+
+<span class="cm">// ─────────────────────────────────────────────────────
+// Modern Alternative: Custom Hook (preferred today)
+// Same logic, much cleaner API — no wrapper component needed
+// ─────────────────────────────────────────────────────</span>
+<span class="kw">function</span> <span class="fn">useFetch</span>(url) {
+  <span class="kw">const</span> [data, setData] = useState(<span class="kw">null</span>);
+  <span class="kw">const</span> [loading, setLoading] = useState(<span class="kw">true</span>);
+  <span class="kw">const</span> [error, setError] = useState(<span class="kw">null</span>);
+
+  useEffect(() =&gt; {
+    fetch(url)
+      .then(r =&gt; r.json())
+      .then(d =&gt; { setData(d); setLoading(<span class="kw">false</span>); })
+      .catch(err =&gt; { setError(err.message); setLoading(<span class="kw">false</span>); });
+  }, [url]);
+
+  <span class="kw">return</span> { data, loading, error };
+}
+
+<span class="cm">// Usage — clean, no JSX wrapper needed</span>
+<span class="kw">function</span> <span class="fn">UserComponent</span>() {
+  <span class="kw">const</span> { data, loading, error } = <span class="fn">useFetch</span>(<span class="st">'/api/users'</span>);
+  <span class="kw">if</span> (loading) <span class="kw">return</span> <span class="tag">&lt;Spinner /&gt;</span>;
+  <span class="kw">if</span> (error)   <span class="kw">return</span> <span class="tag">&lt;ErrorMessage</span> <span class="attr">message</span>={error} <span class="tag">/&gt;</span>;
+  <span class="kw">return</span> <span class="tag">&lt;UserList</span> <span class="attr">users</span>={data} <span class="tag">/&gt;</span>;
+}</code></pre>
+
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box amber">
+          <p class="fw-700 mb-2"><i class="bi bi-archive me-1"></i>Render Props — When You'll See It</p>
+          <ul class="small mb-0">
+            <li>React Router v4/v5 used it extensively</li>
+            <li>Formik uses render props for form state</li>
+            <li>Downshift (autocomplete) relies on it</li>
+            <li>React Spring animations</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box blue">
+          <p class="fw-700 mb-2"><i class="bi bi-stars me-1" style="color:#3b82f6;"></i>Custom Hooks — Modern Approach</p>
+          <ul class="small mb-0">
+            <li>No extra JSX wrapper component</li>
+            <li>Easier to compose multiple behaviors</li>
+            <li>Better TypeScript inference</li>
+            <li>Avoid "wrapper hell" in React DevTools</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== INTERVIEW QUESTIONS ========== -->
+  <div class="prop-card" data-aos="fade-up">
+    <span class="section-label">Interview Prep</span>
+    <h2><i class="bi bi-chat-left-quote-fill me-2" style="color:#6366f1;"></i>Interview Questions — Props</h2>
+    <p class="text-muted mb-4">8 commonly asked React props interview questions with complete answers.</p>
+
+    <div class="accordion" id="interviewAccordion">
+
+      <!-- Q1 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#iq1">
+            <span class="badge me-2" style="background:#6366f1;">Q1</span>
+            What are props in React? Can a component modify its own props?
+          </button>
+        </h2>
+        <div id="iq1" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body answer-text">
+            <p>Props (short for <em>properties</em>) are a mechanism for passing data from a parent component to its child component. They are plain JavaScript objects that hold whatever information the parent wants to pass down.</p>
+            <p class="mb-0"><strong>No, a component cannot modify its own props.</strong> Props are <em>immutable</em> (read-only) from the child's perspective. This is by design — it enforces <strong>unidirectional data flow</strong>, which makes the app more predictable and easier to debug. If a child needs to trigger a change, it should call a callback function received via props, which updates state in the parent, and the updated value flows back down as a new prop.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#iq2">
+            <span class="badge me-2" style="background:#6366f1;">Q2</span>
+            What is the difference between props and state?
+          </button>
+        </h2>
+        <div id="iq2" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body answer-text">
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm">
+                <thead style="background:#6366f1;color:#fff;">
+                  <tr><th>Feature</th><th>Props</th><th>State</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Ownership</td><td>Passed by parent</td><td>Owned by the component</td></tr>
+                  <tr><td>Mutability</td><td>Immutable (read-only)</td><td>Mutable (via setState/setter)</td></tr>
+                  <tr><td>Who controls it</td><td>Parent component</td><td>The component itself</td></tr>
+                  <tr><td>Triggers re-render</td><td>Yes (when parent re-renders)</td><td>Yes (when state changes)</td></tr>
+                  <tr><td>Typical use</td><td>Configuration, input data</td><td>Interactive/internal data</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="mb-0">A simple mental model: <strong>Props are like function arguments</strong> — passed in from outside. <strong>State is like local variables</strong> — managed internally by the component.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#iq3">
+            <span class="badge me-2" style="background:#6366f1;">Q3</span>
+            Explain prop drilling. What problems does it cause?
+          </button>
+        </h2>
+        <div id="iq3" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body answer-text">
+            <p><strong>Prop drilling</strong> occurs when data must be passed through multiple intermediate components that don't use the data themselves — just to deliver it to a deeply nested component that needs it.</p>
+            <p><strong>Problems caused:</strong></p>
+            <ul class="mb-0">
+              <li><strong>Tight coupling</strong> — Intermediate components become aware of data they don't care about, making them harder to reuse independently.</li>
+              <li><strong>Verbosity</strong> — Every layer requires boilerplate prop forwarding code.</li>
+              <li><strong>Maintenance burden</strong> — Adding/renaming a prop requires changes across every intermediate component.</li>
+              <li><strong>Readability</strong> — Component signatures become cluttered with "passthrough" props, obscuring their true purpose.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#iq4">
+            <span class="badge me-2" style="background:#6366f1;">Q4</span>
+            What are the solutions to prop drilling?
+          </button>
+        </h2>
+        <div id="iq4" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body answer-text">
+            <ol class="mb-0">
+              <li class="mb-2"><strong>React Context API</strong> — Built-in solution. Create a <code>Context</code>, wrap with a <code>Provider</code>, and consume with <code>useContext()</code> anywhere in the tree. Best for: auth, theme, locale, user preferences.</li>
+              <li class="mb-2"><strong>State Management Libraries</strong> — Redux, Zustand, Jotai, Recoil store state globally. Components subscribe directly. Best for: large-scale apps with complex interdependent state.</li>
+              <li class="mb-2"><strong>Component Composition</strong> — Restructure the component tree to move the consumer closer to where the data originates. Pass JSX elements (children / slots) instead of raw data.</li>
+              <li><strong>URL / Router State</strong> — For navigation-related data, using React Router's <code>useParams</code> or <code>useSearchParams</code> can eliminate some drilling entirely.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#iq5">
+            <span class="badge me-2" style="background:#6366f1;">Q5</span>
+            What is the children prop? Give 3 use cases.
+          </button>
+        </h2>
+        <div id="iq5" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body answer-text">
+            <p>The <code>children</code> prop is a special React prop that automatically receives whatever JSX content is placed between a component's opening and closing tags. It can be a string, a React element, an array of elements, or a function.</p>
+            <p><strong>3 Key Use Cases:</strong></p>
+            <ol class="mb-0">
+              <li class="mb-2"><strong>Layout Wrappers</strong> — <code>Modal</code>, <code>Card</code>, <code>Panel</code>, <code>Drawer</code>. The wrapper provides structure (chrome, borders, padding, animations) while the caller provides the content. This makes the wrapper infinitely reusable.</li>
+              <li class="mb-2"><strong>Behavioral Wrappers / Guards</strong> — <code>AuthGuard</code>, <code>ErrorBoundary</code>, <code>Tooltip</code>. These components add cross-cutting behavior (auth checking, error catching, hover behavior) transparently around any child tree.</li>
+              <li><strong>Render Slots / Named Areas</strong> — By accepting both <code>children</code> (main slot) and additional props like <code>header</code>, <code>footer</code>, <code>sidebar</code> (each typed as <code>React.ReactNode</code>), a layout component can fill multiple independent content regions.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#iq6">
+            <span class="badge me-2" style="background:#6366f1;">Q6</span>
+            What is the Render Props pattern? How does it compare to custom hooks?
+          </button>
+        </h2>
+        <div id="iq6" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body answer-text">
+            <p><strong>Render Props</strong> is a pattern where a component receives a function as a prop (often named <code>render</code> or using <code>children</code> as a function). The component calls this function with its internal state/data, allowing the caller to control what is rendered. It was the primary code-sharing mechanism before hooks.</p>
+            <p><strong>Example:</strong> <code>&lt;MouseTracker render={({x, y}) =&gt; &lt;Cursor x={x} y={y} /&gt;} /&gt;</code></p>
+            <p><strong>Comparison with Custom Hooks:</strong></p>
+            <ul class="mb-0">
+              <li><strong>Hooks are simpler</strong> — Extract the same logic into a <code>useXxx()</code> hook. No wrapper component needed, no extra JSX nesting.</li>
+              <li><strong>Hooks compose better</strong> — You can call multiple hooks in one component; render props create "wrapper hell" when combined.</li>
+              <li><strong>Hooks have better TS inference</strong> — Return types from hooks are explicit; render prop argument types require more ceremony.</li>
+              <li><strong>When to use render props still</strong> — When the shared logic is inherently tied to rendering (e.g., virtualization, drag-and-drop where you need to inject DOM callbacks), render props or HOCs can still be the right choice.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#iq7">
+            <span class="badge me-2" style="background:#6366f1;">Q7</span>
+            How do you validate props in React? PropTypes vs TypeScript?
+          </button>
+        </h2>
+        <div id="iq7" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body answer-text">
+            <p><strong>PropTypes</strong> (runtime, JS only): Install the <code>prop-types</code> package. Assign a <code>propTypes</code> static object to the component. React warns in the dev console when passed values don't match. <em>Stripped in production builds.</em></p>
+            <p><strong>TypeScript</strong> (compile-time, preferred): Define an <code>interface</code> or <code>type</code> for the props object, then annotate the component function parameter. The TypeScript compiler (and your IDE) will error immediately — before the app runs — if wrong types are passed.</p>
+            <p><strong>Key differences:</strong></p>
+            <ul class="mb-0">
+              <li><strong>When errors surface</strong>: PropTypes → browser console at runtime. TypeScript → editor and build at compile-time.</li>
+              <li><strong>Coverage</strong>: TypeScript catches errors at every usage site. PropTypes only validates what actually runs.</li>
+              <li><strong>DX</strong>: TypeScript enables IDE autocompletion and refactoring. PropTypes does not.</li>
+              <li><strong>Recommendation</strong>: Use TypeScript for new projects. PropTypes is still useful in large JS codebases that can't fully migrate to TS yet.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="accordion-item border mb-2" style="border-radius:10px;overflow:hidden;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-600" type="button" data-bs-toggle="collapse" data-bs-target="#iq8">
+            <span class="badge me-2" style="background:#6366f1;">Q8</span>
+            What is the difference between controlled and uncontrolled components?
+          </button>
+        </h2>
+        <div id="iq8" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+          <div class="accordion-body answer-text">
+            <p>In the context of form elements, this distinction describes who owns the input's current value:</p>
+            <p><strong>Controlled Component:</strong> React state is the "single source of truth." The form element's value is set via the <code>value</code> prop (wired to state), and every keystroke updates state via an <code>onChange</code> handler. You always know the current input value from state.</p>
+            <pre class="code-block mt-2 mb-3"><code><span class="kw">const</span> [name, setName] = useState(<span class="st">''</span>);
+<span class="tag">&lt;input</span>
+  <span class="attr">value</span>={name}
+  <span class="attr">onChange</span>={e =&gt; setName(e.target.value)}
+<span class="tag">/&gt;</span></code></pre>
+            <p><strong>Uncontrolled Component:</strong> The DOM manages the value itself. React reads the current value only when needed (e.g., on form submit) using a <code>ref</code> (<code>useRef</code> / <code>createRef</code>). Less code for simple forms but harder to validate or conditionally update.</p>
+            <pre class="code-block mt-2 mb-2"><code><span class="kw">const</span> nameRef = useRef(<span class="kw">null</span>);
+<span class="tag">&lt;input</span> <span class="attr">defaultValue</span>=<span class="st">""</span> <span class="attr">ref</span>={nameRef} <span class="tag">/&gt;</span>
+<span class="cm">// Read on submit: nameRef.current.value</span></code></pre>
+            <p class="mb-0"><strong>Recommendation:</strong> Prefer controlled components for any form that needs validation, conditional disabling, or derived UI from the input value. Use uncontrolled only for very simple, fire-and-forget inputs or third-party integrations.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== COMMON MISTAKES ========== -->
+  <div class="prop-card" data-aos="fade-up">
+    <span class="section-label">Watch Out</span>
+    <h2><i class="bi bi-exclamation-triangle-fill me-2" style="color:#ef4444;"></i>Common Props Mistakes</h2>
+    <p class="text-muted mb-4">Pitfalls every React developer encounters — know them before your next interview or code review.</p>
+
+    <!-- Mistake 1 -->
+    <div class="mistake-box mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <span class="badge bg-danger mt-1">1</span>
+        <div>
+          <strong>Mutating props directly</strong>
+          <p class="mb-1 mt-1">Props are immutable — directly assigning to a prop property (<code>props.user.name = 'Jane'</code>) causes <em>silent bugs</em>. React will not detect the mutation, re-renders won't occur predictably, and shared object references can corrupt state in sibling components.</p>
+          <div class="row g-2">
+            <div class="col-md-6">
+              <pre class="code-block mb-0"><code><span class="cm">// BAD — silently mutates parent's object</span>
+<span class="kw">function</span> <span class="fn">BadChild</span>({ user }) {
+  user.name = <span class="st">'Jane'</span>;  <span class="cm">// NEVER do this!</span>
+  <span class="kw">return</span> <span class="tag">&lt;div&gt;</span>{user.name}<span class="tag">&lt;/div&gt;</span>;
+}</code></pre>
+            </div>
+            <div class="col-md-6">
+              <pre class="code-block mb-0"><code><span class="cm">// GOOD — call callback to update in parent</span>
+<span class="kw">function</span> <span class="fn">GoodChild</span>({ user, onUpdate }) {
+  <span class="kw">return</span> (
+    <span class="tag">&lt;button</span> <span class="attr">onClick</span>={() =&gt; onUpdate({ ...user, name: <span class="st">'Jane'</span> })}<span class="tag">&gt;</span>
+      Rename
+    <span class="tag">&lt;/button&gt;</span>
+  );
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mistake 2 -->
+    <div class="mistake-box mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <span class="badge bg-danger mt-1">2</span>
+        <div>
+          <strong>Not providing the <code>key</code> prop when mapping to components</strong>
+          <p class="mb-1 mt-1">When rendering arrays of elements with <code>.map()</code>, every element must have a unique, stable <code>key</code> prop. Without it, React cannot efficiently update the list and you'll get console warnings. Keys must be unique <em>among siblings</em>, not globally.</p>
+          <pre class="code-block mb-0"><code><span class="cm">// BAD — missing key</span>
+{users.map(user =&gt; <span class="tag">&lt;UserCard</span> <span class="attr">user</span>={user} <span class="tag">/&gt;</span>)}
+
+<span class="cm">// GOOD — stable, unique key (use ID, not index if list can change)</span>
+{users.map(user =&gt; <span class="tag">&lt;UserCard</span> <span class="attr">key</span>={user.id} <span class="attr">user</span>={user} <span class="tag">/&gt;</span>)}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mistake 3 -->
+    <div class="mistake-box mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <span class="badge bg-danger mt-1">3</span>
+        <div>
+          <strong>Passing objects/arrays as props without <code>useMemo</code> — breaks <code>React.memo</code></strong>
+          <p class="mb-1 mt-1">Object and array literals create a <em>new reference</em> on every render. If you wrap a child in <code>React.memo</code> to skip re-renders, passing <code>style=&#123;&#123; color: 'red' &#125;&#125;</code> or <code>items={[1,2,3]}</code> directly will defeat the memoization — the child re-renders every time because the reference is always new.</p>
+          <pre class="code-block mb-0"><code><span class="cm">// BAD — new object reference every render</span>
+<span class="kw">function</span> <span class="fn">Parent</span>() {
+  <span class="kw">return</span> <span class="tag">&lt;MemoChild</span> <span class="attr">config</span>={{ theme: <span class="st">'dark'</span>, size: <span class="st">'lg'</span> }} <span class="tag">/&gt;</span>;  <span class="cm">// always new ref</span>
+}
+
+<span class="cm">// GOOD — stable reference with useMemo</span>
+<span class="kw">function</span> <span class="fn">Parent</span>() {
+  <span class="kw">const</span> config = useMemo(() =&gt; ({ theme: <span class="st">'dark'</span>, size: <span class="st">'lg'</span> }), []);
+  <span class="kw">return</span> <span class="tag">&lt;MemoChild</span> <span class="attr">config</span>={config} <span class="tag">/&gt;</span>;  <span class="cm">// stable reference</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mistake 4 -->
+    <div class="mistake-box mb-3">
+      <div class="d-flex align-items-start gap-2">
+        <span class="badge bg-danger mt-1">4</span>
+        <div>
+          <strong>Prop drilling when Context would be much cleaner</strong>
+          <p class="mb-1 mt-1">Passing the same prop through 3+ levels of components just to get it to a leaf node is a code smell. It tightly couples your component hierarchy and makes future refactors painful. Recognizing this pattern and reaching for Context API (or a state manager) is a sign of React maturity.</p>
+          <div class="tip-box mt-2 mb-0">
+            <strong>Rule of thumb:</strong> If you're passing the same prop through more than 2 intermediary components that don't use it, consider Context or restructuring via composition.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mistake 5 -->
+    <div class="mistake-box mb-0">
+      <div class="d-flex align-items-start gap-2">
+        <span class="badge bg-danger mt-1">5</span>
+        <div>
+          <strong>Using array index as <code>key</code> in dynamic lists</strong>
+          <p class="mb-1 mt-1">Using the array index as the <code>key</code> prop causes incorrect reconciliation behavior when list items can be reordered, inserted, or deleted. React uses keys to identify which items changed — an index-based key tells React the <em>first item</em> is always the first item, even if the user just deleted it, leading to subtle UI bugs (wrong input focus, stale component state).</p>
+          <pre class="code-block mb-0"><code><span class="cm">// BAD — index key breaks reconciliation on reorder/delete</span>
+{todos.map((todo, index) =&gt; (
+  <span class="tag">&lt;TodoItem</span> <span class="attr">key</span>={index} <span class="attr">todo</span>={todo} <span class="tag">/&gt;</span>
+))}
+
+<span class="cm">// GOOD — stable ID as key (safe for any list mutation)</span>
+{todos.map(todo =&gt; (
+  <span class="tag">&lt;TodoItem</span> <span class="attr">key</span>={todo.id} <span class="attr">todo</span>={todo} <span class="tag">/&gt;</span>
+))}
+
+<span class="cm">// Index key IS safe for: static lists that never reorder/filter/delete</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer style="background:#0f172a;color:#64748b;padding:2rem 0;margin-top:3rem;text-align:center;border-top:1px solid #1e293b;">
+  <div class="container-xl">
+    <p class="mb-1" style="color:#94a3b8;">React Mastery Hub — Section 6: Props</p>
+    <div class="d-flex justify-content-center gap-4 mt-2">
+      <a href="react-components.html" style="color:#61dafb;text-decoration:none;">&larr; Components</a>
+      <a href="react-state.html" style="color:#61dafb;text-decoration:none;">Next: State &rarr;</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({duration:700,once:true,offset:80});
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

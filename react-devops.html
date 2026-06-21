@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>React DevOps — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .project-card{border-radius:16px;padding:1.5rem;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.07);border:2px solid transparent;transition:border-color .2s,transform .2s;height:100%;}
+    .project-card:hover{border-color:#61dafb;transform:translateY(-3px);}
+    [data-theme="dark"] .project-card{background:#111827;}
+    .diff-beginner{background:#dcfce7;color:#166534;border-radius:20px;padding:.2rem .7rem;font-size:.75rem;font-weight:700;}
+    .diff-intermediate{background:#fef9c3;color:#854d0e;border-radius:20px;padding:.2rem .7rem;font-size:.75rem;font-weight:700;}
+    .diff-advanced{background:#fee2e2;color:#991b1b;border-radius:20px;padding:.2rem .7rem;font-size:.75rem;font-weight:700;}
+    [data-theme="dark"] .diff-beginner{background:#14532d;color:#bbf7d0;}
+    [data-theme="dark"] .diff-intermediate{background:#451a03;color:#fef3c7;}
+    [data-theme="dark"] .diff-advanced{background:#450a0a;color:#fecaca;}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link active" href="react-devops.html">DevOps</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<main>
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;font-size:.85rem;padding:.4rem .9rem;border-radius:20px;">Section 23</span>
+      <span class="diff-advanced">Advanced</span>
+    </div>
+    <h1 class="display-5 fw-800 mb-2">DevOps for React Applications</h1>
+    <p class="lead mb-0" style="color:#94a3b8;">CI/CD, Docker, Nginx, Monitoring, and Deployment Strategies</p>
+    <div class="d-flex flex-wrap gap-3 mt-3">
+      <span style="color:#94a3b8;font-size:.9rem;"><i class="bi bi-clock me-1"></i>~45 min read</span>
+      <span style="color:#94a3b8;font-size:.9rem;"><i class="bi bi-book me-1"></i>9 topics</span>
+      <span style="color:#94a3b8;font-size:.9rem;"><i class="bi bi-code-slash me-1"></i>30+ code examples</span>
+    </div>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+<div class="accordion" id="mainAccordion">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 1: CI/CD with GitHub Actions
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="accordion-item border-0 mb-3 shadow-sm" style="border-radius:12px;overflow:hidden;">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cicd" aria-expanded="true">
+        <i class="bi bi-github me-2" style="color:#61dafb;"></i> CI/CD with GitHub Actions
+      </button>
+    </h2>
+    <div id="cicd" class="accordion-collapse collapse show" data-bs-parent="#mainAccordion">
+      <div class="accordion-body p-0">
+        <div class="content-card">
+
+          <div class="concept-box blue"><strong>The Three-Stage Pipeline</strong> — A production React CI/CD pipeline separates concerns into three jobs: (1) <strong>Test</strong> — lint, unit tests, coverage; (2) <strong>Build</strong> — compile TypeScript, bundle assets, inject env vars; (3) <strong>Deploy</strong> — push to CDN/server, invalidate caches. Each stage <code>needs</code> the previous one, so failures stop the pipeline early and save compute minutes.</div>
+
+          <p>Continuous Integration and Continuous Deployment (CI/CD) is the practice of automatically building, testing, and deploying your application every time code is pushed to a repository. For React applications, this means every pull request gets linted and tested automatically, every merge to the main branch produces a verified production build, and that build is deployed to your hosting infrastructure without any manual steps. This transforms deployment from a risky, manual ceremony into a routine, automated event.</p>
+
+          <p>GitHub Actions is GitHub's built-in CI/CD platform, and it is one of the best choices for React applications hosted on GitHub. Workflows are defined as YAML files stored in <code>.github/workflows/</code> and are triggered by repository events — pushes, pull requests, scheduled runs, or manual triggers. Each workflow runs in isolated virtual machines (runners) with a fresh environment, so you never have "works on my machine" problems. GitHub provides generous free minutes for public repositories and a reasonable allocation for private ones.</p>
+
+          <p>The key philosophy for React CI/CD is <strong>fail fast, fail early</strong>. By ordering your pipeline stages so that quick checks (lint, type check) run before expensive ones (full test suite), and fast tests run before slow builds, you give developers immediate feedback on the most common failure modes. A lint error caught in 30 seconds is far less disruptive than one discovered after a 10-minute build. The workflow below embodies this philosophy with three independent but sequentially-gated jobs.</p>
+
+          <pre class="code-block"><span class="cm"># .github/workflows/ci-cd.yml</span>
+<span class="kw">name:</span> React CI/CD Pipeline
+
+<span class="kw">on:</span>
+  <span class="kw">push:</span>
+    <span class="kw">branches:</span> [main, develop]
+  <span class="kw">pull_request:</span>
+    <span class="kw">branches:</span> [main]
+
+<span class="kw">env:</span>
+  <span class="kw">NODE_VERSION:</span> <span class="st">'20'</span>
+  <span class="kw">REGISTRY:</span> ghcr.io
+  <span class="kw">IMAGE_NAME:</span> ${{ github.repository }}
+
+<span class="kw">jobs:</span>
+  <span class="kw">test:</span>
+    <span class="kw">name:</span> Test &amp; Lint
+    <span class="kw">runs-on:</span> ubuntu-latest
+    <span class="kw">steps:</span>
+      - <span class="kw">name:</span> Checkout code
+        <span class="kw">uses:</span> actions/checkout@v4
+
+      - <span class="kw">name:</span> Setup Node.js
+        <span class="kw">uses:</span> actions/setup-node@v4
+        <span class="kw">with:</span>
+          <span class="kw">node-version:</span> ${{ env.NODE_VERSION }}
+          <span class="kw">cache:</span> <span class="st">'npm'</span>
+
+      - <span class="kw">name:</span> Install dependencies
+        <span class="kw">run:</span> npm ci
+
+      - <span class="kw">name:</span> Run ESLint
+        <span class="kw">run:</span> npm run lint
+
+      - <span class="kw">name:</span> Run type check
+        <span class="kw">run:</span> npx tsc --noEmit
+
+      - <span class="kw">name:</span> Run unit tests
+        <span class="kw">run:</span> npm test -- --coverage --watchAll=false
+
+      - <span class="kw">name:</span> Upload coverage to Codecov
+        <span class="kw">uses:</span> codecov/codecov-action@v4
+        <span class="kw">with:</span>
+          <span class="kw">token:</span> ${{ secrets.CODECOV_TOKEN }}
+          <span class="kw">fail_ci_if_error:</span> true
+
+  <span class="kw">build:</span>
+    <span class="kw">name:</span> Build Application
+    <span class="kw">runs-on:</span> ubuntu-latest
+    <span class="kw">needs:</span> test
+    <span class="kw">steps:</span>
+      - <span class="kw">name:</span> Checkout code
+        <span class="kw">uses:</span> actions/checkout@v4
+
+      - <span class="kw">name:</span> Setup Node.js
+        <span class="kw">uses:</span> actions/setup-node@v4
+        <span class="kw">with:</span>
+          <span class="kw">node-version:</span> ${{ env.NODE_VERSION }}
+          <span class="kw">cache:</span> <span class="st">'npm'</span>
+
+      - <span class="kw">name:</span> Install dependencies
+        <span class="kw">run:</span> npm ci
+
+      - <span class="kw">name:</span> Build for production
+        <span class="kw">run:</span> npm run build
+        <span class="kw">env:</span>
+          <span class="kw">REACT_APP_API_URL:</span> ${{ secrets.API_URL }}
+          <span class="kw">REACT_APP_SENTRY_DSN:</span> ${{ secrets.SENTRY_DSN }}
+          <span class="kw">GENERATE_SOURCEMAP:</span> false
+
+      - <span class="kw">name:</span> Upload build artifacts
+        <span class="kw">uses:</span> actions/upload-artifact@v4
+        <span class="kw">with:</span>
+          <span class="kw">name:</span> build-${{ github.sha }}
+          <span class="kw">path:</span> build/
+          <span class="kw">retention-days:</span> 7
+
+  <span class="kw">deploy:</span>
+    <span class="kw">name:</span> Deploy to Production
+    <span class="kw">runs-on:</span> ubuntu-latest
+    <span class="kw">needs:</span> build
+    <span class="kw">if:</span> github.ref == <span class="st">'refs/heads/main'</span> &amp;&amp; github.event_name == <span class="st">'push'</span>
+    <span class="kw">environment:</span>
+      <span class="kw">name:</span> production
+      <span class="kw">url:</span> https://my-app.com
+    <span class="kw">steps:</span>
+      - <span class="kw">name:</span> Download build artifacts
+        <span class="kw">uses:</span> actions/download-artifact@v4
+        <span class="kw">with:</span>
+          <span class="kw">name:</span> build-${{ github.sha }}
+          <span class="kw">path:</span> build/
+
+      - <span class="kw">name:</span> Deploy to S3
+        <span class="kw">run:</span> |
+          aws s3 sync build/ s3://${{ secrets.S3_BUCKET }} \
+            --delete \
+            --cache-control <span class="st">"public, max-age=31536000"</span> \
+            --exclude <span class="st">"index.html"</span>
+          aws s3 cp build/index.html s3://${{ secrets.S3_BUCKET }}/index.html \
+            --cache-control <span class="st">"no-cache, no-store, must-revalidate"</span>
+        <span class="kw">env:</span>
+          <span class="kw">AWS_ACCESS_KEY_ID:</span> ${{ secrets.AWS_ACCESS_KEY_ID }}
+          <span class="kw">AWS_SECRET_ACCESS_KEY:</span> ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          <span class="kw">AWS_DEFAULT_REGION:</span> us-east-1
+
+      - <span class="kw">name:</span> Invalidate CloudFront cache
+        <span class="kw">run:</span> |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths <span class="st">"/*"</span>
+        <span class="kw">env:</span>
+          <span class="kw">AWS_ACCESS_KEY_ID:</span> ${{ secrets.AWS_ACCESS_KEY_ID }}
+          <span class="kw">AWS_SECRET_ACCESS_KEY:</span> ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          <span class="kw">AWS_DEFAULT_REGION:</span> us-east-1
+
+      - <span class="kw">name:</span> Notify Slack on success
+        <span class="kw">uses:</span> slackapi/slack-github-action@v1
+        <span class="kw">with:</span>
+          <span class="kw">payload:</span> |
+            {
+              <span class="st">"text"</span>: <span class="st">"Deployment successful! :rocket:"</span>,
+              <span class="st">"blocks"</span>: [
+                {
+                  <span class="st">"type"</span>: <span class="st">"section"</span>,
+                  <span class="st">"text"</span>: {
+                    <span class="st">"type"</span>: <span class="st">"mrkdwn"</span>,
+                    <span class="st">"text"</span>: <span class="st">"*Deployed:* ${{ github.repository }} to production\n*Commit:* ${{ github.sha }}\n*By:* ${{ github.actor }}"</span>
+                  }
+                }
+              ]
+            }
+        <span class="kw">env:</span>
+          <span class="kw">SLACK_WEBHOOK_URL:</span> ${{ secrets.SLACK_WEBHOOK_URL }}</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">Understanding Each Pipeline Job</h5>
+
+          <p><strong>Job 1 — test (Test &amp; Lint):</strong></p>
+          <ul>
+            <li>Runs ESLint to catch code quality issues and enforce style rules before anything else, giving near-instant feedback on common errors.</li>
+            <li>Runs <code>tsc --noEmit</code> to perform a full TypeScript type check without emitting output files — this catches type errors that your editor might miss in large projects.</li>
+            <li>Runs the full unit test suite with coverage reporting, uploading results to Codecov so coverage trends are tracked over time and regressions are immediately visible in pull request reviews.</li>
+            <li>Uses <code>actions/setup-node</code>'s built-in npm caching so the dependency install is skipped when <code>package-lock.json</code> hasn't changed, cutting job time significantly.</li>
+          </ul>
+
+          <p><strong>Job 2 — build (Build Application):</strong></p>
+          <ul>
+            <li>Declares <code>needs: test</code> so it only runs after the test job passes — a failed test suite will never produce a deployable artifact.</li>
+            <li>Injects production environment variables from GitHub Secrets at build time, ensuring API URLs and DSNs are baked into the bundle without being exposed in the repository.</li>
+            <li>Sets <code>GENERATE_SOURCEMAP: false</code> for production builds to prevent source code from being downloadable by end users, which is both a security and performance improvement.</li>
+            <li>Uploads the compiled <code>build/</code> directory as a named artifact tied to the commit SHA, allowing the deploy job to fetch it without re-running the build.</li>
+          </ul>
+
+          <p><strong>Job 3 — deploy (Deploy to Production):</strong></p>
+          <ul>
+            <li>Uses an <code>if:</code> conditional to only run on direct pushes to <code>main</code>, not on pull requests — preventing accidental production deployments from feature branch merges.</li>
+            <li>Syncs static assets to S3 with a one-year cache header (<code>max-age=31536000</code>) since Vite/CRA asset filenames include a content hash, while <code>index.html</code> is uploaded separately with no-cache headers so browsers always fetch the latest entry point.</li>
+            <li>Invalidates the CloudFront CDN cache after the S3 sync completes, ensuring users receive the new <code>index.html</code> immediately rather than serving a stale cached version from the edge nodes.</li>
+            <li>Sends a structured Slack notification on success with repository name, commit SHA, and deploying actor — giving the team real-time visibility into production changes.</li>
+          </ul>
+
+          <div class="tip-box"><strong>Cache node_modules:</strong> Use <code>actions/cache</code> or the built-in cache in <code>actions/setup-node</code> to avoid reinstalling packages on every run. This can save 1–3 minutes per build.</div>
+          <div class="tip-box"><strong>Matrix Builds:</strong> Test against multiple Node versions with <code>strategy: matrix: node: ['18', '20', '22']</code> to catch version-specific bugs before they reach production.</div>
+
+          <h5 class="fw-700 mt-4 mb-3">Advanced: Lighthouse CI Integration</h5>
+
+          <p>Beyond correctness testing, you can enforce performance budgets in your CI pipeline using Lighthouse CI. This prevents performance regressions from shipping to users by failing the build if key metrics fall below defined thresholds — treating performance as a first-class requirement alongside correctness.</p>
+
+          <pre class="code-block">  <span class="kw">lighthouse:</span>
+    <span class="kw">name:</span> Lighthouse CI
+    <span class="kw">runs-on:</span> ubuntu-latest
+    <span class="kw">needs:</span> build
+    <span class="kw">steps:</span>
+      - <span class="kw">uses:</span> actions/checkout@v4
+      - <span class="kw">name:</span> Download build artifacts
+        <span class="kw">uses:</span> actions/download-artifact@v4
+        <span class="kw">with:</span>
+          <span class="kw">name:</span> build-${{ github.sha }}
+          <span class="kw">path:</span> build/
+      - <span class="kw">name:</span> Run Lighthouse CI
+        <span class="kw">uses:</span> treosh/lighthouse-ci-action@v11
+        <span class="kw">with:</span>
+          <span class="kw">urls:</span> |
+            http://localhost:3000
+            http://localhost:3000/about
+          <span class="kw">budgetPath:</span> ./.lighthouserc.json
+          <span class="kw">uploadArtifacts:</span> true
+          <span class="kw">temporaryPublicStorage:</span> true</pre>
+
+          <p>The corresponding <code>.lighthouserc.json</code> budget file defines the minimum acceptable scores for each Lighthouse category. The <code>"error"</code> level causes the CI job to fail and block the merge, while <code>"warn"</code> produces a warning annotation without failing:</p>
+
+          <pre class="code-block">{
+  <span class="st">"ci"</span>: {
+    <span class="st">"assert"</span>: {
+      <span class="st">"assertions"</span>: {
+        <span class="st">"categories:performance"</span>: [<span class="st">"error"</span>, {<span class="st">"minScore"</span>: 0.9}],
+        <span class="st">"categories:accessibility"</span>: [<span class="st">"error"</span>, {<span class="st">"minScore"</span>: 0.9}],
+        <span class="st">"categories:best-practices"</span>: [<span class="st">"warn"</span>, {<span class="st">"minScore"</span>: 0.85}],
+        <span class="st">"categories:seo"</span>: [<span class="st">"warn"</span>, {<span class="st">"minScore"</span>: 0.8}]
+      }
+    }
+  }
+}</pre>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 2: Docker for React
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="accordion-item border-0 mb-3 shadow-sm" style="border-radius:12px;overflow:hidden;">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#docker" aria-expanded="false">
+        <i class="bi bi-box-seam me-2" style="color:#61dafb;"></i> Docker for React
+      </button>
+    </h2>
+    <div id="docker" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
+      <div class="accordion-body p-0">
+        <div class="content-card">
+
+          <p>Docker brings <strong>environment consistency</strong> to React deployments. The infamous "it works on my machine" problem is eliminated because the application runs in an identical containerized environment on every developer's laptop, in every CI runner, and in every production server. You define the OS, Node version, build steps, and runtime server once in a Dockerfile, and Docker guarantees that definition is reproduced exactly — down to the system library versions — everywhere the image is run.</p>
+
+          <p>For React applications specifically, Docker's <strong>multi-stage build</strong> feature is transformative. A React app only needs Node.js at build time to compile TypeScript and bundle assets with Webpack or Vite. At runtime, the output is just static HTML, CSS, and JavaScript files that any web server can serve. Multi-stage builds let you use a full Node.js environment to build the app, then copy only the compiled output into a tiny production image based on Nginx Alpine — discarding all the Node.js tooling, source code, and development dependencies that have no business being in production.</p>
+
+          <p>Container <strong>isolation and reproducibility</strong> also make rollbacks trivial. Because each deployment is a tagged Docker image, rolling back to a previous version is as simple as redeploying the previous image tag. There is no need to rebuild, no risk of dependency drift, and no manual steps — the old image is identical to what was running before. Combined with container orchestration platforms like Kubernetes or AWS ECS, this makes zero-downtime deployments and canary releases straightforward operational practices rather than complex one-off procedures.</p>
+
+          <pre class="code-block"><span class="cm"># Stage 1: Dependencies</span>
+<span class="kw">FROM</span> node:20-alpine <span class="kw">AS</span> deps
+<span class="kw">WORKDIR</span> /app
+<span class="kw">COPY</span> package*.json ./
+<span class="kw">RUN</span> npm ci --only=production &amp;&amp; \
+    npm cache clean --force
+
+<span class="cm"># Stage 2: Builder</span>
+<span class="kw">FROM</span> node:20-alpine <span class="kw">AS</span> builder
+<span class="kw">WORKDIR</span> /app
+<span class="kw">COPY</span> package*.json ./
+<span class="kw">RUN</span> npm ci
+<span class="kw">COPY</span> . .
+<span class="kw">ARG</span> REACT_APP_API_URL
+<span class="kw">ARG</span> REACT_APP_SENTRY_DSN
+<span class="kw">ENV</span> REACT_APP_API_URL=$REACT_APP_API_URL
+<span class="kw">ENV</span> REACT_APP_SENTRY_DSN=$REACT_APP_SENTRY_DSN
+<span class="kw">RUN</span> npm run build
+
+<span class="cm"># Stage 3: Production (Nginx)</span>
+<span class="kw">FROM</span> nginx:1.25-alpine <span class="kw">AS</span> production
+<span class="cm"># Copy custom nginx config</span>
+<span class="kw">COPY</span> nginx.conf /etc/nginx/nginx.conf
+<span class="cm"># Copy built assets from builder stage</span>
+<span class="kw">COPY</span> --from=builder /app/build /usr/share/nginx/html
+<span class="cm"># Add healthcheck</span>
+<span class="kw">HEALTHCHECK</span> --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -qO- http://localhost/health || exit 1
+<span class="cm"># Use non-root user for security</span>
+<span class="kw">RUN</span> addgroup -g 1001 -S nginx-app &amp;&amp; \
+    adduser -S -D -H -u 1001 -h /var/cache/nginx -s /sbin/nologin -G nginx-app -g nginx-app nginx-app &amp;&amp; \
+    chown -R nginx-app:nginx-app /usr/share/nginx/html &amp;&amp; \
+    chown -R nginx-app:nginx-app /var/cache/nginx &amp;&amp; \
+    touch /var/run/nginx.pid &amp;&amp; \
+    chown nginx-app:nginx-app /var/run/nginx.pid
+<span class="kw">USER</span> nginx-app
+<span class="kw">EXPOSE</span> 80
+<span class="kw">CMD</span> ["nginx", "-g", "daemon off;"]</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">Understanding Each Build Stage</h5>
+
+          <p><strong>Stage 1 — deps (Dependencies):</strong></p>
+          <ul>
+            <li>Uses <code>node:20-alpine</code> — the Alpine Linux variant of the Node image, which is roughly 50MB compared to the ~1GB Debian-based <code>node:20</code> image.</li>
+            <li>Runs <code>npm ci --only=production</code> to install only production dependencies and cleans the npm cache immediately to minimize layer size. This stage is often unused in the final image but kept as a separate layer for caching clarity.</li>
+            <li>The key optimization is copying <code>package*.json</code> first, installing dependencies, and then copying source — so the expensive install step is cached as long as <code>package-lock.json</code> doesn't change.</li>
+          </ul>
+
+          <p><strong>Stage 2 — builder (Build Application):</strong></p>
+          <ul>
+            <li>Installs all dependencies including devDependencies (TypeScript, Vite, testing tools) needed to compile the application.</li>
+            <li>Accepts build-time arguments via <code>ARG</code> and promotes them to environment variables with <code>ENV</code> so they are available during the <code>npm run build</code> step and baked into the JavaScript bundle.</li>
+            <li>Produces the final compiled output in <code>/app/build</code> — all TypeScript transpiled, all modules bundled, all assets optimized and content-hashed. None of the source files, node_modules, or build tooling will appear in the final image.</li>
+          </ul>
+
+          <p><strong>Stage 3 — production (Nginx Runtime):</strong></p>
+          <ul>
+            <li>Starts fresh from <code>nginx:1.25-alpine</code> — about 7MB base. Only the compiled static files from the builder stage are copied in with <code>COPY --from=builder</code>, resulting in a final image of ~25MB total.</li>
+            <li>Creates and runs as a non-root user (<code>nginx-app</code>) — a critical security practice. If the container is compromised, the attacker only has the permissions of an unprivileged user rather than root access to the host system.</li>
+            <li>Adds a <code>HEALTHCHECK</code> so container orchestrators like Docker Swarm or Kubernetes know whether the container is actually serving traffic, enabling automatic restarts and zero-downtime rolling updates.</li>
+          </ul>
+
+          <div class="tip-box"><strong>Image Size Matters:</strong> A naive React Docker image with node:20 can be 1.2GB+. The multi-stage approach above produces an image of ~25MB (nginx:alpine base). Always use alpine variants and multi-stage builds.</div>
+          <div class="tip-box"><strong>Layer Caching:</strong> Copy <code>package*.json</code> and run <code>npm ci</code> BEFORE copying the rest of your source code. Docker caches layers — if only source files changed (not package.json), the expensive npm install layer is reused.</div>
+
+          <h5 class="fw-700 mt-4 mb-3">Nginx Configuration</h5>
+
+          <p>The Nginx configuration is what makes or breaks a React SPA deployment. You need to configure proper SPA routing, aggressive caching for hashed assets, security headers, gzip compression, and a health check endpoint. Here is a production-ready configuration:</p>
+
+          <pre class="code-block">worker_processes auto;
+error_log /var/log/nginx/error.log warn;
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+    use epoll;
+    multi_accept on;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    <span class="cm"># Logging</span>
+    log_format main <span class="st">'$remote_addr - $remote_user [$time_local] "$request" '</span>
+                    <span class="st">'$status $body_bytes_sent "$http_referer" '</span>
+                    <span class="st">'"$http_user_agent" "$http_x_forwarded_for"'</span>;
+    access_log /var/log/nginx/access.log main;
+
+    <span class="cm"># Performance</span>
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css text/xml text/javascript
+               application/javascript application/xml+rss
+               application/json image/svg+xml;
+
+    server {
+        listen 80;
+        server_name _;
+        root /usr/share/nginx/html;
+        index index.html;
+
+        <span class="cm"># Security headers</span>
+        add_header X-Frame-Options <span class="st">"SAMEORIGIN"</span> always;
+        add_header X-Content-Type-Options <span class="st">"nosniff"</span> always;
+        add_header X-XSS-Protection <span class="st">"1; mode=block"</span> always;
+        add_header Referrer-Policy <span class="st">"strict-origin-when-cross-origin"</span> always;
+        add_header Content-Security-Policy <span class="st">"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:;"</span> always;
+
+        <span class="cm"># SPA routing — serve index.html for all non-file routes</span>
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+
+        <span class="cm"># Cache static assets aggressively (they have content hashes)</span>
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+            expires 1y;
+            add_header Cache-Control <span class="st">"public, immutable"</span>;
+            access_log off;
+        }
+
+        <span class="cm"># Never cache index.html</span>
+        location = /index.html {
+            add_header Cache-Control <span class="st">"no-store, no-cache, must-revalidate"</span>;
+            expires 0;
+        }
+
+        <span class="cm"># Health check endpoint</span>
+        location /health {
+            return 200 <span class="st">'healthy\n'</span>;
+            add_header Content-Type text/plain;
+            access_log off;
+        }
+    }
+}</pre>
+
+          <div class="concept-box green"><strong>Why <code>try_files $uri $uri/ /index.html</code> is Essential</strong><br>React Router manages navigation entirely on the client side — the server only serves one HTML file. When a user visits <code>/dashboard/settings</code> directly or refreshes the page, Nginx receives an HTTP request for that path. Without <code>try_files</code>, Nginx would return a 404 because no file exists at that path. The directive tells Nginx: first try the literal URI, then try it as a directory, and if neither exists, serve <code>index.html</code>. React then reads the URL from <code>window.location</code> and renders the correct component. This is required for all SPA frameworks (React, Vue, Angular) deployed on any static server.</div>
+
+          <h5 class="fw-700 mt-4 mb-3">Docker Compose for Local &amp; Staging Environments</h5>
+
+          <p>Docker Compose lets you define and run multi-container applications with a single YAML file. For a React application, this typically means running the frontend, a backend API, and a database together in a locally reproducible environment. Here is a production-grade compose file that also includes Traefik for SSL termination:</p>
+
+          <pre class="code-block"><span class="kw">version:</span> <span class="st">'3.8'</span>
+<span class="kw">services:</span>
+  <span class="kw">react-app:</span>
+    <span class="kw">build:</span>
+      <span class="kw">context:</span> .
+      <span class="kw">dockerfile:</span> Dockerfile
+      <span class="kw">args:</span>
+        <span class="kw">REACT_APP_API_URL:</span> ${REACT_APP_API_URL}
+        <span class="kw">REACT_APP_SENTRY_DSN:</span> ${REACT_APP_SENTRY_DSN}
+    <span class="kw">image:</span> my-react-app:latest
+    <span class="kw">ports:</span>
+      - <span class="st">"3000:80"</span>
+    <span class="kw">environment:</span>
+      - NODE_ENV=production
+    <span class="kw">restart:</span> unless-stopped
+    <span class="kw">healthcheck:</span>
+      <span class="kw">test:</span> [<span class="st">"CMD"</span>, <span class="st">"wget"</span>, <span class="st">"-qO-"</span>, <span class="st">"http://localhost/health"</span>]
+      <span class="kw">interval:</span> 30s
+      <span class="kw">timeout:</span> 3s
+      <span class="kw">retries:</span> 3
+      <span class="kw">start_period:</span> 10s
+    <span class="kw">labels:</span>
+      - <span class="st">"traefik.enable=true"</span>
+      - <span class="st">"traefik.http.routers.react-app.rule=Host(`myapp.example.com`)"</span>
+      - <span class="st">"traefik.http.routers.react-app.entrypoints=websecure"</span>
+      - <span class="st">"traefik.http.routers.react-app.tls.certresolver=letsencrypt"</span>
+
+  <span class="kw">api:</span>
+    <span class="kw">image:</span> my-api:latest
+    <span class="kw">ports:</span>
+      - <span class="st">"8080:8080"</span>
+    <span class="kw">environment:</span>
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    <span class="kw">depends_on:</span>
+      <span class="kw">postgres:</span>
+        <span class="kw">condition:</span> service_healthy
+    <span class="kw">restart:</span> unless-stopped
+
+  <span class="kw">postgres:</span>
+    <span class="kw">image:</span> postgres:16-alpine
+    <span class="kw">environment:</span>
+      <span class="kw">POSTGRES_DB:</span> myapp
+      <span class="kw">POSTGRES_USER:</span> ${DB_USER}
+      <span class="kw">POSTGRES_PASSWORD:</span> ${DB_PASSWORD}
+    <span class="kw">volumes:</span>
+      - postgres_data:/var/lib/postgresql/data
+    <span class="kw">healthcheck:</span>
+      <span class="kw">test:</span> [<span class="st">"CMD-SHELL"</span>, <span class="st">"pg_isready -U ${DB_USER}"</span>]
+      <span class="kw">interval:</span> 10s
+      <span class="kw">timeout:</span> 5s
+      <span class="kw">retries:</span> 5
+
+<span class="kw">volumes:</span>
+  postgres_data:</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">Essential Docker Commands</h5>
+
+          <pre class="code-block"><span class="cm"># Build the image</span>
+docker build --build-arg REACT_APP_API_URL=https://api.example.com -t my-react-app:latest .
+
+<span class="cm"># Run locally</span>
+docker run -p 3000:80 my-react-app:latest
+
+<span class="cm"># Tag and push to Docker Hub</span>
+docker tag my-react-app:latest username/my-react-app:1.0.0
+docker push username/my-react-app:1.0.0
+
+<span class="cm"># Push to AWS ECR</span>
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 123456789.dkr.ecr.us-east-1.amazonaws.com
+docker tag my-react-app:latest 123456789.dkr.ecr.us-east-1.amazonaws.com/my-react-app:latest
+docker push 123456789.dkr.ecr.us-east-1.amazonaws.com/my-react-app:latest
+
+<span class="cm"># Inspect image size</span>
+docker images my-react-app
+
+<span class="cm"># Multi-platform build (for M1 Mac deploying to x86 servers)</span>
+docker buildx build --platform linux/amd64 -t my-react-app:latest --push .</pre>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 3: Environment Variables Strategy
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="accordion-item border-0 mb-3 shadow-sm" style="border-radius:12px;overflow:hidden;">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#envvars" aria-expanded="false">
+        <i class="bi bi-key me-2" style="color:#61dafb;"></i> Environment Variables Strategy
+      </button>
+    </h2>
+    <div id="envvars" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
+      <div class="accordion-body p-0">
+        <div class="content-card">
+
+          <p>Environment variables are the standard mechanism for configuring application behavior across environments — development, staging, and production — without changing code. Both Create React App and Vite support <code>.env</code> files with a hierarchical override system, but they use different variable name prefixes to distinguish public (browser-safe) variables from potentially sensitive ones that should never be bundled. Understanding this system is foundational to any React deployment strategy.</p>
+
+          <p>Both CRA (<code>REACT_APP_</code> prefix) and Vite (<code>VITE_</code> prefix) only embed variables with the correct prefix into the browser bundle. Any variable without the prefix is silently ignored at build time. This is a safety mechanism — it prevents accidentally exposing a <code>DATABASE_URL</code> or <code>JWT_SECRET</code> that happens to be in your shell environment. At build time, these variables are statically replaced in the compiled JavaScript: <code>process.env.REACT_APP_API_URL</code> becomes the literal string value of that variable. There is no runtime process.env in the browser.</p>
+
+          <p>The <code>.env</code> file hierarchy gives you layered configuration with increasing specificity. Base files committed to the repository define sane defaults. Local files (gitignored) allow individual developers to override values without affecting teammates. Environment-specific files apply only when running in a particular mode. This layering means you rarely need to touch environment variable configuration for day-to-day development — the defaults just work — while still giving you full control for edge cases.</p>
+
+          <h5 class="fw-700 mt-4 mb-3">.env File Hierarchy</h5>
+
+          <pre class="code-block">.env                    <span class="cm"># Base defaults (committed)</span>
+.env.local              <span class="cm"># Local overrides (gitignored)</span>
+.env.development        <span class="cm"># Development mode (committed)</span>
+.env.development.local  <span class="cm"># Dev overrides (gitignored)</span>
+.env.test               <span class="cm"># Test mode (committed)</span>
+.env.production         <span class="cm"># Production (committed)</span>
+.env.production.local   <span class="cm"># Prod overrides (gitignored)</span></pre>
+
+          <h5 class="fw-700 mt-4 mb-3">CRA vs Vite Variable Prefixes</h5>
+
+          <pre class="code-block"><span class="cm"># Create React App — prefix: REACT_APP_</span>
+REACT_APP_API_URL=https://api.example.com
+REACT_APP_GOOGLE_MAPS_KEY=AIzaSy...
+REACT_APP_FEATURE_FLAG_NEW_UI=true
+
+<span class="cm"># Vite — prefix: VITE_</span>
+VITE_API_URL=https://api.example.com
+VITE_GOOGLE_MAPS_KEY=AIzaSy...
+VITE_FEATURE_FLAG_NEW_UI=true</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">Accessing Env Vars in React Code</h5>
+
+          <pre class="code-block"><span class="cm">// CRA — accessed via process.env</span>
+<span class="kw">const</span> apiUrl = <span class="fn">process</span>.env.REACT_APP_API_URL;
+
+<span class="cm">// Vite — accessed via import.meta.env</span>
+<span class="kw">const</span> apiUrl = <span class="fn">import</span>.meta.env.VITE_API_URL;
+
+<span class="cm">// Type-safe env vars with Vite (vite-env.d.ts)</span>
+<span class="cm">/// &lt;reference types="vite/client" /&gt;</span>
+<span class="kw">interface</span> <span class="fn">ImportMetaEnv</span> {
+  <span class="kw">readonly</span> VITE_API_URL: <span class="fn">string</span>;
+  <span class="kw">readonly</span> VITE_GOOGLE_MAPS_KEY: <span class="fn">string</span>;
+  <span class="kw">readonly</span> VITE_FEATURE_FLAG_NEW_UI: <span class="fn">string</span>;
+}
+
+<span class="cm">// Config module pattern — centralize all env access</span>
+<span class="cm">// src/config/env.ts</span>
+<span class="kw">export const</span> config = {
+  apiUrl: <span class="fn">import</span>.meta.env.VITE_API_URL || <span class="st">'http://localhost:3001'</span>,
+  googleMapsKey: <span class="fn">import</span>.meta.env.VITE_GOOGLE_MAPS_KEY,
+  isNewUiEnabled: <span class="fn">import</span>.meta.env.VITE_FEATURE_FLAG_NEW_UI === <span class="st">'true'</span>,
+  isDevelopment: <span class="fn">import</span>.meta.env.DEV,
+  isProduction: <span class="fn">import</span>.meta.env.PROD,
+} <span class="kw">as const</span>;
+
+<span class="cm">// Usage anywhere in the app</span>
+<span class="kw">import</span> { config } <span class="kw">from</span> <span class="st">'@/config/env'</span>;
+<span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`${config.apiUrl}/users`</span>);</pre>
+
+          <div class="concept-box amber"><strong>SECURITY WARNING — Frontend Env Vars Are PUBLIC</strong><br>Any environment variable you embed in your React bundle is visible to ALL users — it is just JavaScript in the browser. Never put API secrets, private keys, database passwords, or any sensitive credentials in <code>REACT_APP_*</code> or <code>VITE_*</code> variables. These are for PUBLIC configuration only: API base URLs, public OAuth client IDs, feature flag endpoints, analytics tracking IDs. Keep secrets server-side only.</div>
+
+          <h5 class="fw-700 mt-4 mb-3">Runtime Environment Injection</h5>
+
+          <p>Build-time env var substitution has a significant operational limitation: it bakes the values permanently into the JavaScript bundle. If you need different values for staging vs. production, you must build two separate Docker images. Runtime injection solves this by generating a small JavaScript file at container startup that reads actual environment variables from the container runtime, allowing one image to serve multiple environments.</p>
+
+          <pre class="code-block"><span class="cm">#!/bin/sh</span>
+<span class="cm"># docker-entrypoint.sh — inject runtime config into the served HTML</span>
+
+<span class="cm"># Generate runtime config from environment variables</span>
+cat &gt; /usr/share/nginx/html/runtime-config.js <span class="st">&lt;&lt; EOF
+window.__ENV__ = {
+  API_URL: "${API_URL}",
+  FEATURE_FLAGS: "${FEATURE_FLAGS}",
+  ANALYTICS_ID: "${ANALYTICS_ID}"
+};
+EOF</span>
+
+<span class="cm"># Start nginx</span>
+exec nginx -g <span class="st">"daemon off;"</span></pre>
+
+          <p>Read the runtime configuration in your React application using a typed wrapper module that falls back gracefully to build-time env vars for local development (where no <code>runtime-config.js</code> is served):</p>
+
+          <pre class="code-block"><span class="cm">// src/config/runtime.ts</span>
+<span class="kw">declare global</span> {
+  <span class="kw">interface</span> <span class="fn">Window</span> {
+    __ENV__?: {
+      API_URL: <span class="fn">string</span>;
+      FEATURE_FLAGS: <span class="fn">string</span>;
+      ANALYTICS_ID: <span class="fn">string</span>;
+    };
+  }
+}
+
+<span class="kw">export const</span> runtimeConfig = {
+  apiUrl: window.__ENV__?.API_URL ?? <span class="fn">import</span>.meta.env.VITE_API_URL ?? <span class="st">'http://localhost:3001'</span>,
+  featureFlags: window.__ENV__?.FEATURE_FLAGS?.<span class="fn">split</span>(<span class="st">','</span>) ?? [],
+  analyticsId: window.__ENV__?.ANALYTICS_ID,
+};</pre>
+
+          <p>Update your Dockerfile to use the entrypoint script instead of running Nginx directly:</p>
+
+          <pre class="code-block"><span class="cm"># In your Dockerfile (add to the production stage)</span>
+<span class="kw">COPY</span> docker-entrypoint.sh /docker-entrypoint.sh
+<span class="kw">RUN</span> chmod +x /docker-entrypoint.sh
+<span class="kw">ENTRYPOINT</span> [<span class="st">"/docker-entrypoint.sh"</span>]</pre>
+
+          <p>And reference the runtime config script in your HTML entry point so it is loaded and executed before your React application bundle:</p>
+
+          <pre class="code-block"><span class="cm">&lt;!-- public/index.html — load runtime config before React app --&gt;</span>
+&lt;<span class="kw">script</span> src=<span class="st">"/runtime-config.js"</span>&gt;&lt;/<span class="kw">script</span>&gt;</pre>
+
+          <div class="tip-box"><strong>Runtime vs Build-time Config:</strong> Build-time env vars require a new Docker image for each environment (dev/staging/prod). Runtime injection lets you use ONE image across all environments, changing behaviour via environment variables at container startup. This is the 12-Factor App principle and is essential for proper Docker/Kubernetes workflows.</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 7 — SECURITY BEST PRACTICES
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="accordion-item border-0 mb-3 shadow-sm" style="border-radius:12px;overflow:hidden;">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#security" aria-expanded="false">
+        <i class="bi bi-shield-check me-2" style="color:#61dafb;"></i> Security Best Practices
+      </button>
+    </h2>
+    <div id="security" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
+      <div class="accordion-body p-0">
+        <div class="content-card">
+
+          <div class="concept-box purple"><strong>Security is Not Optional</strong> — A React application running in the browser is an inherently hostile environment. Your JavaScript is fully visible to users, your API calls are inspectable in DevTools, and every dependency you install is a potential supply-chain attack vector. The strategies in this section form the baseline security posture every production React application should have.</div>
+
+          <p>Cross-Site Scripting (XSS) remains the most prevalent vulnerability in web applications. In a React context, the framework's JSX escaping protects you from most accidental XSS — React automatically escapes values rendered into the DOM. The danger zones are <code>dangerouslySetInnerHTML</code>, raw <code>href</code> attributes accepting user-provided URLs, and third-party components that may render unescaped content. Any time you render HTML from an external source, sanitization is non-negotiable.</p>
+
+          <p>Cross-Site Request Forgery (CSRF) is less relevant for modern single-page applications that rely on Authorization headers (Bearer tokens) rather than cookie-based sessions, since CSRF attacks cannot read custom headers. However, if your application uses session cookies for authentication, CSRF tokens or the <code>SameSite=Strict</code> cookie attribute become critical defenses. Always confirm with your backend team which authentication mechanism is in use.</p>
+
+          <p>Supply-chain attacks — where a malicious package is injected into your dependency tree — are the fastest-growing attack surface in frontend development. The <code>npm</code> ecosystem's massive package graph means a single compromised transitive dependency can expose thousands of applications. Proactive defenses include regular <code>npm audit</code> runs, pinning exact versions in <code>package-lock.json</code>, using Subresource Integrity on CDN scripts, and adopting automated tools like Dependabot or Snyk to surface vulnerabilities before they are exploited in the wild.</p>
+
+          <h5 class="fw-700 mt-4 mb-3">Content Security Policy (CSP)</h5>
+
+          <p>CSP is an HTTP response header that instructs the browser which content sources it is allowed to load and execute. A strict CSP is your single most powerful defense against XSS, because even if an attacker manages to inject a script tag, the browser will refuse to execute it if it violates the policy.</p>
+
+          <pre class="code-block"><span class="cm"># nginx.conf — Content Security Policy header</span>
+<span class="fn">add_header</span> Content-Security-Policy <span class="st">"
+  default-src 'self';
+  script-src 'self' 'nonce-{NONCE}' https://www.googletagmanager.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com;
+  img-src 'self' data: https: blob:;
+  connect-src 'self' https://api.example.com https://sentry.io wss://realtime.example.com;
+  frame-ancestors 'none';
+  base-uri 'self';
+  form-action 'self';
+  upgrade-insecure-requests;
+"</span> always;</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">XSS Prevention with DOMPurify</h5>
+
+          <p>When you must render user-supplied HTML (rich text editors, CMS content, email previews), always sanitize it with DOMPurify before passing it to <code>dangerouslySetInnerHTML</code>. DOMPurify parses the HTML in a sandboxed environment and strips any elements or attributes not in its allowlist.</p>
+
+          <pre class="code-block"><span class="kw">import</span> DOMPurify <span class="kw">from</span> <span class="st">'dompurify'</span>;
+
+<span class="cm">// NEVER do this with user content:</span>
+<span class="cm">// &lt;div dangerouslySetInnerHTML={{ __html: userContent }} /&gt;</span>
+
+<span class="cm">// Always sanitize before rendering HTML</span>
+<span class="kw">function</span> <span class="fn">SafeHtmlRenderer</span>({ htmlContent }: { htmlContent: <span class="fn">string</span> }) {
+  <span class="kw">const</span> sanitized = DOMPurify.<span class="fn">sanitize</span>(htmlContent, {
+    ALLOWED_TAGS: [<span class="st">'b'</span>, <span class="st">'i'</span>, <span class="st">'em'</span>, <span class="st">'strong'</span>, <span class="st">'a'</span>, <span class="st">'p'</span>, <span class="st">'br'</span>, <span class="st">'ul'</span>, <span class="st">'ol'</span>, <span class="st">'li'</span>],
+    ALLOWED_ATTR: [<span class="st">'href'</span>, <span class="st">'target'</span>, <span class="st">'rel'</span>],
+    FORCE_BODY: <span class="kw">true</span>,
+    <span class="cm">// Force all links to open safely</span>
+    ADD_ATTR: [<span class="st">'target'</span>],
+  });
+
+  <span class="cm">// Add rel="noopener noreferrer" to all links</span>
+  DOMPurify.<span class="fn">addHook</span>(<span class="st">'afterSanitizeAttributes'</span>, (node) =&gt; {
+    <span class="kw">if</span> (<span class="st">'target'</span> <span class="kw">in</span> node) {
+      node.<span class="fn">setAttribute</span>(<span class="st">'target'</span>, <span class="st">'_blank'</span>);
+      node.<span class="fn">setAttribute</span>(<span class="st">'rel'</span>, <span class="st">'noopener noreferrer'</span>);
+    }
+  });
+
+  <span class="kw">return</span> &lt;<span class="fn">div</span> dangerouslySetInnerHTML={{ __html: sanitized }} /&gt;;
+}
+
+<span class="cm">// Also sanitize URL params to prevent javascript: protocol attacks</span>
+<span class="kw">function</span> <span class="fn">sanitizeUrl</span>(url: <span class="fn">string</span>): <span class="fn">string</span> {
+  <span class="kw">const</span> allowedProtocols = [<span class="st">'http:'</span>, <span class="st">'https:'</span>, <span class="st">'mailto:'</span>];
+  <span class="kw">try</span> {
+    <span class="kw">const</span> parsed = <span class="kw">new</span> <span class="fn">URL</span>(url);
+    <span class="kw">return</span> allowedProtocols.<span class="fn">includes</span>(parsed.protocol) ? url : <span class="st">'#'</span>;
+  } <span class="kw">catch</span> {
+    <span class="kw">return</span> <span class="st">'#'</span>; <span class="cm">// Invalid URL</span>
+  }
+}</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">HTTPS Enforcement and HSTS</h5>
+
+          <p>HTTPS is mandatory for any application that handles user data or authentication. HTTP Strict Transport Security (HSTS) instructs browsers to always use HTTPS for your domain — even if the user types <code>http://</code> — for the specified duration. Submitting to the HSTS preload list bakes this policy into browser binaries, providing protection even on the very first visit.</p>
+
+          <pre class="code-block"><span class="cm"># nginx.conf — Force HTTPS + HSTS</span>
+<span class="kw">server</span> {
+    <span class="fn">listen</span> 80;
+    <span class="fn">server_name</span> example.com www.example.com;
+    <span class="kw">return</span> 301 https://$server_name$request_uri;
+}
+
+<span class="kw">server</span> {
+    <span class="fn">listen</span> 443 ssl http2;
+    <span class="fn">server_name</span> example.com www.example.com;
+
+    <span class="fn">ssl_certificate</span> /etc/letsencrypt/live/example.com/fullchain.pem;
+    <span class="fn">ssl_certificate_key</span> /etc/letsencrypt/live/example.com/privkey.pem;
+    <span class="fn">ssl_protocols</span> TLSv1.2 TLSv1.3;
+    <span class="fn">ssl_ciphers</span> ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512;
+    <span class="fn">ssl_prefer_server_ciphers</span> on;
+    <span class="fn">ssl_session_cache</span> shared:SSL:10m;
+
+    <span class="cm"># HSTS — tell browsers to always use HTTPS (2 year max-age)</span>
+    <span class="fn">add_header</span> Strict-Transport-Security <span class="st">"max-age=63072000; includeSubDomains; preload"</span> always;
+}</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">Dependency Security Auditing</h5>
+
+          <p>Regularly auditing your npm dependencies is a first-line defense against supply-chain attacks. <code>npm audit</code> checks your installed packages against the Node Security Advisory database and reports known vulnerabilities along with their severity. Integrate this into your CI pipeline and fail the build on high or critical findings.</p>
+
+          <pre class="code-block"><span class="cm"># Run security audit</span>
+npm audit
+
+<span class="cm"># Fix automatically where possible</span>
+npm audit fix
+
+<span class="cm"># Check for high severity only</span>
+npm audit --audit-level=high
+
+<span class="cm"># Generate audit report</span>
+npm audit --json &gt; audit-report.json
+
+<span class="cm"># Check for known vulnerabilities with Snyk (more thorough)</span>
+npx snyk test
+
+<span class="cm"># Check for outdated packages</span>
+npm outdated
+
+<span class="cm"># Interactive upgrade tool</span>
+npx npm-check-updates -i</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">Automated Dependency Updates with Dependabot</h5>
+
+          <p>Manual dependency management does not scale. Dependabot integrates directly into GitHub and opens automated pull requests when new versions or security patches are available for your npm packages. Configure it to run weekly, assign reviewers, and apply labels so security PRs are easy to identify and prioritize.</p>
+
+          <pre class="code-block"><span class="cm"># .github/dependabot.yml</span>
+<span class="fn">version</span>: 2
+<span class="fn">updates</span>:
+  - <span class="fn">package-ecosystem</span>: <span class="st">"npm"</span>
+    <span class="fn">directory</span>: <span class="st">"/"</span>
+    <span class="fn">schedule</span>:
+      <span class="fn">interval</span>: <span class="st">"weekly"</span>
+      <span class="fn">day</span>: <span class="st">"monday"</span>
+    <span class="fn">open-pull-requests-limit</span>: 10
+    <span class="fn">reviewers</span>:
+      - <span class="st">"your-github-username"</span>
+    <span class="fn">labels</span>:
+      - <span class="st">"dependencies"</span>
+      - <span class="st">"automated"</span>
+    <span class="fn">ignore</span>:
+      - <span class="fn">dependency-name</span>: <span class="st">"some-package"</span>
+        <span class="fn">versions</span>: [<span class="st">"1.x"</span>, <span class="st">"2.x"</span>]</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">Secure localStorage Usage</h5>
+
+          <p>Developers frequently misuse <code>localStorage</code> to persist authentication tokens. Because <code>localStorage</code> is synchronously accessible to any JavaScript running on the page, a successful XSS attack immediately compromises every token stored there. Prefer <code>httpOnly</code> cookies set by the server — they cannot be read by JavaScript at all. When <code>localStorage</code> is unavoidable for non-sensitive data, wrap it in a utility that handles quota errors and namespaces keys to avoid collisions.</p>
+
+          <pre class="code-block"><span class="cm">// Never store sensitive data in localStorage — it's accessible to any JS on the page</span>
+<span class="cm">// BAD:</span>
+localStorage.<span class="fn">setItem</span>(<span class="st">'authToken'</span>, jwtToken); <span class="cm">// Vulnerable to XSS</span>
+
+<span class="cm">// GOOD: Use httpOnly cookies (set by server, not accessible to JS)</span>
+<span class="cm">// Server sets: Set-Cookie: token=xxx; HttpOnly; Secure; SameSite=Strict</span>
+
+<span class="cm">// If you must use localStorage (for non-sensitive data only):</span>
+<span class="kw">const</span> STORAGE_PREFIX = <span class="st">'myapp_v1_'</span>;
+
+<span class="kw">export const</span> secureStorage = {
+  <span class="fn">set</span>(key: <span class="fn">string</span>, value: <span class="kw">unknown</span>): <span class="kw">void</span> {
+    <span class="kw">try</span> {
+      localStorage.<span class="fn">setItem</span>(STORAGE_PREFIX + key, JSON.<span class="fn">stringify</span>(value));
+    } <span class="kw">catch</span> (err) {
+      console.<span class="fn">warn</span>(<span class="st">'Storage quota exceeded or unavailable'</span>);
+    }
+  },
+  <span class="fn">get</span>&lt;T&gt;(key: <span class="fn">string</span>): T | <span class="kw">null</span> {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> item = localStorage.<span class="fn">getItem</span>(STORAGE_PREFIX + key);
+      <span class="kw">return</span> item ? JSON.<span class="fn">parse</span>(item) : <span class="kw">null</span>;
+    } <span class="kw">catch</span> {
+      <span class="kw">return</span> <span class="kw">null</span>;
+    }
+  },
+  <span class="fn">remove</span>(key: <span class="fn">string</span>): <span class="kw">void</span> {
+    localStorage.<span class="fn">removeItem</span>(STORAGE_PREFIX + key);
+  },
+  <span class="fn">clear</span>(): <span class="kw">void</span> {
+    Object.<span class="fn">keys</span>(localStorage)
+      .<span class="fn">filter</span>(k =&gt; k.<span class="fn">startsWith</span>(STORAGE_PREFIX))
+      .<span class="fn">forEach</span>(k =&gt; localStorage.<span class="fn">removeItem</span>(k));
+  },
+};</pre>
+
+          <div class="tip-box"><strong>Subresource Integrity (SRI):</strong> When loading scripts from CDNs, add <code>integrity</code> and <code>crossorigin</code> attributes. Example: <code>&lt;script src='...' integrity='sha384-abc...' crossorigin='anonymous'&gt;&lt;/script&gt;</code>. If the CDN is compromised and the file changes, the browser will refuse to execute it.</div>
+
+          <div class="tip-box"><strong>Regular Dependency Audits:</strong> Run <code>npm audit</code> in CI and fail the build on high/critical vulnerabilities. Set up Dependabot or Renovate Bot to automatically open PRs for security updates. Unpatched npm vulnerabilities are one of the most common real-world attack vectors.</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 8 — PERFORMANCE OPTIMIZATION CHECKLIST
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="accordion-item border-0 mb-3 shadow-sm" style="border-radius:12px;overflow:hidden;">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance" aria-expanded="false">
+        <i class="bi bi-lightning-charge me-2" style="color:#61dafb;"></i> Performance Optimization Checklist
+      </button>
+    </h2>
+    <div id="performance" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
+      <div class="accordion-body p-0">
+        <div class="content-card">
+
+          <p>React's rendering model is built around the virtual DOM diffing algorithm — when state or props change, React re-renders the affected component tree and reconciles the diff against the real DOM. In small applications this is invisible; in large ones with deeply nested trees or frequent state updates, unnecessary re-renders become the dominant performance bottleneck. Understanding the reconciler's decision-making is the foundation of all React-specific performance work.</p>
+
+          <p>The cardinal rule of performance optimization is: measure first, optimize second. React DevTools Profiler lets you record a session and see exactly which components rendered, how long each render took, and why it triggered. Without this data, you are guessing — and premature optimization frequently adds code complexity for zero user-visible gain. Focus on the critical rendering path: the 20% of components that account for 80% of render time. Once you have identified real bottlenecks, the techniques below provide targeted, high-leverage solutions across loading, rendering, code quality, and monitoring.</p>
+
+          <h5 class="fw-700 mt-4 mb-3">Optimization Checklist</h5>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div style="background:#f8fafc;border-radius:12px;padding:1rem 1.2rem;">
+                <h6 class="fw-700 mb-3" style="color:#0f172a;font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;">Loading Performance</h6>
+                <ul class="list-unstyled mb-0">
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Enable gzip/Brotli compression on server</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Set <code>Cache-Control: immutable</code> for hashed static assets</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Preconnect to critical origins (<code>&lt;link rel="preconnect"&gt;</code>)</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Lazy load images with <code>loading="lazy"</code> attribute</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Use WebP/AVIF image formats with <code>&lt;picture&gt;</code> fallbacks</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Implement route-based code splitting with React.lazy</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div style="background:#f8fafc;border-radius:12px;padding:1rem 1.2rem;">
+                <h6 class="fw-700 mb-3" style="color:#0f172a;font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;">React Rendering</h6>
+                <ul class="list-unstyled mb-0">
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Wrap expensive components with <code>React.memo</code></li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Use <code>useMemo</code> for expensive computations</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Use <code>useCallback</code> for stable function references</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Avoid creating objects/arrays inline in JSX props</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Use <code>useTransition</code> for non-urgent state updates</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Virtualize long lists with react-window or react-virtual</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div style="background:#f8fafc;border-radius:12px;padding:1rem 1.2rem;">
+                <h6 class="fw-700 mb-3" style="color:#0f172a;font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;">Code Quality</h6>
+                <ul class="list-unstyled mb-0">
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>No barrel file re-exports that break tree shaking</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Remove all <code>console.log</code> calls in production</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Set performance budget in CI (bundlesize)</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Use Lighthouse CI to enforce scores</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div style="background:#f8fafc;border-radius:12px;padding:1rem 1.2rem;">
+                <h6 class="fw-700 mb-3" style="color:#0f172a;font-size:.9rem;text-transform:uppercase;letter-spacing:.05em;">Monitoring</h6>
+                <ul class="list-unstyled mb-0">
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Track Core Web Vitals with web-vitals library</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Set up Sentry error tracking with source maps</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Monitor real user performance with RUM tool</li>
+                  <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Alert on error rate spikes with PagerDuty/Slack</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h5 class="fw-700 mt-4 mb-3">React.memo + useMemo + useCallback + useTransition</h5>
+
+          <p>These four hooks and higher-order component work together to give you fine-grained control over when React re-renders components. The key insight is that React.memo does a shallow comparison of props — so if you pass a new function or object reference on every render, memo provides no benefit. useCallback and useMemo are the tools that stabilize those references.</p>
+
+          <pre class="code-block"><span class="kw">import</span> React, { <span class="fn">useState</span>, <span class="fn">useMemo</span>, <span class="fn">useCallback</span>, <span class="fn">useTransition</span> } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">interface</span> <span class="fn">Item</span> {
+  id: <span class="fn">number</span>;
+  name: <span class="fn">string</span>;
+  category: <span class="fn">string</span>;
+  price: <span class="fn">number</span>;
+}
+
+<span class="kw">interface</span> <span class="fn">ItemListProps</span> {
+  items: <span class="fn">Item</span>[];
+  onSelect: (id: <span class="fn">number</span>) =&gt; <span class="kw">void</span>;
+  filterCategory: <span class="fn">string</span>;
+}
+
+<span class="cm">// React.memo — only re-renders if props actually change</span>
+<span class="kw">const</span> <span class="fn">ItemList</span> = React.<span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">ItemList</span>({ items, onSelect, filterCategory }: <span class="fn">ItemListProps</span>) {
+  console.<span class="fn">log</span>(<span class="st">'ItemList render'</span>); <span class="cm">// Should only log when props change</span>
+
+  <span class="cm">// useMemo — expensive filter/sort only recomputes when deps change</span>
+  <span class="kw">const</span> filteredItems = <span class="fn">useMemo</span>(() =&gt; {
+    <span class="kw">return</span> items
+      .<span class="fn">filter</span>(item =&gt; filterCategory === <span class="st">'all'</span> || item.category === filterCategory)
+      .<span class="fn">sort</span>((a, b) =&gt; a.price - b.price);
+  }, [items, filterCategory]);
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">ul</span>&gt;
+      {filteredItems.<span class="fn">map</span>(item =&gt; (
+        &lt;<span class="fn">ItemRow</span> key={item.id} item={item} onSelect={onSelect} /&gt;
+      ))}
+    &lt;/<span class="fn">ul</span>&gt;
+  );
+});
+
+<span class="kw">interface</span> <span class="fn">ItemRowProps</span> {
+  item: <span class="fn">Item</span>;
+  onSelect: (id: <span class="fn">number</span>) =&gt; <span class="kw">void</span>;
+}
+
+<span class="cm">// Memoize child component too</span>
+<span class="kw">const</span> <span class="fn">ItemRow</span> = React.<span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">ItemRow</span>({ item, onSelect }: <span class="fn">ItemRowProps</span>) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">li</span> onClick={() =&gt; <span class="fn">onSelect</span>(item.id)}&gt;
+      {item.name} — ${item.price}
+    &lt;/<span class="fn">li</span>&gt;
+  );
+});
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">const</span> [items] = <span class="fn">useState</span>&lt;<span class="fn">Item</span>[]&gt;(<span class="cm">/* large dataset */</span>[]);
+  <span class="kw">const</span> [selected, <span class="fn">setSelected</span>] = <span class="fn">useState</span>&lt;<span class="fn">number</span> | <span class="kw">null</span>&gt;(<span class="kw">null</span>);
+  <span class="kw">const</span> [filter, <span class="fn">setFilter</span>] = <span class="fn">useState</span>(<span class="st">'all'</span>);
+  <span class="kw">const</span> [isPending, <span class="fn">startTransition</span>] = <span class="fn">useTransition</span>();
+
+  <span class="cm">// useCallback — stable reference so ItemList doesn't re-render when App re-renders</span>
+  <span class="kw">const</span> handleSelect = <span class="fn">useCallback</span>((id: <span class="fn">number</span>) =&gt; {
+    <span class="fn">setSelected</span>(id);
+  }, []); <span class="cm">// No deps — setSelected is stable</span>
+
+  <span class="kw">const</span> <span class="fn">handleFilterChange</span> = (category: <span class="fn">string</span>) =&gt; {
+    <span class="cm">// useTransition — mark filter update as non-urgent</span>
+    <span class="cm">// UI stays responsive; React can interrupt the render if needed</span>
+    <span class="fn">startTransition</span>(() =&gt; {
+      <span class="fn">setFilter</span>(category);
+    });
+  };
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">div</span>&gt;
+      &lt;<span class="fn">FilterBar</span> onFilter={handleFilterChange} /&gt;
+      {isPending &amp;&amp; &lt;<span class="fn">span</span>&gt;Updating...&lt;/<span class="fn">span</span>&gt;}
+      &lt;<span class="fn">ItemList</span>
+        items={items}
+        onSelect={handleSelect}
+        filterCategory={filter}
+      /&gt;
+    &lt;/<span class="fn">div</span>&gt;
+  );
+}</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">List Virtualization with react-window</h5>
+
+          <p>Rendering thousands of DOM nodes simultaneously is one of the most common React performance killers. Virtualization libraries like react-window solve this by only rendering the items currently visible in the viewport — typically 20-50 rows — regardless of how large the underlying dataset is. The result is linear memory usage and constant render time even for 100,000-item lists.</p>
+
+          <pre class="code-block"><span class="kw">import</span> { <span class="fn">FixedSizeList</span> <span class="kw">as</span> List } <span class="kw">from</span> <span class="st">'react-window'</span>;
+<span class="kw">import</span> AutoSizer <span class="kw">from</span> <span class="st">'react-virtualized-auto-sizer'</span>;
+
+<span class="kw">interface</span> <span class="fn">RowProps</span> {
+  index: <span class="fn">number</span>;
+  style: React.<span class="fn">CSSProperties</span>;
+  data: <span class="fn">Item</span>[];
+}
+
+<span class="cm">// Only visible rows are rendered — handles 100,000+ items</span>
+<span class="kw">const</span> <span class="fn">Row</span> = ({ index, style, data }: <span class="fn">RowProps</span>) =&gt; (
+  &lt;<span class="fn">div</span> style={style} className=<span class="st">"list-item"</span>&gt;
+    &lt;<span class="fn">span</span>&gt;{data[index].name}&lt;/<span class="fn">span</span>&gt;
+    &lt;<span class="fn">span</span>&gt;${data[index].price}&lt;/<span class="fn">span</span>&gt;
+  &lt;/<span class="fn">div</span>&gt;
+);
+
+<span class="kw">function</span> <span class="fn">VirtualizedItemList</span>({ items }: { items: <span class="fn">Item</span>[] }) {
+  <span class="kw">return</span> (
+    <span class="cm">// AutoSizer fills the container — works with responsive layouts</span>
+    &lt;<span class="fn">AutoSizer</span>&gt;
+      {({ height, width }) =&gt; (
+        &lt;<span class="fn">List</span>
+          height={height}
+          width={width}
+          itemCount={items.length}
+          itemSize={50}   <span class="cm">// Fixed row height in px</span>
+          itemData={items} <span class="cm">// Passed to Row via data prop</span>
+          overscanCount={5} <span class="cm">// Render 5 extra rows above/below viewport</span>
+        &gt;
+          {Row}
+        &lt;/<span class="fn">List</span>&gt;
+      )}
+    &lt;/<span class="fn">AutoSizer</span>&gt;
+  );
+}
+
+<span class="cm">// For variable-height rows, use VariableSizeList:</span>
+<span class="kw">import</span> { <span class="fn">VariableSizeList</span> } <span class="kw">from</span> <span class="st">'react-window'</span>;
+
+<span class="kw">function</span> <span class="fn">getItemSize</span>(index: <span class="fn">number</span>): <span class="fn">number</span> {
+  <span class="cm">// Return actual height for each item</span>
+  <span class="kw">return</span> items[index].hasDescription ? 80 : 50;
+}</pre>
+
+          <h5 class="fw-700 mt-4 mb-3">Image Optimization</h5>
+
+          <p>Images are typically the largest assets on a web page and the primary driver of poor Largest Contentful Paint scores. Serving images in modern formats (WebP, AVIF) reduces payload by 30–80% vs JPEG/PNG. Using the <code>&lt;picture&gt;</code> element with format fallbacks ensures compatibility with older browsers while delivering the best format to modern ones.</p>
+
+          <pre class="code-block"><span class="cm">// Responsive images with WebP fallback</span>
+<span class="kw">function</span> <span class="fn">OptimizedImage</span>({ src, alt, width, height }: <span class="fn">ImageProps</span>) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">picture</span>&gt;
+      &lt;<span class="fn">source</span>
+        srcSet={`${src}.avif`}
+        type=<span class="st">"image/avif"</span>
+      /&gt;
+      &lt;<span class="fn">source</span>
+        srcSet={`${src}.webp`}
+        type=<span class="st">"image/webp"</span>
+      /&gt;
+      &lt;<span class="fn">img</span>
+        src={`${src}.jpg`}
+        alt={alt}
+        width={width}
+        height={height}
+        loading=<span class="st">"lazy"</span>
+        decoding=<span class="st">"async"</span>
+        <span class="cm">// Prevent layout shift — always specify dimensions</span>
+        style={{ aspectRatio: `${width}/${height}` }}
+      /&gt;
+    &lt;/<span class="fn">picture</span>&gt;
+  );
+}
+
+<span class="cm">// Preload critical above-the-fold images</span>
+<span class="cm">// In index.html:</span>
+<span class="cm">// &lt;link rel="preload" as="image" href="/hero.webp" type="image/webp" /&gt;</span></pre>
+
+          <div class="tip-box"><strong>Profile Before Optimizing:</strong> Use React DevTools Profiler to identify which components are actually slow before applying memo/useMemo. Premature optimization adds code complexity for zero benefit. Measure, then optimize the 20% of components causing 80% of re-renders.</div>
+
+          <div class="tip-box"><strong>useTransition vs useDeferredValue:</strong> Use <code>useTransition</code> when you control the state update (wrap <code>setState</code> in <code>startTransition</code>). Use <code>useDeferredValue</code> when you receive a prop you can't control — it defers re-rendering with the new value until the browser is idle.</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SECTION 9 — INTERVIEW QUESTIONS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="accordion-item border-0 mb-3 shadow-sm" style="border-radius:12px;overflow:hidden;">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#interview" aria-expanded="false">
+        <i class="bi bi-patch-question me-2" style="color:#61dafb;"></i> DevOps Interview Questions
+      </button>
+    </h2>
+    <div id="interview" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
+      <div class="accordion-body p-0">
+        <div class="content-card">
+
+          <p>The following questions appear frequently in frontend DevOps and senior React engineering interviews. They test your ability to connect theoretical knowledge (CI/CD pipelines, Docker internals, security models) with practical implementation decisions. Each answer is structured to give you the depth needed for a senior-level discussion — not just the surface definition but the trade-offs, edge cases, and React-specific nuances that distinguish a strong candidate.</p>
+
+          <div class="accordion" id="interviewAccordion">
+
+            <!-- IQ1 -->
+            <div class="accordion-item border-0 mb-2" style="background:#f8fafc;border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#iq1" style="background:#f8fafc;font-weight:600;">
+                  <span class="badge me-2" style="background:#61dafb;color:#0f172a;font-size:.75rem;">Q1</span>
+                  What is the difference between a CI pipeline and a CD pipeline? How would you structure them for a React application?
+                </button>
+              </h2>
+              <div id="iq1" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+                <div class="accordion-body pt-0">
+                  <p><strong>Continuous Integration (CI)</strong> is the practice of automatically validating every code commit by running a suite of checks — linting, type-checking, unit tests, integration tests, and build verification — in an isolated environment. The goal is to detect regressions within minutes of the offending commit rather than hours or days later. For a React application, CI specifically means running <code>tsc --noEmit</code> to catch TypeScript errors, ESLint to enforce code style, Vitest or Jest to verify component and hook behavior, and a production build to confirm the bundle compiles without error and stays within your performance budget.</p>
+                  <p><strong>Continuous Delivery (CD)</strong> extends CI by automating the deployment of validated code to downstream environments. In a well-designed CD pipeline, every green CI run automatically deploys to a staging environment that mirrors production. Promotion to production is either fully automatic (Continuous Deployment) or requires a manual approval gate — the choice depends on organizational risk tolerance and compliance requirements. CD handles environment-specific concerns that CI does not: building with production environment variables, invalidating CDN caches, running smoke tests against the live deployment, and triggering rollback if health checks fail.</p>
+                  <p>For a React application, the practical CI stages are: install dependencies → lint + typecheck → unit tests → build → bundle size check (using tools like <code>bundlesize</code> or <code>size-limit</code>). The CD stages add: push Docker image to registry → deploy to staging → run Playwright or Cypress end-to-end tests → await manual approval → deploy to production → invalidate CloudFront cache → verify health endpoints. Blue-green deployments and feature flags are two CD strategies that decouple deployment from release — you can deploy code to production without exposing it to users, then flip the flag when ready.</p>
+                  <p>Trunk-based development (all engineers commit to <code>main</code> multiple times per day behind feature flags) produces the fastest CI/CD feedback loops and the fewest merge conflicts. GitFlow (long-lived feature branches merged via pull requests) is more common in teams with formal release cycles but introduces integration delays. For most React applications shipping to the web, trunk-based development with feature flags is the more mature approach.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- IQ2 -->
+            <div class="accordion-item border-0 mb-2" style="background:#f8fafc;border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#iq2" style="background:#f8fafc;font-weight:600;">
+                  <span class="badge me-2" style="background:#61dafb;color:#0f172a;font-size:.75rem;">Q2</span>
+                  Explain the multi-stage Docker build pattern. Why is it important for React applications?
+                </button>
+              </h2>
+              <div id="iq2" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+                <div class="accordion-body pt-0">
+                  <p>The fundamental problem with naively Dockerizing a React application is that the Node.js build toolchain is enormous. A <code>node_modules</code> directory for a medium-sized React app frequently exceeds 300–500 MB, and that is before you account for the Node.js runtime itself, TypeScript compiler, Vite/webpack, and all associated plugins. If you package all of this into your production image, you are shipping hundreds of megabytes of build tools that will never execute at runtime — a significant security surface area and a slow deployment artifact.</p>
+                  <p>Multi-stage builds solve this by using separate Docker stages for building and serving. The <code>deps</code> stage installs only production dependencies. The <code>builder</code> stage installs all dependencies (including devDependencies) and runs the build command, producing a <code>dist/</code> folder of static files. The final <code>production</code> stage starts from <code>nginx:alpine</code> — a minimal ~23MB Linux image with Nginx — and uses <code>COPY --from=builder /app/dist /usr/share/nginx/html</code> to copy only the compiled static assets. The Node.js runtime, <code>node_modules</code>, TypeScript, and Vite never enter the production image at all. The result is typically a 20–30 MB production image versus 1.2 GB+ for the naive approach.</p>
+                  <p>Layer caching order is critical for build performance. Because Docker invalidates a layer's cache whenever its inputs change, you should always copy <code>package.json</code> and <code>package-lock.json</code> first and run <code>npm ci</code> before copying your source files. This way, dependency installation (the slowest step) is cached and skipped on every build where you have only modified application code — which is the overwhelming majority of builds.</p>
+                  <p>Beyond image size, the multi-stage pattern improves security posture. The production image contains only static files and the Nginx binary. There is no shell-accessible Node.js runtime, no <code>npm</code> command, and no package manager — dramatically reducing the attack surface if a container escape or misconfiguration occurs.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- IQ3 -->
+            <div class="accordion-item border-0 mb-2" style="background:#f8fafc;border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#iq3" style="background:#f8fafc;font-weight:600;">
+                  <span class="badge me-2" style="background:#61dafb;color:#0f172a;font-size:.75rem;">Q3</span>
+                  How do you handle environment-specific configuration in a React app deployed via Docker?
+                </button>
+              </h2>
+              <div id="iq3" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+                <div class="accordion-body pt-0">
+                  <p><strong>Build-time substitution</strong> is the approach used by default in Vite (<code>VITE_*</code>) and Create React App (<code>REACT_APP_*</code>). Environment variables are read by the bundler at build time and their values are inlined as string literals throughout the compiled JavaScript bundle. This approach is simple and requires no server-side logic. The trade-off is that every environment (development, staging, production) requires its own Docker image build — you cannot reuse a staging image for production because the API URL is literally baked into the JavaScript.</p>
+                  <p><strong>Runtime injection</strong> solves the one-image-per-environment problem. A <code>docker-entrypoint.sh</code> shell script runs when the container starts (before Nginx). It reads environment variables from the container runtime (set via <code>docker run -e</code>, Kubernetes <code>env:</code> or <code>envFrom:</code>, or AWS ECS task definition) and writes them to a small <code>runtime-config.js</code> file served as a static asset. Your React application loads this file via a <code>&lt;script&gt;</code> tag in <code>index.html</code> before the application bundle, making the values available on <code>window.__ENV__</code>. A typed wrapper module reads from <code>window.__ENV__</code> with a fallback to Vite env vars for local development. This is the 12-Factor App methodology applied to frontend configuration.</p>
+                  <p>The trade-offs are real. Build-time is simpler, easier to debug, and has zero runtime complexity — appropriate for small teams or applications with few environments. Runtime injection is the correct approach for organizations practicing proper Docker/Kubernetes hygiene, where a single immutable artifact should flow through all environments unchanged. Critically, neither approach should ever be used to store secrets — API keys, database credentials, or private tokens must never appear in a frontend bundle. All sensitive values belong exclusively in server-side infrastructure.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- IQ4 -->
+            <div class="accordion-item border-0 mb-2" style="background:#f8fafc;border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#iq4" style="background:#f8fafc;font-weight:600;">
+                  <span class="badge me-2" style="background:#61dafb;color:#0f172a;font-size:.75rem;">Q4</span>
+                  What is Content Security Policy (CSP) and how does it protect a React application?
+                </button>
+              </h2>
+              <div id="iq4" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+                <div class="accordion-body pt-0">
+                  <p>Content Security Policy is an HTTP response header — <code>Content-Security-Policy</code> — that declares to the browser which sources of content (scripts, styles, images, fonts, API connections) are trusted for a given page. When a browser receives a CSP header, it enforces the policy by refusing to load or execute any resource that does not match the declared allowlist. A strict CSP is the most powerful single defense against Cross-Site Scripting: even if an attacker succeeds in injecting a <code>&lt;script&gt;</code> tag into your HTML, the browser will refuse to execute it if it violates the policy.</p>
+                  <p>For React applications, the most important directives are <code>default-src 'self'</code> (block everything not explicitly allowed), <code>script-src</code> (restrict script sources — ideally to <code>'self'</code> plus specific CDN domains), and <code>connect-src</code> (restrict which origins your <code>fetch</code>/<code>XMLHttpRequest</code> calls can reach). The notorious challenge for React is <code>style-src</code>: many CSS-in-JS solutions and third-party libraries inject inline styles, which require <code>'unsafe-inline'</code> to function. A better alternative is nonce-based CSP, where the server generates a cryptographic nonce per request, includes it in the CSP header, and adds it to each <code>&lt;style&gt;</code> tag — allowing legitimate inline styles while blocking injected ones.</p>
+                  <p>The <code>report-uri</code> (or the modern <code>report-to</code>) directive allows you to deploy CSP in report-only mode initially: the browser enforces nothing but sends JSON violation reports to your endpoint. This lets you discover what your real-world application needs before switching to enforcing mode. Services like Report URI aggregate these reports into dashboards. Once in production, CSP violation reports are a real-time alert system for XSS attempts — legitimate users should never trigger them. CSP is defense-in-depth: it is not a replacement for proper input validation and output encoding, but it catches attacks that slip past the first line of defenses.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- IQ5 -->
+            <div class="accordion-item border-0 mb-2" style="background:#f8fafc;border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#iq5" style="background:#f8fafc;font-weight:600;">
+                  <span class="badge me-2" style="background:#61dafb;color:#0f172a;font-size:.75rem;">Q5</span>
+                  What are Core Web Vitals and how do you improve LCP and CLS in a React application?
+                </button>
+              </h2>
+              <div id="iq5" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+                <div class="accordion-body pt-0">
+                  <p>Core Web Vitals are Google's standardized set of user experience metrics that measure real-world page performance. The current three are: <strong>Largest Contentful Paint (LCP)</strong> — how long it takes for the largest visible element (usually a hero image or heading) to render, measuring perceived loading speed; <strong>Interaction to Next Paint (INP)</strong> — the latency from user interaction (click, tap, key press) to the next visual update, measuring interactivity; and <strong>Cumulative Layout Shift (CLS)</strong> — the total unexpected movement of page content during load, measuring visual stability. Google uses these metrics as a ranking signal, making them commercially significant beyond pure UX quality.</p>
+                  <p>Improving LCP in a React application focuses on reducing the time to the first meaningful render. The highest-leverage techniques are: preloading the hero image with <code>&lt;link rel="preload" as="image"&gt;</code>, using a CDN to serve assets from edge nodes geographically close to users, reducing server Time to First Byte (TTFB) with edge caching or server-side rendering for the initial HTML shell, and ensuring the above-the-fold content is not blocked by large JavaScript bundles. Code splitting with <code>React.lazy</code> and <code>Suspense</code> ensures that only the code needed for the initial view is downloaded before the first render. For critical API-dependent content, React 18's concurrent rendering with <code>Suspense</code> boundaries can keep the page interactive while data loads.</p>
+                  <p>Improving CLS requires eliminating unexpected layout shifts. Always specify explicit <code>width</code> and <code>height</code> attributes on <code>&lt;img&gt;</code> elements so the browser reserves space before the image loads. Avoid inserting content above existing page content in response to user interactions or data loading — if you must show a notification or banner, reserve its space in the layout from the start. Use CSS <code>transform</code> and <code>opacity</code> for animations rather than properties like <code>top</code>, <code>left</code>, <code>width</code>, or <code>height</code> that trigger layout recalculation. In React, be particularly careful with conditional rendering of elements that affect layout — prefer hiding with <code>visibility: hidden</code> or <code>opacity: 0</code> over conditionally mounting/unmounting.</p>
+                  <p>For INP, React 18's concurrent features are specifically designed to help. <code>useTransition</code> marks expensive state updates as non-urgent, allowing React to interrupt them if a higher-priority user interaction arrives. Code splitting reduces JavaScript parse and execution time, which is the primary cause of slow INP on mobile. Virtualizing long lists eliminates the DOM node explosion that makes scroll events sluggish on data-heavy pages.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- IQ6 -->
+            <div class="accordion-item border-0 mb-2" style="background:#f8fafc;border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#iq6" style="background:#f8fafc;font-weight:600;">
+                  <span class="badge me-2" style="background:#61dafb;color:#0f172a;font-size:.75rem;">Q6</span>
+                  How would you implement a zero-downtime deployment strategy for a React SPA on AWS?
+                </button>
+              </h2>
+              <div id="iq6" class="accordion-collapse collapse" data-bs-parent="#interviewAccordion">
+                <div class="accordion-body pt-0">
+                  <p>The core challenge for zero-downtime React SPA deployments is a cache coherence problem: when you deploy a new version, users who already have the old <code>index.html</code> cached in their browser will try to load the old JavaScript chunk filenames referenced in it. If you have deleted those old chunks from S3 (because the new build generated new content-addressed filenames), those requests return 404 errors, breaking the application for anyone in an active session at the moment of deployment.</p>
+                  <p>The solution has four interlocking parts. First, content-addressed filenames: Vite and webpack both append a hash of the file contents to the filename by default (e.g., <code>main.a3f9c2d1.js</code>). This means the chunk files from the old and new builds have different names and can safely coexist in S3. Second, never cache <code>index.html</code>: set <code>Cache-Control: no-store, no-cache</code> specifically for <code>index.html</code> so browsers always fetch the freshest version. All other assets can be cached with <code>Cache-Control: public, max-age=31536000, immutable</code> since their content-addressed names guarantee freshness. Third, retain old chunks for 24–48 hours after deployment so users who were active at deploy time can complete their session without 404 errors. Fourth, after uploading the new build to S3, invalidate only <code>/index.html</code> in CloudFront — not the entire distribution — so new visitors get the new version immediately while old visitors are not broken.</p>
+                  <p>For truly zero-downtime at the infrastructure level, a blue-green deployment switches the CloudFront origin between two S3 buckets (blue = current production, green = new version). You fully deploy and verify the green environment, then atomically update the CloudFront origin with a single API call. If post-deploy monitoring detects errors, you revert the CloudFront origin to blue — rollback takes seconds and requires no re-deployment. AWS CodeDeploy, GitHub Actions with AWS CLI, or a purpose-built pipeline can orchestrate this.</p>
+                  <p>Feature flags decouple deployment from release — the highest-maturity zero-downtime strategy. You deploy new code to production behind a flag that is off for all users. QA verifies in production, then you flip the flag progressively: 1% of users, then 10%, then 100%. If metrics degrade, you flip the flag off instantly — no rollback, no redeployment. Tools like LaunchDarkly, Flagsmith, or a simple JSON endpoint suffice. This pattern means every deployment is inherently zero-risk from the user's perspective, because no new code path is executed until you deliberately enable it.</p>
+                  <p><strong>Deployment sequence for S3/CloudFront:</strong></p>
+                  <ol>
+                    <li>Build new version locally or in CI (generates new content-addressed chunks)</li>
+                    <li>Upload all new chunk files to S3 (old chunks remain — do not delete yet)</li>
+                    <li>Upload new <code>index.html</code> to S3 (overwrites the old one)</li>
+                    <li>Invalidate <code>/index.html</code> in CloudFront (<code>aws cloudfront create-invalidation --paths "/index.html"</code>)</li>
+                    <li>Monitor error rates for 30 minutes; if healthy, delete chunk files older than 48 hours</li>
+                    <li>If unhealthy, re-upload the previous <code>index.html</code> and invalidate again</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- end interviewAccordion -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+        </div><!-- end mainAccordion -->
+      </div><!-- end container-xl -->
+    </main>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center"><span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Build Real Projects</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+</body>
+</html>
+

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Redux — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--text:#f1f5f9;--border:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;}
+    .content-section{background:#fff;border-radius:16px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-section{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link active" href="react-redux.html">Redux</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;border:1px solid #61dafb;font-size:.85rem;">Section 15</span>
+      <span class="text-white-50">React Mastery Hub</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.5rem;">Redux Toolkit</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;">RTK store, slices, async thunks, useSelector, useDispatch, and RTK Query</p>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+
+  <!-- RTK Store Setup -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-database-fill me-2 text-primary"></i>Redux Toolkit — Modern Redux</h2>
+    <p class="text-muted mb-3">Redux Toolkit (RTK) is the official, opinionated toolset for Redux. It eliminates boilerplate by including Immer (immutable updates), createSlice, and createAsyncThunk out of the box.</p>
+    <div class="concept-box blue mb-3">
+      <strong>RTK vs legacy Redux:</strong> RTK requires ~70% less code, uses Immer for "mutating" syntax in reducers, and ships createAsyncThunk instead of hand-rolled thunk middleware.
+    </div>
+    <pre class="code-block"><span class="cm">// store/index.ts</span>
+<span class="kw">import</span> { configureStore } <span class="kw">from</span> <span class="st">'@reduxjs/toolkit'</span>;
+<span class="kw">import</span> authReducer <span class="kw">from</span> <span class="st">'./authSlice'</span>;
+<span class="kw">import</span> cartReducer <span class="kw">from</span> <span class="st">'./cartSlice'</span>;
+
+<span class="kw">export const</span> store = <span class="fn">configureStore</span>({
+  reducer: {
+    auth: authReducer,
+    cart: cartReducer,
+  },
+});
+
+<span class="cm">// TypeScript — export inferred types</span>
+<span class="kw">export type</span> RootState = <span class="kw">ReturnType</span>&lt;<span class="kw">typeof</span> store.getState&gt;;
+<span class="kw">export type</span> AppDispatch = <span class="kw">typeof</span> store.dispatch;
+
+<span class="cm">// Typed hooks — use these everywhere instead of plain hooks</span>
+<span class="kw">export const</span> useAppSelector = useSelector.<span class="fn">withTypes</span>&lt;RootState&gt;();
+<span class="kw">export const</span> useAppDispatch = useDispatch.<span class="fn">withTypes</span>&lt;AppDispatch&gt;();</pre>
+  </div>
+
+  <!-- Creating a Slice -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-puzzle-fill me-2 text-success"></i>Creating a Slice</h2>
+    <p class="text-muted mb-3">A "slice" combines the reducer, action creators, and initial state for one domain in a single <code>createSlice</code> call. RTK uses Immer under the hood, so you can write direct "mutations" that are actually safe.</p>
+    <div class="concept-box green mb-3">
+      <strong>Immer magic:</strong> Inside reducers, you can write <code>state.items.push(action.payload)</code> — Immer intercepts this and produces a new immutable state. Never mutate state outside of RTK reducers.
+    </div>
+    <pre class="code-block"><span class="cm">// store/cartSlice.js</span>
+<span class="kw">import</span> { createSlice } <span class="kw">from</span> <span class="st">'@reduxjs/toolkit'</span>;
+
+<span class="kw">const</span> cartSlice = <span class="fn">createSlice</span>({
+  name: <span class="st">'cart'</span>,
+  initialState: { items: [], total: 0 },
+  reducers: {
+    <span class="fn">addItem</span>(state, action) {
+      <span class="cm">// RTK uses Immer — "mutate" draft state directly!</span>
+      state.items.<span class="fn">push</span>(action.payload);
+      state.total += action.payload.price;
+    },
+    <span class="fn">removeItem</span>(state, action) {
+      <span class="kw">const</span> idx = state.items.<span class="fn">findIndex</span>(i =&gt; i.id === action.payload);
+      <span class="kw">if</span> (idx !== -1) {
+        state.total -= state.items[idx].price;
+        state.items.<span class="fn">splice</span>(idx, 1);
+      }
+    },
+    <span class="fn">clearCart</span>(state) {
+      state.items = [];
+      state.total = 0;
+    },
+  },
+});
+
+<span class="kw">export const</span> { addItem, removeItem, clearCart } = cartSlice.actions;
+<span class="kw">export default</span> cartSlice.reducer;</pre>
+  </div>
+
+  <!-- Async Thunks -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-arrow-clockwise me-2 text-warning"></i>Async Thunks</h2>
+    <p class="text-muted mb-3"><code>createAsyncThunk</code> generates pending/fulfilled/rejected action types automatically and integrates cleanly with <code>extraReducers</code>.</p>
+    <pre class="code-block"><span class="cm">// store/authSlice.js</span>
+<span class="kw">import</span> { createSlice, createAsyncThunk } <span class="kw">from</span> <span class="st">'@reduxjs/toolkit'</span>;
+
+<span class="kw">export const</span> loginThunk = <span class="fn">createAsyncThunk</span>(
+  <span class="st">'auth/login'</span>,
+  <span class="kw">async</span> (credentials, { rejectWithValue }) =&gt; {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> response = <span class="kw">await</span> api.<span class="fn">post</span>(<span class="st">'/auth/login'</span>, credentials);
+      localStorage.<span class="fn">setItem</span>(<span class="st">'token'</span>, response.token);
+      <span class="kw">return</span> response.user; <span class="cm">// becomes action.payload in fulfilled</span>
+    } <span class="kw">catch</span> (error) {
+      <span class="kw">return</span> <span class="fn">rejectWithValue</span>(error.response.data.message);
+    }
+  }
+);
+
+<span class="kw">const</span> authSlice = <span class="fn">createSlice</span>({
+  name: <span class="st">'auth'</span>,
+  initialState: { user: <span class="kw">null</span>, loading: <span class="kw">false</span>, error: <span class="kw">null</span> },
+  reducers: {
+    <span class="fn">logout</span>(state) {
+      state.user = <span class="kw">null</span>;
+      localStorage.<span class="fn">removeItem</span>(<span class="st">'token'</span>);
+    }
+  },
+  extraReducers: (builder) =&gt; {
+    builder
+      .<span class="fn">addCase</span>(loginThunk.pending, (state) =&gt; {
+        state.loading = <span class="kw">true</span>; state.error = <span class="kw">null</span>;
+      })
+      .<span class="fn">addCase</span>(loginThunk.fulfilled, (state, action) =&gt; {
+        state.loading = <span class="kw">false</span>; state.user = action.payload;
+      })
+      .<span class="fn">addCase</span>(loginThunk.rejected, (state, action) =&gt; {
+        state.loading = <span class="kw">false</span>; state.error = action.payload;
+      });
+  },
+});
+
+<span class="kw">export const</span> { logout } = authSlice.actions;
+<span class="kw">export default</span> authSlice.reducer;</pre>
+  </div>
+
+  <!-- Using Redux in Components -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-plug me-2 text-info"></i>Using Redux in Components</h2>
+    <p class="text-muted mb-3">Connect components to the store with <code>useSelector</code> (read state) and <code>useDispatch</code> (send actions). Keep selectors close to the component or colocate them in the slice file.</p>
+    <pre class="code-block"><span class="kw">import</span> { useSelector, useDispatch } <span class="kw">from</span> <span class="st">'react-redux'</span>;
+<span class="kw">import</span> { addItem } <span class="kw">from</span> <span class="st">'../store/cartSlice'</span>;
+
+<span class="kw">function</span> <span class="fn">ProductCard</span>({ product }) {
+  <span class="kw">const</span> dispatch = <span class="fn">useDispatch</span>();
+  <span class="kw">const</span> cartItems = <span class="fn">useSelector</span>(state =&gt; state.cart.items);
+  <span class="kw">const</span> isInCart = cartItems.<span class="fn">some</span>(i =&gt; i.id === product.id);
+
+  <span class="kw">return</span> (
+    &lt;div className=<span class="st">"card"</span>&gt;
+      &lt;h3&gt;{product.name}&lt;/h3&gt;
+      &lt;p&gt;${product.price}&lt;/p&gt;
+      &lt;button
+        <span class="fn">onClick</span>={() =&gt; <span class="fn">dispatch</span>(<span class="fn">addItem</span>(product))}
+        disabled={isInCart}
+      &gt;
+        {isInCart ? <span class="st">'In Cart'</span> : <span class="st">'Add to Cart'</span>}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+<span class="cm">// Colocate selectors in the slice — recommended pattern</span>
+<span class="cm">// In cartSlice.js:</span>
+<span class="kw">export const</span> selectCartItems = (state) =&gt; state.cart.items;
+<span class="kw">export const</span> selectCartTotal = (state) =&gt; state.cart.total;
+<span class="kw">export const</span> selectIsInCart = (id) =&gt; (state) =&gt; state.cart.items.<span class="fn">some</span>(i =&gt; i.id === id);
+
+<span class="cm">// Usage — cleaner and reusable</span>
+<span class="kw">const</span> isInCart = <span class="fn">useSelector</span>(<span class="fn">selectIsInCart</span>(product.id));</pre>
+  </div>
+
+  <!-- RTK Query -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-lightning-charge-fill me-2 text-danger"></i>RTK Query — Data Fetching</h2>
+    <p class="text-muted mb-3">RTK Query is a powerful data fetching and caching tool built into Redux Toolkit. It auto-generates hooks, handles caching, background refetching, and cache invalidation with tags.</p>
+    <div class="concept-box amber mb-3">
+      <strong>RTK Query vs React Query:</strong> Both are excellent. RTK Query integrates directly with your Redux store (state lives in Redux, DevTools support) and is the best choice if you're already using Redux. React Query is lighter and framework-agnostic.
+    </div>
+    <pre class="code-block"><span class="cm">// api/productsApi.js</span>
+<span class="kw">import</span> { createApi, fetchBaseQuery } <span class="kw">from</span> <span class="st">'@reduxjs/toolkit/query/react'</span>;
+
+<span class="kw">export const</span> productsApi = <span class="fn">createApi</span>({
+  reducerPath: <span class="st">'productsApi'</span>,
+  baseQuery: <span class="fn">fetchBaseQuery</span>({ baseUrl: <span class="st">'/api/'</span> }),
+  tagTypes: [<span class="st">'Products'</span>],
+  endpoints: (builder) =&gt; ({
+    getProducts: builder.<span class="fn">query</span>({
+      query: () =&gt; <span class="st">'products'</span>,
+      providesTags: [<span class="st">'Products'</span>],
+    }),
+    getProductById: builder.<span class="fn">query</span>({
+      query: (id) =&gt; `products/${id}`,
+    }),
+    createProduct: builder.<span class="fn">mutation</span>({
+      query: (body) =&gt; ({ url: <span class="st">'products'</span>, method: <span class="st">'POST'</span>, body }),
+      invalidatesTags: [<span class="st">'Products'</span>], <span class="cm">// auto-refetches getProducts</span>
+    }),
+    deleteProduct: builder.<span class="fn">mutation</span>({
+      query: (id) =&gt; ({ url: `products/${id}`, method: <span class="st">'DELETE'</span> }),
+      invalidatesTags: [<span class="st">'Products'</span>],
+    }),
+  }),
+});
+
+<span class="kw">export const</span> {
+  useGetProductsQuery,
+  useGetProductByIdQuery,
+  useCreateProductMutation,
+  useDeleteProductMutation,
+} = productsApi;
+
+<span class="cm">// Usage — auto-generated hooks handle all loading/error states</span>
+<span class="kw">function</span> <span class="fn">Products</span>() {
+  <span class="kw">const</span> { data, isLoading, error } = <span class="fn">useGetProductsQuery</span>();
+  <span class="kw">const</span> [createProduct, { isLoading: isCreating }] = <span class="fn">useCreateProductMutation</span>();
+
+  <span class="kw">if</span> (isLoading) <span class="kw">return</span> &lt;Spinner /&gt;;
+  <span class="kw">if</span> (error) <span class="kw">return</span> &lt;Error /&gt;;
+  <span class="kw">return</span> &lt;ProductGrid products={data} <span class="fn">onCreate</span>={createProduct} /&gt;;
+}</pre>
+  </div>
+
+  <!-- Redux vs Context -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-table me-2 text-secondary"></i>Redux vs Context Comparison</h2>
+    <div class="table-responsive mb-3">
+      <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Dimension</th>
+            <th>Redux Toolkit</th>
+            <th>Context + useReducer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Performance</strong></td>
+            <td><span class="badge bg-success">Selective re-renders via selectors</span></td>
+            <td><span class="badge bg-warning text-dark">All consumers re-render</span></td>
+          </tr>
+          <tr>
+            <td><strong>DevTools</strong></td>
+            <td>Redux DevTools (time-travel, action replay)</td>
+            <td>React DevTools only</td>
+          </tr>
+          <tr>
+            <td><strong>Async</strong></td>
+            <td>createAsyncThunk, RTK Query</td>
+            <td>Manual useEffect / custom hooks</td>
+          </tr>
+          <tr>
+            <td><strong>Bundle size</strong></td>
+            <td>~11 KB (RTK)</td>
+            <td>0 KB (built-in)</td>
+          </tr>
+          <tr>
+            <td><strong>Middleware</strong></td>
+            <td>Thunks, sagas, listeners</td>
+            <td>Not supported</td>
+          </tr>
+          <tr>
+            <td><strong>Best for</strong></td>
+            <td>Complex app-wide state, teams, large apps</td>
+            <td>Simple global state, small apps</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tip-box">
+      <strong>Decision guide:</strong> Start with Context for low-frequency global state (auth, theme). Add Redux when you need: cross-cutting state accessed by many components, complex async flows, time-travel debugging, or the team grows beyond 3 developers and shared state conventions matter.
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What are the three core principles of Redux?</div>
+    <div class="concept-box purple mb-3">
+      1. <strong>Single source of truth</strong> — the entire app state lives in one store. 2. <strong>State is read-only</strong> — the only way to change state is to dispatch an action. 3. <strong>Changes are made with pure functions</strong> — reducers must be pure (same input → same output, no side effects).
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does Immer work inside RTK reducers?</div>
+    <div class="concept-box purple mb-3">
+      RTK wraps each reducer with Immer's <code>produce</code>. Immer creates a "draft" proxy of the state. You can write mutations on the draft (like <code>state.items.push(x)</code>). When the reducer returns, Immer compares the draft to the original and produces a new immutable state object — your mutations never actually modify the original.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the difference between a selector and a reducer?</div>
+    <div class="concept-box purple mb-3">
+      A <strong>reducer</strong> is a pure function that takes the current state and an action and returns a new state — it writes state. A <strong>selector</strong> is a pure function that takes the Redux state and returns a derived value — it reads state. Colocating selectors in slice files keeps reading and writing logic together.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Why use rejectWithValue in createAsyncThunk?</div>
+    <div class="concept-box purple mb-3">
+      Without <code>rejectWithValue</code>, when you <code>throw</code> an error in a thunk, <code>action.payload</code> is <code>undefined</code> and the serialized error goes to <code>action.error</code>. Using <code>rejectWithValue(message)</code> sets <code>action.payload</code> to your custom error value in the rejected case, making error handling in <code>extraReducers</code> clean and predictable.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What are RTK Query tags and how does cache invalidation work?</div>
+    <div class="concept-box purple mb-3">
+      Tags are labels you assign to query results (<code>providesTags</code>) and to mutations (<code>invalidatesTags</code>). When a mutation with <code>invalidatesTags: ['Products']</code> succeeds, RTK Query automatically marks all cached queries with <code>providesTags: ['Products']</code> as stale and triggers a background refetch — without any manual <code>queryClient.invalidateQueries</code> calls.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is memoized selector (createSelector) and why is it needed?</div>
+    <div class="concept-box purple mb-3">
+      <code>createSelector</code> (from Reselect, included in RTK) creates a memoized selector. If the input selectors return the same values as the previous call, the output function is not re-run — the cached result is returned. This prevents derived data computations (e.g., filtering a list) from running on every render when the relevant state hasn't changed.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you handle authentication state with Redux?</div>
+    <div class="concept-box purple mb-3">
+      Create an <code>authSlice</code> with <code>user</code>, <code>loading</code>, and <code>error</code> state. Use <code>createAsyncThunk</code> for login/logout API calls. On app startup, dispatch a <code>checkAuth</code> thunk that reads the stored token and validates it. Components subscribe to <code>selectCurrentUser</code> and redirect via React Router's <code>Navigate</code> when authentication state changes.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>When would you use RTK Query instead of createAsyncThunk?</div>
+    <div class="concept-box purple mb-3">
+      Use RTK Query for standard CRUD operations against a REST or GraphQL API — it auto-generates hooks, handles caching, deduplication, polling, and cache invalidation without manual boilerplate. Use <code>createAsyncThunk</code> for non-data-fetching async logic: complex business workflows, multi-step processes, or operations that must coordinate multiple slices' state.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the Redux data flow?</div>
+    <div class="concept-box purple mb-3">
+      Unidirectional: 1. Component calls <code>dispatch(action)</code>. 2. The Redux store passes <code>(currentState, action)</code> to the root reducer. 3. Reducers return new state. 4. The store notifies all <code>useSelector</code> subscribers. 5. Components whose selected value changed re-render. This single direction makes state changes traceable and predictable.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does useSelector prevent unnecessary re-renders?</div>
+    <div class="concept-box purple mb-3">
+      After each dispatched action, <code>useSelector</code> runs the selector and compares the result to the previous result using strict equality (<code>===</code>). If the result is the same reference, the component does not re-render. For derived objects, use <code>createSelector</code> to ensure the same reference is returned when inputs haven't changed.
+    </div>
+  </div>
+
+</div>
+
+<footer class="py-4 mt-2" style="background:#0f172a;color:#64748b;">
+  <div class="container-xl text-center">
+    <span>React Mastery Hub &mdash; Section 15: Redux Toolkit</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

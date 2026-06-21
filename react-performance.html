@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Performance — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--text:#f1f5f9;--border:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;}
+    .content-section{background:#fff;border-radius:16px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-section{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-redux.html">Redux</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;border:1px solid #61dafb;font-size:.85rem;">Section 13</span>
+      <span class="text-white-50">React Mastery Hub</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.5rem;">React Performance</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;">React.memo, useMemo, useCallback, code splitting, and bundle optimisation</p>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+
+  <!-- React.memo -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-memory me-2 text-primary"></i>React.memo</h2>
+    <p class="text-muted mb-3"><code>React.memo</code> is a higher-order component that memoizes the rendered output. It prevents re-renders when the parent re-renders but props haven't changed (shallow comparison by default).</p>
+    <div class="concept-box amber mb-3">
+      <strong>When to use:</strong> Components that render frequently with the same props — list items, chart components, or any component lower in a large tree that is expensive to render.
+    </div>
+    <pre class="code-block"><span class="cm">// Default — shallow prop comparison</span>
+<span class="kw">const</span> ExpensiveChart = React.<span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">Chart</span>({ data, title }) {
+  <span class="cm">// Only re-renders when data or title changes (shallow compare)</span>
+  <span class="kw">const</span> processedData = <span class="fn">heavyComputation</span>(data);
+  <span class="kw">return</span> &lt;canvas&gt;...&lt;/canvas&gt;;
+});
+
+<span class="cm">// Custom comparison — full control</span>
+<span class="kw">const</span> UserCard = React.<span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">UserCard</span>({ user }) {
+  <span class="kw">return</span> &lt;div&gt;{user.name}&lt;/div&gt;;
+}, (prevProps, nextProps) =&gt; {
+  <span class="cm">// Return true = SKIP re-render (props are equal)</span>
+  <span class="cm">// Return false = DO re-render (props changed)</span>
+  <span class="kw">return</span> prevProps.user.id === nextProps.user.id;
+});</pre>
+    <div class="mistake-box">
+      <strong>Pitfall:</strong> <code>React.memo</code> only memoizes props. If a callback prop is a new function reference on every render, memo does nothing — pair it with <code>useCallback</code>.
+    </div>
+  </div>
+
+  <!-- useMemo -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-calculator me-2 text-success"></i>useMemo — Expensive Computation</h2>
+    <p class="text-muted mb-3"><code>useMemo</code> caches the result of an expensive calculation between renders. React only recomputes the value when one of its dependencies changes.</p>
+    <div class="concept-box green mb-3">
+      <strong>Rule of thumb:</strong> Use <code>useMemo</code> when a calculation takes noticeably long (e.g., sorting/filtering 1000+ items) or when the result is passed as a prop to a memoized component.
+    </div>
+    <pre class="code-block"><span class="kw">function</span> <span class="fn">DataTable</span>({ items, sortField, filterText }) {
+  <span class="cm">// Only recalculates when items, sortField, or filterText changes</span>
+  <span class="kw">const</span> processedItems = <span class="fn">useMemo</span>(() =&gt; {
+    <span class="kw">return</span> items
+      .<span class="fn">filter</span>(item =&gt; item.name.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(filterText.<span class="fn">toLowerCase</span>()))
+      .<span class="fn">sort</span>((a, b) =&gt; a[sortField] &gt; b[sortField] ? 1 : -1);
+  }, [items, sortField, filterText]);
+
+  <span class="kw">return</span> &lt;Table data={processedItems} /&gt;;
+}
+
+<span class="cm">// Also use useMemo to stabilise object/array references</span>
+<span class="kw">const</span> config = <span class="fn">useMemo</span>(() =&gt; ({
+  theme: <span class="st">'dark'</span>,
+  pageSize: 20,
+}), []); <span class="cm">// stable reference — won't cause child re-renders</span></pre>
+  </div>
+
+  <!-- useCallback -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-arrow-repeat me-2 text-warning"></i>useCallback — Stable Function References</h2>
+    <p class="text-muted mb-3"><code>useCallback</code> returns a memoized version of a callback. The function is only recreated when its dependencies change — preventing memoized children from re-rendering due to new function references.</p>
+    <pre class="code-block"><span class="kw">function</span> <span class="fn">TodoList</span>() {
+  <span class="kw">const</span> [todos, setTodos] = <span class="fn">useState</span>([]);
+
+  <span class="cm">// Without useCallback: new function reference on every render</span>
+  <span class="cm">// → MemoizedTodo always re-renders even when todo data didn't change</span>
+
+  <span class="cm">// With useCallback: same reference between renders</span>
+  <span class="kw">const</span> handleToggle = <span class="fn">useCallback</span>((id) =&gt; {
+    <span class="fn">setTodos</span>(prev =&gt; prev.<span class="fn">map</span>(t =&gt;
+      t.id === id ? {...t, done: !t.done} : t
+    ));
+  }, []); <span class="cm">// empty deps = never recreated (uses functional updater)</span>
+
+  <span class="kw">const</span> handleDelete = <span class="fn">useCallback</span>((id) =&gt; {
+    <span class="fn">setTodos</span>(prev =&gt; prev.<span class="fn">filter</span>(t =&gt; t.id !== id));
+  }, []);
+
+  <span class="kw">return</span> todos.<span class="fn">map</span>(todo =&gt; (
+    &lt;MemoizedTodo key={todo.id} todo={todo} <span class="fn">onToggle</span>={handleToggle} <span class="fn">onDelete</span>={handleDelete} /&gt;
+  ));
+}
+
+<span class="kw">const</span> MemoizedTodo = React.<span class="fn">memo</span>(Todo); <span class="cm">// now actually skips re-renders</span></pre>
+  </div>
+
+  <!-- Code Splitting -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-scissors me-2 text-info"></i>Code Splitting + Lazy Loading</h2>
+    <p class="text-muted mb-3">Code splitting breaks your bundle into smaller chunks loaded on demand — the single most impactful performance optimisation for large SPAs.</p>
+    <pre class="code-block"><span class="cm">// Route-based splitting (highest impact)</span>
+<span class="kw">const</span> Dashboard = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./pages/Dashboard'</span>));
+<span class="kw">const</span> Analytics = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./pages/Analytics'</span>));
+<span class="kw">const</span> Reports = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./pages/Reports'</span>));
+
+<span class="cm">// Component-level splitting — heavy modals, charts, editors</span>
+<span class="kw">const</span> HeavyModal = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./components/HeavyModal'</span>));
+
+<span class="kw">function</span> <span class="fn">Page</span>() {
+  <span class="kw">const</span> [showModal, setShowModal] = <span class="fn">useState</span>(<span class="kw">false</span>);
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;button <span class="fn">onClick</span>={() =&gt; <span class="fn">setShowModal</span>(<span class="kw">true</span>)}&gt;Open&lt;/button&gt;
+      &lt;Suspense fallback={<span class="kw">null</span>}&gt;
+        {showModal &amp;&amp; &lt;HeavyModal <span class="fn">onClose</span>={() =&gt; <span class="fn">setShowModal</span>(<span class="kw">false</span>)} /&gt;}
+      &lt;/Suspense&gt;
+    &lt;/&gt;
+  );
+}</pre>
+    <div class="concept-box blue">
+      <strong>Dynamic import naming:</strong> Use <code>/* webpackChunkName: "dashboard" */</code> magic comments to give chunks readable names in the bundle analyser.
+    </div>
+  </div>
+
+  <!-- Bundle Analysis -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-bar-chart-fill me-2 text-secondary"></i>Bundle Analysis + Tree Shaking</h2>
+    <p class="text-muted mb-3">Analyse your bundle to find large dependencies, duplicates, and unused code before optimising.</p>
+    <pre class="code-block"><span class="cm"># Vite — rollup-plugin-visualizer</span>
+npm install --save-dev rollup-plugin-visualizer
+
+<span class="cm"># vite.config.ts</span>
+<span class="kw">import</span> { visualizer } <span class="kw">from</span> <span class="st">'rollup-plugin-visualizer'</span>;
+plugins: [react(), <span class="fn">visualizer</span>({ open: <span class="kw">true</span>, gzipSize: <span class="kw">true</span> })]
+
+<span class="cm"># Webpack — webpack-bundle-analyzer</span>
+npm install --save-dev webpack-bundle-analyzer
+
+<span class="cm"># Tree shaking — import only what you use</span>
+<span class="cm"># Bad: imports entire lodash (500KB)</span>
+<span class="kw">import</span> _ <span class="kw">from</span> <span class="st">'lodash'</span>;
+
+<span class="cm"># Good: imports only debounce (~2KB)</span>
+<span class="kw">import</span> debounce <span class="kw">from</span> <span class="st">'lodash/debounce'</span>;
+<span class="cm"># or with ES modules (Vite auto tree-shakes):</span>
+<span class="kw">import</span> { debounce } <span class="kw">from</span> <span class="st">'lodash-es'</span>;</pre>
+  </div>
+
+  <!-- Performance Checklist -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-check2-square me-2 text-success"></i>Performance Optimisation Checklist</h2>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex align-items-center gap-3 px-0">
+        <span class="badge bg-success">Done</span>
+        <span>Use <code>React.memo</code> on pure components that receive stable props</span>
+      </li>
+      <li class="list-group-item d-flex align-items-center gap-3 px-0">
+        <span class="badge bg-success">Done</span>
+        <span>Wrap callbacks with <code>useCallback</code> passed to memoized children</span>
+      </li>
+      <li class="list-group-item d-flex align-items-center gap-3 px-0">
+        <span class="badge bg-success">Done</span>
+        <span>Cache expensive computations with <code>useMemo</code></span>
+      </li>
+      <li class="list-group-item d-flex align-items-center gap-3 px-0">
+        <span class="badge bg-success">Done</span>
+        <span>Implement route-based code splitting with <code>React.lazy</code></span>
+      </li>
+      <li class="list-group-item d-flex align-items-center gap-3 px-0">
+        <span class="badge bg-warning text-dark">Check</span>
+        <span>Use virtual scrolling (react-virtual) for lists &gt;200 items</span>
+      </li>
+      <li class="list-group-item d-flex align-items-center gap-3 px-0">
+        <span class="badge bg-warning text-dark">Check</span>
+        <span>Analyse bundle with visualiser — remove unused dependencies</span>
+      </li>
+      <li class="list-group-item d-flex align-items-center gap-3 px-0">
+        <span class="badge bg-warning text-dark">Check</span>
+        <span>Use named imports / lodash-es for proper tree shaking</span>
+      </li>
+      <li class="list-group-item d-flex align-items-center gap-3 px-0">
+        <span class="badge bg-danger">Review</span>
+        <span>Avoid creating objects/arrays inline in JSX props (breaks memo)</span>
+      </li>
+      <li class="list-group-item d-flex align-items-center gap-3 px-0">
+        <span class="badge bg-danger">Review</span>
+        <span>Don't over-memoize — measure first with React DevTools Profiler</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the difference between useMemo and useCallback?</div>
+    <div class="concept-box purple mb-3">
+      <code>useMemo</code> memoizes a computed <strong>value</strong> (the result of calling a function). <code>useCallback</code> memoizes a <strong>function reference</strong> itself. <code>useCallback(fn, deps)</code> is equivalent to <code>useMemo(() =&gt; fn, deps)</code>.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>When does React.memo fail to prevent re-renders?</div>
+    <div class="concept-box purple mb-3">
+      When props include new object/array/function references on every render. Memo uses shallow comparison — a new <code>&#123;&#125;</code> or <code>[]</code> literal always has a different reference. Fix with <code>useMemo</code> for objects and <code>useCallback</code> for functions passed as props.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the React Profiler and how do you use it?</div>
+    <div class="concept-box purple mb-3">
+      The React DevTools Profiler records component render timings. Click "Record," interact with the app, then stop recording. It shows a flame graph of which components rendered, how long each took, and why (what props/state changed). Always profile before optimising — never optimise blindly.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is tree shaking and how does Vite enable it?</div>
+    <div class="concept-box purple mb-3">
+      Tree shaking eliminates dead code (unused exports) from the bundle. It requires ES module syntax (<code>import/export</code>). Vite uses Rollup under the hood which performs tree shaking automatically for ESM packages. Use <code>lodash-es</code> instead of <code>lodash</code> to get tree-shakeable lodash.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Why shouldn't you put useMemo/useCallback on everything?</div>
+    <div class="concept-box purple mb-3">
+      Memoization has overhead — React still calls the function, compares deps, and stores the previous value. For cheap computations or rarely-updated props, this overhead exceeds the savings. Premature optimisation also makes code harder to read. Always profile first.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is virtual scrolling and when is it needed?</div>
+    <div class="concept-box purple mb-3">
+      Virtual scrolling (windowing) renders only the DOM nodes currently visible in the viewport, regardless of list size. With 10,000 list items, React renders ~20 DOM nodes at a time. Libraries: <code>@tanstack/react-virtual</code>, <code>react-window</code>. Needed when lists exceed ~200 items and scrolling feels sluggish.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does useTransition help with performance?</div>
+    <div class="concept-box purple mb-3">
+      <code>useTransition</code> marks state updates as non-urgent. React renders urgent updates (typing input) immediately, then defers lower-priority renders (filtering a large list). The UI stays responsive during heavy re-renders: <code>const [isPending, startTransition] = useTransition()</code>.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the key prop's role in performance?</div>
+    <div class="concept-box purple mb-3">
+      The <code>key</code> prop helps React identify which items in a list have changed, been added, or removed. Using stable, unique keys (like database IDs) allows React to reuse DOM nodes and component state. Using index as key causes unnecessary re-renders and can break component state when items reorder.
+    </div>
+  </div>
+
+</div>
+
+<footer class="py-4 mt-2" style="background:#0f172a;color:#64748b;">
+  <div class="container-xl text-center">
+    <span>React Mastery Hub &mdash; Section 13: Performance</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>React Architecture — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0;}
+    .compare-card{border-radius:12px;padding:1.2rem;border:2px solid transparent;}
+    .compare-card.left{background:#eff6ff;border-color:#93c5fd;}
+    .compare-card.right{background:#f0fdf4;border-color:#6ee7b7;}
+    [data-theme="dark"] .compare-card.left{background:#1e3a5f;border-color:#3b82f6;}
+    [data-theme="dark"] .compare-card.right{background:#14532d;border-color:#22c55e;}
+    .tree-line{font-family:'JetBrains Mono',monospace;font-size:.85rem;background:#0f172a;color:#e2e8f0;padding:1.2rem;border-radius:10px;line-height:1.8;}
+    .tree-line .dir{color:#60a5fa;font-weight:600;}
+    .tree-line .file{color:#86efac;}
+    .tree-line .comment{color:#64748b;font-style:italic;}
+    .decision-step{border-radius:12px;padding:1rem 1.2rem;margin-bottom:.5rem;border-left:4px solid #3b82f6;background:#eff6ff;}
+    [data-theme="dark"] .decision-step{background:#1e3a5f;color:#bfdbfe;}
+    .decision-step:nth-child(2){border-color:#22c55e;background:#f0fdf4;}
+    [data-theme="dark"] .decision-step:nth-child(2){background:#14532d;color:#bbf7d0;}
+    .decision-step:nth-child(3){border-color:#f59e0b;background:#fffbeb;}
+    [data-theme="dark"] .decision-step:nth-child(3){background:#451a03;color:#fef3c7;}
+    .decision-step:nth-child(4){border-color:#8b5cf6;background:#f5f3ff;}
+    [data-theme="dark"] .decision-step:nth-child(4){background:#3b0764;color:#ede9fe;}
+    .decision-step:nth-child(5){border-color:#ef4444;background:#fff5f5;}
+    [data-theme="dark"] .decision-step:nth-child(5){background:#450a0a;color:#fecaca;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge rounded-pill px-3 py-2" style="background:rgba(97,218,251,.15);color:#61dafb;font-size:.85rem;border:1px solid rgba(97,218,251,.3);">Section 22</span>
+      <span class="badge rounded-pill px-3 py-2" style="background:#7c3aed;">Advanced</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.4rem;">React Architecture</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;max-width:640px;">Patterns for structuring scalable React applications — folder layout, micro frontends, state decisions, API layers, and performance strategies.</p>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- Folder Structure Patterns -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-folder2-open me-2" style="color:#f59e0b;"></i>Folder Structure Patterns</h2>
+    <p class="mb-4">There is no single "correct" structure. The right pattern depends on your team size, domain complexity, and app scale.</p>
+
+    <!-- Pattern 1 -->
+    <div class="mb-4">
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-success px-3 py-2">Pattern 1</span>
+        <h5 class="fw-700 mb-0">Feature-Based (Recommended for large apps)</h5>
+      </div>
+      <p class="text-muted small mb-2">Group code by <strong>domain/feature</strong>, not by file type. Each feature is a self-contained module with its own components, hooks, state, and API.</p>
+      <div class="tree-line">
+<span class="dir">src/</span>
+├── <span class="dir">features/</span>
+│   ├── <span class="dir">auth/</span>
+│   │   ├── <span class="dir">components/</span>   <span class="comment">LoginForm, RegisterForm, ForgotPassword</span>
+│   │   ├── <span class="dir">hooks/</span>        <span class="comment">useAuth, useLogin, useLogout</span>
+│   │   ├── <span class="dir">store/</span>        <span class="comment">authSlice.ts, authSelectors.ts</span>
+│   │   ├── <span class="dir">api/</span>          <span class="comment">authApi.ts — login, register, refresh</span>
+│   │   └── <span class="dir">types/</span>        <span class="comment">auth.types.ts — User, AuthState, LoginPayload</span>
+│   ├── <span class="dir">products/</span>
+│   │   ├── <span class="dir">components/</span>   <span class="comment">ProductCard, ProductGrid, ProductFilters</span>
+│   │   ├── <span class="dir">hooks/</span>        <span class="comment">useProducts, useProductSearch</span>
+│   │   ├── <span class="dir">store/</span>        <span class="comment">productsSlice.ts</span>
+│   │   └── <span class="dir">api/</span>          <span class="comment">productsApi.ts</span>
+│   └── <span class="dir">checkout/</span>
+│       ├── <span class="dir">components/</span>   <span class="comment">CartItem, OrderSummary, PaymentForm</span>
+│       ├── <span class="dir">hooks/</span>        <span class="comment">useCart, useCheckout</span>
+│       └── <span class="dir">store/</span>        <span class="comment">cartSlice.ts</span>
+├── <span class="dir">components/</span>           <span class="comment">Shared UI: Button, Modal, Input, Badge</span>
+├── <span class="dir">hooks/</span>                <span class="comment">Shared: useDebounce, useLocalStorage, useFetch</span>
+├── <span class="dir">utils/</span>                <span class="comment">formatDate, formatCurrency, validators</span>
+├── <span class="dir">types/</span>                <span class="comment">Global TypeScript types: ApiResponse, PaginatedList</span>
+├── <span class="dir">constants/</span>            <span class="comment">API_BASE_URL, ROUTES, ERROR_CODES</span>
+├── <span class="dir">services/</span>             <span class="comment">api.ts (axios), tokenService.ts, analytics.ts</span>
+└── <span class="file">App.tsx</span>
+      </div>
+      <div class="tip-box mt-2">
+        <i class="bi bi-lightbulb me-2"></i><strong>Rule of thumb:</strong> If you can delete a feature folder and the rest of the app still compiles, your feature boundaries are clean.
+      </div>
+    </div>
+
+    <!-- Pattern 2 -->
+    <div class="mb-4">
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-primary px-3 py-2">Pattern 2</span>
+        <h5 class="fw-700 mb-0">Type-Based (Small/Medium Apps)</h5>
+      </div>
+      <p class="text-muted small mb-2">Group by file type. Simple to understand but gets unwieldy as the app grows.</p>
+      <div class="tree-line">
+<span class="dir">src/</span>
+├── <span class="dir">components/</span>   <span class="comment">ALL components — Header, ProductCard, Modal, etc.</span>
+├── <span class="dir">pages/</span>        <span class="comment">Route-level components — Home, Products, Checkout</span>
+├── <span class="dir">hooks/</span>        <span class="comment">ALL custom hooks</span>
+├── <span class="dir">store/</span>        <span class="comment">Redux slices, selectors, store.ts</span>
+├── <span class="dir">api/</span>          <span class="comment">All API functions</span>
+├── <span class="dir">utils/</span>        <span class="comment">Helper functions</span>
+└── <span class="dir">types/</span>        <span class="comment">TypeScript types</span>
+      </div>
+    </div>
+
+    <!-- Pattern 3 -->
+    <div class="mb-2">
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-warning text-dark px-3 py-2">Pattern 3</span>
+        <h5 class="fw-700 mb-0">Atomic Design (Design System Approach)</h5>
+      </div>
+      <p class="text-muted small mb-2">Organizes UI components by complexity level. Best for teams building a shared design system.</p>
+      <div class="tree-line">
+<span class="dir">src/</span>
+├── <span class="dir">atoms/</span>        <span class="comment">Button, Input, Badge, Icon, Spinner</span>
+├── <span class="dir">molecules/</span>    <span class="comment">SearchBar, FormField, CardHeader</span>
+├── <span class="dir">organisms/</span>    <span class="comment">Header, ProductCard, LoginForm, DataTable</span>
+├── <span class="dir">templates/</span>    <span class="comment">PageLayout, DashboardLayout, AuthLayout</span>
+└── <span class="dir">pages/</span>        <span class="comment">Home, Products, Profile — assemble templates</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Micro Frontend Architecture -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-diagram-3 me-2" style="color:#8b5cf6;"></i>Micro Frontend Architecture</h2>
+    <p class="mb-3">Micro frontends extend microservices thinking to the frontend. Each team owns a vertical slice — from UI to API.</p>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <div class="concept-box blue h-100">
+          <div class="fw-700 mb-2"><i class="bi bi-gear me-2"></i>Module Federation (Webpack 5)</div>
+          <p class="small mb-2">Each app exposes components/modules that other apps can consume at runtime.</p>
+          <div class="code-block" style="font-size:.72rem;"><span class="cm">// Host app webpack.config.js</span>
+<span class="kw">new</span> <span class="fn">ModuleFederationPlugin</span>({
+  name: <span class="st">'shell'</span>,
+  remotes: {
+    productApp: <span class="st">'products@http://localhost:3001/remoteEntry.js'</span>,
+    cartApp: <span class="st">'cart@http://localhost:3002/remoteEntry.js'</span>,
+  },
+});</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="concept-box green h-100">
+          <div class="fw-700 mb-2"><i class="bi bi-router me-2"></i>Routing Strategy</div>
+          <p class="small mb-2">Shell app owns top-level routing. Each micro-frontend handles its own sub-routes.</p>
+          <div class="code-block" style="font-size:.72rem;"><span class="cm">// Shell app — top-level routes</span>
+<span class="kw">const</span> ProductApp = <span class="fn">lazy</span>(
+  () =&gt; <span class="kw">import</span>(<span class="st">'productApp/App'</span>)
+);
+
+&lt;<span class="fn">Route</span>
+  path=<span class="st">"/products/*"</span>
+  element={&lt;<span class="fn">ProductApp</span> /&gt;}
+/&gt;</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="concept-box amber h-100">
+          <div class="fw-700 mb-2"><i class="bi bi-share me-2"></i>Shared Dependencies</div>
+          <p class="small mb-0 small">Share React, React DOM, design system — avoid loading them multiple times.</p>
+          <div class="code-block" style="font-size:.72rem;"><span class="cm">// Shared config</span>
+shared: {
+  react: {
+    singleton: <span class="kw">true</span>,
+    requiredVersion: <span class="st">'^18.0.0'</span>
+  },
+  <span class="st">'react-dom'</span>: {
+    singleton: <span class="kw">true</span>
+  },
+  <span class="st">'@company/design-system'</span>: {
+    singleton: <span class="kw">true</span>
+  }
+}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-box purple">
+      <div class="fw-700 mb-2">When to Use Micro Frontends</div>
+      <div class="row g-2">
+        <div class="col-md-6">
+          <div class="fw-600 small text-success mb-1">Good fit:</div>
+          <ul class="small mb-0">
+            <li>Multiple teams working on the same product</li>
+            <li>Different deployment cadences per feature</li>
+            <li>Technology heterogeneity needed</li>
+            <li>Large, complex enterprise apps (10+ devs)</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <div class="fw-600 small text-danger mb-1">Poor fit:</div>
+          <ul class="small mb-0">
+            <li>Small teams (1-3 devs)</li>
+            <li>Tightly coupled features</li>
+            <li>Consistent UX is critical</li>
+            <li>Performance budget is tight (bundle overhead)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- State Architecture Decision Tree -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-diagram-2 me-2" style="color:#22c55e;"></i>State Architecture Decision Tree</h2>
+    <p class="mb-3">Before choosing a state solution, ask these questions in order:</p>
+
+    <div class="decision-step">
+      <div class="d-flex align-items-start gap-3">
+        <span class="badge bg-primary rounded-circle" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
+        <div>
+          <div class="fw-700">Is it server/async data? (fetched from an API)</div>
+          <div class="small mt-1">Use <strong>React Query (TanStack Query)</strong> or <strong>RTK Query</strong> — handles caching, loading states, refetching, stale time, and background sync automatically. Don't put server data in Redux.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="d-flex align-items-start gap-3">
+        <span class="badge bg-success rounded-circle" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
+        <div>
+          <div class="fw-700">Is it shared across many unrelated components?</div>
+          <div class="small mt-1">Use <strong>React Context</strong> for simple cases (theme, locale, auth user). Use <strong>Redux Toolkit</strong> or <strong>Zustand</strong> for complex shared state with frequent updates.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="d-flex align-items-start gap-3">
+        <span class="badge bg-warning text-dark rounded-circle" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
+        <div>
+          <div class="fw-700">Is it form state?</div>
+          <div class="small mt-1">Use <strong>React Hook Form</strong> or <strong>Formik</strong>. Don't manage form state with useState/Redux — these libraries handle validation, dirty tracking, and submission efficiently.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="d-flex align-items-start gap-3">
+        <span class="badge rounded-circle" style="background:#8b5cf6;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</span>
+        <div>
+          <div class="fw-700">Is it UI state? (modal open, active tab, tooltip visible)</div>
+          <div class="small mt-1">Use local <strong>useState</strong> in the component that owns it. Co-locate state as close as possible to where it's used. Only lift when two sibling components need it.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-step">
+      <div class="d-flex align-items-start gap-3">
+        <span class="badge bg-danger rounded-circle" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</span>
+        <div>
+          <div class="fw-700">Is it URL/navigation state? (filters, search query, active tab in URL)</div>
+          <div class="small mt-1">Use <strong>React Router search params</strong> (<code>useSearchParams</code>). This makes state shareable via URL and survives page refreshes. Use for filters, pagination, and selected IDs.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mistake-box mt-3">
+      <i class="bi bi-exclamation-triangle me-2"></i><strong>Common mistake:</strong> Putting everything in Redux. Server data belongs in React Query, form state belongs in React Hook Form, and UI state belongs in useState. Redux is for complex global client state only.
+    </div>
+  </div>
+
+  <!-- Performance Architecture -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-speedometer2 me-2" style="color:#3b82f6;"></i>Performance Architecture</h2>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">Render Boundary Strategy (React.memo placement)</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// Expensive list item — memoize</span>
+<span class="kw">const</span> ProductCard = React.<span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">ProductCard</span>({ product }) {
+  <span class="kw">return</span> &lt;<span class="fn">div</span>&gt;{product.name}&lt;/<span class="fn">div</span>&gt;;
+}, (prev, next) =&gt; prev.product.id === next.product.id);
+
+<span class="cm">// Parent re-renders don't re-render cards</span>
+<span class="kw">function</span> <span class="fn">ProductList</span>({ products }) {
+  <span class="kw">return</span> products.<span class="fn">map</span>(p =&gt;
+    &lt;<span class="fn">ProductCard</span> key={p.id} product={p} /&gt;
+  );
+}</div>
+        <div class="tip-box mt-2">
+          <i class="bi bi-lightbulb me-2"></i>Only memoize components that render frequently with the same props. React.memo has overhead — don't use it everywhere.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">Code Splitting Boundaries</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// Route-level splitting — always do this</span>
+<span class="kw">const</span> ProductsPage = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./pages/Products'</span>));
+<span class="kw">const</span> CheckoutPage = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./pages/Checkout'</span>));
+
+<span class="cm">// Feature-level splitting — heavy features</span>
+<span class="kw">const</span> RichTextEditor = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./components/RichTextEditor'</span>));
+<span class="kw">const</span> ChartDashboard = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./features/analytics/Dashboard'</span>));
+
+&lt;<span class="fn">Suspense</span> fallback={&lt;<span class="fn">PageSkeleton</span> /&gt;}&gt;
+  &lt;<span class="fn">Routes</span>&gt;
+    &lt;<span class="fn">Route</span> path=<span class="st">"/products"</span> element={&lt;<span class="fn">ProductsPage</span> /&gt;} /&gt;
+    &lt;<span class="fn">Route</span> path=<span class="st">"/checkout"</span> element={&lt;<span class="fn">CheckoutPage</span> /&gt;} /&gt;
+  &lt;/<span class="fn">Routes</span>&gt;
+&lt;/<span class="fn">Suspense</span>&gt;</div>
+      </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">Context Slicing Strategy</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// BAD — one huge context causes all consumers to re-render</span>
+<span class="kw">const</span> AppContext = { user, theme, cart, notifications, settings };
+
+<span class="cm">// GOOD — separate contexts, consumers only re-render for their slice</span>
+<span class="kw">const</span> UserContext = <span class="fn">createContext</span>(); <span class="cm">// auth user</span>
+<span class="kw">const</span> ThemeContext = <span class="fn">createContext</span>(); <span class="cm">// dark/light mode</span>
+<span class="kw">const</span> CartContext = <span class="fn">createContext</span>(); <span class="cm">// cart items</span>
+
+<span class="cm">// Each provider wraps only what needs it</span>
+<span class="kw">function</span> <span class="fn">Providers</span>({ children }) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">UserProvider</span>&gt;
+      &lt;<span class="fn">ThemeProvider</span>&gt;
+        &lt;<span class="fn">CartProvider</span>&gt;{children}&lt;/<span class="fn">CartProvider</span>&gt;
+      &lt;/<span class="fn">ThemeProvider</span>&gt;
+    &lt;/<span class="fn">UserProvider</span>&gt;
+  );
+}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box amber h-100">
+          <div class="fw-700 mb-2">Performance Checklist</div>
+          <ul class="mb-0 small">
+            <li>Route-based code splitting (lazy + Suspense)</li>
+            <li>Virtualize long lists (react-virtual, react-window)</li>
+            <li>Memoize expensive computations (useMemo)</li>
+            <li>Stable callbacks (useCallback for child props)</li>
+            <li>Small, focused contexts (avoid mega-context)</li>
+            <li>Image lazy loading + WebP + CDN</li>
+            <li>Avoid anonymous functions in JSX (creates new ref each render)</li>
+            <li>Normalize state to avoid deep renders</li>
+            <li>Use React DevTools Profiler to measure before optimizing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Layer Architecture -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-hdd-network me-2" style="color:#ef4444;"></i>API Layer Architecture</h2>
+    <p class="mb-3">Centralize all HTTP configuration in a single Axios instance. Add request/response interceptors for auth token injection, error normalization, and token refresh logic.</p>
+
+    <div class="code-block"><span class="cm">// services/api.ts — centralized Axios instance</span>
+<span class="kw">import</span> axios <span class="kw">from</span> <span class="st">'axios'</span>;
+<span class="kw">import</span> { tokenService } <span class="kw">from</span> <span class="st">'./tokenService'</span>;
+
+<span class="kw">const</span> api = axios.<span class="fn">create</span>({
+  baseURL: process.env.REACT_APP_API_URL,
+  timeout: <span class="st">10000</span>,
+  headers: { <span class="st">'Content-Type'</span>: <span class="st">'application/json'</span> },
+});
+
+<span class="cm">// Request interceptor: inject auth token</span>
+api.interceptors.request.<span class="fn">use</span>(config =&gt; {
+  <span class="kw">const</span> token = tokenService.<span class="fn">get</span>();
+  <span class="kw">if</span> (token) config.headers.Authorization = <span class="st">`Bearer ${token}`</span>;
+  <span class="kw">return</span> config;
+});
+
+<span class="cm">// Response interceptor: handle 401 refresh</span>
+api.interceptors.response.<span class="fn">use</span>(
+  response =&gt; response.data,
+  <span class="kw">async</span> error =&gt; {
+    <span class="kw">if</span> (error.response?.status === <span class="st">401</span> && !error.config._retry) {
+      error.config._retry = <span class="kw">true</span>;
+      <span class="kw">const</span> newToken = <span class="kw">await</span> tokenService.<span class="fn">refresh</span>();
+      error.config.headers.Authorization = <span class="st">`Bearer ${newToken}`</span>;
+      <span class="kw">return</span> <span class="fn">api</span>(error.config);
+    }
+    <span class="kw">return</span> Promise.<span class="fn">reject</span>(error);
+  }
+);
+
+<span class="kw">export default</span> api;</div>
+
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">Domain API Modules</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// api/products.ts</span>
+<span class="kw">import</span> api <span class="kw">from</span> <span class="st">'../services/api'</span>;
+
+<span class="kw">export const</span> productsApi = {
+  <span class="fn">getAll</span>: (params) =&gt; api.<span class="fn">get</span>(<span class="st">'/products'</span>, { params }),
+  <span class="fn">getById</span>: (id) =&gt; api.<span class="fn">get</span>(<span class="st">`/products/${id}`</span>),
+  <span class="fn">create</span>: (data) =&gt; api.<span class="fn">post</span>(<span class="st">'/products'</span>, data),
+  <span class="fn">update</span>: (id, data) =&gt; api.<span class="fn">put</span>(<span class="st">`/products/${id}`</span>, data),
+  <span class="fn">remove</span>: (id) =&gt; api.<span class="fn">delete</span>(<span class="st">`/products/${id}`</span>),
+};</div>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">React Query Integration</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// hooks/useProducts.ts</span>
+<span class="kw">import</span> { useQuery, useMutation } <span class="kw">from</span> <span class="st">'@tanstack/react-query'</span>;
+<span class="kw">import</span> { productsApi } <span class="kw">from</span> <span class="st">'../api/products'</span>;
+
+<span class="kw">export function</span> <span class="fn">useProducts</span>(params) {
+  <span class="kw">return</span> <span class="fn">useQuery</span>({
+    queryKey: [<span class="st">'products'</span>, params],
+    queryFn: () =&gt; productsApi.<span class="fn">getAll</span>(params),
+    staleTime: <span class="st">5 * 60 * 1000</span>, <span class="cm">// 5 minutes</span>
+  });
+}
+
+<span class="kw">export function</span> <span class="fn">useCreateProduct</span>() {
+  <span class="kw">return</span> <span class="fn">useMutation</span>({
+    mutationFn: productsApi.create,
+    onSuccess: () =&gt; queryClient.<span class="fn">invalidateQueries</span>([<span class="st">'products'</span>]),
+  });
+}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-chat-left-quote me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+
+    <div class="interview-q">1. How would you structure a large React application? Explain feature-based vs type-based folders.</div>
+    <div class="mb-3 ps-3 small">Feature-based groups all related code (components, hooks, state, API) by domain (auth/, products/, checkout/). Type-based groups by file type (components/, hooks/, store/). Feature-based scales better for large teams because each feature is self-contained and can be owned by a single team without cross-cutting concerns.</div>
+
+    <div class="interview-q">2. What are Micro Frontends and when would you use them?</div>
+    <div class="mb-3 ps-3 small">Micro frontends apply microservices concepts to UI — multiple independently deployed frontend apps compose into one user experience. Use Module Federation (Webpack 5) to share components at runtime. Best for large organizations where multiple teams own distinct domains. Downsides: runtime overhead, shared dependency versioning, CORS complexity.</div>
+
+    <div class="interview-q">3. How do you decide between useState, Context, Redux, and React Query for state?</div>
+    <div class="mb-3 ps-3 small">Server data → React Query (caching, refetching). Shared complex client state → Redux/Zustand. Simple shared state (theme, user) → Context. Form state → React Hook Form. URL-driven state → useSearchParams. UI-local state → useState. The key principle: keep state as close to where it's used as possible.</div>
+
+    <div class="interview-q">4. What is Context slicing and why does it matter for performance?</div>
+    <div class="mb-3 ps-3 small">When a Context value changes, all consumers re-render. A large monolithic context (user + cart + theme + settings) causes every context consumer to re-render on any change. Slicing means separate contexts per concern — a theme change only re-renders ThemeContext consumers, not cart or user consumers. This is a critical optimization for apps with many context consumers.</div>
+
+    <div class="interview-q">5. How do you implement token refresh in an Axios interceptor?</div>
+    <div class="mb-3 ps-3 small">The response interceptor catches 401 errors. It sets <code>_retry = true</code> on the config to prevent infinite retry loops, calls the refresh endpoint to get a new token, stores it, then retries the original request with the new Authorization header. If refresh also fails, redirect to login.</div>
+
+    <div class="interview-q">6. How does code splitting improve React app performance?</div>
+    <div class="mb-3 ps-3 small">Code splitting (React.lazy + Suspense) breaks the JS bundle into chunks loaded on demand. Route-based splitting is the most impactful — users only download JS for the pages they visit. This reduces initial bundle size, improves Time-to-Interactive, and speeds up the critical rendering path. Measure with webpack-bundle-analyzer.</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

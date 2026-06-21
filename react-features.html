@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>React Features — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0;}
+    .compare-card{border-radius:12px;padding:1.2rem;border:2px solid transparent;}
+    .compare-card.left{background:#eff6ff;border-color:#93c5fd;}
+    .compare-card.right{background:#f0fdf4;border-color:#6ee7b7;}
+    [data-theme="dark"] .compare-card.left{background:#1e3a5f;border-color:#3b82f6;}
+    [data-theme="dark"] .compare-card.right{background:#14532d;border-color:#22c55e;}
+    .version-badge{display:inline-flex;align-items:center;gap:.4rem;border-radius:20px;padding:.25rem .75rem;font-size:.75rem;font-weight:700;border:1.5px solid;}
+    .v16{background:#fef3c7;color:#b45309;border-color:#fcd34d;}
+    .v17{background:#ecfdf5;color:#065f46;border-color:#6ee7b7;}
+    .v18{background:#eff6ff;color:#1d4ed8;border-color:#93c5fd;}
+    .v19{background:#f5f3ff;color:#5b21b6;border-color:#c4b5fd;}
+    [data-theme="dark"] .v16{background:#451a03;color:#fef3c7;border-color:#f59e0b;}
+    [data-theme="dark"] .v17{background:#052e16;color:#bbf7d0;border-color:#22c55e;}
+    [data-theme="dark"] .v18{background:#1e3a5f;color:#bfdbfe;border-color:#3b82f6;}
+    [data-theme="dark"] .v19{background:#3b0764;color:#ede9fe;border-color:#a78bfa;}
+    .feature-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge rounded-pill px-3 py-2" style="background:rgba(97,218,251,.15);color:#61dafb;font-size:.85rem;border:1px solid rgba(97,218,251,.3);">Section 29</span>
+      <span class="badge rounded-pill px-3 py-2" style="background:#7c3aed;">React 18+</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.4rem;">React Features Guide</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;max-width:640px;">Deep dive into React 18+ features — concurrent rendering, automatic batching, server components, and the React Compiler.</p>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- Feature 1: Concurrent Features -->
+  <div class="content-card">
+    <div class="d-flex align-items-start gap-3 mb-3">
+      <div class="feature-num">1</div>
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <h2 class="fw-700 mb-0" style="font-size:1.4rem;">Concurrent Features</h2>
+          <span class="version-badge v18">React 18</span>
+        </div>
+        <p class="text-muted mb-0 small">Concurrent Mode lets React interrupt, pause, and resume renders — making apps more responsive.</p>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">useTransition — Non-Urgent Updates</h6>
+        <p class="small mb-2">Mark state updates as "non-urgent" so React can interrupt them if a more urgent update arrives (like user input).</p>
+        <div class="code-block"><span class="kw">import</span> { useState, useTransition } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">SearchPage</span>() {
+  <span class="kw">const</span> [inputValue, setInputValue] = <span class="fn">useState</span>(<span class="st">''</span>);
+  <span class="kw">const</span> [searchQuery, setSearchQuery] = <span class="fn">useState</span>(<span class="st">''</span>);
+  <span class="kw">const</span> [isPending, startTransition] = <span class="fn">useTransition</span>();
+
+  <span class="kw">const</span> handleSearch = (e) =&gt; {
+    <span class="kw">const</span> q = e.target.value;
+    setInputValue(q);     <span class="cm">// Urgent — updates input immediately</span>
+    <span class="fn">startTransition</span>(() =&gt; {
+      setSearchQuery(q); <span class="cm">// Non-urgent — can be interrupted</span>
+    });
+  };
+
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="fn">input</span> value={inputValue} onChange={handleSearch} /&gt;
+      {isPending && &lt;<span class="fn">Spinner</span> /&gt;}
+      &lt;<span class="fn">SearchResults</span> query={searchQuery} /&gt; <span class="cm">// Heavy re-render</span>
+    &lt;/&gt;
+  );
+}</div>
+        <div class="tip-box mt-2">
+          <i class="bi bi-lightbulb me-2"></i><code>isPending</code> is true while the transition is in progress — use it to show a loading indicator without blocking the input.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">useDeferredValue — Defer Expensive Renders</h6>
+        <p class="small mb-2">Similar to useTransition but for values you don't control (like props). React renders with the previous value while processing the new one.</p>
+        <div class="code-block"><span class="kw">import</span> { useDeferredValue, useMemo } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">FilteredList</span>({ items, searchQuery }) {
+  <span class="cm">// deferredQuery lags behind searchQuery</span>
+  <span class="cm">// UI stays responsive while filtering runs</span>
+  <span class="kw">const</span> deferredQuery = <span class="fn">useDeferredValue</span>(searchQuery);
+
+  <span class="kw">const</span> results = <span class="fn">useMemo</span>(
+    () =&gt; <span class="fn">filterItems</span>(items, deferredQuery),
+    [items, deferredQuery]
+  );
+
+  <span class="cm">// Show stale-content indicator while deferred</span>
+  <span class="kw">const</span> isStale = deferredQuery !== searchQuery;
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">ul</span> style={{ opacity: isStale ? <span class="st">0.7</span> : <span class="st">1</span> }}&gt;
+      {results.<span class="fn">map</span>(item =&gt; (
+        &lt;<span class="fn">li</span> key={item.id}&gt;{item.name}&lt;/<span class="fn">li</span>&gt;
+      ))}
+    &lt;/<span class="fn">ul</span>&gt;
+  );
+}</div>
+
+        <div class="concept-box purple mt-2">
+          <div class="fw-700 mb-1 small">useTransition vs useDeferredValue</div>
+          <ul class="small mb-0">
+            <li><strong>useTransition</strong>: you control the state update — wrap with startTransition</li>
+            <li><strong>useDeferredValue</strong>: you only have a value (from props/API) — wrap the value</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 2: Automatic Batching -->
+  <div class="content-card">
+    <div class="d-flex align-items-start gap-3 mb-3">
+      <div class="feature-num">2</div>
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <h2 class="fw-700 mb-0" style="font-size:1.4rem;">Automatic Batching</h2>
+          <span class="version-badge v18">React 18</span>
+        </div>
+        <p class="text-muted mb-0 small">React now batches ALL state updates together — even inside timeouts, promises, and native event handlers.</p>
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card left">
+        <div class="fw-700 mb-2" style="color:#ef4444;"><i class="bi bi-x-circle me-2"></i>Before React 18</div>
+        <div class="code-block" style="font-size:.75rem;"><span class="cm">// Inside React event handlers: batched ✓</span>
+<span class="kw">function</span> <span class="fn">onClick</span>() {
+  <span class="fn">setCount</span>(c =&gt; c + <span class="st">1</span>); <span class="cm">// } single re-render</span>
+  <span class="fn">setFlag</span>(f =&gt; !f);   <span class="cm">// }</span>
+}
+
+<span class="cm">// But inside setTimeout: NOT batched ✗</span>
+setTimeout(() =&gt; {
+  <span class="fn">setCount</span>(c =&gt; c + <span class="st">1</span>); <span class="cm">// re-render 1 ✗</span>
+  <span class="fn">setFlag</span>(f =&gt; !f);   <span class="cm">// re-render 2 ✗</span>
+}, 0);
+
+<span class="cm">// Also NOT batched in promises:</span>
+fetch(<span class="st">'/api'</span>).<span class="fn">then</span>(() =&gt; {
+  <span class="fn">setData</span>(d);     <span class="cm">// re-render 1 ✗</span>
+  <span class="fn">setLoading</span>(<span class="kw">false</span>); <span class="cm">// re-render 2 ✗</span>
+});</div>
+      </div>
+      <div class="compare-card right">
+        <div class="fw-700 mb-2" style="color:#22c55e;"><i class="bi bi-check-circle me-2"></i>React 18 — Always Batched</div>
+        <div class="code-block" style="font-size:.75rem;"><span class="cm">// All contexts now batch automatically ✓</span>
+setTimeout(() =&gt; {
+  <span class="fn">setCount</span>(c =&gt; c + <span class="st">1</span>); <span class="cm">// } single re-render</span>
+  <span class="fn">setFlag</span>(f =&gt; !f);   <span class="cm">// }</span>
+}, <span class="st">0</span>);
+
+fetch(<span class="st">'/api'</span>).<span class="fn">then</span>(() =&gt; {
+  <span class="fn">setData</span>(d);          <span class="cm">// } single re-render</span>
+  <span class="fn">setLoading</span>(<span class="kw">false</span>);  <span class="cm">// }</span>
+});
+
+<span class="cm">// Opt out if needed with flushSync:</span>
+<span class="kw">import</span> { flushSync } <span class="kw">from</span> <span class="st">'react-dom'</span>;
+
+flushSync(() =&gt; <span class="fn">setCount</span>(c =&gt; c + <span class="st">1</span>)); <span class="cm">// immediate re-render</span>
+flushSync(() =&gt; <span class="fn">setFlag</span>(f =&gt; !f));   <span class="cm">// another re-render</span></div>
+      </div>
+    </div>
+    <div class="tip-box mt-2">
+      <i class="bi bi-lightbulb me-2"></i>Automatic batching is enabled by switching from <code>ReactDOM.render()</code> to <code>ReactDOM.createRoot()</code>. Apps still using the legacy render API don't get automatic batching.
+    </div>
+  </div>
+
+  <!-- Feature 3: New Root API -->
+  <div class="content-card">
+    <div class="d-flex align-items-start gap-3 mb-3">
+      <div class="feature-num">3</div>
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <h2 class="fw-700 mb-0" style="font-size:1.4rem;">New Root API (createRoot)</h2>
+          <span class="version-badge v18">React 18</span>
+        </div>
+        <p class="text-muted mb-0 small">The entry point to enable all React 18 concurrent features.</p>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="cm">// Old (React 17) — legacy blocking mode, no concurrent features</span>
+<span class="kw">import</span> ReactDOM <span class="kw">from</span> <span class="st">'react-dom'</span>;
+ReactDOM.<span class="fn">render</span>(&lt;<span class="fn">App</span> /&gt;, document.<span class="fn">getElementById</span>(<span class="st">'root'</span>));
+
+<span class="cm">// New (React 18) — enables concurrent rendering, auto batching, Suspense data</span>
+<span class="kw">import</span> { createRoot } <span class="kw">from</span> <span class="st">'react-dom/client'</span>;
+
+<span class="kw">const</span> root = createRoot(document.<span class="fn">getElementById</span>(<span class="st">'root'</span>)!);
+root.<span class="fn">render</span>(
+  &lt;<span class="fn">React.StrictMode</span>&gt;
+    &lt;<span class="fn">App</span> /&gt;
+  &lt;/<span class="fn">React.StrictMode</span>&gt;
+);
+
+<span class="cm">// For Server-Side Rendering: hydrateRoot</span>
+<span class="kw">import</span> { hydrateRoot } <span class="kw">from</span> <span class="st">'react-dom/client'</span>;
+hydrateRoot(
+  document.<span class="fn">getElementById</span>(<span class="st">'root'</span>)!,
+  &lt;<span class="fn">App</span> /&gt;
+);</div>
+  </div>
+
+  <!-- Feature 4: Suspense for Data -->
+  <div class="content-card">
+    <div class="d-flex align-items-start gap-3 mb-3">
+      <div class="feature-num">4</div>
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <h2 class="fw-700 mb-0" style="font-size:1.4rem;">Suspense for Data Fetching</h2>
+          <span class="version-badge v18">React 18</span>
+        </div>
+        <p class="text-muted mb-0 small">Suspense is no longer just for code splitting — React 18 fully enables Suspense for async data with frameworks.</p>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="cm">// Suspense boundary — shows fallback while children are "suspended"</span>
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">Suspense</span> fallback={&lt;<span class="fn">PageSkeleton</span> /&gt;}&gt;
+      &lt;<span class="fn">UserProfile</span> userId={<span class="st">1</span>} /&gt;
+    &lt;/<span class="fn">Suspense</span>&gt;
+  );
+}
+
+<span class="cm">// Nested Suspense — different loading states per section</span>
+<span class="kw">function</span> <span class="fn">Dashboard</span>() {
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="fn">Suspense</span> fallback={&lt;<span class="fn">HeaderSkeleton</span> /&gt;}&gt;
+        &lt;<span class="fn">Header</span> /&gt;
+      &lt;/<span class="fn">Suspense</span>&gt;
+      &lt;<span class="fn">Suspense</span> fallback={&lt;<span class="fn">ContentSkeleton</span> /&gt;}&gt;
+        &lt;<span class="fn">MainContent</span> /&gt;
+        &lt;<span class="fn">Suspense</span> fallback={&lt;<span class="fn">SidebarSkeleton</span> /&gt;}&gt;
+          &lt;<span class="fn">Sidebar</span> /&gt;
+        &lt;/<span class="fn">Suspense</span>&gt;
+      &lt;/<span class="fn">Suspense</span>&gt;
+    &lt;/&gt;
+  );
+}
+
+<span class="cm">// With React Query (suspense mode)</span>
+<span class="kw">function</span> <span class="fn">UserProfile</span>({ userId }) {
+  <span class="kw">const</span> { data: user } = <span class="fn">useSuspenseQuery</span>({
+    queryKey: [<span class="st">'user'</span>, userId],
+    queryFn: () =&gt; userApi.<span class="fn">getById</span>(userId),
+  });
+
+  <span class="kw">return</span> &lt;<span class="fn">div</span>&gt;&lt;<span class="fn">h1</span>&gt;{user.name}&lt;/<span class="fn">h1</span>&gt;&lt;/<span class="fn">div</span>&gt;;
+  <span class="cm">// No loading/error check needed — handled by Suspense + ErrorBoundary</span>
+}</div>
+  </div>
+
+  <!-- Feature 5: useId -->
+  <div class="content-card">
+    <div class="d-flex align-items-start gap-3 mb-3">
+      <div class="feature-num">5</div>
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <h2 class="fw-700 mb-0" style="font-size:1.4rem;">useId — Stable IDs for SSR</h2>
+          <span class="version-badge v18">React 18</span>
+        </div>
+        <p class="text-muted mb-0 small">Generate stable, unique IDs that match between server and client renders — critical for SSR hydration.</p>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="code-block"><span class="kw">import</span> { useId } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Accessible form fields — label htmlFor must match input id</span>
+<span class="kw">function</span> <span class="fn">FormField</span>({ label, type = <span class="st">'text'</span> }) {
+  <span class="kw">const</span> id = <span class="fn">useId</span>(); <span class="cm">// stable: ':r0:', ':r1:', etc.</span>
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">div</span>&gt;
+      &lt;<span class="fn">label</span> htmlFor={id}&gt;{label}&lt;/<span class="fn">label</span>&gt;
+      &lt;<span class="fn">input</span> id={id} type={type} /&gt;
+    &lt;/<span class="fn">div</span>&gt;
+  );
+}
+
+<span class="cm">// Multiple IDs from one useId call</span>
+<span class="kw">function</span> <span class="fn">PasswordField</span>() {
+  <span class="kw">const</span> id = <span class="fn">useId</span>();
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="fn">label</span> htmlFor={id + <span class="st">'-input'</span>}&gt;Password&lt;/<span class="fn">label</span>&gt;
+      &lt;<span class="fn">input</span> id={id + <span class="st">'-input'</span>} type=<span class="st">"password"</span>
+             aria-describedby={id + <span class="st">'-hint'</span>} /&gt;
+      &lt;<span class="fn">p</span> id={id + <span class="st">'-hint'</span>}&gt;Must be 8+ characters&lt;/<span class="fn">p</span>&gt;
+    &lt;/&gt;
+  );
+}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box amber">
+          <div class="fw-700 mb-2">Why Not Math.random() or a Counter?</div>
+          <ul class="small mb-0">
+            <li><strong>Math.random()</strong> — different on server vs client → hydration mismatch error</li>
+            <li><strong>Global counter</strong> — breaks with Concurrent Mode (renders can be paused/replayed)</li>
+            <li><strong>useId</strong> — deterministic based on component tree position, always matches between SSR and hydration</li>
+          </ul>
+        </div>
+        <div class="concept-box green mt-2">
+          <div class="fw-700 mb-1 small">Use Cases</div>
+          <ul class="small mb-0">
+            <li>label + input pairs (htmlFor/id)</li>
+            <li>aria-labelledby, aria-describedby</li>
+            <li>SVG filter/mask IDs (must be unique per page)</li>
+            <li>Accordion/tab panel IDs for ARIA</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 6: useSyncExternalStore -->
+  <div class="content-card">
+    <div class="d-flex align-items-start gap-3 mb-3">
+      <div class="feature-num">6</div>
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <h2 class="fw-700 mb-0" style="font-size:1.4rem;">useSyncExternalStore</h2>
+          <span class="version-badge v18">React 18</span>
+        </div>
+        <p class="text-muted mb-0 small">The official hook for subscribing to external stores (used internally by Redux, Zustand, and other state libraries).</p>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="kw">import</span> { useSyncExternalStore } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Subscribe to browser window width — updates on resize</span>
+<span class="kw">function</span> <span class="fn">useWindowWidth</span>() {
+  <span class="kw">return</span> <span class="fn">useSyncExternalStore</span>(
+    <span class="cm">// subscribe: called when React needs to subscribe to the store</span>
+    (callback) =&gt; {
+      window.<span class="fn">addEventListener</span>(<span class="st">'resize'</span>, callback);
+      <span class="kw">return</span> () =&gt; window.<span class="fn">removeEventListener</span>(<span class="st">'resize'</span>, callback);
+    },
+    <span class="cm">// getSnapshot: return the current value</span>
+    () =&gt; window.innerWidth,
+    <span class="cm">// getServerSnapshot: SSR fallback (optional)</span>
+    () =&gt; <span class="st">1200</span>
+  );
+}
+
+<span class="cm">// Subscribe to online/offline status</span>
+<span class="kw">function</span> <span class="fn">useOnlineStatus</span>() {
+  <span class="kw">return</span> <span class="fn">useSyncExternalStore</span>(
+    (callback) =&gt; {
+      window.<span class="fn">addEventListener</span>(<span class="st">'online'</span>,  callback);
+      window.<span class="fn">addEventListener</span>(<span class="st">'offline'</span>, callback);
+      <span class="kw">return</span> () =&gt; {
+        window.<span class="fn">removeEventListener</span>(<span class="st">'online'</span>,  callback);
+        window.<span class="fn">removeEventListener</span>(<span class="st">'offline'</span>, callback);
+      };
+    },
+    () =&gt; navigator.onLine,
+    () =&gt; <span class="kw">true</span>
+  );
+}
+
+<span class="cm">// Usage in components</span>
+<span class="kw">function</span> <span class="fn">ResponsiveComponent</span>() {
+  <span class="kw">const</span> width = <span class="fn">useWindowWidth</span>();
+  <span class="kw">const</span> isOnline = <span class="fn">useOnlineStatus</span>();
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">div</span>&gt;
+      {!isOnline && &lt;<span class="fn">p</span>&gt;You are offline&lt;/<span class="fn">p</span>&gt;}
+      {width &lt; <span class="st">768</span> ? &lt;<span class="fn">MobileNav</span> /&gt; : &lt;<span class="fn">DesktopNav</span> /&gt;}
+    &lt;/<span class="fn">div</span>&gt;
+  );
+}</div>
+  </div>
+
+  <!-- Feature 7: Server Components -->
+  <div class="content-card">
+    <div class="d-flex align-items-start gap-3 mb-3">
+      <div class="feature-num">7</div>
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <h2 class="fw-700 mb-0" style="font-size:1.4rem;">Server Components (RSC)</h2>
+          <span class="version-badge v19">React 19 / Next.js 13+</span>
+        </div>
+        <p class="text-muted mb-0 small">Server Components run only on the server — zero JS sent to the browser. Game-changer for performance and data access.</p>
+      </div>
+    </div>
+
+    <div class="compare-grid mb-3">
+      <div class="compare-card left">
+        <div class="fw-700 mb-2" style="color:#3b82f6;">Server Component</div>
+        <ul class="small mb-0">
+          <li>Runs on the server only</li>
+          <li>No JS sent to the browser</li>
+          <li>Can directly access DB, files, secrets</li>
+          <li>Cannot use useState, useEffect, event handlers</li>
+          <li>Default in Next.js 13+ App Router</li>
+          <li>Can be async (await data directly)</li>
+        </ul>
+      </div>
+      <div class="compare-card right">
+        <div class="fw-700 mb-2" style="color:#22c55e;">Client Component</div>
+        <ul class="small mb-0">
+          <li>Runs in browser (and during SSR)</li>
+          <li>JS bundle included</li>
+          <li>Can use useState, useEffect, events</li>
+          <li>Cannot access server-only resources</li>
+          <li>Marked with <code>'use client'</code> directive</li>
+          <li>Receives props from server components</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="cm">// ── Server Component — no 'use client', no JS sent to browser ──────</span>
+<span class="kw">async function</span> <span class="fn">UserProfile</span>({ userId }: { userId: <span class="kw">number</span> }) {
+  <span class="cm">// Direct DB access — no API needed!</span>
+  <span class="kw">const</span> user = <span class="kw">await</span> db.user.<span class="fn">findUnique</span>({ where: { id: userId } });
+  <span class="kw">const</span> posts = <span class="kw">await</span> db.post.<span class="fn">findMany</span>({ where: { authorId: userId } });
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">div</span>&gt;
+      &lt;<span class="fn">h1</span>&gt;{user.name}&lt;/<span class="fn">h1</span>&gt;
+      &lt;<span class="fn">p</span>&gt;{user.email}&lt;/<span class="fn">p</span>&gt;
+      {posts.<span class="fn">map</span>(post =&gt; &lt;<span class="fn">PostCard</span> key={post.id} post={post} /&gt;)}
+      &lt;<span class="fn">LikeButton</span> userId={userId} /&gt; <span class="cm">// Client Component embedded here</span>
+    &lt;/<span class="fn">div</span>&gt;
+  );
+}
+
+<span class="cm">// ── Client Component — marked with 'use client' directive ───────────</span>
+<span class="st">'use client'</span>;
+<span class="kw">import</span> { useState } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">LikeButton</span>({ userId }: { userId: <span class="kw">number</span> }) {
+  <span class="kw">const</span> [liked, setLiked] = <span class="fn">useState</span>(<span class="kw">false</span>);
+  <span class="kw">return</span> (
+    &lt;<span class="fn">button</span> onClick={() =&gt; <span class="fn">setLiked</span>(l =&gt; !l)}&gt;
+      {liked ? <span class="st">'♥ Liked'</span> : <span class="st">'♡ Like'</span>}
+    &lt;/<span class="fn">button</span>&gt;
+  );
+}
+
+<span class="cm">// ── Server Actions — async functions that run on the server ─────────</span>
+<span class="st">'use server'</span>;
+<span class="kw">async function</span> <span class="fn">createPost</span>(formData: FormData) {
+  <span class="kw">const</span> title = formData.<span class="fn">get</span>(<span class="st">'title'</span>);
+  <span class="kw">await</span> db.post.<span class="fn">create</span>({ data: { title } });
+  revalidatePath(<span class="st">'/posts'</span>);
+}</div>
+
+    <div class="concept-box amber">
+      <div class="fw-700 mb-2">Server Component Mental Model</div>
+      <ul class="small mb-0">
+        <li>Think of the server/client boundary as a "client frontier" — mark components as client when they need interactivity</li>
+        <li>Push the boundary as far down the tree as possible — keep most components as server components</li>
+        <li>Server components can import and render client components, but NOT vice versa</li>
+        <li>Pass server data to client components as props — they can't access DB directly</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 8: React Compiler -->
+  <div class="content-card">
+    <div class="d-flex align-items-start gap-3 mb-3">
+      <div class="feature-num">8</div>
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <h2 class="fw-700 mb-0" style="font-size:1.4rem;">React Compiler (React Forget)</h2>
+          <span class="version-badge v19">React 19</span>
+        </div>
+        <p class="text-muted mb-0 small">Automatic memoization — the compiler rewrites your components to add optimal memoization. No more manual useMemo/useCallback in most cases.</p>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">Before Compiler (Manual Memoization)</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// You write this:</span>
+<span class="kw">function</span> <span class="fn">ExpensiveList</span>({ items, filter, onSelect }) {
+  <span class="kw">const</span> filtered = <span class="fn">useMemo</span>(
+    () =&gt; items.<span class="fn">filter</span>(i =&gt; i.type === filter),
+    [items, filter]
+  );
+  <span class="kw">const</span> handleSelect = <span class="fn">useCallback</span>(
+    (id) =&gt; <span class="fn">onSelect</span>(id),
+    [onSelect]
+  );
+  <span class="kw">return</span> filtered.<span class="fn">map</span>(i =&gt;
+    &lt;<span class="fn">Item</span> key={i.id} item={i} onSelect={handleSelect} /&gt;
+  );
+}
+
+<span class="kw">const</span> Item = React.<span class="fn">memo</span>(({ item, onSelect }) =&gt; (
+  &lt;<span class="fn">div</span> onClick={() =&gt; <span class="fn">onSelect</span>(item.id)}&gt;{item.name}&lt;/<span class="fn">div</span>&gt;
+));</div>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">With React Compiler</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// You write this simpler version:</span>
+<span class="kw">function</span> <span class="fn">ExpensiveList</span>({ items, filter, onSelect }) {
+  <span class="kw">const</span> filtered = items.<span class="fn">filter</span>(i =&gt; i.type === filter);
+
+  <span class="kw">return</span> filtered.<span class="fn">map</span>(i =&gt;
+    &lt;<span class="fn">Item</span> key={i.id} item={i} onSelect={onSelect} /&gt;
+  );
+}
+
+<span class="kw">function</span> <span class="fn">Item</span>({ item, onSelect }) {
+  <span class="kw">return</span> &lt;<span class="fn">div</span> onClick={() =&gt; <span class="fn">onSelect</span>(item.id)}&gt;{item.name}&lt;/<span class="fn">div</span>&gt;;
+}
+
+<span class="cm">// Compiler automatically adds optimal memoization</span>
+<span class="cm">// No useMemo, useCallback, or React.memo needed!</span></div>
+      </div>
+    </div>
+    <div class="tip-box mt-2">
+      <i class="bi bi-lightbulb me-2"></i>The React Compiler understands the "Rules of React" (pure functions, no mutation) and automatically memoizes only where beneficial. It requires writing idiomatic React — which you should already be doing.
+    </div>
+  </div>
+
+  <!-- Version Timeline -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-clock-history me-2" style="color:#3b82f6;"></i>React Version Timeline</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Version</th>
+            <th>Release</th>
+            <th>Key Features</th>
+            <th>Breaking Changes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="version-badge v16">React 16</span></td>
+            <td>2017</td>
+            <td>Fiber architecture, Portals, Error Boundaries, Fragments, Context API redesign, Hooks (16.8)</td>
+            <td>New internal architecture. Introduced class component lifecycle deprecations.</td>
+          </tr>
+          <tr>
+            <td><span class="version-badge v17">React 17</span></td>
+            <td>2020</td>
+            <td>No new features — "stepping stone" release. Event delegation moved from document to root. Gradual upgrades.</td>
+            <td>Event delegation change. JSX transform (no need to import React in every file).</td>
+          </tr>
+          <tr>
+            <td><span class="version-badge v18">React 18</span></td>
+            <td>2022</td>
+            <td>Concurrent rendering, createRoot, automatic batching, useTransition, useDeferredValue, useId, useSyncExternalStore, Suspense for data, streaming SSR</td>
+            <td>ReactDOM.render deprecated. StrictMode runs effects twice in dev. Batching behavior changed.</td>
+          </tr>
+          <tr>
+            <td><span class="version-badge v19">React 19</span></td>
+            <td>2024</td>
+            <td>React Compiler (auto-memoization), Server Components stable, Server Actions, use() hook, ref as prop (no forwardRef), improved error messages, Asset Loading APIs</td>
+            <td>forwardRef no longer needed. ReactDOM.render and other legacy APIs removed. Legacy Context API removed.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="row g-3 mt-2">
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <div class="fw-700 mb-2">New in React 19 — Quick Ref</div>
+          <ul class="small mb-0">
+            <li><code>use(promise)</code> — read async values in render (replaces some useEffect patterns)</li>
+            <li><code>use(Context)</code> — call useContext conditionally (finally!)</li>
+            <li><code>ref</code> as a regular prop — no more <code>forwardRef</code> wrapper</li>
+            <li>Document metadata — <code>&lt;title&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;link&gt;</code> in JSX auto-hoisted to &lt;head&gt;</li>
+            <li>Resource preloading — <code>preload()</code>, <code>prefetchDNS()</code>, <code>preinit()</code> APIs</li>
+            <li>Actions — async event handlers with automatic optimistic state</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box purple">
+          <div class="fw-700 mb-2">use() Hook — React 19</div>
+          <div class="code-block" style="font-size:.75rem;"><span class="cm">// Read a promise in render (Suspense-compatible)</span>
+<span class="kw">import</span> { use } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">Comments</span>({ commentsPromise }) {
+  <span class="cm">// Suspends until promise resolves</span>
+  <span class="kw">const</span> comments = <span class="fn">use</span>(commentsPromise);
+  <span class="kw">return</span> comments.<span class="fn">map</span>(c =&gt; &lt;<span class="fn">p</span> key={c.id}&gt;{c.text}&lt;/<span class="fn">p</span>&gt;);
+}
+
+<span class="cm">// Read Context conditionally (not allowed with useContext)</span>
+<span class="kw">function</span> <span class="fn">ConditionalComponent</span>({ show }) {
+  <span class="kw">if</span> (!show) <span class="kw">return null</span>;
+  <span class="kw">const</span> theme = <span class="fn">use</span>(ThemeContext); <span class="cm">// ✓ conditional use()</span>
+  <span class="kw">return</span> &lt;<span class="fn">div</span> className={theme.mode}&gt;...&lt;/<span class="fn">div</span>&gt;;
+}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-chat-left-quote me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+
+    <div class="interview-q">1. What is Concurrent Mode and how does it improve user experience?</div>
+    <div class="mb-3 ps-3 small">Concurrent Mode lets React work on multiple state updates simultaneously and interrupt low-priority renders if a high-priority update arrives. Previously, React processed each render synchronously — a heavy re-render would block user input. With Concurrent Mode (enabled via createRoot), React can pause an expensive render, process a user keystroke immediately, then resume. useTransition and useDeferredValue give you control over what's "urgent" vs "non-urgent".</div>
+
+    <div class="interview-q">2. Explain automatic batching in React 18. How does it differ from React 17?</div>
+    <div class="mb-3 ps-3 small">React 17 only batched state updates inside React event handlers. Updates in setTimeout, Promises, and native event handlers each caused separate re-renders. React 18 batches ALL state updates everywhere automatically, reducing re-renders. This is enabled by createRoot. Use flushSync() to opt out when you need immediate re-renders (rare — e.g., reading DOM measurements between state updates).</div>
+
+    <div class="interview-q">3. What are React Server Components and how do they differ from SSR?</div>
+    <div class="mb-3 ps-3 small">SSR renders components on the server and sends HTML + JS to the browser (JS then hydrates the page). Server Components run ONLY on the server — their output (serialized React tree) is sent to the client, but no JS is shipped for them. They can directly access databases and files. They cannot use useState, useEffect, or browser APIs. They are composable with Client Components ('use client') which handle interactivity.</div>
+
+    <div class="interview-q">4. What problem does useId solve? Why not use Math.random()?</div>
+    <div class="mb-3 ps-3 small">useId generates IDs that are stable between server and client renders. Math.random() generates different values each time — so the ID generated on the server won't match what the client generates during hydration, causing a hydration mismatch error. useId derives its value from the component's position in the tree, which is deterministic on both server and client.</div>
+
+    <div class="interview-q">5. What is the React Compiler and why is it significant?</div>
+    <div class="mb-3 ps-3 small">The React Compiler (formerly "React Forget") is a build-time compiler that automatically adds optimal memoization to React components. It analyzes component code and inserts useMemo/useCallback/React.memo only where they provide measurable benefit. This means developers no longer need to manually reason about memoization — the compiler handles it correctly. It requires components to follow the Rules of React (pure render functions, no mutation).</div>
+
+    <div class="interview-q">6. When would you use useTransition vs useDeferredValue?</div>
+    <div class="mb-3 ps-3 small">Use <strong>useTransition</strong> when you own the state update — wrap the setter in startTransition(). Use <strong>useDeferredValue</strong> when you receive a value via props or from an external source you don't control. Both defer expensive re-renders, but the API differs: useTransition wraps the update, useDeferredValue wraps the received value. useDeferredValue is also useful inside components that can't call startTransition (e.g., component libraries).</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

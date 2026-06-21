@@ -1,0 +1,2670 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>60 React Projects — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .project-card{border-radius:16px;padding:1.5rem;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.07);border:2px solid transparent;transition:border-color .2s,transform .2s;height:100%;}
+    .project-card:hover{border-color:#61dafb;transform:translateY(-3px);}
+    [data-theme="dark"] .project-card{background:#111827;}
+    .diff-beginner{background:#dcfce7;color:#166534;border-radius:20px;padding:.2rem .7rem;font-size:.75rem;font-weight:700;}
+    .diff-intermediate{background:#fef9c3;color:#854d0e;border-radius:20px;padding:.2rem .7rem;font-size:.75rem;font-weight:700;}
+    .diff-advanced{background:#fee2e2;color:#991b1b;border-radius:20px;padding:.2rem .7rem;font-size:.75rem;font-weight:700;}
+    [data-theme="dark"] .diff-beginner{background:#14532d;color:#bbf7d0;}
+    [data-theme="dark"] .diff-intermediate{background:#451a03;color:#fef3c7;}
+    [data-theme="dark"] .diff-advanced{background:#450a0a;color:#fecaca;}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link active" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="section-hero">
+  <div class="container-xl text-center">
+    <h1 class="fw-900 mb-3" style="font-size:2.6rem;">60 Projects — From Beginner to Expert</h1>
+    <p class="mb-4" style="color:#94a3b8;font-size:1.1rem;max-width:680px;margin:0 auto 1.5rem;">Build real-world React applications at every skill level. Each project is carefully designed to reinforce core concepts while producing something genuinely useful for your portfolio.</p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <span class="badge px-3 py-2" style="background:#14532d;color:#bbf7d0;font-size:.95rem;border-radius:20px;"><i class="bi bi-star-fill me-1"></i>20 Beginner</span>
+      <span class="badge px-3 py-2" style="background:#451a03;color:#fef3c7;font-size:.95rem;border-radius:20px;"><i class="bi bi-star-half me-1"></i>20 Intermediate</span>
+      <span class="badge px-3 py-2" style="background:#450a0a;color:#fecaca;font-size:.95rem;border-radius:20px;"><i class="bi bi-star-fill me-1"></i>20 Advanced</span>
+      <span class="badge px-3 py-2" style="background:#1e3a5f;color:#bfdbfe;font-size:.95rem;border-radius:20px;"><i class="bi bi-grid-3x3-gap-fill me-1"></i>60 Total Projects</span>
+    </div>
+  </div>
+</section>
+
+<div class="container-xl mb-4">
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="concept-box blue">
+        <h6 class="fw-700 mb-2"><i class="bi bi-briefcase-fill me-2"></i>Portfolio Building Strategy</h6>
+        <p class="mb-0" style="font-size:.9rem;">Focus on completing 3–5 polished projects rather than starting many. Each finished project should include a live demo link, a well-structured README with screenshots, and clean, commented code that a hiring manager can actually read. Beginners should aim for 2 beginner projects and 1 intermediate project as their initial portfolio baseline.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="concept-box green">
+        <h6 class="fw-700 mb-2"><i class="bi bi-map-fill me-2"></i>Recommended Learning Path</h6>
+        <p class="mb-0" style="font-size:.9rem;">Start with Beginner projects 1–5 to get comfortable with JSX and component thinking. Move to projects 6–15 for hooks (useState, useEffect). Tackle Intermediate projects once you're confident with state and props. Advanced projects require Redux, authentication flows, WebSockets, and performance optimization — tackle these only after completing at least 10 intermediate projects.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="concept-box purple">
+        <h6 class="fw-700 mb-2"><i class="bi bi-award-fill me-2"></i>Making Projects Stand Out</h6>
+        <p class="mb-0" style="font-size:.9rem;">Add dark mode, responsive design, accessibility (ARIA labels, keyboard navigation), loading skeletons, error boundary handling, and unit tests to any project. Deploy to Vercel or Netlify with a custom domain. Write a case study in your README explaining the architectural decisions you made and what you'd do differently next time. These extras transform a tutorial clone into a genuine portfolio piece.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-xl">
+  <!-- TABS -->
+  <ul class="nav nav-tabs mb-4 fw-600" id="projectTabs" role="tablist" style="border-bottom:2px solid #e2e8f0;">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="beginner-tab" data-bs-toggle="tab" data-bs-target="#beginner" type="button" role="tab" style="font-size:1rem;padding:.7rem 1.4rem;">
+        <i class="bi bi-star me-2" style="color:#22c55e;"></i>Beginner <span class="badge ms-1" style="background:#dcfce7;color:#166534;">20</span>
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="intermediate-tab" data-bs-toggle="tab" data-bs-target="#intermediate" type="button" role="tab" style="font-size:1rem;padding:.7rem 1.4rem;">
+        <i class="bi bi-star-half me-2" style="color:#f59e0b;"></i>Intermediate <span class="badge ms-1" style="background:#fef9c3;color:#854d0e;">20</span>
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" style="font-size:1rem;padding:.7rem 1.4rem;">
+        <i class="bi bi-star-fill me-2" style="color:#ef4444;"></i>Advanced <span class="badge ms-1" style="background:#fee2e2;color:#991b1b;">20</span>
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="projectTabsContent">
+
+    <!-- ===== BEGINNER TAB ===== -->
+    <div class="tab-pane fade show active" id="beginner" role="tabpanel">
+      <div class="row g-4">
+
+        <!-- #01 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#01</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Counter App</h5>
+            <p style="font-size:.88rem;color:#64748b;">The classic first React project that teaches the fundamental mental model of state-driven UI. You build a counter with increment, decrement, and reset buttons, learning how React re-renders when state changes. This project might seem trivial but it cements the most important concept in all of React: state is the single source of truth.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">useState</span>
+              <span class="badge bg-secondary me-1 mt-1">Event Handlers</span>
+              <span class="badge bg-info text-dark me-1 mt-1">JSX</span>
+              <span class="badge bg-success me-1 mt-1">Component State</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>A numeric counter display with large, readable typography</li>
+                <li>Increment (+1) and decrement (-1) buttons with boundary logic</li>
+                <li>Reset button that returns counter to zero</li>
+                <li>Color feedback: green when positive, red when negative</li>
+                <li>Step size selector (count by 1, 5, or 10)</li>
+                <li>History log showing the last 5 values</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useState</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Modules</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> useState returns a tuple — the current value and a setter function. Calling the setter schedules a re-render; never mutate state directly. Understand why <code>setCount(count + 1)</code> called twice in the same handler doesn't increment by 2 — use the functional updater <code>setCount(prev =&gt; prev + 1)</code> instead.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #02 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#02</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Todo List App</h5>
+            <p style="font-size:.88rem;color:#64748b;">The quintessential React learning project that introduces list rendering, form input handling, and array state manipulation. Every developer has built a todo app, but building it yourself from scratch is what makes the patterns stick. You'll encounter the "lifting state up" pattern for the first time here.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">useState</span>
+              <span class="badge bg-secondary me-1 mt-1">Array State</span>
+              <span class="badge bg-info text-dark me-1 mt-1">map()</span>
+              <span class="badge bg-success me-1 mt-1">Forms</span>
+              <span class="badge bg-warning text-dark me-1 mt-1">key prop</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Input field with submit-on-Enter and button click support</li>
+                <li>Rendered list of todo items with unique keys</li>
+                <li>Toggle complete/incomplete on item click with strikethrough style</li>
+                <li>Delete individual items with confirmation logic</li>
+                <li>Filter tabs: All, Active, Completed</li>
+                <li>Persistent storage via localStorage so todos survive refresh</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useState</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+              <span class="badge bg-dark me-1 mt-1">CSS</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> When storing arrays in state, always create a new array rather than mutating the existing one. Use <code>filter()</code> to remove items, <code>map()</code> to update items, and spread <code>[...todos, newTodo]</code> to add items. Always use a stable unique id (like <code>crypto.randomUUID()</code>) as the key — never use array index.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #03 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#03</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Weather Widget</h5>
+            <p style="font-size:.88rem;color:#64748b;">Your first real-world API integration project. You'll learn how to fetch data from an external REST API (OpenWeatherMap), handle loading and error states, and display dynamic data in a clean UI. This project introduces useEffect and the asynchronous patterns that you'll use in virtually every React app.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">useEffect</span>
+              <span class="badge bg-secondary me-1 mt-1">fetch API</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Loading States</span>
+              <span class="badge bg-success me-1 mt-1">Error Handling</span>
+              <span class="badge bg-warning text-dark me-1 mt-1">Async/Await</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>City search input that triggers an API call</li>
+                <li>Current temperature, humidity, wind speed display</li>
+                <li>Weather condition icon from the API response</li>
+                <li>Loading spinner while data is being fetched</li>
+                <li>User-friendly error message for invalid cities</li>
+                <li>Toggle between Celsius and Fahrenheit</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">OpenWeatherMap API</span>
+              <span class="badge bg-dark me-1 mt-1">useEffect</span>
+              <span class="badge bg-dark me-1 mt-1">fetch</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> useEffect's dependency array controls when the effect runs. An empty array <code>[]</code> means run once on mount. Adding a variable like <code>[city]</code> means re-run whenever city changes. Always handle the three states of async data: loading, success, and error — never assume the API call will succeed.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #04 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#04</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Calculator App</h5>
+            <p style="font-size:.88rem;color:#64748b;">Building a functional calculator is a deceptively tricky logic exercise that sharpens your component design thinking. You'll manage complex state transitions (operand entry, operator selection, equals evaluation) and learn how to model UI state as a finite state machine in your head, even without a formal library.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">useState</span>
+              <span class="badge bg-secondary me-1 mt-1">State Machine Logic</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Event Delegation</span>
+              <span class="badge bg-success me-1 mt-1">Math Operations</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Full numeric keypad (0-9) with decimal point support</li>
+                <li>Arithmetic operators: +, -, *, / with correct precedence</li>
+                <li>Display showing current input and running expression</li>
+                <li>Clear (AC) and backspace (DEL) functionality</li>
+                <li>Percentage (%) and sign-flip (+/-) buttons</li>
+                <li>Keyboard support for all calculator operations</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useState</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Grid</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> When state transitions become complex (multiple interdependent state variables), consider migrating from useState to useReducer. A reducer lets you express all possible actions and their state transitions in one place, making the logic easier to reason about and test. This calculator is a perfect use case for useReducer.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #05 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#05</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Quiz App</h5>
+            <p style="font-size:.88rem;color:#64748b;">A multiple-choice quiz application that teaches conditional rendering, component composition, and score tracking. You'll learn how to step through a sequence of questions and display different UI based on the current state — an extremely common pattern in forms, wizards, and onboarding flows.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Conditional Rendering</span>
+              <span class="badge bg-secondary me-1 mt-1">Array Indexing</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Component Composition</span>
+              <span class="badge bg-success me-1 mt-1">Score Tracking</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Welcome screen with topic selection and quiz start button</li>
+                <li>Question display with 4 multiple-choice answer buttons</li>
+                <li>Immediate visual feedback: green for correct, red for wrong</li>
+                <li>Progress bar showing current question out of total</li>
+                <li>Score summary screen at the end with correct/incorrect breakdown</li>
+                <li>Restart functionality that shuffles question order</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useState</span>
+              <span class="badge bg-dark me-1 mt-1">JSON Data</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Animations</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Conditional rendering is the heart of interactive UIs. Use ternary operators for simple conditions, logical AND (<code>&amp;&amp;</code>) for showing/hiding elements, and separate component functions for distinct views (start screen vs quiz vs results). Avoid deeply nested ternaries — they become unreadable fast.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #06 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#06</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Color Picker Tool</h5>
+            <p style="font-size:.88rem;color:#64748b;">Build a tool that lets users generate, explore, and copy color values in multiple formats (HEX, RGB, HSL). This project is all about controlled inputs and derived state — you'll learn how to keep multiple representations of the same data in sync without duplicating state, which is a critical React skill.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Controlled Inputs</span>
+              <span class="badge bg-secondary me-1 mt-1">Derived State</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Color Math</span>
+              <span class="badge bg-success me-1 mt-1">Clipboard API</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Native color input (type="color") as primary picker</li>
+                <li>Live preview panel showing the selected color</li>
+                <li>HEX, RGB, and HSL representations updated in real-time</li>
+                <li>Copy-to-clipboard button for each format with toast feedback</li>
+                <li>Random color generator button for inspiration</li>
+                <li>Saved color palette with localStorage persistence</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useState</span>
+              <span class="badge bg-dark me-1 mt-1">Clipboard API</span>
+              <span class="badge bg-dark me-1 mt-1">Color Conversion</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Don't store the same data in multiple state variables — store the minimal representation (one HEX value) and derive everything else during render. This is the "single source of truth" principle. It prevents sync bugs where two variables get out of sync with each other.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #07 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#07</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Markdown Previewer</h5>
+            <p style="font-size:.88rem;color:#64748b;">A live markdown editor that renders formatted HTML output in real-time as you type. This project teaches the controlled input pattern, how to safely render HTML in React using dangerouslySetInnerHTML, and introduces you to the concept of third-party npm packages for React applications.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Controlled Textarea</span>
+              <span class="badge bg-secondary me-1 mt-1">dangerouslySetInnerHTML</span>
+              <span class="badge bg-info text-dark me-1 mt-1">npm Packages</span>
+              <span class="badge bg-success me-1 mt-1">Split Pane UI</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Split-pane layout with editor on left, preview on right</li>
+                <li>Markdown textarea with monospace font and line numbers</li>
+                <li>Live HTML preview using the marked.js library</li>
+                <li>Toolbar buttons for bold, italic, link, image, code block</li>
+                <li>Download button to save the markdown file</li>
+                <li>Word and character count display in the status bar</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">marked.js</span>
+              <span class="badge bg-dark me-1 mt-1">DOMPurify</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Flexbox</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> <code>dangerouslySetInnerHTML</code> bypasses React's XSS protection — it's dangerous when used with user-generated content rendered to others. Always sanitize HTML with DOMPurify before injecting it. This project teaches you both how to use the escape hatch and why the safety warning exists.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #08 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#08</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Random Quote Generator</h5>
+            <p style="font-size:.88rem;color:#64748b;">A beautifully styled quote card that fetches and displays random quotes from an API. This project reinforces useEffect and async data fetching while also teaching you about CSS transitions and animations — because a quote generator without a smooth card flip animation is just a div with text.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">useEffect</span>
+              <span class="badge bg-secondary me-1 mt-1">fetch API</span>
+              <span class="badge bg-info text-dark me-1 mt-1">CSS Transitions</span>
+              <span class="badge bg-success me-1 mt-1">Social Sharing</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Large quote card with author attribution and decorative quote marks</li>
+                <li>New Quote button with fade-out/fade-in transition animation</li>
+                <li>Tweet button that opens Twitter with the quote pre-filled</li>
+                <li>Category filter to get quotes by topic (motivational, funny, wisdom)</li>
+                <li>Favorites list saved to localStorage with delete capability</li>
+                <li>Background gradient that changes with each new quote</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">Quotable API</span>
+              <span class="badge bg-dark me-1 mt-1">useEffect</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Transitions</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Animate between state changes by briefly setting an "exiting" CSS class when content is about to change, waiting for the CSS transition to complete, then swapping in the new content and setting an "entering" class. This technique works for any content transition and doesn't require an animation library.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #09 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#09</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Stopwatch &amp; Timer</h5>
+            <p style="font-size:.88rem;color:#64748b;">Build a precision stopwatch and countdown timer that uses setInterval inside useEffect. This project is specifically designed to teach you about effect cleanup — one of the most commonly misunderstood aspects of React hooks. Without proper cleanup, your app will leak memory and display incorrect time values.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">useEffect Cleanup</span>
+              <span class="badge bg-secondary me-1 mt-1">setInterval</span>
+              <span class="badge bg-info text-dark me-1 mt-1">useRef</span>
+              <span class="badge bg-success me-1 mt-1">Time Formatting</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Digital display showing HH:MM:SS:ms with monospace font</li>
+                <li>Start, Stop, and Reset controls</li>
+                <li>Lap functionality that records split times in a scrollable list</li>
+                <li>Countdown timer mode with custom time input</li>
+                <li>Alarm sound when countdown reaches zero</li>
+                <li>Tab title updates with current time while running</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useEffect</span>
+              <span class="badge bg-dark me-1 mt-1">useRef</span>
+              <span class="badge bg-dark me-1 mt-1">Web Audio API</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Always return a cleanup function from useEffect when using setInterval or setTimeout. Without cleanup, the interval keeps firing even after the component unmounts, causing "Can't perform state update on unmounted component" warnings and memory leaks. Use useRef to store the interval ID so it persists across renders without triggering re-renders.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #10 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#10</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Image Gallery</h5>
+            <p style="font-size:.88rem;color:#64748b;">A responsive photo gallery with a lightbox modal for full-screen viewing. This project introduces the concept of a modal overlay — one of the most common UI patterns in the web — and teaches you how to manage body scroll locking, keyboard escape handling, and focus trapping for accessibility.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Modal/Lightbox</span>
+              <span class="badge bg-secondary me-1 mt-1">CSS Grid Masonry</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Keyboard Events</span>
+              <span class="badge bg-success me-1 mt-1">Lazy Loading</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Masonry-style grid layout using CSS columns</li>
+                <li>Image cards with hover overlay showing title and zoom icon</li>
+                <li>Full-screen lightbox with next/previous navigation</li>
+                <li>Keyboard support: Escape to close, arrow keys to navigate</li>
+                <li>Search/filter by image category or tag</li>
+                <li>Lazy loading with intersection observer for performance</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">Unsplash API</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Columns</span>
+              <span class="badge bg-dark me-1 mt-1">IntersectionObserver</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> When a modal is open, add a keydown event listener to the document for Escape key handling and lock body scroll with <code>document.body.style.overflow = 'hidden'</code>. Use useEffect to add these listeners and clean them up properly. This is a real-world pattern used in every production app with modals.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #11 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#11</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Expense Tracker</h5>
+            <p style="font-size:.88rem;color:#64748b;">A personal finance tracker that lets users log income and expenses, see a running balance, and visualize their spending. This project introduces more complex state shapes (arrays of objects), form validation, and computed values — you'll learn how to derive summary statistics from raw data without duplicating state.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Complex State</span>
+              <span class="badge bg-secondary me-1 mt-1">Form Validation</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Derived Values</span>
+              <span class="badge bg-success me-1 mt-1">Data Visualization</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Balance display card showing total income, expenses, and net balance</li>
+                <li>Transaction entry form with description, amount, and type selection</li>
+                <li>Scrollable transaction history list with color-coded income/expense rows</li>
+                <li>Delete transaction with instant balance recalculation</li>
+                <li>Category breakdown as percentage bars (food, transport, utilities)</li>
+                <li>Export transactions as CSV for download</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Custom Props</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Derive computed values like total balance during render using <code>reduce()</code> on the transactions array. Do not store the total as a separate state variable — it will get out of sync. When your state has multiple related actions (add, delete, edit transactions), useReducer is cleaner than multiple useState calls.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #12 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#12</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Recipe Finder App</h5>
+            <p style="font-size:.88rem;color:#64748b;">Search and browse recipes using the MealDB or Spoonacular API. This project ties together everything you've learned so far: API calls, loading states, search with debouncing, and routing between a list view and a detail view. It's the first project where you'll use React Router.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">React Router</span>
+              <span class="badge bg-secondary me-1 mt-1">Search Debouncing</span>
+              <span class="badge bg-info text-dark me-1 mt-1">API Pagination</span>
+              <span class="badge bg-success me-1 mt-1">useParams</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Homepage with featured recipes and category browsing</li>
+                <li>Search bar with debounced API calls (no request on every keystroke)</li>
+                <li>Recipe grid with thumbnail, title, and prep time</li>
+                <li>Recipe detail page with ingredients, instructions, and video embed</li>
+                <li>Saved recipes feature with localStorage persistence</li>
+                <li>Filter by dietary preferences (vegetarian, gluten-free)</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+              <span class="badge bg-dark me-1 mt-1">MealDB API</span>
+              <span class="badge bg-dark me-1 mt-1">useCallback</span>
+              <span class="badge bg-dark me-1 mt-1">Debounce</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Debounce search inputs to avoid firing an API call on every single keypress. Use a useEffect with a setTimeout that clears on every new keystroke — this ensures the API is only called when the user stops typing for 300-500ms. This dramatically reduces API quota usage and improves performance.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #13 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#13</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Memory Card Game</h5>
+            <p style="font-size:.88rem;color:#64748b;">A classic memory matching game that challenges you to model game state correctly. You'll manage card flipping, matched pair tracking, and move counting — all as immutable state updates. The shuffle algorithm and flip animation make this one of the most satisfying beginner projects to complete.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Array Shuffling</span>
+              <span class="badge bg-secondary me-1 mt-1">Game State</span>
+              <span class="badge bg-info text-dark me-1 mt-1">CSS 3D Flip</span>
+              <span class="badge bg-success me-1 mt-1">useEffect Logic</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>4x4 (or larger) grid of face-down cards</li>
+                <li>3D CSS flip animation when a card is selected</li>
+                <li>Match detection when two flipped cards have the same symbol</li>
+                <li>Non-matched cards flip back after a brief delay</li>
+                <li>Move counter and elapsed timer</li>
+                <li>Win screen with star rating based on number of moves</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+                <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useState</span>
+              <span class="badge bg-dark me-1 mt-1">useEffect</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Transform</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Use a useEffect that watches the "flipped cards" array — when its length reaches 2, check for a match using a setTimeout to add a visual pause before flipping back. Never call setState during render. The Fisher-Yates shuffle algorithm ensures a truly random card layout on each new game.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #14 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#14</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">GitHub Profile Viewer</h5>
+            <p style="font-size:.88rem;color:#64748b;">Fetch and display GitHub user profiles and repositories using the public GitHub REST API. This project is excellent for your portfolio because every developer knows how to evaluate the result. You'll practice API error handling, conditional rendering, and displaying lists of data with sorting and filtering.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">REST API</span>
+              <span class="badge bg-secondary me-1 mt-1">Error Boundaries</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Sorting/Filtering</span>
+              <span class="badge bg-success me-1 mt-1">Profile Cards</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Username search that fetches profile from GitHub API</li>
+                <li>Profile card with avatar, bio, follower/following counts</li>
+                <li>Paginated repository list with stars, forks, and language badges</li>
+                <li>Sort repos by stars, forks, or recently updated</li>
+                <li>Recent activity feed using the GitHub events API</li>
+                <li>Link to view the profile on GitHub.com</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">GitHub REST API</span>
+              <span class="badge bg-dark me-1 mt-1">useEffect</span>
+              <span class="badge bg-dark me-1 mt-1">Axios</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The GitHub API returns a 404 for non-existent users — always handle non-2xx HTTP responses explicitly. With fetch(), a 404 doesn't throw an error; you must check <code>response.ok</code> manually. With Axios, non-2xx responses do throw, making error handling cleaner. This distinction is fundamental.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #15 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#15</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Pomodoro Timer</h5>
+            <p style="font-size:.88rem;color:#64748b;">A productivity timer based on the Pomodoro Technique — 25-minute focused work sessions followed by 5-minute breaks. This project deepens your understanding of interval-based timers, audio notifications, and multi-mode state management. It's also genuinely useful, making it great for your personal toolkit.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Multi-mode State</span>
+              <span class="badge bg-secondary me-1 mt-1">setInterval</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Audio Notifications</span>
+              <span class="badge bg-success me-1 mt-1">Circular Progress</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Circular SVG progress ring that depletes as time runs out</li>
+                <li>Work/break mode toggling with distinct color themes</li>
+                <li>Customizable session and break durations</li>
+                <li>Browser notification and sound alert when session ends</li>
+                <li>Session counter tracking completed pomodoros</li>
+                <li>Task list integration to associate tasks with sessions</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">SVG Animation</span>
+              <span class="badge bg-dark me-1 mt-1">Notification API</span>
+              <span class="badge bg-dark me-1 mt-1">Web Audio</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The SVG stroke-dashoffset technique creates a smooth circular progress bar. Calculate the circumference of your circle (2πr), set it as stroke-dasharray, and animate stroke-dashoffset from 0 to the circumference as time passes. This is a reusable pattern for any circular progress indicator.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #16 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#16</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Typing Speed Test</h5>
+            <p style="font-size:.88rem;color:#64748b;">A WPM (words per minute) typing speed test that displays sample text and measures how fast and accurately the user types. This project teaches you about character-level string comparison, real-time state updates, and how to use refs to manage focus programmatically — skills that appear in many professional form implementations.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">String Comparison</span>
+              <span class="badge bg-secondary me-1 mt-1">useRef Focus</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Real-time Feedback</span>
+              <span class="badge bg-success me-1 mt-1">WPM Calculation</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Random paragraph display with character-level highlighting</li>
+                <li>Input area that auto-focuses and starts the timer on first keypress</li>
+                <li>Correct characters shown in green, incorrect in red, remaining in grey</li>
+                <li>Live WPM, accuracy percentage, and time-remaining counters</li>
+                <li>Results modal showing final WPM, accuracy, and errors</li>
+                <li>Difficulty selector (easy/medium/hard word complexity)</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useRef</span>
+              <span class="badge bg-dark me-1 mt-1">useState</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Span Coloring</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Render the sample text as an array of individual character <code>&lt;span&gt;</code> elements, each colored based on the typed input at that index. Split the target string and the typed string into arrays and compare index by index. This pattern — rendering an array of elements with computed styles — is core to React.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #17 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#17</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Movie Search App</h5>
+            <p style="font-size:.88rem;color:#64748b;">Search for movies using the OMDB or TMDB API and display rich results with posters, ratings, and descriptions. This project practises pagination, search result rendering, and linking to a detail view — very similar to what you'd build for any content-browsing feature in a real production application.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">API Pagination</span>
+              <span class="badge bg-secondary me-1 mt-1">Search State</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Image Fallbacks</span>
+              <span class="badge bg-success me-1 mt-1">React Router</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Movie search with real-time results as you type</li>
+                <li>Movie cards showing poster, title, year, and IMDb rating</li>
+                <li>Fallback placeholder when poster image is unavailable</li>
+                <li>Movie detail page with cast, plot, genre, and trailer link</li>
+                <li>Watchlist feature with add/remove and localStorage persistence</li>
+                <li>Infinite scroll or paginated load-more button</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+              <span class="badge bg-dark me-1 mt-1">OMDB API</span>
+              <span class="badge bg-dark me-1 mt-1">Axios</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Grid</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Handle missing images gracefully using the <code>onError</code> event on the img tag to swap in a placeholder. Store the search query in the URL using React Router's useSearchParams hook — this makes search results shareable and allows the browser back button to return to previous searches. URL-based state is a professional-grade pattern.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #18 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#18</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Multi-Step Form Wizard</h5>
+            <p style="font-size:.88rem;color:#64748b;">A multi-step registration or checkout form that collects data across several pages and validates each step before proceeding. This project introduces form state management, step-based navigation, and inline validation — patterns that are absolutely essential in enterprise React applications.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Multi-step Forms</span>
+              <span class="badge bg-secondary me-1 mt-1">Form Validation</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Step Navigation</span>
+              <span class="badge bg-success me-1 mt-1">Progress Indicator</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>4-step form: Personal Info → Address → Account → Review</li>
+                <li>Step progress indicator showing completed/current/upcoming steps</li>
+                <li>Field-level validation with error messages displayed inline</li>
+                <li>Back navigation that preserves previously entered data</li>
+                <li>Review step showing a summary of all entered information</li>
+                <li>Final submission with loading state and success confirmation</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useState</span>
+              <span class="badge bg-dark me-1 mt-1">React Hook Form</span>
+              <span class="badge bg-dark me-1 mt-1">Yup Validation</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Store the entire form state as a single object at the top level (the wizard component) and pass update functions down as props. This is classic "lifting state up" — each step form modifies a slice of the shared state. React Hook Form with Yup schema validation dramatically reduces boilerplate for complex forms.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #19 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#19</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">Currency Converter</h5>
+            <p style="font-size:.88rem;color:#64748b;">A real-time currency converter that uses an exchange rate API to convert between 150+ world currencies. This seemingly simple project teaches bidirectional controlled inputs (changing the "from" amount updates the "to" amount and vice versa), API key management, and working with numerical precision in JavaScript.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Bidirectional State</span>
+              <span class="badge bg-secondary me-1 mt-1">Exchange Rate API</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Number Formatting</span>
+              <span class="badge bg-success me-1 mt-1">Select Inputs</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Two currency selectors with flags and full currency names</li>
+                <li>Bidirectional amount inputs that stay in sync</li>
+                <li>Swap button to instantly reverse the conversion direction</li>
+                <li>Live exchange rate display with last-updated timestamp</li>
+                <li>Conversion history log for the current session</li>
+                <li>Favorite currency pairs for quick access</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">ExchangeRate API</span>
+              <span class="badge bg-dark me-1 mt-1">Intl.NumberFormat</span>
+              <span class="badge bg-dark me-1 mt-1">useState</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Use JavaScript's built-in <code>Intl.NumberFormat</code> API to format currencies correctly with proper locale-aware decimal separators and currency symbols — different currencies have different decimal places (JPY has 0, USD has 2, KWD has 3). Never hardcode <code>.toFixed(2)</code> for all currencies.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #20 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#20</span>
+              <span class="diff-beginner">Beginner</span>
+            </div>
+            <h5 class="fw-700 mb-2">News Aggregator</h5>
+            <p style="font-size:.88rem;color:#64748b;">A news reader that pulls headlines from multiple sources via the NewsAPI and lets users filter by category, source, or keyword. This capstone beginner project brings together routing, API calls, search, filtering, and a polished card-based layout — it's the most complete project in the beginner tier.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Multiple APIs</span>
+              <span class="badge bg-secondary me-1 mt-1">Category Filtering</span>
+              <span class="badge bg-info text-dark me-1 mt-1">useSearchParams</span>
+              <span class="badge bg-success me-1 mt-1">Skeleton Loading</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Navigation with category tabs: Top Stories, Tech, Sports, Business</li>
+                <li>News cards with thumbnail, headline, source, and time since published</li>
+                <li>Skeleton loading cards displayed while articles are being fetched</li>
+                <li>Keyword search with URL query parameter sync</li>
+                <li>Read-later bookmarks saved to localStorage</li>
+                <li>Share button with native Web Share API for mobile</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+              <span class="badge bg-dark me-1 mt-1">NewsAPI</span>
+              <span class="badge bg-dark me-1 mt-1">Axios</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Skeleton</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Skeleton loaders (grey animated placeholders) provide a far better UX than a spinner because they communicate the shape of the content that's loading. Build them with a CSS shimmer animation on placeholder divs that match the final card layout. This technique is used on LinkedIn, Facebook, YouTube, and almost every major app.</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /row beginner -->
+
+      <!-- Beginner CTA -->
+      <div class="text-center mt-4 mb-2">
+        <a href="projects-beginner.html" class="btn btn-lg fw-700" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;border-radius:50px;padding:.75rem 2.5rem;font-size:1.05rem;">
+          <i class="bi bi-code-slash me-2"></i>View Full Code for All 20 Beginner Projects
+        </a>
+      </div>
+
+    </div><!-- /beginner tab -->
+
+    <!-- ===== INTERMEDIATE TAB ===== -->
+    <div class="tab-pane fade" id="intermediate" role="tabpanel">
+      <div class="row g-4">
+
+        <!-- #21 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#21</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Kanban Board</h5>
+            <p style="font-size:.88rem;color:#64748b;">A Trello-inspired drag-and-drop task board where users can organize work across columns like To Do, In Progress, and Done. This project introduces the HTML5 Drag and Drop API (or react-beautiful-dnd), complex nested state updates, and optimistic UI updates — all essential skills for building collaborative tools.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Drag and Drop</span>
+              <span class="badge bg-secondary me-1 mt-1">Nested State</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Optimistic UI</span>
+              <span class="badge bg-success me-1 mt-1">useContext</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Multiple columns representing workflow stages</li>
+                <li>Draggable task cards with title, description, and assignee avatar</li>
+                <li>Drag between columns and reorder within a column</li>
+                <li>Add new columns and tasks with inline editing</li>
+                <li>Task labels with color coding and priority levels</li>
+                <li>Column task count badges and completion progress bars</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">react-beautiful-dnd</span>
+              <span class="badge bg-dark me-1 mt-1">useContext</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Model your board state as an object with column IDs as keys and arrays of task IDs as values, plus a separate tasks lookup map. This normalized data structure makes reordering and moving tasks between columns an O(1) array splice operation rather than a nested search. This is the same pattern Redux recommends for entity state.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #22 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#61dafb;font-size:1.1rem;">#22</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">E-Commerce Product Page</h5>
+            <p style="font-size:.88rem;color:#64748b;">Build a full-featured product detail page with variant selection, image gallery, add-to-cart functionality, and a slide-out cart drawer. This is one of the highest-value portfolio projects for frontend roles because almost every company sells something online. The cart state management is particularly instructive.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Cart State</span>
+              <span class="badge bg-secondary me-1 mt-1">Context API</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Image Gallery</span>
+              <span class="badge bg-success me-1 mt-1">Variant Selection</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Product image gallery with thumbnail navigation and zoom</li>
+                <li>Size and color variant selector with stock indicators</li>
+                <li>Quantity picker with min/max bounds</li>
+                <li>Add to Cart button with animated cart icon badge update</li>
+                <li>Slide-out cart drawer with item list, subtotal, and checkout button</li>
+                <li>Related products carousel using CSS scroll snap</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">Context API</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Scroll Snap</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Use React Context + useReducer to create a CartContext that any component in the tree can subscribe to. When adding an item already in the cart, increment its quantity rather than duplicating the entry. The cart reducer pattern is exactly what you'd use in a real production storefront — master it here before adding Redux later.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #23 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#23</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Movie Search App (TMDB API)</h5>
+            <p style="font-size:.88rem;color:#64748b;">Search millions of movies and TV shows using The Movie Database API. Features debounced search to avoid hammering the API, star ratings, a personal watchlist saved to localStorage, and a details modal showing cast, crew, and trailer links. This project teaches the complete async data-fetching lifecycle.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">API Debouncing</span>
+              <span class="badge bg-secondary me-1 mt-1">useCallback</span>
+              <span class="badge bg-info text-dark me-1 mt-1">TMDB API</span>
+              <span class="badge bg-success me-1 mt-1">Modal</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Debounced search input that fires only after 300ms pause</li>
+                <li>Movie grid with poster, title, year, and star rating</li>
+                <li>Watchlist sidebar with add/remove and localStorage persistence</li>
+                <li>Details modal with full cast, budget, revenue, and trailer embed</li>
+                <li>Genre filter chips to narrow results by category</li>
+                <li>Loading skeleton cards and graceful error state UI</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">TMDB API</span>
+              <span class="badge bg-dark me-1 mt-1">useCallback</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Implement debouncing with useEffect cleanup: inside the effect, set a setTimeout that calls the API, and return a cleanup function that calls clearTimeout. When the user types again before 300ms, the previous timeout is cleared and a new one starts. Only the final keystroke's timeout completes — this is clean, no-library debouncing.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #24 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#24</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Multi-Step Form Wizard</h5>
+            <p style="font-size:.88rem;color:#64748b;">A 4-step registration wizard with Personal Info, Address, Account Setup, and Review screens. Includes a progress bar, per-step validation that blocks advancing on invalid input, back navigation that preserves entered data, and a final review screen before submission. This is the most commonly asked form pattern in frontend interviews.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Multi-step State</span>
+              <span class="badge bg-secondary me-1 mt-1">Form Validation</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Progress Bar</span>
+              <span class="badge bg-success me-1 mt-1">useReducer</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Animated step progress bar with completed/current/future states</li>
+                <li>Step 1: Name, email, phone with regex validation</li>
+                <li>Step 2: Address with country/state dependent dropdowns</li>
+                <li>Step 3: Password with strength meter and confirmation match</li>
+                <li>Step 4: Review summary of all entered data before submit</li>
+                <li>Inline field errors that appear on blur, clear on fix</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">Custom Validation</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Transitions</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Store all form data as a single object managed by a top-level useReducer. Each step receives a slice of the data and a dispatch function. Validate only the current step's fields on "Next" — this avoids the jarring experience of showing errors on fields the user hasn't reached yet. This is the pattern behind React Hook Form's multi-step support.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #25 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#25</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Blog with Full CRUD</h5>
+            <p style="font-size:.88rem;color:#64748b;">A complete client-side blog application where you can create, read, update, and delete posts — with no backend required. Features rich text editing via contentEditable, a tag/category system, full-text search, and client-side pagination. This project forces you to think carefully about mutable state in React.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">CRUD Operations</span>
+              <span class="badge bg-secondary me-1 mt-1">Pagination</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Tag System</span>
+              <span class="badge bg-success me-1 mt-1">Search Filter</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Post list view with pagination (5 posts per page)</li>
+                <li>Post detail view with author, date, reading time estimate</li>
+                <li>Create/Edit form with title, body, tags, and cover image URL</li>
+                <li>Delete with confirmation modal to prevent accidental removal</li>
+                <li>Real-time search filtering with highlighted match text</li>
+                <li>Tag filter sidebar that updates the post list instantly</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+              <span class="badge bg-dark me-1 mt-1">useContext</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Client-side pagination: never mutate the source array. Instead, derive a display slice: const visible = filteredPosts.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE). When the search query changes, reset page to 0 first — otherwise users see an empty page because they're on page 3 of a 1-page filtered result.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #26 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#26</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Real-time Chat UI</h5>
+            <p style="font-size:.88rem;color:#64748b;">A polished chat interface that simulates real-time messaging without a backend. Features message bubbles with timestamps, a typing indicator that appears after 500ms of inactivity, an emoji picker, online/offline user status, and automatic scroll-to-bottom on new messages. Teaches critical useRef and useEffect patterns.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">useRef</span>
+              <span class="badge bg-secondary me-1 mt-1">useEffect</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Auto-scroll</span>
+              <span class="badge bg-success me-1 mt-1">Typing Indicator</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Chat sidebar with contact list and unread message badges</li>
+                <li>Message bubbles (sent/received) with timestamps</li>
+                <li>Typing indicator with animated dots (CSS keyframes)</li>
+                <li>Emoji picker grid that inserts emoji at cursor position</li>
+                <li>Message reactions (thumbs up, heart, laugh) on hover</li>
+                <li>Auto-scroll sentinel div that scrolls into view on new message</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useRef</span>
+              <span class="badge bg-dark me-1 mt-1">useEffect</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Animations</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Place an empty div at the bottom of the message list and attach a useRef to it. In a useEffect that depends on the messages array, call messagesEndRef.current?.scrollIntoView({behavior: 'smooth'}). This correctly scrolls after the DOM has been updated — not before — because effects run after paint.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #27 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#27</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Analytics Dashboard with SVG Charts</h5>
+            <p style="font-size:.88rem;color:#64748b;">An admin dashboard with collapsible sidebar navigation, animated KPI stat cards, and hand-crafted SVG line and bar charts — all built without any charting library. Includes a date range filter that updates the charts in real-time. Building charts from scratch teaches the math behind every visualization tool you'll ever use.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">SVG Drawing</span>
+              <span class="badge bg-secondary me-1 mt-1">useMemo</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Responsive Layout</span>
+              <span class="badge bg-success me-1 mt-1">Animated Numbers</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Collapsible sidebar with icon-only and expanded modes</li>
+                <li>4 animated KPI cards (Revenue, Users, Orders, Conversion)</li>
+                <li>SVG line chart with gradient area fill and hover tooltips</li>
+                <li>SVG bar chart with animated bar growth on mount</li>
+                <li>Activity feed with relative timestamps (2 hours ago)</li>
+                <li>Date range picker that re-derives chart data via useMemo</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">SVG</span>
+              <span class="badge bg-dark me-1 mt-1">useMemo</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Grid</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Normalize data values to fit your SVG viewBox: xPos = (index / (data.length - 1)) * svgWidth, yPos = svgHeight - (value / maxValue) * svgHeight. Build a polyline points string from these coordinates. Wrap this calculation in useMemo — it only needs to recalculate when the data or dimensions change, not on every render.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #28 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#28</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Music Player UI</h5>
+            <p style="font-size:.88rem;color:#64748b;">A Spotify-inspired music player with a playlist sidebar, play/pause/skip/seek controls, an animated progress bar that updates smoothly, volume control, shuffle and repeat modes, and album artwork that drives the color theme. This project gives deep useRef practice with the HTML Audio API.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Audio API</span>
+              <span class="badge bg-secondary me-1 mt-1">useRef</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Progress Bar</span>
+              <span class="badge bg-success me-1 mt-1">Shuffle Logic</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Player controls: play, pause, previous, next, seek by clicking progress bar</li>
+                <li>Volume slider with mute toggle and persistent volume preference</li>
+                <li>Shuffle mode using Fisher-Yates algorithm to randomize the queue</li>
+                <li>Repeat: Off / Repeat One / Repeat All cycling mode</li>
+                <li>Animated equalizer bars on the currently playing track</li>
+                <li>Playlist with drag-to-reorder and right-click context menu</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">HTML Audio API</span>
+              <span class="badge bg-dark me-1 mt-1">useRef</span>
+              <span class="badge bg-dark me-1 mt-1">requestAnimationFrame</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The HTML Audio element's currentTime and duration are DOM properties — they change 60 times per second. Don't sync them to React state (that would cause 60 re-renders/second). Instead, read them directly from the ref in a requestAnimationFrame loop, updating only the progress bar's width style property via the DOM directly.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #29 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#29</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Expense Tracker with SVG Charts</h5>
+            <p style="font-size:.88rem;color:#64748b;">Track income and expenses with category breakdowns visualized as hand-drawn SVG pie and bar charts — no charting library required. Features a monthly budget limit system, CSV export, and a full transaction history with filters. The SVG math teaches data visualization from first principles.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">useReducer</span>
+              <span class="badge bg-secondary me-1 mt-1">SVG Charts</span>
+              <span class="badge bg-info text-dark me-1 mt-1">localStorage</span>
+              <span class="badge bg-success me-1 mt-1">CSV Export</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Income/expense form with category dropdown and date picker</li>
+                <li>Running balance display with color-coded positive/negative states</li>
+                <li>SVG pie chart breaking down spending by category</li>
+                <li>SVG bar chart comparing monthly income vs expenses</li>
+                <li>Monthly budget limits per category with warning indicators</li>
+                <li>CSV export button that generates a downloadable file</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">SVG</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> SVG pie chart math: convert each category's percentage to an arc. Use polarToCartesian(cx, cy, r, angle) to get x/y coordinates. Build each slice with an SVG path using the M (move), A (arc), L (line), Z (close) commands. Use useReducer here — all state transitions (add, delete, update balance) happen atomically.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #30 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#30</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Memory Card Game</h5>
+            <p style="font-size:.88rem;color:#64748b;">Flip emoji card pairs to find all matches before the timer runs out. Features smooth CSS 3D card flip animation, match detection logic, a move counter, countdown timer, victory screen with stats, and three difficulty levels. This project teaches CSS transforms, game state management, and React timing patterns.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">CSS 3D Transforms</span>
+              <span class="badge bg-secondary me-1 mt-1">Game Logic</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Timer</span>
+              <span class="badge bg-success me-1 mt-1">Array Shuffle</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>CSS 3D card flip using perspective + transform-style: preserve-3d</li>
+                <li>Fisher-Yates shuffle for randomizing card layout on each game</li>
+                <li>Match detection: 600ms reveal window before non-matches flip back</li>
+                <li>Countdown timer with interval cleanup via useEffect return function</li>
+                <li>3 difficulty levels: Easy (4×3), Medium (4×4), Hard (6×4)</li>
+                <li>Victory screen showing time, moves, and best score from localStorage</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Transforms</span>
+              <span class="badge bg-dark me-1 mt-1">useEffect</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The card flip uses CSS: .card-inner { transform-style: preserve-3d; transition: transform .6s; } .flipped .card-inner { transform: rotateY(180deg); } .card-front, .card-back { backface-visibility: hidden; } .card-back { transform: rotateY(180deg); }. The game logic should lock input during the 600ms "peeking" delay using a isLocked state flag to prevent a third card flip breaking the matching logic.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #31 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#31</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Habit Tracker</h5>
+            <p style="font-size:.88rem;color:#64748b;">A daily habit tracking app with streak counters, a GitHub-style 30-day calendar heatmap showing completion history, and motivational milestones. Users can add custom habits, mark them complete, and view long-term trends. The heatmap is built from scratch with pure React and CSS grid — no libraries needed.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Date Arithmetic</span>
+              <span class="badge bg-secondary me-1 mt-1">Calendar Heatmap</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Streak Logic</span>
+              <span class="badge bg-success me-1 mt-1">localStorage</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Add/archive habits with name, icon, and target frequency</li>
+                <li>Daily check-off UI with satisfying completion animation</li>
+                <li>Streak counter that resets if a day is missed</li>
+                <li>30-day heatmap grid with 4 completion intensity colors</li>
+                <li>Weekly summary bar chart (days completed / days in week)</li>
+                <li>Milestone badges for 7-day, 30-day, 100-day streaks</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">Date API</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> For the heatmap, generate an array of the last 30 date strings (YYYY-MM-DD format). For each date, check if it exists in the habit's completion record. Store completions as a Set of date strings for O(1) lookups. Streak calculation: walk backwards from today, stop when you find a missing date.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #32 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#32</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Budget Planner App</h5>
+            <p style="font-size:.88rem;color:#64748b;">A monthly budget management tool where users set income, allocate budgets across spending categories, and track actual spending against limits. Features color-coded progress bars that turn red when over budget, a monthly snapshot history, and budget vs actual comparison charts built with SVG.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Budget Logic</span>
+              <span class="badge bg-secondary me-1 mt-1">Progress Bars</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Category System</span>
+              <span class="badge bg-success me-1 mt-1">useReducer</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Income input with monthly/annual toggle that converts automatically</li>
+                <li>50/30/20 budget rule suggestion with one-click apply</li>
+                <li>Category cards with budget limit, spent amount, and progress bar</li>
+                <li>Over-budget warning state with red color and alert icon</li>
+                <li>Add transactions that automatically decrement category budgets</li>
+                <li>Monthly snapshot to save and compare budgets across months</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">Intl.NumberFormat</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Currency formatting should always use Intl.NumberFormat, not manual string manipulation — it handles locale-specific separators and currency symbols. For the progress bar: width = Math.min((spent / budget) * 100, 100)% to prevent overflow. Derive the "over budget" flag from state rather than storing it separately.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #33 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#33</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Advanced Image Carousel</h5>
+            <p style="font-size:.88rem;color:#64748b;">A production-quality image carousel component with auto-play, pause-on-hover, thumbnail strip navigation, dot indicators, keyboard arrow support, swipe gestures on mobile, and a lightbox fullscreen mode. Goes far beyond a basic slider — this is a reusable component you can drop into any project.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Touch Events</span>
+              <span class="badge bg-secondary me-1 mt-1">useInterval</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Keyboard Nav</span>
+              <span class="badge bg-success me-1 mt-1">CSS Transitions</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Smooth CSS slide transition with configurable duration</li>
+                <li>Auto-play with useInterval custom hook, pauses on hover</li>
+                <li>Thumbnail strip that scrolls to show the active thumbnail</li>
+                <li>Dot indicators that are clickable for direct navigation</li>
+                <li>Touch/swipe detection using onTouchStart/onTouchEnd delta</li>
+                <li>Fullscreen lightbox mode with backdrop overlay</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Transitions</span>
+              <span class="badge bg-dark me-1 mt-1">Touch Events API</span>
+              <span class="badge bg-dark me-1 mt-1">useInterval Hook</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Build a useInterval custom hook: it takes a callback and a delay, uses useEffect to set/clear the interval, and stores the callback in a useRef so the interval doesn't need to restart when the callback changes. This pattern was popularized by Dan Abramov and is a foundational React hook composition technique.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #34 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#34</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Job Board with Filters</h5>
+            <p style="font-size:.88rem;color:#64748b;">A developer job board that aggregates job listings with powerful multi-filter capabilities: job type (full-time/remote/contract), location, tech stack, and salary range. Users can save jobs to a wishlist and apply via a slide-in application form with file upload simulation. A great project for practicing derived state and filter logic.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Multi-filter Logic</span>
+              <span class="badge bg-secondary me-1 mt-1">Derived State</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Slide-in Panel</span>
+              <span class="badge bg-success me-1 mt-1">Saved Jobs</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Job card grid with company logo, title, location, and tech badges</li>
+                <li>Multi-select filter bar: type, location, salary range slider</li>
+                <li>Tech stack filter with searchable dropdown multi-select</li>
+                <li>Save/unsave jobs with a heart icon and saved-jobs tab</li>
+                <li>Slide-in application form with name, email, resume upload</li>
+                <li>Active filter chips showing applied filters with remove buttons</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useMemo</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Transitions</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Compute filtered results with useMemo: const filtered = useMemo(() => jobs.filter(job => matchesAllFilters(job, filters)), [jobs, filters]). Never filter inside render without useMemo — filtering 1000 jobs on every keystroke of an unrelated input is a common performance bug. The filters object is the only dependency that matters.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #35 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#35</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Social Media Feed</h5>
+            <p style="font-size:.88rem;color:#64748b;">A Twitter/Instagram-style social feed with posts, likes, comments, a follow system, image attachments, and load-more pagination. This project teaches you how to manage deeply nested shared state (liking a post updates the feed, profile, and notifications simultaneously) — a pattern critical for senior frontend interviews.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Normalized State</span>
+              <span class="badge bg-secondary me-1 mt-1">Context API</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Load More</span>
+              <span class="badge bg-success me-1 mt-1">Follow System</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Post composer with text, image URL, and character counter</li>
+                <li>Like button with animated heart and live like count</li>
+                <li>Expandable comments thread with reply nesting (1 level)</li>
+                <li>Follow/unfollow with personalized feed filtering</li>
+                <li>"Load More" button that appends 10 posts (simulated pagination)</li>
+                <li>Notification bell with count badge for new likes/comments</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">Context + useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">Immer</span>
+              <span class="badge bg-dark me-1 mt-1">date-fns</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Normalize the post state: { posts: { byId: {}, allIds: [] }, users: { byId: {} } }. When a like happens, you only update posts.byId[postId].likes — not a deeply nested structure. Without normalization, updating a like requires finding the post in an array by ID on every update, which is O(n) and breaks React's immutable update pattern.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #36 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#36</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Country Explorer (REST Countries)</h5>
+            <p style="font-size:.88rem;color:#64748b;">Explore all 250 countries using the free REST Countries API. Features region and language filters, a detail page with neighboring country links, a dark/light theme toggle, and search with highlighted matches. This is an excellent portfolio project that looks polished and is often used as a take-home assessment by companies.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">REST API</span>
+              <span class="badge bg-secondary me-1 mt-1">React Router</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Dark Mode</span>
+              <span class="badge bg-success me-1 mt-1">Filter Logic</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Country grid with flag, name, population, region, capital</li>
+                <li>Region filter dropdown (Africa, Americas, Asia, Europe, Oceania)</li>
+                <li>Language filter derived from all languages in the dataset</li>
+                <li>Country detail page with currencies, calling code, border countries</li>
+                <li>Clickable border country links navigating to that country's detail</li>
+                <li>Dark/light theme toggle persisted in localStorage</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+              <span class="badge bg-dark me-1 mt-1">REST Countries API</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Variables</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> This is a favorite take-home assessment used by real companies (Frontend Mentor hosts this exact challenge). For dark mode, use CSS custom properties on :root, toggled via a data-theme attribute on the document element. This avoids prop drilling theme values through every component — any component can use var(--bg-color) directly in its CSS.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #37 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#37</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Inventory Management Table</h5>
+            <p style="font-size:.88rem;color:#64748b;">A product inventory table with full CRUD operations, multi-column sorting, low stock alerts, category filtering, and inline cell editing. This project builds the exact skills needed for enterprise dashboards and data-heavy admin panels — the kind of work that pays senior developer salaries.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Sortable Table</span>
+              <span class="badge bg-secondary me-1 mt-1">Inline Editing</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Multi-select</span>
+              <span class="badge bg-success me-1 mt-1">CSV Export</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Sortable columns with asc/desc toggle and sort direction indicator</li>
+                <li>Inline cell editing: click to edit, Enter to save, Escape to cancel</li>
+                <li>Row checkbox selection with select-all and bulk delete</li>
+                <li>Low stock threshold alerts with highlighted row and badge</li>
+                <li>Category filter sidebar with item count per category</li>
+                <li>Export selected or all rows to CSV file download</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useMemo</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">Blob API</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> For sortable tables, store { column: 'name', direction: 'asc' } in state. Derive the sorted array with useMemo: [...data].sort(compareFn). Always spread before sorting — Array.sort is in-place and mutates the original. Wrap the sort in useMemo so it only re-runs when the data or sort config changes, not on every render.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #38 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#38</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Auth Flow (JWT Simulated)</h5>
+            <p style="font-size:.88rem;color:#64748b;">A complete simulated authentication system with login, registration, and logout — using fake JWT tokens stored in localStorage to demonstrate the full auth flow without a real backend. Features protected routes, role-based access control (admin vs user), and a persistent session that survives page refresh.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">AuthContext</span>
+              <span class="badge bg-secondary me-1 mt-1">Protected Routes</span>
+              <span class="badge bg-info text-dark me-1 mt-1">JWT Simulation</span>
+              <span class="badge bg-success me-1 mt-1">Role-based Access</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Login form with email/password validation and error messages</li>
+                <li>Registration form with password strength and confirmation match</li>
+                <li>AuthContext with useReducer managing user, token, and loading state</li>
+                <li>ProtectedRoute component that redirects to login if not authenticated</li>
+                <li>Admin-only route that shows 403 Forbidden for regular users</li>
+                <li>Session persistence: on app load, restore auth state from localStorage</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+              <span class="badge bg-dark me-1 mt-1">Context + useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The ProtectedRoute component pattern: wrap it around any route in your router config. Inside, use the useAuth hook to check if user exists — if not, return &lt;Navigate to="/login" state={{from: location}} replace /&gt;. Pass the attempted URL in route state so after login you can redirect back to where they were trying to go.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #39 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#39</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Recipe &amp; Meal Planner</h5>
+            <p style="font-size:.88rem;color:#64748b;">Search recipes using the free MealDB API and drag them onto a weekly meal plan calendar. The app automatically generates a consolidated shopping list from all planned meals, grouped by ingredient category. This project combines API fetching, drag-and-drop, and complex derived state computation.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">MealDB API</span>
+              <span class="badge bg-secondary me-1 mt-1">Drag and Drop</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Derived State</span>
+              <span class="badge bg-success me-1 mt-1">Shopping List</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Recipe search grid using TheMealDB API with category filters</li>
+                <li>Recipe detail modal with ingredients, instructions, and YouTube embed</li>
+                <li>7-day meal plan grid (Mon-Sun, Breakfast/Lunch/Dinner slots)</li>
+                <li>Drag recipes from search results onto any meal slot</li>
+                <li>Auto-generated shopping list from all planned meals' ingredients</li>
+                <li>Shopping list grouped by category (Produce, Dairy, Meat, etc.)</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">MealDB API</span>
+              <span class="badge bg-dark me-1 mt-1">HTML5 DnD</span>
+              <span class="badge bg-dark me-1 mt-1">useMemo</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The shopping list is a derived value: useMemo(() => {const allIngredients = Object.values(mealPlan).flat().flatMap(meal => meal.ingredients); return groupBy(allIngredients, 'category');}, [mealPlan]). Derived state should never be stored in setState — it creates sync bugs. Always derive it fresh from the source of truth with useMemo.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #40 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#f59e0b;font-size:1.1rem;">#40</span>
+              <span class="diff-intermediate">Intermediate</span>
+            </div>
+            <h5 class="fw-700 mb-2">Typing Speed Test</h5>
+            <p style="font-size:.88rem;color:#64748b;">A fully-featured typing speed test that measures WPM (words per minute) and accuracy in real-time with character-by-character color feedback. Features multiple test durations (15s, 30s, 60s), word and quote modes, a personal best leaderboard in localStorage, and an accuracy breakdown showing which keys you miss most.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-primary me-1 mt-1">Real-time Input</span>
+              <span class="badge bg-secondary me-1 mt-1">WPM Calculation</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Timer</span>
+              <span class="badge bg-success me-1 mt-1">Key Heatmap</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Character-by-character color feedback (green=correct, red=wrong, gray=untyped)</li>
+                <li>Live WPM counter updating every second during the test</li>
+                <li>Countdown timer that ends the test and shows results</li>
+                <li>WPM = (correct characters / 5) / elapsed minutes formula</li>
+                <li>Missed key frequency heatmap showing your worst keys</li>
+                <li>Personal best history stored in localStorage with date/WPM/accuracy</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useRef</span>
+              <span class="badge bg-dark me-1 mt-1">useEffect</span>
+              <span class="badge bg-dark me-1 mt-1">setInterval</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Never use a controlled input for a typing test — it re-renders on every keystroke which causes visible lag. Instead, use an invisible contentEditable div that you listen to with onKeyDown. Store the typed text in a useRef to track progress without triggering renders, and only update display state (the colored characters) every 100ms using setInterval.</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /row intermediate -->
+
+      <!-- Intermediate CTA -->
+      <div class="text-center mt-4 mb-2">
+        <a href="projects-intermediate.html" class="btn btn-lg fw-700" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:white;border:none;border-radius:50px;padding:.75rem 2.5rem;font-size:1.05rem;">
+          <i class="bi bi-code-slash me-2"></i>View Full Code for All 20 Intermediate Projects
+        </a>
+      </div>
+
+    </div><!-- /intermediate tab -->
+
+    <!-- ===== ADVANCED TAB ===== -->
+    <div class="tab-pane fade" id="advanced" role="tabpanel">
+
+      <div class="concept-box purple mb-4" style="border-radius:12px;padding:1.1rem 1.3rem;">
+        <h6 class="fw-700 mb-1"><i class="bi bi-info-circle-fill me-2"></i>Advanced Projects (41–60)</h6>
+        <p class="mb-0" style="font-size:.9rem;">These 20 projects use production-grade patterns: Redux Toolkit, React Query, custom form libraries, WebSocket, WebRTC, virtual scrolling, PWA, micro-frontends, and compound components. These are interview-impressive, portfolio-defining projects.</p>
+      </div>
+
+      <div class="row g-4">
+
+        <!-- #41 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#41</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">JWT Auth System with Axios Interceptors</h5>
+            <p style="font-size:.88rem;color:#64748b;">A production-ready authentication system with an AuthContext powered by useReducer, Axios request/response interceptors that automatically attach tokens and handle 401 refresh cycles, a reusable useAuth hook, and persistent sessions via localStorage. This is the auth architecture used in most real React applications.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">AuthContext</span>
+              <span class="badge bg-secondary me-1 mt-1">Axios Interceptors</span>
+              <span class="badge bg-dark me-1 mt-1">Token Refresh</span>
+              <span class="badge bg-warning text-dark me-1 mt-1">useReducer</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>AuthContext with useReducer: LOGIN, LOGOUT, REFRESH_TOKEN actions</li>
+                <li>Axios request interceptor that injects Bearer token on every request</li>
+                <li>Axios response interceptor that catches 401s and silently refreshes tokens</li>
+                <li>Retry queue: hold pending requests during refresh, replay on success</li>
+                <li>ProtectedRoute HOC with redirect to login and return URL preservation</li>
+                <li>useAuth custom hook exposing user, login, logout, isAuthenticated</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">Axios</span>
+              <span class="badge bg-dark me-1 mt-1">Context + useReducer</span>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The token refresh pattern: when a 401 arrives, the response interceptor adds the request to a retry queue, calls the refresh endpoint once (not once per queued request — use an isRefreshing flag), then replays the queued requests with the new token. This pattern appears in virtually every production React app that uses JWT authentication.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #42 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#42</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Real-time Chat with WebSocket</h5>
+            <p style="font-size:.88rem;color:#64748b;">A full-featured chat application backed by a real WebSocket connection (or simulated with a local echo server). Features a useWebSocket custom hook with automatic reconnection using exponential backoff, optimistic message updates, typing indicators, read receipts, and message normalization in state. This is the most commonly requested "advanced" project in senior interviews.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">WebSocket</span>
+              <span class="badge bg-secondary me-1 mt-1">Custom Hook</span>
+              <span class="badge bg-dark me-1 mt-1">Optimistic Updates</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Reconnection Logic</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>useWebSocket hook: connects, subscribes to messages, returns send function</li>
+                <li>Exponential backoff reconnection: retry after 1s, 2s, 4s, 8s, up to 30s</li>
+                <li>Optimistic messages: show immediately as "pending", update to "sent"/"failed"</li>
+                <li>Typing indicator: debounced broadcast when user is typing</li>
+                <li>Read receipts: checkmarks that update when recipient reads</li>
+                <li>Message rooms/channels with unread count badges per room</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">WebSocket API</span>
+              <span class="badge bg-dark me-1 mt-1">Custom Hook</span>
+              <span class="badge bg-dark me-1 mt-1">Normalized State</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Optimistic UI pattern: when the user sends a message, immediately add it to state with status: 'pending' and a client-generated tempId. When the server ACKs with a real ID, replace the temp message. If it fails, mark it status: 'failed' with a retry button. This is exactly how WhatsApp, iMessage, and Slack work — messages appear instantly regardless of server latency.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #43 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#43</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Infinite Scroll with IntersectionObserver</h5>
+            <p style="font-size:.88rem;color:#64748b;">A performant infinite-scroll news/post feed using IntersectionObserver instead of scroll event listeners. Encapsulated in a reusable useInfiniteScroll custom hook, with skeleton loading cards, retry on error with exponential backoff, and a "Back to top" button that appears after scrolling 500px. This is how Twitter, Reddit, and Instagram load content.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">IntersectionObserver</span>
+              <span class="badge bg-secondary me-1 mt-1">Custom Hook</span>
+              <span class="badge bg-dark me-1 mt-1">Paginated API</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Skeleton UI</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>useIntersectionObserver hook: observe a ref, call callback on intersection</li>
+                <li>useInfiniteScroll hook: wraps observer + pagination state + fetch logic</li>
+                <li>Sentinel div at list bottom that triggers next page load on visibility</li>
+                <li>Skeleton card placeholders during loading with CSS shimmer animation</li>
+                <li>Error state with exponential backoff retry button</li>
+                <li>Back-to-top button using smooth scrollIntoView with behavior: 'smooth'</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">IntersectionObserver API</span>
+              <span class="badge bg-dark me-1 mt-1">Custom Hooks</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Animations</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> IntersectionObserver is 10x more performant than scroll event listeners because it fires only on threshold crossing, not on every scroll pixel. Create the observer in useEffect, observe the sentinel element, and disconnect in the cleanup function. Pass threshold: 0.1 to trigger when 10% of the sentinel is visible — this gives a more natural "upcoming page" feel.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #44 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#44</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Drag-and-Drop Kanban (No Library)</h5>
+            <p style="font-size:.88rem;color:#64748b;">A production-quality Kanban board built entirely without any drag-and-drop library. Implements a useDragDrop custom hook that encapsulates all HTML5 DnD event logic, a column-level useReducer for state, drag visual feedback with placeholder cards, priority badges, a card edit modal, due dates, and full localStorage persistence.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">useDragDrop Hook</span>
+              <span class="badge bg-secondary me-1 mt-1">HTML5 DnD API</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+              <span class="badge bg-warning text-dark me-1 mt-1">useRef for DnD</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>useDragDrop hook abstracting onDragStart, onDragOver, onDrop logic</li>
+                <li>Ghost placeholder card showing drop target position during drag</li>
+                <li>Priority badges (Low/Medium/High/Critical) with color coding</li>
+                <li>Card modal with title, description, due date, priority, and assignee</li>
+                <li>Column WIP (work-in-progress) limits with over-limit warning state</li>
+                <li>Keyboard-accessible move: select card, then Tab+Enter to move to next column</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">HTML5 DnD API</span>
+              <span class="badge bg-dark me-1 mt-1">useRef</span>
+              <span class="badge bg-dark me-1 mt-1">useReducer</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Store the dragged card ID in a useRef, not useState. Inside drag event handlers, closures capture the state value at render time — if you use state, you'll read stale values. useRef.current always gives you the live value regardless of when the handler was created. This is the most common bug in from-scratch DnD implementations.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #45 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#45</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Custom Form Library (React Hook Form Clone)</h5>
+            <p style="font-size:.88rem;color:#64748b;">Build your own miniature React Hook Form from scratch — a useForm hook that uses uncontrolled inputs via refs to avoid re-rendering on every keystroke. Implements register, handleSubmit, watch, reset, setError, and clearErrors. Supports validation rules (required, minLength, pattern, validate function) with per-field and form-level error state.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">Uncontrolled Inputs</span>
+              <span class="badge bg-secondary me-1 mt-1">useRef</span>
+              <span class="badge bg-dark me-1 mt-1">Validation Engine</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Custom Hook</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>useForm hook returning register, handleSubmit, errors, watch, reset</li>
+                <li>register(name, rules) returns {ref, name, onBlur} to spread onto input</li>
+                <li>handleSubmit validates all fields, calls callback only if all pass</li>
+                <li>watch(fieldName) subscribes to a field's value for dependent validation</li>
+                <li>Validation rules: required, min/maxLength, pattern regex, custom validate fn</li>
+                <li>Demo: complex multi-field form with 0 re-renders during typing</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useRef</span>
+              <span class="badge bg-dark me-1 mt-1">useCallback</span>
+              <span class="badge bg-dark me-1 mt-1">React DevTools Profiler</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The key insight of React Hook Form: store all field values in a single ref object (valuesRef.current = {name: '', email: ''}). Since refs don't trigger re-renders, typing into fields causes zero component re-renders. Only setState is called when errors change or on submit — this is why RHF is dramatically faster than useState-based forms.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #46 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#46</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Virtual Scrolling Data Table</h5>
+            <p style="font-size:.88rem;color:#64748b;">Render 100,000 rows of data without the browser freezing, using a hand-built useVirtualList hook that only renders the visible rows plus a small buffer. Features sortable and resizable columns, a column visibility toggle, inline cell editing, row selection, and CSV export — built to understand how AG Grid and TanStack Table work under the hood.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">Virtual Scrolling</span>
+              <span class="badge bg-secondary me-1 mt-1">Custom Hook</span>
+              <span class="badge bg-dark me-1 mt-1">useMemo</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Performance</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>useVirtualList hook: takes data + rowHeight, returns visible slice + offset</li>
+                <li>Total container height = data.length * rowHeight to maintain correct scrollbar</li>
+                <li>Spacer div at top pushes rendered rows to the correct scroll position</li>
+                <li>Sortable columns with sort state stored as {key, dir} and useMemo sort</li>
+                <li>Resizable columns using onMouseDown + mousemove event on header edge</li>
+                <li>Inline editing: double-click cell to edit, Enter/Blur to save</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useRef + onScroll</span>
+              <span class="badge bg-dark me-1 mt-1">useMemo</span>
+              <span class="badge bg-dark me-1 mt-1">Blob CSV Export</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Virtual scrolling math: startIndex = Math.floor(scrollTop / rowHeight), endIndex = Math.min(startIndex + visibleCount + buffer, data.length). Render only rows[startIndex..endIndex]. Set the container's total height to data.length * rowHeight so the scrollbar looks correct. Shift visible rows down by startIndex * rowHeight with a top paddingTop style. This is exactly how react-window works.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #47 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#47</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Redux Toolkit Full App (RTK Query)</h5>
+            <p style="font-size:.88rem;color:#64748b;">A complete multi-feature app using Redux Toolkit as the state management layer — with RTK Query for data fetching and caching, multiple feature slices with Immer-powered reducers, memoized selectors via createSelector, optimistic updates with rollback on failure, and the full Redux DevTools integration. This is enterprise React state management mastered.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">RTK Query</span>
+              <span class="badge bg-secondary me-1 mt-1">createSelector</span>
+              <span class="badge bg-dark me-1 mt-1">Immer Reducers</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Optimistic Updates</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Store with postsSlice, usersSlice, uiSlice, and RTK Query apiSlice</li>
+                <li>RTK Query endpoints: getPostsQuery, addPostMutation, updatePostMutation</li>
+                <li>Optimistic update on like: update cache immediately, rollback on error</li>
+                <li>createSelector for derived data: filteredPosts, postsByUser, totalLikes</li>
+                <li>RTK Query cache invalidation: after add/delete, auto-refetch the list</li>
+                <li>Redux DevTools integration showing time-travel debugging</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">Redux Toolkit</span>
+              <span class="badge bg-dark me-1 mt-1">RTK Query</span>
+              <span class="badge bg-dark me-1 mt-1">createSelector</span>
+              <span class="badge bg-dark me-1 mt-1">Immer</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> RTK Query is the modern answer to "how do I cache API data in Redux?" It auto-generates hooks like useGetPostsQuery() that handle loading, error, and data states, plus automatic cache invalidation via tags. The optimistic update pattern: use onQueryStarted to update the cache before the server responds, and undo with patchResult.undo() if the mutation fails.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #48 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#48</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Code-Split Router with Suspense</h5>
+            <p style="font-size:.88rem;color:#64748b;">Build a React app with full code splitting: every route loads its JS bundle on demand using React.lazy() + Suspense. Features nested route layouts, data-loading route loaders (React Router v6.4+), animated route transitions with AnimatePresence, granular Suspense boundaries, and a custom ErrorBoundary that catches both render and async errors.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">React.lazy</span>
+              <span class="badge bg-secondary me-1 mt-1">Suspense</span>
+              <span class="badge bg-dark me-1 mt-1">ErrorBoundary</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Nested Layouts</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>All route components wrapped in React.lazy() for on-demand loading</li>
+                <li>Suspense fallback with skeleton screens matched to each page's layout</li>
+                <li>Nested route layouts: AppLayout wrapping DashboardLayout wrapping pages</li>
+                <li>Route loaders that pre-fetch data before rendering the page</li>
+                <li>ErrorBoundary class component catching lazy load failures with retry</li>
+                <li>Network tab demo showing code-split bundles loading on navigation</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+              <span class="badge bg-dark me-1 mt-1">Vite</span>
+              <span class="badge bg-dark me-1 mt-1">Framer Motion</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Always wrap lazy components in error boundaries — a ChunkLoadError (network failure during bundle download) will crash your app without one. The ErrorBoundary can detect this specific error and show a "Reload page" button rather than a generic error. Also prefetch route components on link hover using the import() function to eliminate loading states entirely for fast connections.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #49 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#49</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Build Your Own Zustand Clone</h5>
+            <p style="font-size:.88rem;color:#64748b;">Implement a minimal but functional clone of Zustand — a publish/subscribe state manager that React components can subscribe to with selector functions. No Context API, no Redux, just a plain JS object + Set of listeners. This project demystifies how external state libraries work and teaches the observer pattern that powers all of React's concurrent features.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">Observer Pattern</span>
+              <span class="badge bg-secondary me-1 mt-1">useSyncExternalStore</span>
+              <span class="badge bg-dark me-1 mt-1">Pub/Sub</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Selector Memoization</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>createStore(initializer) returns { getState, setState, subscribe }</li>
+                <li>Set of listener functions, called on every setState</li>
+                <li>useStore(store, selector) hook using useSyncExternalStore</li>
+                <li>Selector support: components only re-render when their selected slice changes</li>
+                <li>persist middleware: wraps setState/getState to sync with localStorage</li>
+                <li>Demo todo app showing components subscribing to different store slices</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useSyncExternalStore</span>
+              <span class="badge bg-dark me-1 mt-1">Vanilla JS</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Zustand's entire core is ~50 lines: a closure holding state, a Set of listeners, and setState that updates state then calls all listeners. Use React 18's useSyncExternalStore to subscribe React components — it handles concurrent mode tearing. The selector prevents unnecessary re-renders: only re-render if selector(newState) !== selector(oldState) (reference equality).</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #50 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#50</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Compound Components Design Pattern</h5>
+            <p style="font-size:.88rem;color:#64748b;">Build a reusable UI component library using the compound components pattern — the same pattern used by Radix UI, Headless UI, and Reach UI. Implements Tabs, Accordion, and a custom Select dropdown where the parent manages shared state and communicates it to children via Context, without any prop drilling. This is the most impressive React pattern to demonstrate in interviews.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">Compound Components</span>
+              <span class="badge bg-secondary me-1 mt-1">Context + displayName</span>
+              <span class="badge bg-dark me-1 mt-1">useId</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Accessibility</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Tabs compound: &lt;Tabs&gt;&lt;Tabs.List&gt;&lt;Tabs.Tab&gt;&lt;Tabs.Panel&gt; pattern</li>
+                <li>Accordion compound: &lt;Accordion&gt;&lt;Accordion.Item&gt;&lt;Accordion.Trigger&gt;&lt;Accordion.Content&gt;</li>
+                <li>Custom Select: &lt;Select&gt;&lt;Select.Trigger&gt;&lt;Select.Options&gt;&lt;Select.Option&gt;</li>
+                <li>useId for generating linked aria-controls/aria-labelledby IDs</li>
+                <li>Full keyboard navigation: Arrow keys, Home, End, Escape</li>
+                <li>Focus trap in Select dropdown using a custom useFocusTrap hook</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">useContext</span>
+              <span class="badge bg-dark me-1 mt-1">useId</span>
+              <span class="badge bg-dark me-1 mt-1">ARIA</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The compound components pattern: the parent component creates a Context with its state, and child components consume it with useContext. No props are passed between parent and children — they communicate through the shared context. Set displayName on each sub-component so React DevTools shows &lt;Tabs.Tab&gt; instead of anonymous components. This is how every serious component library works.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #51 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#51</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">TanStack Query Dashboard</h5>
+            <p style="font-size:.88rem;color:#64748b;">A data-heavy admin dashboard powered entirely by TanStack Query (React Query) — demonstrating useQuery for data fetching, useMutation for writes with optimistic rollback, useInfiniteQuery for paginated lists, query invalidation and refetching strategies, and background refetch on window focus. This project shows you how to never need Redux for server state again.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">TanStack Query</span>
+              <span class="badge bg-secondary me-1 mt-1">useQuery</span>
+              <span class="badge bg-dark me-1 mt-1">useMutation</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Query Invalidation</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Dashboard with useQuery for each stat card (stale-while-revalidate)</li>
+                <li>Data table using useInfiniteQuery with load-more cursor pagination</li>
+                <li>Create/Edit form with useMutation + optimistic cache update</li>
+                <li>Automatic cache invalidation: after mutation, refetch affected queries</li>
+                <li>Background refetch on window focus to keep data fresh</li>
+                <li>React Query DevTools integration showing cache state visually</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">TanStack Query v5</span>
+              <span class="badge bg-dark me-1 mt-1">Axios</span>
+              <span class="badge bg-dark me-1 mt-1">MSW (Mock API)</span>
+              <span class="badge bg-dark me-1 mt-1">React Query DevTools</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> React Query separates server state (remote data with loading/stale/error states) from client state (UI state like modals, filters). The optimistic mutation pattern: in onMutate, cancel outgoing refetches, snapshot the current cache, update the cache optimistically, and return the snapshot. In onError, rollback via queryClient.setQueryData(key, snapshot). This prevents UI flicker on fast writes.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #52 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#52</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Framer Motion Animation System</h5>
+            <p style="font-size:.88rem;color:#64748b;">Build a comprehensive animation showcase app using Framer Motion — covering page transitions with AnimatePresence, staggered list animations, spring physics for draggable elements, scroll-triggered reveal animations, and a shared layout animation where elements morph between pages. This is the animation knowledge that makes your React apps feel polished and professional.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">AnimatePresence</span>
+              <span class="badge bg-secondary me-1 mt-1">Stagger Children</span>
+              <span class="badge bg-dark me-1 mt-1">Spring Physics</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Shared Layout</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Page transition: slide-in/slide-out between routes with AnimatePresence</li>
+                <li>Staggered list: items animate in one by one with staggerChildren delay</li>
+                <li>Draggable card with spring physics: drag with momentum, snap back on release</li>
+                <li>Scroll-triggered: elements fade+slide in as they enter the viewport</li>
+                <li>Shared layout: click a card, it expands into a full-page modal with layoutId</li>
+                <li>Gesture-based swipe: swipe left/right to dismiss with velocity threshold</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">Framer Motion</span>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+              <span class="badge bg-dark me-1 mt-1">useScroll / useTransform</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> AnimatePresence enables exit animations — without it, React removes elements from the DOM immediately on state change. Wrap your route components in &lt;AnimatePresence mode="wait"&gt; and each page in &lt;motion.div initial exit animate&gt;. The layoutId prop enables "magic motion": Framer Motion automatically animates an element from its old position/size to its new one when its layoutId matches across components.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #53 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#53</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">AI Chatbot with Streaming (OpenAI API)</h5>
+            <p style="font-size:.88rem;color:#64748b;">Integrate the OpenAI API to build a ChatGPT-like interface with streaming responses that display text word-by-word as it's generated. Features conversation history management, system prompt configuration, code block detection with syntax highlighting, markdown rendering, token usage display, and export to markdown. The streaming pattern applies to any Server-Sent Events API.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">ReadableStream</span>
+              <span class="badge bg-secondary me-1 mt-1">Server-Sent Events</span>
+              <span class="badge bg-dark me-1 mt-1">Streaming UI</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Markdown Rendering</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Chat UI with streaming: text appears incrementally as API generates it</li>
+                <li>ReadableStream reader: read chunks, decode UTF-8, parse SSE data: lines</li>
+                <li>Conversation history: previous messages passed in every API call for context</li>
+                <li>System prompt editor: configure AI personality before conversation starts</li>
+                <li>Code block detection and syntax highlighting with highlight.js</li>
+                <li>Export conversation as formatted markdown with one click</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">OpenAI API</span>
+              <span class="badge bg-dark me-1 mt-1">ReadableStream API</span>
+              <span class="badge bg-dark me-1 mt-1">highlight.js</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Streaming with fetch: const response = await fetch(url, {body, method:'POST'}); const reader = response.body.getReader(); while(true) { const {done, value} = await reader.read(); if(done) break; const text = decoder.decode(value); // parse SSE, append to UI }. Store the AI's streaming response in a ref and only call setState every N characters to avoid thousands of re-renders during fast streaming.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #54 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#54</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Progressive Web App with Offline Mode</h5>
+            <p style="font-size:.88rem;color:#64748b;">Convert a React app into a fully installable PWA with offline functionality. Implements a Service Worker with cache-first strategy for static assets and network-first for API calls, background sync for offline mutations, a Web App Manifest for installability, push notification support, and an offline indicator UI. PWA skills are increasingly required in enterprise frontend roles.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">Service Worker</span>
+              <span class="badge bg-secondary me-1 mt-1">Cache API</span>
+              <span class="badge bg-dark me-1 mt-1">Background Sync</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Web App Manifest</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Service Worker: intercepts fetch, serves from cache when offline</li>
+                <li>Cache-first strategy: static assets (JS/CSS/images) always from cache</li>
+                <li>Network-first with fallback: API calls try network, fall back to cached data</li>
+                <li>Background sync: queue failed mutations, replay when connection restores</li>
+                <li>Install prompt: intercept beforeinstallprompt, show custom install button</li>
+                <li>Offline indicator: banner appears when navigator.onLine = false</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18 + Vite</span>
+              <span class="badge bg-dark me-1 mt-1">Service Worker API</span>
+              <span class="badge bg-dark me-1 mt-1">Cache API</span>
+              <span class="badge bg-dark me-1 mt-1">vite-plugin-pwa</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Service Workers run on a separate thread from the main JS thread. They intercept all fetch events via addEventListener('fetch', handler). The stale-while-revalidate strategy: respond immediately from cache, then update the cache from the network in the background. This makes the app feel instant on repeat visits while still eventually showing fresh data.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #55 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#55</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Component Design System</h5>
+            <p style="font-size:.88rem;color:#64748b;">Build a complete design system from scratch: a ThemeProvider using CSS custom properties, and a library of accessible, composable components — Button (with loading/icon variants), Input (with error/helper states), Modal (with focus trap), Toast (with queue), Tooltip (with positioning logic), and a Storybook-style interactive documentation page.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">Theme Provider</span>
+              <span class="badge bg-secondary me-1 mt-1">Focus Trap</span>
+              <span class="badge bg-dark me-1 mt-1">Portal</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Component API Design</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>ThemeProvider: injects CSS variables, supports light/dark/custom themes</li>
+                <li>Button: variant (primary/secondary/ghost), size, loading spinner, icon slot</li>
+                <li>Modal: ReactDOM.createPortal to body, focus trap, Escape to close, backdrop</li>
+                <li>Toast: queue management with auto-dismiss, progress bar, stacking</li>
+                <li>Tooltip: floating positioning using getBoundingClientRect, flip on viewport edge</li>
+                <li>Interactive docs page showing all component variants in a Storybook-style layout</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">ReactDOM.createPortal</span>
+              <span class="badge bg-dark me-1 mt-1">CSS Custom Properties</span>
+              <span class="badge bg-dark me-1 mt-1">ARIA</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Focus trap for modals: on open, query all focusable elements inside the modal, store the first and last. On Tab keydown, if on the last element wrap to the first; on Shift+Tab from the first, wrap to the last. On open, move focus to the modal; on close, return focus to the trigger element. This is required by WCAG 2.1 for accessible modal dialogs and asked in senior frontend interviews.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #56 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#56</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">React Performance Profiler Dashboard</h5>
+            <p style="font-size:.88rem;color:#64748b;">A self-profiling React app that uses the React Profiler API to measure and visualize its own render performance. Features a useWhyDidYouUpdate debug hook, render count overlays on every component, a flamegraph-style visualization of render time, and before/after comparisons showing the effect of React.memo, useCallback, and useMemo optimizations.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">React Profiler API</span>
+              <span class="badge bg-secondary me-1 mt-1">React.memo</span>
+              <span class="badge bg-dark me-1 mt-1">useCallback</span>
+              <span class="badge bg-info text-dark me-1 mt-1">useWhyDidYouUpdate</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>&lt;Profiler id onRender&gt; wrapping sections to measure actual render time</li>
+                <li>useWhyDidYouUpdate hook: logs which props/state changed to trigger render</li>
+                <li>Render count overlay: a small badge on each component showing re-render count</li>
+                <li>Flamegraph visualization: horizontal bars sized by render duration</li>
+                <li>Optimization playground: toggle memo/callback and see render count drop</li>
+                <li>Before/after comparison: naive list vs memoized list with 1000 items</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">React Profiler API</span>
+              <span class="badge bg-dark me-1 mt-1">React.memo</span>
+              <span class="badge bg-dark me-1 mt-1">SVG Flamegraph</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> The Profiler API onRender callback receives: id, phase ("mount"/"update"), actualDuration (ms this render took), baseDuration (estimated without memoization). Use these to build a real performance monitor. The biggest insight: React.memo only helps when props are referentially stable — if you pass a new object/function literal on every render, memo does nothing. useCallback and useMemo stabilize those references.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #57 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#57</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Rich Text Editor (Slate.js / Tiptap)</h5>
+            <p style="font-size:.88rem;color:#64748b;">Build a Medium-style rich text editor using Slate.js or Tiptap with a custom toolbar, keyboard shortcuts, inline code blocks, image embedding, and serialization to/from HTML and markdown. Understanding how content editable editors work under React's model is essential for any product company building document editors, CMS platforms, or note-taking apps.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">ContentEditable</span>
+              <span class="badge bg-secondary me-1 mt-1">Slate.js</span>
+              <span class="badge bg-dark me-1 mt-1">Serialization</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Keyboard Shortcuts</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Floating toolbar that appears on text selection (getBoundingClientRect positioning)</li>
+                <li>Bold, italic, underline, code, heading 1/2 with keyboard shortcuts</li>
+                <li>Block types: paragraph, blockquote, ordered/unordered lists, code block</li>
+                <li>Slash command menu: type "/" to insert block types like Notion</li>
+                <li>Image upload simulation with drag-and-drop into editor</li>
+                <li>Export to HTML and import from HTML with sanitization</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">Slate.js or Tiptap</span>
+              <span class="badge bg-dark me-1 mt-1">DOMParser</span>
+              <span class="badge bg-dark me-1 mt-1">Selection API</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Rich text editors are hard because they must reconcile the browser's native Selection and Range APIs with React's virtual DOM model. Slate.js solves this by maintaining its own document model as a tree of Nodes, keeping it in sync with the DOM via a custom reconciler. Understanding Slate's model (Editor, Element, Text, Transforms) teaches you how all WYSIWYG editors work at the architecture level.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #58 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#58</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Full-Stack Blog with MSW Mock API</h5>
+            <p style="font-size:.88rem;color:#64748b;">A complete blog platform with a realistic mock backend powered by Mock Service Worker (MSW) — simulating actual network requests without a real server. Features full CRUD for posts and comments, image upload preview, a rich text body, pagination, author profiles, and tag-based filtering. MSW makes this app feel like a real full-stack project even in a portfolio.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">MSW (Mock Service Worker)</span>
+              <span class="badge bg-secondary me-1 mt-1">React Query</span>
+              <span class="badge bg-dark me-1 mt-1">CRUD</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Image Upload</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>MSW handlers: GET /posts, POST /posts, PUT /posts/:id, DELETE /posts/:id</li>
+                <li>Seeded in-memory database (faker.js) with realistic post/user/comment data</li>
+                <li>React Query for all data fetching with cache and optimistic updates</li>
+                <li>Image upload: FileReader preview before "upload", stores as base64</li>
+                <li>Nested comments with reply threading (2 levels deep)</li>
+                <li>Tag-based filtering with URL search params for shareable filtered views</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">MSW v2</span>
+              <span class="badge bg-dark me-1 mt-1">TanStack Query</span>
+              <span class="badge bg-dark me-1 mt-1">faker.js</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> MSW intercepts real fetch/XHR requests at the Service Worker level — your app code doesn't know it's hitting a mock. This is superior to mocking axios because it tests the full HTTP layer. MSW handlers return realistic responses with delays (await delay(200)), making the app behave exactly like production. This same MSW setup can be used in Vitest tests for integration testing without any extra config.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #59 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#59</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Collaborative Whiteboard (Canvas + WebSocket)</h5>
+            <p style="font-size:.88rem;color:#64748b;">A real-time collaborative drawing app where multiple users draw simultaneously on a shared canvas. Uses the HTML5 Canvas API for drawing, WebSocket for broadcasting strokes to all connected clients, undo/redo with a history stack, and a toolbox with pen, shapes, text, and eraser. Building this project gives you deep knowledge of both Canvas and real-time sync patterns.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">Canvas API</span>
+              <span class="badge bg-secondary me-1 mt-1">WebSocket</span>
+              <span class="badge bg-dark me-1 mt-1">Undo/Redo Stack</span>
+              <span class="badge bg-info text-dark me-1 mt-1">Event Normalization</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Canvas drawing with mouse and touch events (pointer events API)</li>
+                <li>Tools: freehand pen, rectangle, ellipse, line, text, eraser</li>
+                <li>Color picker, stroke width slider, opacity control</li>
+                <li>Undo/redo: snapshot canvas to ImageData stack on each stroke end</li>
+                <li>WebSocket: broadcast stroke data to room, replay on receiving client's canvas</li>
+                <li>User cursors: other users' cursor positions shown as colored dots in real-time</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">Canvas API</span>
+              <span class="badge bg-dark me-1 mt-1">WebSocket</span>
+              <span class="badge bg-dark me-1 mt-1">Pointer Events API</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> Use Pointer Events API instead of Mouse/Touch events — it handles mouse, touch, and stylus with a single event model, and works correctly with touch devices. For undo/redo: on mouseup, call ctx.getImageData(0,0,w,h) and push to a history array. On undo, pop the stack and call ctx.putImageData(snapshot, 0, 0). Limit the stack to 50 entries to avoid memory issues.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- #60 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="fw-800" style="color:#a78bfa;font-size:1.1rem;">#60</span>
+              <span class="diff-advanced">Advanced</span>
+            </div>
+            <h5 class="fw-700 mb-2">Full-Stack Developer Portfolio CMS</h5>
+            <p style="font-size:.88rem;color:#64748b;">The capstone project: a complete personal portfolio website with a built-in CMS (content management system) — a password-protected admin panel where you can add/edit/delete projects, skills, blog posts, and work experience without touching the code. Deploys as a static site with data stored in JSON files (no backend required). This is the project that shows employers you understand the full product lifecycle.</p>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Key Concepts:</strong><br/>
+              <span class="badge bg-danger me-1 mt-1">Static CMS</span>
+              <span class="badge bg-secondary me-1 mt-1">Code Splitting</span>
+              <span class="badge bg-dark me-1 mt-1">localStorage Auth</span>
+              <span class="badge bg-info text-dark me-1 mt-1">SEO Meta Tags</span>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">What You'll Build:</strong>
+              <ul style="font-size:.85rem;margin-top:.4rem;padding-left:1.2rem;">
+                <li>Public portfolio: Hero, About, Projects grid, Skills, Experience timeline, Contact</li>
+                <li>Password-protected /admin route (localStorage hash check) — CMS panel</li>
+                <li>Admin: CRUD for projects (title, description, image, tags, GitHub, live URL)</li>
+                <li>Admin: CRUD for blog posts with rich text and publish/draft toggle</li>
+                <li>Animated page transitions and scroll-triggered section reveals</li>
+                <li>SEO: dynamic &lt;title&gt; and og: meta tags per page using react-helmet-async</li>
+              </ul>
+            </div>
+            <div class="mb-2">
+              <strong style="font-size:.8rem;">Tech Stack:</strong><br/>
+              <span class="badge bg-dark me-1 mt-1">React 18</span>
+              <span class="badge bg-dark me-1 mt-1">React Router v6</span>
+              <span class="badge bg-dark me-1 mt-1">Framer Motion</span>
+              <span class="badge bg-dark me-1 mt-1">react-helmet-async</span>
+            </div>
+            <div class="tip-box mt-2">
+              <strong style="font-size:.8rem;">Key Learning:</strong>
+              <span style="font-size:.82rem;"> This is the ideal capstone because it demonstrates every skill in one project: routing, auth, CRUD, state management, performance (code splitting the admin panel so it's never loaded by visitors), animations, and deployment. Code-split the /admin route with React.lazy so the entire CMS code never loads for public visitors — keeping your portfolio's initial bundle under 50KB.</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /row advanced -->
+
+      <!-- Advanced CTA -->
+      <div class="text-center mt-4 mb-2">
+        <a href="projects-advanced.html" class="btn btn-lg fw-700" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);color:white;border:none;border-radius:50px;padding:.75rem 2.5rem;font-size:1.05rem;">
+          <i class="bi bi-code-slash me-2"></i>View Full Code for All 20 Advanced Projects
+        </a>
+      </div>
+
+    </div><!-- /advanced tab -->
+
+  </div><!-- /tab-content -->
+</div><!-- /container -->
+
+<!-- NAVIGATION -->
+<div class="container-xl mt-4 mb-5">
+  <div class="d-flex justify-content-between align-items-center">
+    <a href="react-devops.html" class="btn fw-600" style="background:rgba(97,218,251,.1);border:1.5px solid #61dafb;color:#61dafb;border-radius:12px;padding:.6rem 1.4rem;">
+      <i class="bi bi-arrow-left me-2"></i>React DevOps
+    </a>
+    <a href="react-interview.html" class="btn fw-600" style="background:linear-gradient(135deg,#61dafb,#3b82f6);color:#0f172a;border:none;border-radius:12px;padding:.6rem 1.4rem;">
+      Interview Questions<i class="bi bi-arrow-right ms-2"></i>
+    </a>
+  </div>
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:1rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — 60 Projects across 3 difficulty tiers
+      </div>
+      <div class="col-md-6 text-md-end mt-2 mt-md-0">
+        <a href="projects-beginner.html" class="me-3" style="color:#22c55e;text-decoration:none;font-weight:600;">Beginner Code</a>
+        <a href="projects-intermediate.html" class="me-3" style="color:#f59e0b;text-decoration:none;font-weight:600;">Intermediate Code</a>
+        <a href="projects-advanced.html" style="color:#a78bfa;text-decoration:none;font-weight:600;">Advanced Code</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

@@ -1,0 +1,1846 @@
+<div class="accordion-item" id="advanced-q26">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q26" aria-expanded="false" aria-controls="collapse-advanced-q26">
+      Q26. How do error boundaries interact with concurrent mode? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q26" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>In concurrent mode, React can render component trees multiple times before committing to the DOM — this has significant implications for error boundaries. When an error is thrown during a concurrent render attempt, React will catch it and look for the nearest error boundary up the tree. However, because concurrent renders are interruptible and may be retried, React may call <code>render()</code> on a component multiple times before it either commits or is discarded; error boundary lifecycle methods are only invoked after React decides to commit the erroring subtree.</p>
+      <p>One key difference from legacy mode: in concurrent mode, React retries a failed render automatically before giving up and triggering the error boundary. Specifically, React will attempt to render the erroring tree a second time without the failing component, using the error boundary's fallback UI. This retry mechanism means you may see intermittent errors in development that are "swallowed" on the retry — which is intentional behavior to improve resilience.</p>
+      <p>Error boundaries do NOT catch errors in event handlers, asynchronous code (setTimeout, fetch), or server-side rendering. They only catch errors during rendering, in lifecycle methods, and in constructors of child components. With concurrent features like <code>startTransition</code>, if an error occurs inside a transition, the error boundary still catches it, but React may choose to revert to the previous committed state rather than showing the fallback if the transition has not yet committed.</p>
+      <p>Another subtle point: with React 18's concurrent renderer, the error may be thrown during the "render phase" (before commit), meaning the DOM has not been updated yet. The error boundary's <code>componentDidCatch</code> will still be called in the "commit phase," but the error originally occurred before any DOM mutations, making recovery cleaner. You should use error boundaries to wrap discrete UI sections so that a failure in one panel doesn't bring down the entire application.</p>
+<pre class="code-block">
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  // Called during render phase — used to derive fallback state
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  // Called during commit phase — used for side effects (logging)
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error);
+    console.error('Component stack:', errorInfo.componentStack);
+    // Report to monitoring service
+    reportError(error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        &lt;div role="alert"&gt;
+          &lt;h2&gt;Something went wrong.&lt;/h2&gt;
+          &lt;button onClick={() =&gt; this.setState({ hasError: false, error: null })}&gt;
+            Try again
+          &lt;/button&gt;
+        &lt;/div&gt;
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// Usage with concurrent features
+function App() {
+  return (
+    &lt;ErrorBoundary&gt;
+      &lt;React.Suspense fallback={&lt;Spinner /&gt;}&gt;
+        &lt;LazyComponent /&gt;
+      &lt;/React.Suspense&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q27">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q27" aria-expanded="false" aria-controls="collapse-advanced-q27">
+      Q27. What is the difference between getDerivedStateFromError and componentDidCatch? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q27" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p><code>getDerivedStateFromError</code> and <code>componentDidCatch</code> are two separate lifecycle methods that together form a complete error boundary implementation. They serve fundamentally different purposes and are called at different phases of the React rendering cycle. Understanding the distinction is critical for building robust error boundaries.</p>
+      <p><code>getDerivedStateFromError(error)</code> is a static method called during the <strong>render phase</strong>, before the DOM has been updated. It receives the thrown error as its only argument and must return a state object (or null) that React uses to update the component's state — this state update is what causes the error boundary to re-render with the fallback UI. Because it runs during the render phase, it must be a pure function with no side effects. You cannot call <code>setState</code>, dispatch actions, log to external services, or perform any I/O inside this method.</p>
+      <p><code>componentDidCatch(error, errorInfo)</code> is called during the <strong>commit phase</strong>, after the DOM has been updated with the fallback UI. It receives the error AND an <code>errorInfo</code> object containing a <code>componentStack</code> string that traces which components in the tree threw the error. This is where you perform side effects: logging to error monitoring services (Sentry, Datadog), dispatching analytics events, or triggering notifications. It CAN call <code>setState</code>, though this is rarely needed since <code>getDerivedStateFromError</code> handles the state update.</p>
+      <p>A practical rule: use <code>getDerivedStateFromError</code> to render fallback UI, and use <code>componentDidCatch</code> to log the error. If you only implement <code>componentDidCatch</code> and call <code>setState</code> inside it to trigger the fallback, there will be a brief flash of the broken UI before the fallback appears, because <code>componentDidCatch</code> runs after the commit. <code>getDerivedStateFromError</code> prevents that flash by updating state synchronously during the render phase.</p>
+<pre class="code-block">
+class RobustErrorBoundary extends React.Component {
+  state = { hasError: false, error: null, errorInfo: null };
+
+  // RENDER PHASE: pure, no side effects, returns new state
+  static getDerivedStateFromError(error) {
+    // This prevents the broken UI from ever being committed to the DOM
+    return { hasError: true, error };
+  }
+
+  // COMMIT PHASE: side effects allowed here
+  componentDidCatch(error, errorInfo) {
+    // errorInfo.componentStack traces the component tree
+    this.setState({ errorInfo });
+
+    // Safe to call external services here
+    Sentry.captureException(error, {
+      contexts: {
+        react: { componentStack: errorInfo.componentStack }
+      }
+    });
+  }
+
+  render() {
+    const { hasError, error, errorInfo } = this.state;
+    if (hasError) {
+      return (
+        &lt;div className="error-fallback"&gt;
+          &lt;h2&gt;Oops! Something broke.&lt;/h2&gt;
+          {process.env.NODE_ENV === 'development' &amp;&amp; (
+            &lt;details&gt;
+              &lt;summary&gt;Error details&lt;/summary&gt;
+              &lt;pre&gt;{error?.toString()}&lt;/pre&gt;
+              &lt;pre&gt;{errorInfo?.componentStack}&lt;/pre&gt;
+            &lt;/details&gt;
+          )}
+        &lt;/div&gt;
+      );
+    }
+    return this.props.children;
+  }
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q28">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q28" aria-expanded="false" aria-controls="collapse-advanced-q28">
+      Q28. How do you implement a Suspense-compatible data source? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q27" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>A Suspense-compatible data source must integrate with React's "throw a Promise" protocol — when data is not yet available, the component throws a Promise that React catches, registers the Suspense boundary's fallback UI, and then re-renders the component once the Promise resolves. This pattern is sometimes called "suspending" a component. Implementing it correctly requires a cache layer that tracks promise states (pending, resolved, rejected) to avoid re-triggering fetches on every render.</p>
+      <p>The canonical approach involves a <strong>resource cache</strong> — a map from cache keys to resource objects. Each resource object has a <code>read()</code> method that either throws a Promise (if pending), throws an error (if rejected), or returns the data (if resolved). React will call <code>read()</code> during rendering; if it throws a Promise, React suspends the subtree and shows the nearest Suspense fallback. When the Promise resolves, React replays the render and <code>read()</code> returns the data synchronously.</p>
+      <p>With React 18 and the <code>use()</code> hook (stabilized in React 19), you can pass a Promise directly to <code>use(promise)</code> and React handles the suspend/resume cycle automatically. This is cleaner than the manual "throw a Promise" approach and is the recommended API going forward. The <code>use()</code> hook can be called conditionally inside components, unlike other hooks.</p>
+      <p>For production-grade implementations, libraries like SWR, React Query (TanStack Query), and Relay implement Suspense-compatible caches with features like deduplication, background refetching, cache invalidation, and stale-while-revalidate patterns. Rolling your own is educational but unnecessary for most applications. The key invariant is that a resource's <code>read()</code> method must be referentially stable across renders for the same cache key, otherwise you create infinite suspend loops.</p>
+<pre class="code-block">
+// Manual Suspense-compatible resource (educational)
+function createResource(fetchFn) {
+  let status = 'pending';
+  let result;
+
+  const promise = fetchFn().then(
+    (data) => { status = 'success'; result = data; },
+    (error) => { status = 'error'; result = error; }
+  );
+
+  return {
+    read() {
+      if (status === 'pending') throw promise;   // React catches this
+      if (status === 'error') throw result;      // Error boundary catches this
+      return result;                              // Data available!
+    }
+  };
+}
+
+// Cache to prevent recreating resources on every render
+const cache = new Map();
+
+function fetchUser(userId) {
+  if (!cache.has(userId)) {
+    cache.set(userId, createResource(() =>
+      fetch(`/api/users/${userId}`).then(r =&gt; r.json())
+    ));
+  }
+  return cache.get(userId);
+}
+
+// Component that suspends while data loads
+function UserProfile({ userId }) {
+  const resource = fetchUser(userId);
+  const user = resource.read(); // Throws Promise if not ready
+  return &lt;div&gt;{user.name}&lt;/div&gt;;
+}
+
+// React 19 approach using use() hook
+import { use } from 'react';
+
+function UserProfileModern({ userPromise }) {
+  const user = use(userPromise); // Built-in Suspense integration
+  return &lt;div&gt;{user.name}&lt;/div&gt;;
+}
+
+// Usage
+const userPromise = fetch('/api/users/1').then(r =&gt; r.json());
+
+function App() {
+  return (
+    &lt;Suspense fallback={&lt;Skeleton /&gt;}&gt;
+      &lt;ErrorBoundary&gt;
+        &lt;UserProfileModern userPromise={userPromise} /&gt;
+      &lt;/ErrorBoundary&gt;
+    &lt;/Suspense&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q29">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q29" aria-expanded="false" aria-controls="collapse-advanced-q29">
+      Q29. What is the "Suspense waterfall" problem and how do you avoid it? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q29" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>The Suspense waterfall problem occurs when multiple components that each need to fetch data are nested inside one another, causing fetches to execute sequentially rather than in parallel. When component A suspends, React shows A's fallback and doesn't render B at all — so B's fetch never starts. When A's data arrives, React renders A, which renders B, which then suspends and starts its own fetch. This creates a "waterfall" of sequential network requests: A fetch → A renders → B fetch → B renders → C fetch, and so on. Total load time becomes the sum of all individual fetch times instead of the maximum.</p>
+      <p>The root cause is that React cannot know about B's data requirements until A finishes rendering and React reaches B in the tree. This is a fundamental limitation of the "fetch-on-render" pattern. The solution is to adopt a "render-as-you-fetch" or "fetch-then-render" approach where all required data is fetched in parallel before (or concurrently with) rendering begins.</p>
+      <p>The primary mitigation strategy is <strong>hoisting fetches</strong>: initiate all data fetches as high up the component tree as possible (often at the route level or in a parent component), pass the resulting Promises down as props, and let child components <code>use()</code> those Promises. Since all fetches start at the same time, they run in parallel. When child components suspend, the data may already be available or will arrive sooner since all requests were fired simultaneously.</p>
+      <p>A complementary approach is using <strong>parallel Suspense boundaries</strong> by placing siblings (rather than nested components) inside separate Suspense boundaries. React renders sibling boundaries concurrently, so their fetches can proceed in parallel. Another powerful technique is using a data-fetching framework (like Next.js or Remix) that uses server-side data loading to pre-fetch everything before the client renders, eliminating client-side waterfalls entirely.</p>
+<pre class="code-block">
+// PROBLEM: Waterfall pattern (fetch-on-render)
+function UserPage({ userId }) {
+  return (
+    &lt;Suspense fallback={&lt;Spinner /&gt;}&gt;
+      &lt;UserProfile userId={userId} /&gt; {/* Fetches user, then renders: */}
+      {/* Posts only start fetching AFTER UserProfile renders */}
+    &lt;/Suspense&gt;
+  );
+}
+
+function UserProfile({ userId }) {
+  const user = use(fetchUser(userId)); // Suspends here
+  return (
+    &lt;&gt;
+      &lt;h1&gt;{user.name}&lt;/h1&gt;
+      &lt;Suspense fallback={&lt;Spinner /&gt;}&gt;
+        &lt;UserPosts userId={userId} /&gt; {/* Fetch starts AFTER user loads */}
+      &lt;/Suspense&gt;
+    &lt;/&gt;
+  );
+}
+
+// SOLUTION: Hoist fetches (render-as-you-fetch)
+function UserPage({ userId }) {
+  // Both fetches start immediately, in parallel
+  const userPromise = fetchUser(userId);
+  const postsPromise = fetchUserPosts(userId);
+
+  return (
+    &lt;Suspense fallback={&lt;PageSkeleton /&gt;}&gt;
+      &lt;ErrorBoundary&gt;
+        &lt;UserProfile userPromise={userPromise} postsPromise={postsPromise} /&gt;
+      &lt;/ErrorBoundary&gt;
+    &lt;/Suspense&gt;
+  );
+}
+
+function UserProfile({ userPromise, postsPromise }) {
+  const user = use(userPromise);   // Both promises already in-flight
+  return (
+    &lt;&gt;
+      &lt;h1&gt;{user.name}&lt;/h1&gt;
+      &lt;Suspense fallback={&lt;PostsSkeleton /&gt;}&gt;
+        &lt;UserPosts postsPromise={postsPromise} /&gt;
+      &lt;/Suspense&gt;
+    &lt;/&gt;
+  );
+}
+
+// ALSO GOOD: Parallel sibling Suspense boundaries
+function Dashboard() {
+  return (
+    &lt;div className="grid"&gt;
+      &lt;Suspense fallback={&lt;Skeleton /&gt;}&gt;
+        &lt;MetricsPanel /&gt; {/* Fetches independently */}
+      &lt;/Suspense&gt;
+      &lt;Suspense fallback={&lt;Skeleton /&gt;}&gt;
+        &lt;ActivityFeed /&gt; {/* Fetches independently, in parallel */}
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q30">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q30" aria-expanded="false" aria-controls="collapse-advanced-q30">
+      Q30. What is React's reconciliation algorithm for trees with keys vs without? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q30" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>React's reconciliation algorithm (nicknamed "Fiber diffing") compares the previous virtual DOM tree with the new one to determine the minimal set of DOM mutations needed. The algorithm operates under two key heuristics that make it O(n) instead of the theoretically optimal O(n³) for tree diffing: (1) elements of different types produce entirely different trees, and (2) the <code>key</code> prop hints to React that a specific child element should be stable across renders.</p>
+      <p><strong>Without keys</strong>, React reconciles children by position. If you have a list <code>[A, B, C]</code> and it becomes <code>[X, A, B, C]</code>, React compares position 0's A with X (different type/content → destroys and recreates), position 1's B with A, position 2's C with B, and creates a new node for C. This is maximally inefficient — React destroys and recreates most of the list when only an insertion at the front occurred. State attached to those components is also destroyed.</p>
+      <p><strong>With keys</strong>, React builds an identity map from key → fiber for the previous render. During the new render, each child element's key is looked up in this map. If found, React reuses the existing fiber (and its DOM node) and reconciles only the changed props — no unmount/remount occurs. If not found, React creates a new fiber. If a previous key is absent from the new render, React destroys that fiber. This makes list reordering O(n) instead of O(n²).</p>
+      <p>Keys must be stable (not random), unique among siblings (not globally), and meaningful to the data (preferably a database ID). Using array indices as keys is safe ONLY when the list never reorders or filters — if items can reorder, index-based keys defeat the purpose and can cause serious bugs where component state (like form input values) follows the wrong items. Keys are not passed as props to the component; they are used solely by the reconciler.</p>
+<pre class="code-block">
+// WITHOUT keys — position-based reconciliation
+// Adding to front: React destroys and recreates most nodes
+function BadList({ items }) {
+  return (
+    &lt;ul&gt;
+      {items.map((item, index) =&gt; (
+        // Using index as key is as bad as no key when list reorders
+        &lt;li key={index}&gt;
+          &lt;ItemComponent data={item} /&gt;
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+// WITH stable keys — identity-based reconciliation
+// React reuses existing DOM nodes and component instances
+function GoodList({ items }) {
+  return (
+    &lt;ul&gt;
+      {items.map((item) =&gt; (
+        &lt;li key={item.id}&gt;  {/* Stable ID from database */}
+          &lt;ItemComponent data={item} /&gt;
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+// KEY TRICK: Force remount by changing key
+// When you WANT React to destroy and recreate a component:
+function ProfilePage({ userId }) {
+  // Changing userId changes the key → full remount, fresh state
+  return &lt;UserProfile key={userId} userId={userId} /&gt;;
+}
+
+// Reconciliation rules summary:
+// 1. Different element type → destroy subtree, create new
+// 2. Same type, no key → update props, reconcile children by position
+// 3. Same type, with key → find matching key in previous render
+//    - Found: update props, reuse fiber
+//    - Not found: create new fiber
+//    - Previous key missing: destroy fiber
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q31">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q31" aria-expanded="false" aria-controls="collapse-advanced-q31">
+      Q31. What is the Offscreen component (React 18 experiment)? <span class="diff-medium">Medium</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q31" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>The <code>Offscreen</code> component was an experimental React 18 API designed to allow components to remain mounted and preserve their state while being visually hidden or deprioritized. The core idea is to decouple "visible to the user" from "mounted in the tree" — enabling use cases like pre-rendering hidden tabs without mounting them eagerly, keeping a background panel alive so it doesn't lose scroll position, or deprioritizing non-critical rendering to keep animations smooth.</p>
+      <p>Offscreen would support two modes: <code>hidden</code> (component is mounted but not visible, rendered at low priority) and <code>visible</code> (component is fully active). Switching from hidden to visible would be instant since the component was never unmounted. This solves the "tab flicker" problem where switching back to a previously visited tab causes a re-fetch and re-render from scratch.</p>
+      <p>Under the hood, Offscreen uses React's concurrent scheduler to defer rendering of hidden subtrees. Effects run differently for offscreen trees — <code>useEffect</code> cleanup is called when a component goes offscreen, and setup re-runs when it comes back, similar to a focus/blur lifecycle. This respects the "effects represent synchronization" mental model while still preserving state. The component was renamed to <code>Activity</code> in React 19.</p>
+<pre class="code-block">
+// React 18 experimental Offscreen API (conceptual)
+import { unstable_Offscreen as Offscreen } from 'react';
+
+function TabbedInterface({ activeTab }) {
+  return (
+    &lt;div&gt;
+      {/* Tab 1: always mounted, hidden when not active */}
+      &lt;Offscreen mode={activeTab === 'tab1' ? 'visible' : 'hidden'}&gt;
+        &lt;Tab1Content /&gt;
+      &lt;/Offscreen&gt;
+
+      {/* Tab 2: always mounted, hidden when not active */}
+      &lt;Offscreen mode={activeTab === 'tab2' ? 'visible' : 'hidden'}&gt;
+        &lt;Tab2Content /&gt;
+      &lt;/Offscreen&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Compare to unmount approach (loses state):
+function NaiveTabs({ activeTab }) {
+  return (
+    &lt;div&gt;
+      {activeTab === 'tab1' &amp;&amp; &lt;Tab1Content /&gt;}
+      {activeTab === 'tab2' &amp;&amp; &lt;Tab2Content /&gt;}
+    &lt;/div&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q32">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q32" aria-expanded="false" aria-controls="collapse-advanced-q32">
+      Q32. What is Activity (formerly Offscreen) in React 19? <span class="diff-medium">Medium</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q32" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>React 19 renamed the <code>Offscreen</code> experimental component to <code>Activity</code>, and it became a stable API. The rename better reflects the semantics: a component wrapped in <code>Activity</code> represents an "activity" that can be active or inactive, rather than something spatially offscreen. The API controls whether a component subtree is "active" (fully rendered, effects running) or "inactive" (mounted but dormant, effects paused).</p>
+      <p>The <code>Activity</code> component accepts a <code>mode</code> prop with values <code>"visible"</code> and <code>"hidden"</code>. When <code>mode="hidden"</code>, React keeps the component tree mounted and preserves all state, but pauses effects and deprioritizes re-renders of that subtree. When the mode switches back to <code>"visible"</code>, React re-runs effects and brings the component back to full activity instantly since the component was never torn down.</p>
+      <p>This enables several powerful patterns: instant tab switching with preserved scroll positions, pre-rendering route segments before navigation, background data synchronization, and keeping complex forms alive without state loss. The effect lifecycle for Activity-hidden components is explicitly documented: cleanup functions run when hiding, setup functions re-run when showing — giving you hooks to pause subscriptions or cancel animations when a component goes inactive.</p>
+<pre class="code-block">
+// React 19 Activity component
+import { Activity } from 'react';
+
+function App({ currentPage }) {
+  return (
+    &lt;div&gt;
+      &lt;Activity mode={currentPage === 'home' ? 'visible' : 'hidden'}&gt;
+        &lt;HomePage /&gt;
+      &lt;/Activity&gt;
+
+      &lt;Activity mode={currentPage === 'settings' ? 'visible' : 'hidden'}&gt;
+        &lt;SettingsPage /&gt;
+      &lt;/Activity&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Effect behavior in Activity
+function VideoPlayer() {
+  useEffect(() =&gt; {
+    const player = startVideoPlayback();
+    return () =&gt; {
+      // Cleanup runs when Activity mode becomes 'hidden'
+      player.pause();
+    };
+  }, []);
+  // Setup re-runs when Activity mode becomes 'visible' again
+  return &lt;video /&gt;;
+}
+
+// Pre-rendering the next route for instant navigation
+function Router({ currentRoute }) {
+  return (
+    &lt;&gt;
+      &lt;Activity mode={currentRoute === '/dashboard' ? 'visible' : 'hidden'}&gt;
+        &lt;Dashboard /&gt;
+      &lt;/Activity&gt;
+      &lt;Activity mode={currentRoute === '/profile' ? 'visible' : 'hidden'}&gt;
+        &lt;Profile /&gt;
+      &lt;/Activity&gt;
+    &lt;/&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q33">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q33" aria-expanded="false" aria-controls="collapse-advanced-q33">
+      Q33. What is the ViewTransition component in React 19? <span class="diff-medium">Medium</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q33" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>React 19 introduced the <code>ViewTransition</code> component as a first-class integration with the browser's View Transitions API. The View Transitions API allows browsers to animate between different DOM states with smooth, GPU-accelerated transitions — traditionally this required complex manual DOM manipulation or JavaScript animation libraries. React's <code>ViewTransition</code> wraps state updates in a view transition automatically, capturing the before/after DOM snapshots and applying CSS animations between them.</p>
+      <p>When a state update triggers a re-render inside a <code>ViewTransition</code> boundary, React coordinates with the browser to: snapshot the current DOM state, apply the update, snapshot the new DOM state, and then animate between them using the browser's native transition engine. The default animation is a cross-fade, but you can customize it with CSS <code>::view-transition-old()</code> and <code>::view-transition-new()</code> pseudo-elements. Individual elements can be given a <code>viewTransitionName</code> CSS property for element-level transitions such as shared element transitions.</p>
+      <p>This is particularly powerful for route transitions, list reordering animations, and modal open/close effects. Unlike JavaScript-based animation libraries, browser View Transitions are composited on the GPU, run off the main thread, and work with the browser's native rendering pipeline. React's integration ensures the animation is synchronized with React's commit phase — the transition starts at the exact moment React commits the new state to the DOM.</p>
+<pre class="code-block">
+// React 19 ViewTransition component
+import { ViewTransition, startTransition } from 'react';
+
+function ImageGallery({ images }) {
+  const [selected, setSelected] = useState(images[0]);
+
+  function selectImage(image) {
+    startTransition(() =&gt; {
+      setSelected(image);
+    });
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;ViewTransition&gt;
+        &lt;img
+          key={selected.id}
+          src={selected.url}
+          style={{ viewTransitionName: 'main-image' }}
+        /&gt;
+      &lt;/ViewTransition&gt;
+      &lt;div className="thumbnails"&gt;
+        {images.map(img =&gt; (
+          &lt;img key={img.id} src={img.url} onClick={() =&gt; selectImage(img)}
+            style={{ viewTransitionName: `thumb-${img.id}` }} /&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+/* CSS custom transition animations:
+::view-transition-old(main-image) { animation: fade-out 0.2s ease-out; }
+::view-transition-new(main-image) { animation: fade-in 0.2s ease-in; }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+*/
+
+// Route transitions
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    &lt;ViewTransition&gt;
+      &lt;Routes location={location} key={location.pathname}&gt;
+        &lt;Route path="/home" element={&lt;Home /&gt;} /&gt;
+        &lt;Route path="/about" element={&lt;About /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/ViewTransition&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q34">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q34" aria-expanded="false" aria-controls="collapse-advanced-q34">
+      Q34. What are React 19's new hooks: useActionState, useFormStatus, useOptimistic? <span class="diff-medium">Medium</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q34" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>React 19 introduced three new hooks designed around the concept of <strong>Actions</strong> — async functions that handle form submissions and server mutations. Together, they dramatically simplify patterns that previously required significant boilerplate with <code>useState</code>, <code>useEffect</code>, and manual loading/error state management.</p>
+      <p><strong><code>useActionState(action, initialState)</code></strong> wraps an async action function and returns <code>[state, dispatch, isPending]</code>. When <code>dispatch</code> is called (or a form is submitted), React calls the action with the previous state and form data, automatically tracking the pending state. The action can return a new state value. This replaces the common pattern of multiple useState calls for form state, loading, and error tracking. Previously called <code>useFormState</code> in React DOM canary, it was renamed to <code>useActionState</code> in React 19 stable.</p>
+      <p><strong><code>useFormStatus()</code></strong> must be called inside a component that is a child of a <code>&lt;form&gt;</code> element. It returns <code>{ pending, data, method, action }</code> about the parent form's submission state. This allows submit buttons and loading indicators to access form state without prop drilling. <strong><code>useOptimistic(state, updateFn)</code></strong> enables optimistic UI updates — immediately showing the expected result of an action before the server responds. When <code>addOptimistic(value)</code> is called, React immediately applies the optimistic update; when the action completes, React reverts to the real server state, eliminating manual optimistic update logic.</p>
+<pre class="code-block">
+import { useActionState, useOptimistic } from 'react';
+import { useFormStatus } from 'react-dom';
+
+// useActionState: integrated form loading/error state
+function ContactForm() {
+  const [state, submitAction, isPending] = useActionState(
+    async (previousState, formData) =&gt; {
+      try {
+        await sendMessage(formData.get('message'));
+        return { success: true, error: null };
+      } catch (e) {
+        return { success: false, error: e.message };
+      }
+    },
+    { success: false, error: null }
+  );
+
+  return (
+    &lt;form action={submitAction}&gt;
+      {state.error &amp;&amp; &lt;p className="error"&gt;{state.error}&lt;/p&gt;}
+      {state.success &amp;&amp; &lt;p&gt;Message sent!&lt;/p&gt;}
+      &lt;textarea name="message" /&gt;
+      &lt;SubmitButton /&gt;
+    &lt;/form&gt;
+  );
+}
+
+// useFormStatus: submit button aware of parent form
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    &lt;button type="submit" disabled={pending}&gt;
+      {pending ? 'Sending...' : 'Send'}
+    &lt;/button&gt;
+  );
+}
+
+// useOptimistic: immediate UI feedback
+function TodoList({ todos }) {
+  const [optimisticTodos, addOptimisticTodo] = useOptimistic(
+    todos,
+    (current, newTodo) =&gt; [...current, { ...newTodo, pending: true }]
+  );
+
+  async function addTodo(formData) {
+    const title = formData.get('title');
+    addOptimisticTodo({ id: Date.now(), title }); // Immediate UI
+    await saveTodoToServer({ title });             // Real mutation
+  }
+
+  return (
+    &lt;&gt;
+      &lt;ul&gt;
+        {optimisticTodos.map(todo =&gt; (
+          &lt;li key={todo.id} style={{ opacity: todo.pending ? 0.5 : 1 }}&gt;
+            {todo.title}
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+      &lt;form action={addTodo}&gt;
+        &lt;input name="title" /&gt;&lt;button type="submit"&gt;Add&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q35">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q35" aria-expanded="false" aria-controls="collapse-advanced-q35">
+      Q35. What is the Document Metadata API in React 19? <span class="diff-medium">Medium</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q35" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>React 19 introduced built-in support for rendering document metadata tags — <code>&lt;title&gt;</code>, <code>&lt;meta&gt;</code>, and <code>&lt;link&gt;</code> — directly inside React components without needing third-party libraries like <code>react-helmet</code> or <code>react-helmet-async</code>. When React encounters these special tags in a component's JSX, it automatically hoists them to the <code>&lt;head&gt;</code> section of the document, regardless of where in the component tree they appear.</p>
+      <p>This is significant because managing document metadata in React SPAs has historically required external libraries that interact with the DOM imperatively. React 19's native support means metadata updates are synchronized with React's rendering lifecycle, work correctly with Server Components and streaming SSR, and are automatically deduplicated — the last rendered <code>&lt;title&gt;</code> wins. On the server, metadata is rendered directly into the <code>&lt;head&gt;</code> tag in the HTML output without client-side hydration tricks.</p>
+      <p>The API also includes resource management: <code>&lt;link rel="stylesheet"&gt;</code> with a <code>precedence</code> prop lets React manage CSS insertion order for correct cascade ordering. React deduplicates identical stylesheet links across the tree. The <code>react-dom</code> package also exports imperative resource hint functions — <code>prefetchDNS</code>, <code>preconnect</code>, <code>preload</code>, and <code>preinit</code> — for programmatic resource hinting outside of JSX.</p>
+<pre class="code-block">
+// React 19: metadata directly in components — hoisted to &lt;head&gt; automatically
+function ProductPage({ product }) {
+  return (
+    &lt;&gt;
+      &lt;title&gt;{product.name} | My Store&lt;/title&gt;
+      &lt;meta name="description" content={product.description} /&gt;
+      &lt;meta property="og:title" content={product.name} /&gt;
+      &lt;meta property="og:image" content={product.imageUrl} /&gt;
+      &lt;link rel="canonical" href={`https://mystore.com/products/${product.slug}`} /&gt;
+      &lt;main&gt;
+        &lt;h1&gt;{product.name}&lt;/h1&gt;
+      &lt;/main&gt;
+    &lt;/&gt;
+  );
+}
+
+// Old approach with react-helmet (no longer needed):
+// import { Helmet } from 'react-helmet-async';
+// &lt;Helmet&gt;&lt;title&gt;...&lt;/title&gt;&lt;/Helmet&gt;
+
+// Stylesheet precedence management
+function App() {
+  return (
+    &lt;&gt;
+      &lt;link rel="stylesheet" href="/base.css" precedence="low" /&gt;
+      &lt;link rel="stylesheet" href="/components.css" precedence="medium" /&gt;
+      &lt;link rel="stylesheet" href="/overrides.css" precedence="high" /&gt;
+      {/* React inserts them in precedence order, deduplicates if same href */}
+      &lt;MyComponent /&gt;
+    &lt;/&gt;
+  );
+}
+
+// Imperative resource hints
+import { prefetchDNS, preconnect, preload, preinit } from 'react-dom';
+
+function criticalResources() {
+  preconnect('https://api.myapp.com');
+  preload('/fonts/inter.woff2', { as: 'font', crossOrigin: 'anonymous' });
+  preinit('/critical-bundle.js', { as: 'script' });
+  prefetchDNS('https://analytics.myapp.com');
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q36">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q36" aria-expanded="false" aria-controls="collapse-advanced-q36">
+      Q36. How do you implement a custom renderer using React's reconciler? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q36" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>React's architecture separates the reconciler (diffing, scheduling, component lifecycle) from the renderer (DOM manipulation). This separation is exposed via the <code>react-reconciler</code> package, which lets you create a custom renderer targeting any "host environment" — not just the browser DOM. Custom renderers are how React Native, React Three Fiber, Ink (terminal UI), and other React platforms work.</p>
+      <p>To create a custom renderer, you call <code>ReactReconciler(hostConfig)</code> with a host configuration object that defines how to create, update, and delete instances in your target environment. Key host config methods include <code>createInstance</code> (create a host element), <code>appendChildToContainer</code> (add to root), <code>commitUpdate</code> (apply prop changes), and <code>removeChild</code> (delete an element). The reconciler calls these methods during its commit phase after diffing the virtual tree.</p>
+      <p>The reconciler operates in mutation mode (direct instance mutation, like the DOM) or persistent mode (create new instances on update, like React Native's bridge). Most custom renderers use mutation mode. The <code>prepareUpdate</code> method receives old and new props and returns an update payload — if null, no update is needed; if non-null, <code>commitUpdate</code> is called during the commit phase with that payload. This two-phase approach (prepare in render phase, commit in commit phase) keeps the reconciler's rendering interruptible while ensuring DOM mutations are always synchronous and complete.</p>
+<pre class="code-block">
+import ReactReconciler from 'react-reconciler';
+import { DefaultEventPriority } from 'react-reconciler/constants';
+
+// Custom renderer targeting a hypothetical 2D scene graph
+const hostConfig = {
+  supportsMutation: true,
+  supportsPersistence: false,
+  supportsHydration: false,
+
+  createInstance(type, props) {
+    // Map JSX element types to scene objects
+    const instance = { type, props: { ...props }, children: [] };
+    return instance;
+  },
+
+  createTextInstance(text) {
+    return { type: '#text', text };
+  },
+
+  appendInitialChild(parent, child) {
+    parent.children.push(child);
+  },
+
+  appendChild(parent, child) {
+    parent.children.push(child);
+  },
+
+  appendChildToContainer(container, child) {
+    container.root = child;
+    renderScene(container); // Trigger a scene redraw
+  },
+
+  // Return diff payload, or null if no update needed
+  prepareUpdate(instance, type, oldProps, newProps) {
+    const diff = {};
+    let changed = false;
+    for (const key in newProps) {
+      if (key !== 'children' &amp;&amp; oldProps[key] !== newProps[key]) {
+        diff[key] = newProps[key];
+        changed = true;
+      }
+    }
+    return changed ? diff : null;
+  },
+
+  commitUpdate(instance, updatePayload) {
+    Object.assign(instance.props, updatePayload);
+    scheduleRedraw(instance);
+  },
+
+  removeChild(parent, child) {
+    parent.children = parent.children.filter(c =&gt; c !== child);
+  },
+
+  removeChildFromContainer(container, child) {
+    container.root = null;
+  },
+
+  finalizeInitialChildren() { return false; },
+  prepareForCommit() { return null; },
+  resetAfterCommit() {},
+  getRootHostContext() { return {}; },
+  getChildHostContext() { return {}; },
+  shouldSetTextContent() { return false; },
+  getPublicInstance(i) { return i; },
+  getCurrentEventPriority() { return DefaultEventPriority; },
+  getInstanceFromNode() { return null; },
+  beforeActiveInstanceBlur() {},
+  afterActiveInstanceBlur() {},
+  prepareScopeUpdate() {},
+  getInstanceFromScope() { return null; },
+  detachDeletedInstance() {},
+  scheduleTimeout: setTimeout,
+  cancelTimeout: clearTimeout,
+  noTimeout: -1,
+  isPrimaryRenderer: true,
+};
+
+const MyReconciler = ReactReconciler(hostConfig);
+
+export function render(element, container, callback) {
+  const root = MyReconciler.createContainer(
+    container, 0, null, false, null, '', {}, null
+  );
+  MyReconciler.updateContainer(element, root, null, callback);
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q37">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q37" aria-expanded="false" aria-controls="collapse-advanced-q37">
+      Q37. What is React Three Fiber and how does it use React's reconciler? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q37" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>React Three Fiber (R3F) is a React renderer for Three.js, the popular 3D graphics library. It uses the <code>react-reconciler</code> package to create a custom renderer where React components map to Three.js objects — meshes, lights, cameras, materials, geometries — rather than DOM elements. This allows you to build complex 3D scenes using React's declarative component model, hooks, and state management instead of imperative Three.js API calls.</p>
+      <p>R3F's host config maps JSX element type names to Three.js class names via an internal catalog. When you write <code>&lt;mesh&gt;</code>, the reconciler calls <code>createInstance('mesh', props)</code>, which instantiates <code>new THREE.Mesh()</code>. Props are mapped to Three.js property assignments — R3F has special handling for constructors via the <code>args</code> prop (e.g., <code>&lt;boxGeometry args={[1, 1, 1]} /&gt;</code> maps to <code>new THREE.BoxGeometry(1, 1, 1)</code>), nested properties via dot notation (e.g., <code>position-x={1}</code>), and the <code>attach</code> prop for non-standard parent-child relationships.</p>
+      <p>The Three.js rendering loop is handled outside React's rendering cycle. Three.js requires a continuous <code>requestAnimationFrame</code> loop to render the scene at 60fps, independent of React re-renders. R3F manages this loop and exposes the <code>useFrame(callback)</code> hook, which registers a function that runs every animation frame. React re-renders only trigger when state/props change; the 3D scene animates continuously via the RAF loop. This separation is critical for performance — React state updates are typically infrequent, while the render loop must run at 60fps regardless.</p>
+<pre class="code-block">
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useRef, useState } from 'react';
+
+// A rotating, interactive 3D cube
+function RotatingBox() {
+  const meshRef = useRef();
+  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+
+  // Runs every RAF frame — not a React re-render
+  useFrame((state, delta) =&gt; {
+    meshRef.current.rotation.x += delta;
+    meshRef.current.rotation.y += delta * 0.5;
+  });
+
+  return (
+    &lt;mesh
+      ref={meshRef}
+      scale={clicked ? 1.5 : 1}
+      onClick={() =&gt; setClicked(c =&gt; !c)}
+      onPointerOver={() =&gt; setHovered(true)}
+      onPointerOut={() =&gt; setHovered(false)}
+    &gt;
+      {/* args maps to constructor: new BoxGeometry(1, 1, 1) */}
+      &lt;boxGeometry args={[1, 1, 1]} /&gt;
+      &lt;meshStandardMaterial color={hovered ? 'hotpink' : '#2196f3'} /&gt;
+    &lt;/mesh&gt;
+  );
+}
+
+function ThreeDScene() {
+  return (
+    &lt;Canvas camera={{ position: [0, 0, 5] }}&gt;
+      &lt;ambientLight intensity={0.5} /&gt;
+      &lt;directionalLight position={[10, 10, 5]} intensity={1} /&gt;
+      &lt;RotatingBox /&gt;
+    &lt;/Canvas&gt;
+  );
+}
+
+// R3F JSX → Three.js mapping:
+// &lt;mesh&gt;                → new THREE.Mesh()
+// &lt;boxGeometry&gt;         → new THREE.BoxGeometry()
+// &lt;meshStandardMaterial&gt; → new THREE.MeshStandardMaterial()
+// &lt;ambientLight&gt;        → new THREE.AmbientLight()
+// position={[x,y,z]}   → obj.position.set(x, y, z)
+// rotation-x={Math.PI} → obj.rotation.x = Math.PI
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q38">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q38" aria-expanded="false" aria-controls="collapse-advanced-q38">
+      Q38. How do you implement lazy initialization with useState? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q38" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>The <code>useState</code> hook accepts either a value or an <strong>initializer function</strong> as its argument. This is called "lazy initialization" and it's a critical performance optimization for cases where computing the initial state is expensive. React only calls the initializer function <strong>once</strong> — during the initial render — and ignores it on subsequent renders. In contrast, if you pass a computed value directly, that computation executes on every render even though React discards the result after the first render.</p>
+      <p>The syntax difference is subtle but important: <code>useState(expensiveComputation())</code> — with parentheses — calls the function on every render. <code>useState(expensiveComputation)</code> — without parentheses, passing the function reference — calls it only once at mount. The same pattern applies to <code>useReducer</code>: its optional third argument is an initializer function called with the second argument as input, enabling lazy initialization of complex reducer state.</p>
+      <p>Common use cases for lazy initialization include reading from localStorage or sessionStorage (synchronous I/O that blocks the main thread), parsing large JSON blobs, filtering or sorting large arrays to derive an initial view, complex object construction with many computed fields, and any computation that would visibly affect render performance. When the initial state depends on props, use an arrow function closure: <code>useState(() =&gt; computeFromProps(initialProps))</code> — the closure captures the props value at mount time, which is correct since initial state only uses initial props, not updated ones.</p>
+<pre class="code-block">
+// BAD: expensiveRead() runs on EVERY render (wasted CPU)
+function BadComponent() {
+  const [data, setData] = useState(expensiveRead()); // Called every render!
+  return &lt;div&gt;{data}&lt;/div&gt;;
+}
+
+// GOOD: expensiveRead called ONCE at mount
+function GoodComponent() {
+  const [data, setData] = useState(expensiveRead); // Function reference only
+  return &lt;div&gt;{data}&lt;/div&gt;;
+}
+
+// Practical: persisted state with localStorage
+function usePersistedState(key, defaultValue) {
+  const [state, setState] = useState(() =&gt; {
+    try {
+      const stored = localStorage.getItem(key);
+      return stored !== null ? JSON.parse(stored) : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  });
+
+  const setPersistedState = useCallback((value) =&gt; {
+    const next = typeof value === 'function' ? value(state) : value;
+    setState(next);
+    try {
+      localStorage.setItem(key, JSON.stringify(next));
+    } catch { /* storage full */ }
+  }, [key]);
+
+  return [state, setPersistedState];
+}
+
+// With props (arrow function captures initial props value)
+function FilteredList({ initialItems, predicate }) {
+  const [filtered, setFiltered] = useState(
+    () =&gt; initialItems.filter(predicate) // Only runs at mount with initial props
+  );
+  return &lt;ul&gt;{filtered.map(item =&gt; &lt;li key={item.id}&gt;{item.name}&lt;/li&gt;)}&lt;/ul&gt;;
+}
+
+// useReducer with lazy initializer (third argument)
+function initState(initialCount) {
+  return { count: initialCount, history: [], lastUpdated: Date.now() };
+}
+
+function Counter({ startCount }) {
+  // initState(startCount) called ONCE with startCount as argument
+  const [state, dispatch] = useReducer(reducer, startCount, initState);
+  return &lt;button onClick={() =&gt; dispatch('increment')}&gt;{state.count}&lt;/button&gt;;
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q39">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q39" aria-expanded="false" aria-controls="collapse-advanced-q39">
+      Q39. What is the problem with closures and stale state in concurrent mode? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q39" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>Stale closures are one of the most pervasive bugs in React hooks, and concurrent mode amplifies the problem because renders can be interrupted, paused, and replayed. A stale closure occurs when a function (event handler, effect callback, timeout) captures a variable from its enclosing scope at creation time, but by the time the function executes, the underlying React state has been updated — yet the function still references the old value from its closed-over scope.</p>
+      <p>In legacy synchronous mode, the render-to-commit cycle was uninterrupted, so stale closures mostly surfaced in async operations (setTimeout, fetch callbacks). In concurrent mode, React may start rendering a component, pause it to work on higher-priority updates, then resume — creating multiple "versions" of a component's render with different state snapshots. Closures created during one render version may be called with values from a different render version's state.</p>
+      <p>The primary solutions are: (1) Use the <strong>functional update form</strong> of setState — <code>setState(prev =&gt; prev + 1)</code> — which always receives the latest state value regardless of when the closure was created. (2) Use <code>useRef</code> to hold a "latest value" ref that is mutated synchronously on every render — event handlers can read from the ref to always get the current value. (3) Use <code>useReducer</code> with action dispatching instead of direct state reads in callbacks. (4) Properly declare dependencies in <code>useEffect</code> and <code>useCallback</code> dependency arrays so closures are recreated when their dependencies change.</p>
+<pre class="code-block">
+// STALE CLOSURE EXAMPLE
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  // BAD: This closure captures count=0 at creation time
+  useEffect(() =&gt; {
+    const timer = setInterval(() =&gt; {
+      setCount(count + 1); // Always adds 1 to the stale count=0!
+    }, 1000);
+    return () =&gt; clearInterval(timer);
+  }, []); // Empty deps — closure never updates
+
+  return &lt;div&gt;{count}&lt;/div&gt;;
+}
+
+// FIX 1: Functional update form (always uses latest state)
+function CounterFixed1() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() =&gt; {
+    const timer = setInterval(() =&gt; {
+      setCount(prev =&gt; prev + 1); // prev is always current state
+    }, 1000);
+    return () =&gt; clearInterval(timer);
+  }, []);
+
+  return &lt;div&gt;{count}&lt;/div&gt;;
+}
+
+// FIX 2: useRef to track latest value
+function CounterFixed2() {
+  const [count, setCount] = useState(0);
+  const countRef = useRef(count);
+  countRef.current = count; // Always in sync with latest render
+
+  const handleAsync = useCallback(() =&gt; {
+    setTimeout(() =&gt; {
+      console.log('Current count:', countRef.current); // Always latest
+    }, 2000);
+  }, []); // No dependency on count needed
+
+  return &lt;button onClick={handleAsync}&gt;{count}&lt;/button&gt;;
+}
+
+// Concurrent mode specific: multiple render versions
+function ConcurrentPitfall() {
+  const [items, setItems] = useState([]);
+
+  // This transition may be interrupted and replayed
+  const handleAdd = () =&gt; {
+    startTransition(() =&gt; {
+      // If this render is interrupted, items may be stale
+      // Use functional update to always work from latest state:
+      setItems(prevItems =&gt; [...prevItems, { id: Date.now() }]);
+    });
+  };
+
+  return &lt;button onClick={handleAdd}&gt;Add ({items.length})&lt;/button&gt;;
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q40">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q40" aria-expanded="false" aria-controls="collapse-advanced-q40">
+      Q40. How does React prevent "tearing" with useSyncExternalStore? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q40" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>"Tearing" is a visual inconsistency bug unique to concurrent mode where different parts of the UI show different values for the same external state during a single render pass. In legacy synchronous rendering, this was impossible because the entire render was uninterruptible — all components saw the same snapshot of state. In concurrent mode, React can pause a render, yield to the browser, and then resume — and if an external store (Redux, Zustand, Jotai, or any non-React state) updates during that pause, some components will have rendered with the old value and others with the new value, resulting in visual tearing.</p>
+      <p>React 18 introduced <code>useSyncExternalStore</code> specifically to solve this problem. The hook takes three arguments: a <code>subscribe</code> function (to register a listener for store updates), a <code>getSnapshot</code> function (to read the current store value), and an optional <code>getServerSnapshot</code> for SSR. React uses the snapshot to detect if the external store changed mid-render — if it did, React synchronously re-renders the affected components before committing, ensuring consistency.</p>
+      <p>The key invariant is that <code>getSnapshot</code> must return a <strong>referentially stable</strong> value when the store hasn't changed. If <code>getSnapshot</code> creates a new object or array on every call (even with the same underlying data), React will enter an infinite loop of detecting "changes" and re-rendering. You must either return primitive values, or memoize the snapshot (e.g., compare deeply and return the previous reference if unchanged). All state management libraries targeting React 18 (Redux, Zustand, etc.) have been updated to use <code>useSyncExternalStore</code> internally.</p>
+<pre class="code-block">
+import { useSyncExternalStore } from 'react';
+
+// Building a simple store with useSyncExternalStore
+function createStore(initialState) {
+  let state = initialState;
+  const listeners = new Set();
+
+  return {
+    getState() { return state; },
+
+    setState(updater) {
+      state = typeof updater === 'function' ? updater(state) : updater;
+      listeners.forEach(listener =&gt; listener());
+    },
+
+    subscribe(listener) {
+      listeners.add(listener);
+      return () =&gt; listeners.delete(listener); // Cleanup function
+    }
+  };
+}
+
+const counterStore = createStore({ count: 0 });
+
+// Custom hook using useSyncExternalStore
+function useCounter() {
+  return useSyncExternalStore(
+    counterStore.subscribe,                    // subscribe
+    () =&gt; counterStore.getState().count,       // getSnapshot (client)
+    () =&gt; 0                                    // getServerSnapshot (SSR)
+  );
+}
+
+function Counter() {
+  const count = useCounter();
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={() =&gt; counterStore.setState(s =&gt; ({ count: s.count + 1 }))}&gt;
+        +
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// How React prevents tearing:
+// 1. During render, React calls getSnapshot() to read state
+// 2. If store updates during a paused concurrent render,
+//    React detects the snapshot changed
+// 3. React discards the interrupted render and re-renders
+//    synchronously with the new snapshot
+// 4. All components see the same consistent state value
+
+// CRITICAL: getSnapshot must be stable (no new objects each call)
+// BAD:
+const getSnapshot = () =&gt; ({ ...store.getState() }); // New object every call!
+// GOOD:
+let cachedSnapshot = store.getState();
+store.subscribe(() =&gt; { cachedSnapshot = store.getState(); });
+const getSnapshot = () =&gt; cachedSnapshot; // Same reference if unchanged
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q41">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q41" aria-expanded="false" aria-controls="collapse-advanced-q41">
+      Q41. What is the difference between controlled Suspense and uncontrolled Suspense? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q41" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>The terms "controlled" and "uncontrolled" Suspense describe how a parent component manages the loading states of its Suspense-wrapped children. These terms are analogous to controlled vs uncontrolled form inputs — the distinction is about whether the parent explicitly manages the transition or defers entirely to React's automatic behavior.</p>
+      <p><strong>Uncontrolled Suspense</strong> is the default and simplest form: you wrap a component in <code>&lt;Suspense fallback={...}&gt;</code> and React automatically shows the fallback whenever any child suspends. The parent has no direct control over when the fallback appears or disappears — React manages the entire lifecycle. This is appropriate for most use cases: loading routes, lazy components, and data fetching where the loading state doesn't need to be coordinated with other UI state.</p>
+      <p><strong>Controlled Suspense</strong> involves using <code>startTransition</code>, <code>useDeferredValue</code>, or the <code>isPending</code> flag from <code>useTransition</code> to explicitly manage when loading states are shown. When you wrap a state update in <code>startTransition</code>, React keeps showing the previous UI until the new content is ready — the Suspense fallback is not shown for transitions. Instead, you use the <code>isPending</code> boolean to show a subtle loading indicator (like a spinner overlay or opacity reduction) while the new content loads. This provides a much smoother UX than instantly replacing content with a skeleton.</p>
+<pre class="code-block">
+// UNCONTROLLED: React shows fallback automatically when child suspends
+function UncontrolledExample() {
+  const [page, setPage] = useState(1);
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; setPage(p =&gt; p + 1)}&gt;Next&lt;/button&gt;
+      &lt;Suspense fallback={&lt;Skeleton /&gt;}&gt;
+        {/* When page changes, React immediately shows Skeleton */}
+        &lt;PageContent page={page} /&gt;
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+}
+
+// CONTROLLED: Parent manages loading state via useTransition
+function ControlledExample() {
+  const [page, setPage] = useState(1);
+  const [isPending, startTransition] = useTransition();
+
+  const handleNextPage = () =&gt; {
+    startTransition(() =&gt; {
+      setPage(p =&gt; p + 1); // Wrapped in transition
+    });
+  };
+
+  return (
+    &lt;div style={{ opacity: isPending ? 0.7 : 1, transition: 'opacity 0.2s' }}&gt;
+      &lt;button onClick={handleNextPage} disabled={isPending}&gt;
+        {isPending ? 'Loading...' : 'Next'}
+      &lt;/button&gt;
+      &lt;Suspense fallback={&lt;Skeleton /&gt;}&gt;
+        {/* React keeps showing current page until next page is ready */}
+        &lt;PageContent page={page} /&gt;
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+}
+
+// useDeferredValue: controlled Suspense for search/filtering
+function SearchResults({ query }) {
+  const deferredQuery = useDeferredValue(query);
+  const isStale = query !== deferredQuery;
+
+  return (
+    &lt;div style={{ opacity: isStale ? 0.5 : 1 }}&gt;
+      &lt;Suspense fallback={&lt;ResultsSkeleton /&gt;}&gt;
+        {/* Uses deferred value — shows stale results while new ones load */}
+        &lt;Results query={deferredQuery} /&gt;
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q42">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q42" aria-expanded="false" aria-controls="collapse-advanced-q42">
+      Q42. How do you implement a drag-and-drop system with React 18 concurrent features? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q42" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>Drag-and-drop is a particularly tricky interaction to implement correctly with React's concurrent rendering because it involves rapid, continuous state updates (position tracking) combined with high-priority DOM feedback (visual drag cursor) and lower-priority reordering logic (list updates). Naively updating state on every <code>mousemove</code> event at full React priority will cause UI jank — but using concurrent features strategically produces smooth 60fps drag interactions.</p>
+      <p>The key architectural insight is to separate drag state into two categories: <strong>urgent state</strong> (the drag overlay position, cursor style, immediate visual feedback — must update synchronously at the highest priority) and <strong>deferred state</strong> (the target drop zone highlighting, list reordering preview — can be wrapped in <code>startTransition</code> to render at lower priority). This prevents expensive list reordering computations from blocking the drag cursor from following the mouse.</p>
+      <p>For the drag position itself, avoid React state entirely — use a <code>useRef</code> and directly manipulate the drag element's CSS transform via <code>ref.current.style.transform</code>. DOM mutation via ref is synchronous and bypasses React's rendering pipeline, giving you true 60fps position updates. The <code>onDrop</code> and <code>onDragEnd</code> handlers — where the actual list reordering state update happens — should use <code>startTransition</code> to mark the potentially-expensive reorder as a non-urgent update.</p>
+<pre class="code-block">
+import { useState, useTransition, useRef, useCallback } from 'react';
+
+function DragDropList({ initialItems }) {
+  const [items, setItems] = useState(initialItems);
+  const [dragOverId, setDragOverId] = useState(null);
+  const [isPending, startTransition] = useTransition();
+  const dragItemId = useRef(null);
+
+  const handleDragStart = useCallback((e, id) =&gt; {
+    dragItemId.current = id;
+    e.dataTransfer.effectAllowed = 'move';
+  }, []);
+
+  const handleDragOver = useCallback((e, id) =&gt; {
+    e.preventDefault();
+    // Wrap in transition: drop zone highlight can be deferred
+    startTransition(() =&gt; {
+      setDragOverId(id);
+    });
+  }, []);
+
+  const handleDrop = useCallback((e, targetId) =&gt; {
+    e.preventDefault();
+    const sourceId = dragItemId.current;
+    if (sourceId === targetId) return;
+
+    // Reordering is non-urgent — wrap in transition
+    startTransition(() =&gt; {
+      setItems(prev =&gt; {
+        const sourceIdx = prev.findIndex(i =&gt; i.id === sourceId);
+        const targetIdx = prev.findIndex(i =&gt; i.id === targetId);
+        const next = [...prev];
+        const [removed] = next.splice(sourceIdx, 1);
+        next.splice(targetIdx, 0, removed);
+        return next;
+      });
+      setDragOverId(null);
+    });
+  }, []);
+
+  const handleDragEnd = useCallback(() =&gt; {
+    dragItemId.current = null;
+    setDragOverId(null);
+  }, []);
+
+  return (
+    &lt;ul style={{ opacity: isPending ? 0.8 : 1 }}&gt;
+      {items.map(item =&gt; (
+        &lt;li
+          key={item.id}
+          draggable
+          onDragStart={(e) =&gt; handleDragStart(e, item.id)}
+          onDragOver={(e) =&gt; handleDragOver(e, item.id)}
+          onDrop={(e) =&gt; handleDrop(e, item.id)}
+          onDragEnd={handleDragEnd}
+          style={{
+            background: dragOverId === item.id ? '#e3f2fd' : 'white',
+            border: dragOverId === item.id ? '2px dashed #2196f3' : '1px solid #ccc',
+            padding: '8px',
+            marginBottom: '4px',
+            cursor: 'grab',
+            transition: 'background 0.1s'
+          }}
+        &gt;
+          {item.name}
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q43">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q43" aria-expanded="false" aria-controls="collapse-advanced-q43">
+      Q43. What is the "zombie child" problem with concurrent rendering? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q43" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>The "zombie child" problem is a subtle bug that occurs in concurrent React (and was already present in async Redux-connected components) where a child component reads from an external store and renders with stale or inconsistent data after its parent has already processed a state update that should have caused the child to unmount or re-render with new data. The term "zombie" refers to a component that should be dead (unmounted) but continues to render with old data.</p>
+      <p>The classic scenario: a parent component renders a list of items. A store update deletes item #5. The parent re-renders and no longer renders the child for item #5. However, in concurrent mode, the parent's render is interruptible — and a child component subscribed directly to the same store might render with the store's new state (item #5 deleted) before the parent's render completes. When the parent's render finally commits, the child for item #5 is removed, but if the child tried to render with the deleted item, it may have already thrown an error or rendered incorrect data.</p>
+      <p>The root cause is the mismatch between parent tree state and child store subscriptions when store updates happen during interrupted renders. The solution is using <code>useSyncExternalStore</code> which forces all store reads to use a consistent snapshot throughout a render pass. Libraries like React-Redux v8+ use <code>useSyncExternalStore</code> specifically to solve zombie children — by ensuring that the store snapshot React uses for all components in the current render is the same, preventing the parent/child inconsistency. Before React 18, this was partially mitigated by the synchronous rendering model; concurrent mode makes it a more pressing concern.</p>
+<pre class="code-block">
+// ZOMBIE CHILD SCENARIO (simplified)
+// Store: { items: { '1': {...}, '2': {...} } }
+
+// Parent: renders list based on item IDs
+function ItemList() {
+  const itemIds = useSelector(state =&gt; Object.keys(state.items));
+  // In concurrent mode, this render may be interrupted...
+  return itemIds.map(id =&gt; &lt;Item key={id} id={id} /&gt;);
+}
+
+// Child: directly accesses item by ID
+function Item({ id }) {
+  // If item is deleted from store during parent's interrupted render,
+  // this might run with id for a deleted item = ZOMBIE!
+  const item = useSelector(state =&gt; state.items[id]);
+
+  if (!item) {
+    // This guard is necessary even if parent "shouldn't" render this child
+    return null; // Zombie guard
+  }
+
+  return &lt;div&gt;{item.name}&lt;/div&gt;;
+}
+
+// SOLUTION: useSyncExternalStore ensures consistent snapshots
+// React-Redux v8+ implements this internally:
+function useSelector(selector) {
+  return useSyncExternalStore(
+    reduxStore.subscribe,
+    () =&gt; selector(reduxStore.getState()),
+    () =&gt; selector(serverState)
+  );
+}
+
+// The useSyncExternalStore contract:
+// - All components in one render pass use the SAME store snapshot
+// - If the snapshot changes mid-render, React re-renders synchronously
+// - This prevents parent/child seeing different versions of the store
+// - Zombie children are eliminated because consistent snapshots
+//   guarantee parent and child agree on which items exist
+
+// Additional defensive coding:
+function SafeItem({ id }) {
+  const item = useSelector(state =&gt; state.items[id]);
+  // Always guard against item being undefined/null
+  if (!item) return null;
+  return &lt;div&gt;{item.name}&lt;/div&gt;;
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q44">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q44" aria-expanded="false" aria-controls="collapse-advanced-q44">
+      Q44. How do React DevTools work under the hood? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q44" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>React DevTools is a browser extension and standalone tool that provides a visual tree inspector, profiler, and component state/props editor for React applications. Under the hood, it relies on a dedicated communication channel that React itself exposes: a global object on the <code>window</code> called <code>__REACT_DEVTOOLS_GLOBAL_HOOK__</code>. React's renderer code checks for this hook at startup and, if present, calls hook methods to report every fiber tree mutation, render, commit, and effect.</p>
+      <p>The global hook is injected by the DevTools extension before the page's JavaScript executes (via a content script). React's reconciler calls methods like <code>onCommitFiberRoot</code> after each commit, passing a reference to the root Fiber node. The DevTools then walk the fiber tree to extract component names, props, state, hooks, context values, and performance timing — building its own internal representation of the component tree that it displays in the "Components" panel.</p>
+      <p>For the Profiler, React reports timing data for each fiber render: the base duration (time to render the component tree without memoization), actual duration (real render time with memoization applied), and the commit time. The DevTools store this data and render flame charts and ranked charts. The "Why did this render?" feature uses the same fiber data — React stores the "alternate" fiber (the previous render's fiber) alongside each current fiber, allowing the DevTools to diff props and state between renders to identify the cause of a re-render.</p>
+      <p>Component editing (changing state/props from DevTools) works by calling internal React fiber APIs that React exposes specifically for DevTools through the hook interface. These are deliberately separate from the public React API and not intended for production use. Hot-reloading integration also uses this hook system, with Fast Refresh calling into the hook to signal component updates without full tree remounts.</p>
+<pre class="code-block">
+// React checks for DevTools hook at initialization
+// Inside React's source (react-dom/src/client/ReactDOMRoot.js):
+if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined') {
+  __REACT_DEVTOOLS_GLOBAL_HOOK__.inject(internals);
+}
+
+// After each commit, React calls:
+// __REACT_DEVTOOLS_GLOBAL_HOOK__.onCommitFiberRoot(rendererID, root, ...)
+
+// The hook interface (simplified):
+window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+  renderers: new Map(),
+
+  inject(renderer) {
+    const id = nextRendererID++;
+    this.renderers.set(id, renderer);
+    return id;
+  },
+
+  onCommitFiberRoot(rendererID, root, priorityLevel) {
+    // DevTools receives the entire fiber tree here
+    const renderer = this.renderers.get(rendererID);
+    // Walk the fiber tree to update the DevTools component tree
+    walkFibers(root.current);
+  },
+
+  onPostCommitFiberRoot(rendererID, root) {
+    // Called after passive effects run
+  }
+};
+
+// Fiber tree walking (how DevTools reads component data):
+function walkFibers(fiber) {
+  if (!fiber) return;
+
+  const info = {
+    name: getDisplayName(fiber),    // Component name
+    type: fiber.type,               // Function/class/HTML tag
+    props: fiber.memoizedProps,     // Current props
+    state: fiber.memoizedState,     // Linked list of hook states
+    effects: fiber.flags,           // Pending effect flags
+    actualDuration: fiber.actualDuration, // Profiling data
+  };
+
+  // DevTools builds its own tree representation
+  devtoolsTree.set(fiber, info);
+
+  // Recurse through children and siblings
+  walkFibers(fiber.child);
+  walkFibers(fiber.sibling);
+}
+
+// DevTools component editing — uses renderer internals:
+// renderer.overrideHookState(fiber, hookIndex, path, value)
+// renderer.overrideProps(fiber, path, value)
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q45">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q45" aria-expanded="false" aria-controls="collapse-advanced-q45">
+      Q45. What is the difference between React's internal state and external state for concurrent safety? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q45" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>In React 18's concurrent model, "internal state" refers to state managed by React itself via <code>useState</code>, <code>useReducer</code>, and component state — stored inside React's fiber data structure. "External state" refers to state managed outside React: Redux stores, Zustand atoms, MobX observables, browser APIs (localStorage, URL), or any plain JavaScript variables. This distinction is critical for concurrent safety because React's internal state and external state have different guarantees during interrupted renders.</p>
+      <p>React's internal state is <strong>automatically concurrent-safe</strong>. React ensures that during a render pass, all reads to internal state are consistent — if a render is interrupted and restarted, it reads the same state snapshot for the entire restart. React batches updates and applies them atomically, so you can never observe a partial state update in a render. The fiber architecture stores both the "current" and "work-in-progress" versions of state, and React manages the transition between them atomically during commit.</p>
+      <p>External state is <strong>not automatically concurrent-safe</strong>. If external state updates while React has a paused concurrent render in progress, React has no way to automatically detect this or restart the render. Components may read the store at different points in time during a single interrupted render pass, seeing different values — causing tearing. The solution is <code>useSyncExternalStore</code>, which gives React a way to detect external state changes mid-render and force a synchronous re-render. Any external state management library targeting React 18 must use <code>useSyncExternalStore</code> (or the equivalent subscription model) to guarantee concurrent safety.</p>
+<pre class="code-block">
+// INTERNAL STATE: automatically concurrent-safe
+function InternalStateComponent() {
+  const [count, setCount] = useState(0); // Stored in React fiber
+
+  // React guarantees: count is ALWAYS consistent
+  // across all renders in a single render pass
+  return (
+    &lt;div&gt;
+      {count}
+      &lt;Child count={count} /&gt; {/* Always same count value */}
+    &lt;/div&gt;
+  );
+}
+
+// EXTERNAL STATE: NOT concurrent-safe without useSyncExternalStore
+let externalCounter = 0; // Plain JS variable
+function setExternalCounter(val) { externalCounter = val; }
+
+function UnsafeComponent() {
+  // Reading external state directly — TEARING RISK!
+  // If externalCounter updates between parent and child renders:
+  return (
+    &lt;div&gt;
+      {externalCounter} {/* Might show 5 */}
+      &lt;Child /&gt; {/* Child might see 6 if interrupted */}
+    &lt;/div&gt;
+  );
+}
+
+// EXTERNAL STATE: safe with useSyncExternalStore
+const externalStore = {
+  _value: 0,
+  _listeners: new Set(),
+  get() { return this._value; },
+  set(v) { this._value = v; this._listeners.forEach(l =&gt; l()); },
+  subscribe(l) { this._listeners.add(l); return () =&gt; this._listeners.delete(l); }
+};
+
+function SafeComponent() {
+  const value = useSyncExternalStore(
+    externalStore.subscribe.bind(externalStore),
+    externalStore.get.bind(externalStore),
+    () =&gt; 0 // Server snapshot
+  );
+
+  // React guarantees: all components in this render pass
+  // see the same 'value' snapshot
+  return &lt;div&gt;{value}&lt;/div&gt;;
+}
+
+// Summary of concurrent safety:
+// useState/useReducer:   SAFE — React manages snapshots
+// useRef:                MUTABLE — reads are not snapshotted, use with care
+// Context:               SAFE — built on React's state system
+// Redux (pre-v8):        UNSAFE — use react-redux v8+ which uses useSyncExternalStore
+// Zustand:               SAFE — uses useSyncExternalStore internally
+// Plain JS variables:    UNSAFE — no snapshot guarantees
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q46">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q46" aria-expanded="false" aria-controls="collapse-advanced-q46">
+      Q46. How do you implement an accessible modal with portals? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q46" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>An accessible modal requires both React portals (for correct DOM placement) and a suite of ARIA attributes and keyboard behaviors (for screen reader and keyboard user support). Using <code>ReactDOM.createPortal(children, domNode)</code> renders the modal's DOM node as a child of <code>document.body</code> (or another container outside the app root), which prevents CSS overflow clipping and z-index stacking context issues. Despite the portal being physically outside the React component tree in the DOM, React event bubbling and context still work as if the portal were in its logical parent — clicks inside the portal bubble up through React's component tree normally.</p>
+      <p>For accessibility, a compliant modal must: set <code>role="dialog"</code> and <code>aria-modal="true"</code> on the modal container, include <code>aria-labelledby</code> pointing to the modal's heading and <code>aria-describedby</code> pointing to its body text, trap focus within the modal (users tabbing must not be able to leave the modal while it's open), return focus to the previously focused element when closed, and respond to the Escape key for closure. Setting <code>aria-hidden="true"</code> on the main application content while the modal is open prevents screen readers from reading the background content.</p>
+      <p>Focus trapping is the most complex part: you must find all focusable elements within the modal (buttons, links, inputs, elements with tabindex), intercept Tab and Shift+Tab key events, and wrap focus from the last element back to the first (and vice versa). The focus trap must be set up on open and torn down on close. Using a well-tested library like <code>focus-trap-react</code> or the native browser <code>inert</code> attribute on the background content is preferable to implementing focus trapping manually, since edge cases (iframes, shadow DOM, dynamically added elements) are numerous.</p>
+<pre class="code-block">
+import { createPortal } from 'react-dom';
+import { useEffect, useRef, useCallback } from 'react';
+
+function Modal({ isOpen, onClose, title, children }) {
+  const modalRef = useRef(null);
+  const previousFocusRef = useRef(null);
+
+  useEffect(() =&gt; {
+    if (isOpen) {
+      // Store currently focused element to restore on close
+      previousFocusRef.current = document.activeElement;
+
+      // Focus the modal (or first focusable element)
+      modalRef.current?.focus();
+
+      // Hide background from screen readers
+      document.getElementById('app-root')?.setAttribute('aria-hidden', 'true');
+
+      return () =&gt; {
+        document.getElementById('app-root')?.removeAttribute('aria-hidden');
+        previousFocusRef.current?.focus(); // Restore focus on close
+      };
+    }
+  }, [isOpen]);
+
+  const handleKeyDown = useCallback((e) =&gt; {
+    if (e.key === 'Escape') {
+      onClose();
+      return;
+    }
+
+    // Focus trap: Tab / Shift+Tab
+    if (e.key === 'Tab') {
+      const focusable = modalRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
+    }
+  }, [onClose]);
+
+  if (!isOpen) return null;
+
+  return createPortal(
+    &lt;div
+      role="presentation"
+      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000 }}
+      onClick={(e) =&gt; { if (e.target === e.currentTarget) onClose(); }}
+    &gt;
+      &lt;div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-desc"
+        ref={modalRef}
+        tabIndex={-1}
+        onKeyDown={handleKeyDown}
+        style={{ background: 'white', padding: '24px', borderRadius: '8px',
+                 maxWidth: '500px', margin: '10vh auto', outline: 'none' }}
+      &gt;
+        &lt;h2 id="modal-title"&gt;{title}&lt;/h2&gt;
+        &lt;div id="modal-desc"&gt;{children}&lt;/div&gt;
+        &lt;button onClick={onClose} aria-label="Close dialog"&gt;Close&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;,
+    document.body
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q47">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q47" aria-expanded="false" aria-controls="collapse-advanced-q47">
+      Q47. What is the act() boundary in React tests and concurrent mode? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q47" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p><code>act()</code> is a test utility that ensures all pending React state updates, effects, and re-renders are processed and flushed before your test's assertions run. Without <code>act()</code>, tests can make assertions against a stale DOM that hasn't yet reflected the latest state updates — a particularly common problem with async operations, <code>useEffect</code>, and <code>useLayoutEffect</code>. The name "act" comes from the testing convention of "Arrange, Act, Assert" — <code>act()</code> wraps the "Act" phase to ensure React's work is complete before "Assert".</p>
+      <p>In React 18's concurrent mode, <code>act()</code> became async-aware. The async form <code>await act(async () =&gt; { ... })</code> is required when your test involves async operations (like <code>useEffect</code> with a fetch, or <code>startTransition</code>) because concurrent React schedules work asynchronously. When you wrap an interaction in <code>act()</code>, React processes all pending synchronous updates, flushes the microtask queue, runs all scheduled effects, and then processes any state updates triggered by those effects — recursively, until no more work is pending.</p>
+      <p>Testing Library (React Testing Library) wraps all its user interaction utilities (<code>userEvent.click</code>, <code>fireEvent</code>, <code>render</code>) in <code>act()</code> automatically, which is one reason it's the recommended testing approach. If you see the warning "An update to X inside a test was not wrapped in act()", it means an async state update (typically from a useEffect or an unresolved Promise) completed after your test assertions ran. The fix is to <code>await act(async () =&gt; {})</code> or use <code>await waitFor(() =&gt; expect(...).toBe(...))</code> from Testing Library.</p>
+<pre class="code-block">
+import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+// Basic synchronous act (implicit via Testing Library)
+test('counter increments on click', async () =&gt; {
+  const user = userEvent.setup();
+  render(&lt;Counter /&gt;);
+
+  // userEvent wraps in act() automatically
+  await user.click(screen.getByRole('button', { name: 'Increment' }));
+
+  expect(screen.getByText('Count: 1')).toBeInTheDocument();
+});
+
+// Explicit act() for manual state updates
+test('manual act usage', async () =&gt; {
+  let setCount;
+  function TestComponent() {
+    const [count, sc] = useState(0);
+    setCount = sc;
+    return &lt;div&gt;{count}&lt;/div&gt;;
+  }
+
+  render(&lt;TestComponent /&gt;);
+
+  // Wrap state update in act() to ensure re-render completes
+  act(() =&gt; {
+    setCount(5);
+  });
+
+  expect(screen.getByText('5')).toBeInTheDocument();
+});
+
+// Async act() for effects and async operations
+test('data loads correctly', async () =&gt; {
+  global.fetch = jest.fn().mockResolvedValue({
+    json: () =&gt; Promise.resolve({ name: 'Alice' })
+  });
+
+  render(&lt;UserProfile userId="1" /&gt;);
+
+  expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+  // Wait for async effects to complete
+  await act(async () =&gt; {
+    await Promise.resolve(); // Flush microtasks
+  });
+
+  expect(screen.getByText('Alice')).toBeInTheDocument();
+});
+
+// React Testing Library's waitFor handles act() internally
+test('with waitFor', async () =&gt; {
+  render(&lt;AsyncComponent /&gt;);
+
+  // waitFor retries the assertion, wrapping each retry in act()
+  await waitFor(() =&gt; {
+    expect(screen.getByText('Loaded!')).toBeInTheDocument();
+  });
+});
+
+// Concurrent mode: act() with startTransition
+test('transition updates', async () =&gt; {
+  render(&lt;SearchComponent /&gt;);
+  const input = screen.getByRole('textbox');
+
+  await act(async () =&gt; {
+    await userEvent.type(input, 'react');
+  });
+
+  // Transitions are flushed inside act()
+  await waitFor(() =&gt; {
+    expect(screen.getByText('Results for: react')).toBeInTheDocument();
+  });
+});
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q48">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q48" aria-expanded="false" aria-controls="collapse-advanced-q48">
+      Q48. How does React implement synthetic events and the event propagation system? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q48" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>React implements a synthetic event system that normalizes browser event APIs across different browsers and integrates with React's rendering model. In React 17+, React attaches all event listeners to the <strong>root container</strong> (the element passed to <code>ReactDOM.createRoot()</code>) rather than to the document or individual DOM nodes. This is a significant change from React 16, which attached listeners to <code>document</code> — the change was made to better support micro-frontends and multiple React roots on the same page.</p>
+      <p>When a user event occurs (e.g., a click), the native browser event bubbles up to the React root container, where React's single delegated event listener catches it. React then walks the fiber tree from the event's target back up to the root, collecting all React event handlers (<code>onClick</code>, <code>onCapture</code>, etc.) along the way. React creates a <strong>SyntheticEvent</strong> — a cross-browser wrapper around the native event — and dispatches it through the collected handlers in the correct order (capture phase handlers top-down, bubble phase handlers bottom-up).</p>
+      <p>SyntheticEvents were pooled in React 16 and earlier (reused for performance by nullifying properties after each event handler), which caused issues with async event handlers that tried to access event properties after the synchronous dispatch. React 17 removed event pooling entirely — SyntheticEvents are now regular objects that get garbage collected normally. However, the <code>nativeEvent</code> property still gives you access to the underlying DOM event if you need browser-specific properties that React's normalization doesn't expose.</p>
+      <p>React handles some events specially: <code>onChange</code> on inputs fires on every keystroke (not just on blur like native <code>change</code>), events like <code>onFocus</code>/<code>onBlur</code> use the capture phase for delegation (because focus doesn't bubble natively), and <code>onScroll</code> does not bubble in React (matching browser behavior). The synthetic event system is why you should call <code>e.stopPropagation()</code> on the React synthetic event rather than the native event — doing it on the native event may not stop React's simulated propagation.</p>
+<pre class="code-block">
+// React 17+: events delegated to root container, not document
+const root = ReactDOM.createRoot(document.getElementById('root'));
+// All event listeners are on the 'root' div, not document
+
+function EventExample() {
+  const handleClick = (e) =&gt; {
+    // e is a SyntheticEvent (normalized, cross-browser)
+    console.log(e.type);          // 'click'
+    console.log(e.target);        // Native DOM element
+    console.log(e.nativeEvent);   // Original native MouseEvent
+
+    // React 17+: event properties DO persist after handler (no pooling)
+    setTimeout(() =&gt; {
+      console.log(e.type); // Still 'click' — no longer null! (React 17+)
+    }, 100);
+
+    // Stop React's simulated propagation
+    e.stopPropagation();
+
+    // Prevent browser default
+    e.preventDefault();
+  };
+
+  return &lt;button onClick={handleClick}&gt;Click me&lt;/button&gt;;
+}
+
+// Capture phase events (fire top-down before bubble)
+function CaptureExample() {
+  return (
+    &lt;div onClickCapture={(e) =&gt; console.log('Captured at parent')}&gt;
+      &lt;button onClick={(e) =&gt; console.log('Bubbled at child')}&gt;
+        Click order: parent capture → child bubble
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Accessing native event for browser-specific properties
+function NativeEventExample() {
+  const handleWheel = (e) =&gt; {
+    // deltaY is normalized, but deltaMode may need native event
+    const native = e.nativeEvent;
+    console.log(native.deltaMode); // 0=pixel, 1=line, 2=page
+  };
+  return &lt;div onWheel={handleWheel}&gt;Scroll here&lt;/div&gt;;
+}
+
+// onChange fires on every keystroke (unlike native change = on blur)
+function InputExample() {
+  const [value, setValue] = useState('');
+  return (
+    &lt;input
+      value={value}
+      onChange={(e) =&gt; setValue(e.target.value)} // Every keystroke
+    /&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q49">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q49" aria-expanded="false" aria-controls="collapse-advanced-q49">
+      Q49. What is "interleaving" in React's rendering and why does it matter? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q49" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>"Interleaving" in React's concurrent rendering refers to the ability of React's scheduler to interleave the rendering work of multiple updates — pausing one update mid-render to process a higher-priority update, then resuming the original update. This is the fundamental capability that makes concurrent mode "concurrent": rather than rendering updates sequentially to completion, React can work on multiple render trees simultaneously, yielding control between them based on priority.</p>
+      <p>In practice, interleaving enables the distinction between "urgent" and "non-urgent" updates. An urgent update (user typing in an input, button click) must be processed immediately to feel responsive. A non-urgent update (filtering a long list based on input, loading new route content in a transition) can be deferred. When an urgent update arrives while a non-urgent render is in progress, React can pause ("interrupt") the non-urgent render, synchronously apply the urgent update, paint to the screen, and then resume the non-urgent render — the user sees immediate feedback without waiting for the expensive operation.</p>
+      <p>Interleaving has important implications for correctness. Because a single "render pass" for a component may be split across multiple execution frames, with other renders happening in between, your render functions must be pure (no side effects that depend on execution timing). Any side effect that assumes "my render runs to completion before anything else" will break with interleaving. This is why the React team has always emphasized pure render functions — in legacy mode it was a style guideline, in concurrent mode it becomes a hard requirement for correct behavior.</p>
+      <p>The React compiler (introduced as an experimental feature in React 19) analyzes component code statically to identify and memoize only the parts that truly change, reducing the cost of interleaved renders. Understanding interleaving also explains why React calls render functions twice in Strict Mode during development — to help surface impure renders that produce different results on repeated invocation, catching bugs before they manifest as subtle interleaving issues in concurrent mode.</p>
+<pre class="code-block">
+// Interleaving example: urgent vs deferred updates
+function SearchPage() {
+  const [inputValue, setInputValue] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isPending, startTransition] = useTransition();
+
+  const handleChange = (e) =&gt; {
+    const value = e.target.value;
+
+    // URGENT: Input value updates immediately (interleaves at high priority)
+    setInputValue(value);
+
+    // NON-URGENT: Search query update is deferred (interleaved at low priority)
+    startTransition(() =&gt; {
+      setSearchQuery(value);
+    });
+  };
+
+  // React's internal scheduling with interleaving:
+  // 1. User types 'r':
+  //    - Urgent render starts: setInputValue('r')
+  //    - Concurrent render queued: setSearchQuery('r')
+  // 2. User types 'e' before concurrent render finishes:
+  //    - React INTERRUPTS the searchQuery='r' render
+  //    - Urgent render: setInputValue('re')
+  //    - Previous concurrent render DISCARDED
+  //    - New concurrent render queued: setSearchQuery('re')
+  // Result: Input always feels instantaneous
+
+  return (
+    &lt;div&gt;
+      &lt;input value={inputValue} onChange={handleChange} /&gt;
+      {/* Input shows instantly (urgent update) */}
+
+      &lt;div style={{ opacity: isPending ? 0.5 : 1 }}&gt;
+        {/* Results update when non-urgent render completes */}
+        &lt;SearchResults query={searchQuery} /&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+// PURITY REQUIREMENT: Render functions must be pure for interleaving to work
+// BAD: Side effect in render (breaks with interleaving)
+let renderCount = 0;
+function ImpureComponent() {
+  renderCount++; // Side effect in render! React may call this multiple times
+  return &lt;div&gt;Renders: {renderCount}&lt;/div&gt;;
+}
+
+// GOOD: Pure render, side effects in useEffect
+function PureComponent() {
+  const [count, setCount] = useState(0);
+  useEffect(() =&gt; {
+    // Side effects here, in the commit phase
+    analytics.track('component_mounted');
+  }, []);
+  return &lt;div&gt;Count: {count}&lt;/div&gt;;
+}
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item" id="advanced-q50">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-advanced-q50" aria-expanded="false" aria-controls="collapse-advanced-q50">
+      Q50. How do you implement a feature detection system for React 18 vs React 19 features? <span class="diff-hard">Hard</span>
+    </button>
+  </h2>
+  <div id="collapse-advanced-q50" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>Feature detection for React versions is necessary when building libraries, design systems, or applications that need to support multiple React versions simultaneously — such as a component library that targets both React 18 and React 19 consumers. Unlike browser feature detection (where you test the DOM API), React feature detection involves checking the React package version and the availability of specific APIs, hooks, and components that were added in particular versions.</p>
+      <p>The most reliable approach is to check the React version string via <code>React.version</code> and parse the semver. However, version checking is fragile against pre-release versions (canary, experimental builds) that may have features from a higher version. A more robust approach is to directly check for the existence of the API: <code>typeof React.use === 'function'</code> for the <code>use()</code> hook, <code>typeof React.Activity !== 'undefined'</code> for the Activity component, <code>typeof ReactDOM.createRoot === 'function'</code> for React 18's createRoot, and so on. This "duck typing" approach is version-agnostic and handles canary builds correctly.</p>
+      <p>For hook-based feature detection, you need to be careful — hooks can only be called inside components. Create dedicated compatibility hooks that detect availability at call time and return either the real implementation or a polyfill. A common pattern for libraries is to export compatibility wrappers: <code>useCompat_useActionState</code> which uses <code>useActionState</code> if available and falls back to a <code>useState</code>+<code>useEffect</code> implementation for React 18. The React team also ships the <code>react-dom/client</code> API checker which logs deprecation warnings for legacy render APIs.</p>
+      <p>Build-time feature detection using bundler conditions (<code>package.json</code> <code>exports</code> field with peer dependency ranges) is the cleanest long-term approach for library authors: ship different entry points for React 18 vs React 19, and let the package manager resolve the correct version. For application developers, just upgrade to the latest React version — feature detection is primarily a library author concern.</p>
+<pre class="code-block">
+// Version-based detection
+import React from 'react';
+
+const reactVersion = React.version; // e.g., "19.0.0" or "18.3.1"
+const [major, minor] = reactVersion.split('.').map(Number);
+
+const REACT_VERSION = { major, minor, isReact18: major === 18, isReact19: major >= 19 };
+
+// Duck-typing API detection (preferred over version strings)
+const hasUseHook = typeof React.use === 'function';
+const hasActivity = typeof (React as any).Activity !== 'undefined';
+const hasViewTransition = typeof (React as any).ViewTransition !== 'undefined';
+const hasUseActionState = typeof React.useActionState === 'function'; // React 19
+const hasUseFormState = typeof (React as any).useFormState === 'function'; // React 18 canary
+
+// Compatibility hook: useActionState with React 18 fallback
+function useCompatActionState(action, initialState) {
+  // React 19: use native hook
+  if (typeof React.useActionState === 'function') {
+    return React.useActionState(action, initialState);
+  }
+
+  // React 18 fallback implementation
+  const [state, setState] = useState(initialState);
+  const [isPending, setIsPending] = useState(false);
+
+  const dispatch = useCallback(async (...args) =&gt; {
+    setIsPending(true);
+    try {
+      const newState = await action(state, ...args);
+      setState(newState);
+    } finally {
+      setIsPending(false);
+    }
+  }, [action, state]);
+
+  return [state, dispatch, isPending];
+}
+
+// Compatibility wrapper for createRoot vs legacy render
+function compatRender(element, container) {
+  if (typeof ReactDOM.createRoot === 'function') {
+    // React 18+: concurrent mode
+    const root = ReactDOM.createRoot(container);
+    root.render(element);
+  } else {
+    // React 17 and below (legacy)
+    (ReactDOM as any).render(element, container);
+  }
+}
+
+// Package.json exports for library authors (build-time splitting)
+// {
+//   "exports": {
+//     "./react18": "./dist/react18/index.js",
+//     "./react19": "./dist/react19/index.js",
+//     ".": {
+//       "react-19": "./dist/react19/index.js",
+//       "default": "./dist/react18/index.js"
+//     }
+//   },
+//   "peerDependencies": {
+//     "react": "^18.0.0 || ^19.0.0"
+//   }
+// }
+
+// Runtime feature matrix check
+function getFeatureSupport() {
+  return {
+    concurrentMode: typeof ReactDOM.createRoot === 'function',
+    useId: typeof React.useId === 'function',           // React 18
+    useDeferredValue: typeof React.useDeferredValue === 'function', // React 18
+    use: typeof React.use === 'function',                // React 19
+    useActionState: typeof React.useActionState === 'function', // React 19
+    useOptimistic: typeof React.useOptimistic === 'function',   // React 19
+    Activity: typeof (React as any).Activity !== 'undefined',   // React 19
+    ViewTransition: typeof (React as any).ViewTransition !== 'undefined', // React 19
+  };
+}
+</pre>
+    </div>
+  </div>
+</div>

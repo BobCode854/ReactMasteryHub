@@ -1,0 +1,1207 @@
+        <!-- Q26 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q26" data-bs-parent="#acc-architecture">
+              <span class="q-num">26</span>
+              <span class="diff-hard me-2">Hard</span>
+              What is domain-driven design (DDD) applied to React?
+            </button>
+          </h2>
+          <div id="architecture-q26" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Domain-Driven Design applied to React means organising your codebase around business domains rather than technical layers, so each domain owns its own components, state, API calls, hooks, and types in a single cohesive slice.</p>
+              <ul class="ans-list blue">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Bounded contexts:</strong> Each domain (Orders, Inventory, Users) is a self-contained module with a clear public API surface exported from an <code>index.ts</code> barrel</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Ubiquitous language:</strong> Component, hook, and type names match the business vocabulary the domain experts use — <code>Order</code>, <code>Shipment</code>, <code>Carrier</code> not <code>Item</code>, <code>Record</code>, <code>Entity</code></li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Domain models:</strong> TypeScript interfaces live inside the domain and map 1-to-1 with backend aggregates; API adapters translate raw JSON into domain objects at the boundary</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Anti-corruption layer:</strong> An adapter/mapper function absorbs API shape changes so domain code never needs to change when the backend evolves</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Domain services:</strong> Business logic that does not belong to a single component lives in plain TypeScript functions inside the domain, independently testable</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// src/domains/orders/</span>
+├── <span class="cm">components/</span>   <span class="cm">// OrderCard, OrderTable, OrderStatusBadge</span>
+├── <span class="cm">hooks/</span>        <span class="cm">// useOrders, useOrderById, useCreateOrder</span>
+├── <span class="cm">api/</span>          <span class="cm">// ordersApi.ts — raw fetch calls</span>
+├── <span class="cm">adapters/</span>     <span class="cm">// mapApiOrderToOrder.ts — anti-corruption layer</span>
+├── <span class="cm">store/</span>        <span class="cm">// ordersSlice.ts, ordersSelectors.ts</span>
+├── <span class="cm">types/</span>        <span class="cm">// Order.ts, OrderStatus.ts, OrderLine.ts</span>
+└── index.ts      <span class="cm">// public API — only export what other domains need</span>
+
+<span class="cm">// adapters/mapApiOrderToOrder.ts — anti-corruption layer</span>
+<span class="kw">export function</span> <span class="fn">mapApiOrderToOrder</span>(raw: ApiOrder): Order {
+  <span class="kw">return</span> {
+    id:        raw.order_id,
+    status:    raw.order_status <span class="kw">as</span> OrderStatus,
+    placedAt:  <span class="kw">new</span> <span class="fn">Date</span>(raw.created_ts),
+    lines:     raw.line_items.<span class="fn">map</span>(mapApiLineToOrderLine),
+  };
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests whether candidates can reason about large-scale codebase organisation beyond simple file-type folders — a key senior-level skill.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q27 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q27" data-bs-parent="#acc-architecture">
+              <span class="q-num">27</span>
+              <span class="diff-hard me-2">Hard</span>
+              How do you implement an event bus in a React application?
+            </button>
+          </h2>
+          <div id="architecture-q27" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>An event bus is a publish/subscribe mechanism that decouples components by letting any part of the app emit named events and any other part subscribe to them, without requiring a shared parent or prop drilling.</p>
+              <ul class="ans-list green">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>When to use:</strong> Cross-cutting concerns — analytics events, toast notifications, global modal triggers — where wiring through the component tree is impractical</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Simple implementation:</strong> A singleton <code>EventEmitter</code> class built on a <code>Map</code> of listener arrays — no third-party library needed</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>React integration:</strong> Subscribe in <code>useEffect</code>, always return a cleanup that unsubscribes to prevent memory leaks</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>TypeScript safety:</strong> Use a typed event map so every emit/subscribe call is checked at compile time</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Caution:</strong> Overusing an event bus creates implicit coupling that is hard to trace — prefer React state/context for component communication first</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// services/eventBus.ts</span>
+<span class="kw">type</span> EventMap = {
+  <span class="st">'cart:item-added'</span>:   { productId: <span class="kw">string</span>; qty: <span class="kw">number</span> };
+  <span class="st">'auth:logged-out'</span>:   <span class="kw">void</span>;
+  <span class="st">'toast:show'</span>:        { message: <span class="kw">string</span>; variant: <span class="kw">string</span> };
+};
+
+<span class="kw">type</span> Listener&lt;T&gt; = (payload: T) => <span class="kw">void</span>;
+
+<span class="kw">class</span> <span class="fn">EventBus</span> {
+  <span class="kw">private</span> listeners = <span class="kw">new</span> <span class="fn">Map</span>&lt;<span class="kw">string</span>, <span class="fn">Set</span>&lt;Listener&lt;<span class="kw">any</span>&gt;&gt;&gt;();
+
+  <span class="fn">on</span>&lt;K <span class="kw">extends keyof</span> EventMap&gt;(event: K, cb: Listener&lt;EventMap[K]&gt;) {
+    <span class="kw">if</span> (!<span class="kw">this</span>.listeners.<span class="fn">has</span>(event))
+      <span class="kw">this</span>.listeners.<span class="fn">set</span>(event, <span class="kw">new</span> <span class="fn">Set</span>());
+    <span class="kw">this</span>.listeners.<span class="fn">get</span>(event)!.<span class="fn">add</span>(cb);
+    <span class="kw">return</span> () => <span class="kw">this</span>.listeners.<span class="fn">get</span>(event)!.<span class="fn">delete</span>(cb);
+  }
+
+  <span class="fn">emit</span>&lt;K <span class="kw">extends keyof</span> EventMap&gt;(event: K, payload: EventMap[K]) {
+    <span class="kw">this</span>.listeners.<span class="fn">get</span>(event)?.<span class="fn">forEach</span>(cb => <span class="fn">cb</span>(payload));
+  }
+}
+
+<span class="kw">export const</span> eventBus = <span class="kw">new</span> <span class="fn">EventBus</span>();
+
+<span class="cm">// Usage in a component</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">const</span> off = eventBus.<span class="fn">on</span>(<span class="st">'toast:show'</span>, ({ message, variant }) => {
+    <span class="fn">showToast</span>(message, variant);
+  });
+  <span class="kw">return</span> off; <span class="cm">// cleanup on unmount</span>
+}, []);</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Demonstrates knowledge of decoupling patterns and whether the candidate knows when pub/sub is appropriate vs. when React's built-in mechanisms suffice.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q28 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q28" data-bs-parent="#acc-architecture">
+              <span class="q-num">28</span>
+              <span class="diff-hard me-2">Hard</span>
+              What is the facade pattern for external integrations in React?
+            </button>
+          </h2>
+          <div id="architecture-q28" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>The facade pattern wraps a complex or volatile external dependency behind a thin, stable interface so the rest of the application interacts only with your interface, never directly with the third-party API.</p>
+              <ul class="ans-list purple">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Problem it solves:</strong> Third-party SDKs change their APIs, get replaced, or need swapping per environment — a facade absorbs all of that churn in one file</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Analytics example:</strong> A <code>useAnalytics</code> hook that internally calls Segment, Amplitude, or a custom logger — callers use <code>track('button_clicked', data)</code> and never import the SDK directly</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Auth facade:</strong> Wrap Okta/Auth0/Cognito behind an <code>authService</code> with methods <code>login()</code>, <code>logout()</code>, <code>getUser()</code> — swapping providers means editing one file</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Testability:</strong> Mock the facade in tests rather than mocking the entire SDK, keeping tests fast and SDK-agnostic</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// services/analytics/index.ts  — the facade</span>
+<span class="kw">import</span> * <span class="kw">as</span> amplitude <span class="kw">from</span> <span class="st">'@amplitude/analytics-browser'</span>;
+
+<span class="kw">export const</span> analytics = {
+  <span class="fn">track</span>(event: <span class="kw">string</span>, props?: Record&lt;<span class="kw">string</span>, <span class="kw">unknown</span>&gt;) {
+    amplitude.<span class="fn">track</span>(event, props);
+  },
+  <span class="fn">identify</span>(userId: <span class="kw">string</span>, traits?: Record&lt;<span class="kw">string</span>, <span class="kw">unknown</span>&gt;) {
+    amplitude.<span class="fn">setUserId</span>(userId);
+    <span class="kw">if</span> (traits) amplitude.<span class="fn">identify</span>(<span class="kw">new</span> amplitude.<span class="fn">Identify</span>());
+  },
+  <span class="fn">page</span>(name: <span class="kw">string</span>) {
+    amplitude.<span class="fn">track</span>(<span class="st">`page_view`</span>, { page: name });
+  },
+};
+
+<span class="cm">// Anywhere in the app — never imports amplitude directly</span>
+analytics.<span class="fn">track</span>(<span class="st">'checkout_started'</span>, { cartValue: <span class="st">99.99</span> });</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Reveals architectural maturity — senior devs isolate third-party risk; junior devs scatter SDK calls throughout components.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q29 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q29" data-bs-parent="#acc-architecture">
+              <span class="q-num">29</span>
+              <span class="diff-hard me-2">Hard</span>
+              How do you implement plugin architecture in React?
+            </button>
+          </h2>
+          <div id="architecture-q29" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>A plugin architecture lets you extend an application's behaviour at defined extension points without modifying the core — plugins register themselves against a registry and the host app discovers and mounts them at runtime.</p>
+              <ul class="ans-list amber">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Plugin registry:</strong> A central <code>PluginRegistry</code> singleton that plugins call <code>register()</code> on; the host app iterates the registry to render or execute each plugin</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Extension points:</strong> Named slots in the UI where plugins can inject components — <code>'sidebar'</code>, <code>'toolbar'</code>, <code>'dashboard-widget'</code></li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Plugin contract:</strong> A TypeScript interface that every plugin must implement — <code>id</code>, <code>name</code>, <code>component</code>, optional <code>route</code>, optional <code>permissions</code></li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Lazy loading:</strong> Each plugin is a dynamic import so it only loads when activated, keeping the core bundle small</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Real-world use:</strong> VS Code, Figma, Grafana dashboards — all use this pattern; in React it powers extensible admin panels and SaaS platforms</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// plugin.types.ts</span>
+<span class="kw">export interface</span> Plugin {
+  id:         <span class="kw">string</span>;
+  slot:       <span class="st">'sidebar'</span> | <span class="st">'dashboard'</span> | <span class="st">'toolbar'</span>;
+  component:  <span class="fn">React.ComponentType</span>;
+  requiredRole?: <span class="kw">string</span>;
+}
+
+<span class="cm">// pluginRegistry.ts</span>
+<span class="kw">const</span> registry: Plugin[] = [];
+<span class="kw">export const</span> registerPlugin = (p: Plugin) => registry.<span class="fn">push</span>(p);
+<span class="kw">export const</span> getPlugins = (slot: Plugin[<span class="st">'slot'</span>']) =>
+  registry.<span class="fn">filter</span>(p => p.slot === slot);
+
+<span class="cm">// PluginSlot.tsx — renders all plugins for a slot</span>
+<span class="kw">export function</span> <span class="fn">PluginSlot</span>({ slot }: { slot: Plugin[<span class="st">'slot'</span>'] }) {
+  <span class="kw">const</span> plugins = <span class="fn">getPlugins</span>(slot);
+  <span class="kw">return</span> &lt;&gt;{plugins.<span class="fn">map</span>(({ id, component: C }) =>
+    &lt;C key={id} /&gt;
+  )}&lt;/&gt;;
+}
+
+<span class="cm">// analytics-plugin/index.ts — self-registers</span>
+<span class="fn">registerPlugin</span>({
+  id: <span class="st">'analytics-dashboard'</span>,
+  slot: <span class="st">'dashboard'</span>,
+  component: AnalyticsDashboardWidget,
+  requiredRole: <span class="st">'admin'</span>,
+});</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> A hallmark of platform-thinking — important for candidates building extensible products where third-party or internal teams add features without touching core code.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q30 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q30" data-bs-parent="#acc-architecture">
+              <span class="q-num">30</span>
+              <span class="diff-hard me-2">Hard</span>
+              What is the command pattern applied to React user actions?
+            </button>
+          </h2>
+          <div id="architecture-q30" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>The command pattern encapsulates a user action — and everything needed to execute, undo, or replay it — as a plain object (the command), decoupling the action's invocation from its implementation.</p>
+              <ul class="ans-list blue">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Command object:</strong> Contains <code>execute()</code> and optionally <code>undo()</code> methods plus all the data needed to perform the action</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Command history:</strong> A stack of executed commands makes undo/redo trivial — pop the last command and call <code>undo()</code></li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Redux is the command pattern:</strong> Every dispatched action is a command; Redux Dev Tools replay is command replay in action</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Offline queue:</strong> Commands can be serialised to <code>localStorage</code> and replayed when connectivity is restored</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Audit logs:</strong> Each command object is a self-describing event that can be sent to a backend audit trail verbatim</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// types/command.ts</span>
+<span class="kw">interface</span> Command&lt;T = <span class="kw">void</span>&gt; {
+  <span class="fn">execute</span>(): T;
+  <span class="fn">undo</span>():    <span class="kw">void</span>;
+  label:     <span class="kw">string</span>;
+}
+
+<span class="cm">// commands/renameItemCommand.ts</span>
+<span class="kw">export function</span> <span class="fn">renameItemCommand</span>(
+  id: <span class="kw">string</span>, prev: <span class="kw">string</span>, next: <span class="kw">string</span>,
+  dispatch: AppDispatch
+): Command {
+  <span class="kw">return</span> {
+    label: <span class="st">`Rename "${prev}" to "${next}"`</span>,
+    <span class="fn">execute</span>() { dispatch(<span class="fn">renameItem</span>({ id, name: next })); },
+    <span class="fn">undo</span>()    { dispatch(<span class="fn">renameItem</span>({ id, name: prev })); },
+  };
+}
+
+<span class="cm">// useCommandHistory.ts</span>
+<span class="kw">export function</span> <span class="fn">useCommandHistory</span>() {
+  <span class="kw">const</span> [history, setHistory] = <span class="fn">useState</span>&lt;Command[]&gt;([]);
+
+  <span class="kw">const</span> run = <span class="fn">useCallback</span>((cmd: Command) => {
+    cmd.<span class="fn">execute</span>();
+    setHistory(h => [...h, cmd]);
+  }, []);
+
+  <span class="kw">const</span> undo = <span class="fn">useCallback</span>(() => {
+    setHistory(h => {
+      <span class="kw">const</span> last = h.<span class="fn">at</span>(-<span class="st">1</span>);
+      last?.<span class="fn">undo</span>();
+      <span class="kw">return</span> h.<span class="fn">slice</span>(<span class="st">0</span>, -<span class="st">1</span>);
+    });
+  }, []);
+
+  <span class="kw">return</span> { run, undo, history };
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests whether candidates understand design patterns beyond CRUD — especially relevant for collaborative or document-editing applications.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q31 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q31" data-bs-parent="#acc-architecture">
+              <span class="q-num">31</span>
+              <span class="diff-medium me-2">Medium</span>
+              How do you implement internationalization (i18n) in React?
+            </button>
+          </h2>
+          <div id="architecture-q31" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Internationalization in React is most commonly implemented with <strong>react-i18next</strong> (backed by i18next), which provides a <code>useTranslation</code> hook, namespace-based message files, and runtime language switching without a page reload.</p>
+              <ul class="ans-list green">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Setup:</strong> Initialise i18next with language resources (JSON files per locale) and wrap the app in <code>I18nextProvider</code></li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Namespaces:</strong> Split translations into domain namespaces (<code>common</code>, <code>orders</code>, <code>errors</code>) so only needed strings are loaded per route</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Interpolation:</strong> Pass dynamic values as <code>t('greeting', { name: 'Karan' })</code> mapped to <code>"Hello {{name}}"</code> in the JSON</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Pluralisation:</strong> i18next handles plural forms automatically with <code>_one</code> / <code>_other</code> key suffixes</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Lazy loading:</strong> Use <code>i18next-http-backend</code> to load locale JSON on demand instead of bundling all languages upfront</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Date/Number formatting:</strong> Use the native <code>Intl</code> API or <code>react-intl</code> for locale-aware dates and currency — i18next handles text only</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// i18n/en/orders.json</span>
+{
+  <span class="st">"title"</span>:       <span class="st">"Your Orders"</span>,
+  <span class="st">"count_one"</span>:   <span class="st">"{{count}} order"</span>,
+  <span class="st">"count_other"</span>: <span class="st">"{{count}} orders"</span>,
+  <span class="st">"status"</span>: {
+    <span class="st">"pending"</span>:   <span class="st">"Pending"</span>,
+    <span class="st">"shipped"</span>:   <span class="st">"Shipped"</span>
+  }
+}
+
+<span class="cm">// OrdersPage.tsx</span>
+<span class="kw">import</span> { <span class="fn">useTranslation</span> } <span class="kw">from</span> <span class="st">'react-i18next'</span>;
+
+<span class="kw">export function</span> <span class="fn">OrdersPage</span>() {
+  <span class="kw">const</span> { t } = <span class="fn">useTranslation</span>(<span class="st">'orders'</span>);
+  <span class="kw">const</span> count = <span class="st">3</span>;
+
+  <span class="kw">return</span> (
+    &lt;h1&gt;{<span class="fn">t</span>(<span class="st">'title'</span>)}&lt;/h1&gt;      <span class="cm">// "Your Orders"</span>
+    &lt;p&gt;{<span class="fn">t</span>(<span class="st">'count'</span>, { count })}&lt;/p&gt; <span class="cm">// "3 orders"</span>
+  );
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Any production app serving global users needs i18n — interviewers check for practical library knowledge and awareness of pitfalls like hardcoded strings scattered through JSX.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q32 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q32" data-bs-parent="#acc-architecture">
+              <span class="q-num">32</span>
+              <span class="diff-medium me-2">Medium</span>
+              What is the difference between static and dynamic feature flags?
+            </button>
+          </h2>
+          <div id="architecture-q32" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Static feature flags are baked into the build (environment variables or config JSON) and require a redeploy to change, while dynamic feature flags are resolved at runtime from a remote service and can be toggled instantly without touching the codebase.</p>
+              <ul class="ans-list purple">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Static flags:</strong> <code>import.meta.env.VITE_ENABLE_BETA</code> or a committed <code>app-settings.json</code> — simple, zero latency, but needs a deploy to flip</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Dynamic flags:</strong> Fetched from LaunchDarkly, Unleash, or a custom endpoint at app boot; can be updated without a deploy and targeted per user/segment</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Use static for:</strong> Build-time optimisation, permanent feature splits between environments (dev/staging/prod)</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Use dynamic for:</strong> Kill switches, gradual rollouts, A/B tests, per-tenant feature grants</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Best practice:</strong> Load flags early (before rendering) and provide a React context so any component can read them without prop drilling</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// Static — build-time, in app-settings.json</span>
+{ <span class="st">"featureFlags"</span>: { <span class="st">"newCheckout"</span>: <span class="kw">true</span> } }
+
+<span class="cm">// Dynamic — runtime, fetched once at boot</span>
+<span class="kw">const</span> { flags } = <span class="fn">useLDClient</span>();
+<span class="kw">const</span> showNewCheckout = flags[<span class="st">'new-checkout'</span>];
+
+<span class="cm">// Context pattern for both cases</span>
+<span class="kw">const</span> FlagsContext = <span class="fn">createContext</span>&lt;Flags&gt;({});
+
+<span class="kw">export function</span> <span class="fn">FlagsProvider</span>({ children }: PropsWithChildren) {
+  <span class="kw">const</span> [flags, setFlags] = <span class="fn">useState</span>&lt;Flags&gt;({});
+  <span class="fn">useEffect</span>(() => {
+    <span class="fn">fetchFlags</span>().<span class="fn">then</span>(setFlags);
+  }, []);
+  <span class="kw">return</span> &lt;FlagsContext.Provider value={flags}&gt;{children}&lt;/FlagsContext.Provider&gt;;
+}
+
+<span class="kw">export const</span> useFlags = () => <span class="fn">useContext</span>(FlagsContext);</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Feature flags are fundamental to modern CI/CD and trunk-based development — understanding the trade-offs signals deployment maturity.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q33 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q33" data-bs-parent="#acc-architecture">
+              <span class="q-num">33</span>
+              <span class="diff-medium me-2">Medium</span>
+              How do you implement A/B testing in React?
+            </button>
+          </h2>
+          <div id="architecture-q33" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>A/B testing in React involves assigning users to experiment variants (usually via a feature flag service), rendering the appropriate variant, and tracking conversion events — all in a way that is deterministic per user across sessions.</p>
+              <ul class="ans-list amber">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Variant assignment:</strong> Use LaunchDarkly, GrowthBook, or a custom hash of the user ID modulo 100 to determine which bucket (A or B) a user falls into</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Persistence:</strong> Store the assigned variant in <code>localStorage</code> or a cookie so the same user always sees the same variant</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Exposure tracking:</strong> Fire an analytics event the moment the variant is first rendered — not when the page loads — to avoid counting users who never saw the experiment</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Isolation:</strong> Wrap A/B logic in a dedicated hook or component so experiment code is easy to remove once a winner is declared</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// hooks/useExperiment.ts</span>
+<span class="kw">export function</span> <span class="fn">useExperiment</span>(experimentId: <span class="kw">string</span>) {
+  <span class="kw">const</span> userId = <span class="fn">useCurrentUserId</span>();
+
+  <span class="kw">const</span> variant = <span class="fn">useMemo</span>(() => {
+    <span class="kw">const</span> stored = localStorage.<span class="fn">getItem</span>(<span class="st">`exp_${experimentId}`</span>);
+    <span class="kw">if</span> (stored) <span class="kw">return</span> stored;
+    <span class="kw">const</span> v = <span class="fn">hashToVariant</span>(userId + experimentId); <span class="cm">// 'A' or 'B'</span>
+    localStorage.<span class="fn">setItem</span>(<span class="st">`exp_${experimentId}`</span>, v);
+    <span class="kw">return</span> v;
+  }, [experimentId, userId]);
+
+  <span class="fn">useEffect</span>(() => {
+    analytics.<span class="fn">track</span>(<span class="st">'experiment_exposed'</span>, { experimentId, variant });
+  }, [experimentId, variant]);
+
+  <span class="kw">return</span> variant;
+}
+
+<span class="cm">// CheckoutButton.tsx</span>
+<span class="kw">function</span> <span class="fn">CheckoutButton</span>() {
+  <span class="kw">const</span> variant = <span class="fn">useExperiment</span>(<span class="st">'checkout-cta-2024'</span>);
+  <span class="kw">return</span> variant === <span class="st">'B'</span>
+    ? &lt;<span class="fn">Button</span> color=<span class="st">"green"</span>&gt;Buy Now — Save 10%&lt;/<span class="fn">Button</span>&gt;
+    : &lt;<span class="fn">Button</span>&gt;Proceed to Checkout&lt;/<span class="fn">Button</span>&gt;;
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Growth-focused teams run constant experiments — candidates should understand how to implement them cleanly without polluting every component with experiment logic.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q34 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q34" data-bs-parent="#acc-architecture">
+              <span class="q-num">34</span>
+              <span class="diff-medium me-2">Medium</span>
+              What is analytics instrumentation architecture in React?
+            </button>
+          </h2>
+          <div id="architecture-q34" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Analytics instrumentation architecture defines how user events are captured, enriched, and delivered to analytics platforms in a consistent, maintainable way — without scattering raw SDK calls throughout every component.</p>
+              <ul class="ans-list blue">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Centralised facade:</strong> A single <code>analytics</code> module wraps the SDK so the rest of the codebase never imports Segment/Amplitude/GTM directly</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Typed event catalogue:</strong> Define a TypeScript union or object type listing every possible event name and its required properties — prevents typos and missing required fields</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Automatic context enrichment:</strong> Middleware in the facade automatically attaches <code>userId</code>, <code>sessionId</code>, <code>appVersion</code>, and <code>timestamp</code> to every event</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Page view automation:</strong> A router listener (React Router <code>useLocation</code> effect) fires page-view events automatically on route change</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Click tracking:</strong> A <code>data-track</code> attribute pattern plus a global click listener can capture low-priority interactions without adding code to individual components</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// analytics/events.ts — typed catalogue</span>
+<span class="kw">type</span> AnalyticsEvents = {
+  <span class="st">'product_viewed'</span>:      { productId: <span class="kw">string</span>; category: <span class="kw">string</span> };
+  <span class="st">'add_to_cart'</span>:         { productId: <span class="kw">string</span>; qty: <span class="kw">number</span>; price: <span class="kw">number</span> };
+  <span class="st">'checkout_completed'</span>:  { orderId: <span class="kw">string</span>; total: <span class="kw">number</span> };
+};
+
+<span class="cm">// analytics/index.ts — typed track call</span>
+<span class="kw">export function</span> track&lt;K <span class="kw">extends keyof</span> AnalyticsEvents&gt;(
+  event: K,
+  props: AnalyticsEvents[K]
+) {
+  segment.<span class="fn">track</span>(event, { ...props, ...<span class="fn">getBaseContext</span>() });
+}
+
+<span class="cm">// Auto page-view in router</span>
+<span class="kw">const</span> location = <span class="fn">useLocation</span>();
+<span class="fn">useEffect</span>(() => {
+  analytics.<span class="fn">page</span>(location.pathname);
+}, [location.pathname]);</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Analytics debt is painful at scale — a well-thought-out instrumentation architecture signals the candidate has built and maintained real production applications.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q35 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q35" data-bs-parent="#acc-architecture">
+              <span class="q-num">35</span>
+              <span class="diff-medium me-2">Medium</span>
+              How do you implement error reporting (e.g., Sentry) in React?
+            </button>
+          </h2>
+          <div id="architecture-q35" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Error reporting integrates Sentry (or a similar tool) to automatically capture uncaught exceptions and React render errors, enrich them with user and release context, and surface them in a dashboard for triage.</p>
+              <ul class="ans-list green">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>SDK init:</strong> Call <code>Sentry.init()</code> at app entry with your DSN, release version, and environment — Sentry auto-instruments unhandled promise rejections and XHR errors from this point</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Error boundaries:</strong> Wrap route-level or section-level components in Sentry's <code>ErrorBoundary</code> (or your own) to catch React render errors and report them with component stack</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>User context:</strong> After login call <code>Sentry.setUser({ id, email })</code> so every subsequent error is linked to the affected user</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Source maps:</strong> Upload source maps during CI so stack traces point to original TypeScript lines, not minified output</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Manual capture:</strong> Use <code>Sentry.captureException(err)</code> inside catch blocks for expected error paths (API failures, validation errors) that would otherwise be silently swallowed</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// main.tsx — init before React renders</span>
+<span class="fn">Sentry.init</span>({
+  dsn:         <span class="kw">import</span>.meta.env.VITE_SENTRY_DSN,
+  environment: <span class="kw">import</span>.meta.env.VITE_APP_ENV,
+  release:     <span class="st">`my-app@${__APP_VERSION__}`</span>,
+  integrations: [<span class="kw">new</span> Sentry.<span class="fn">BrowserTracing</span>(), <span class="kw">new</span> Sentry.<span class="fn">Replay</span>()],
+  tracesSampleRate: <span class="st">0.2</span>,
+});
+
+<span class="cm">// App.tsx — boundary around the whole app</span>
+<span class="kw">import</span> { <span class="fn">ErrorBoundary</span> } <span class="kw">from</span> <span class="st">'@sentry/react'</span>;
+
+&lt;<span class="fn">ErrorBoundary</span> fallback={&lt;<span class="fn">CrashPage</span> /&gt;}&gt;
+  &lt;<span class="fn">App</span> /&gt;
+&lt;/<span class="fn">ErrorBoundary</span>&gt;
+
+<span class="cm">// In an async catch block</span>
+<span class="kw">try</span> {
+  <span class="kw">await</span> <span class="fn">submitOrder</span>(cart);
+} <span class="kw">catch</span> (err) {
+  Sentry.<span class="fn">captureException</span>(err, { extra: { cartId: cart.id } });
+  <span class="fn">showErrorToast</span>(<span class="st">'Order failed — please try again'</span>);
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Error observability is a production readiness baseline — candidates who have never set it up properly tend to learn about bugs from user complaints instead of dashboards.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q36 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q36" data-bs-parent="#acc-architecture">
+              <span class="q-num">36</span>
+              <span class="diff-hard me-2">Hard</span>
+              How do you implement a white-label theming system in React?
+            </button>
+          </h2>
+          <div id="architecture-q36" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>A white-label theming system lets multiple clients (tenants) each have a distinct visual identity — colours, typography, logos, border radius — while sharing the same codebase, by loading a per-tenant theme token set at runtime.</p>
+              <ul class="ans-list purple">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Design tokens:</strong> Define the full visual language as a flat token object — <code>primaryColor</code>, <code>fontFamily</code>, <code>borderRadius</code> — in a TypeScript interface so all themes are type-checked</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>CSS custom properties:</strong> Inject token values as CSS variables on <code>:root</code> at boot; components only ever reference <code>var(--color-primary)</code> so swapping the whole theme is a single DOM operation</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Tenant resolution:</strong> Determine the tenant from the subdomain, URL parameter, or auth token, then fetch that tenant's theme JSON from a CDN or API</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>MUI integration:</strong> Dynamically create a MUI theme with <code>createTheme(tenantTokens)</code> and wrap the app in <code>&lt;ThemeProvider theme={theme}&gt;</code></li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Fallback:</strong> Always ship a default theme as a bundled constant so the app renders correctly if the tenant API is slow or unavailable</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// theme/types.ts</span>
+<span class="kw">export interface</span> ThemeTokens {
+  colorPrimary:   <span class="kw">string</span>;
+  colorSecondary: <span class="kw">string</span>;
+  fontFamily:     <span class="kw">string</span>;
+  borderRadius:   <span class="kw">string</span>;
+  logoUrl:        <span class="kw">string</span>;
+}
+
+<span class="cm">// theme/applyTheme.ts</span>
+<span class="kw">export function</span> <span class="fn">applyTheme</span>(tokens: ThemeTokens) {
+  <span class="kw">const</span> root = document.documentElement;
+  root.style.<span class="fn">setProperty</span>(<span class="st">'--color-primary'</span>,   tokens.colorPrimary);
+  root.style.<span class="fn">setProperty</span>(<span class="st">'--color-secondary'</span>, tokens.colorSecondary);
+  root.style.<span class="fn">setProperty</span>(<span class="st">'--font-family'</span>,     tokens.fontFamily);
+  root.style.<span class="fn">setProperty</span>(<span class="st">'--border-radius'</span>,   tokens.borderRadius);
+}
+
+<span class="cm">// ThemeLoader.tsx — resolves tenant and applies theme</span>
+<span class="kw">export function</span> <span class="fn">ThemeLoader</span>({ children }: PropsWithChildren) {
+  <span class="kw">const</span> [ready, setReady] = <span class="fn">useState</span>(<span class="kw">false</span>);
+
+  <span class="fn">useEffect</span>(() => {
+    <span class="kw">const</span> tenantId = <span class="fn">resolveTenantFromSubdomain</span>();
+    <span class="fn">fetchTenantTheme</span>(tenantId)
+      .<span class="fn">then</span>(applyTheme)
+      .<span class="fn">finally</span>(() => <span class="fn">setReady</span>(<span class="kw">true</span>));
+  }, []);
+
+  <span class="kw">if</span> (!ready) <span class="kw">return</span> &lt;<span class="fn">SplashScreen</span> /&gt;;
+  <span class="kw">return</span> &lt;&gt;{children}&lt;/&gt;;
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> White-labelling is a common SaaS requirement — it tests knowledge of CSS variables, runtime configuration, and multi-tenancy patterns simultaneously.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q37 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q37" data-bs-parent="#acc-architecture">
+              <span class="q-num">37</span>
+              <span class="diff-hard me-2">Hard</span>
+              What is the hub-and-spoke architecture for React applications?
+            </button>
+          </h2>
+          <div id="architecture-q37" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Hub-and-spoke architecture positions a central shell application (the hub) as the entry point that hosts multiple domain-specific applications (the spokes), orchestrating shared concerns like authentication, navigation, and design tokens centrally while each spoke owns its own domain fully.</p>
+              <ul class="ans-list blue">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Hub responsibilities:</strong> Global auth, top-level routing, shared design system, notification centre, user preferences — everything that must be consistent across domains</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Spoke responsibilities:</strong> A fully owned vertical — its own state, API layer, components, and sub-routing; ideally deployable independently via Module Federation</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Communication contract:</strong> Spokes receive user/auth context from the hub via a shared context or standard props; they communicate back through defined events or a shared event bus</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>vs. Monolith:</strong> A monolith has all domains in one repo with shared state. Hub-and-spoke keeps domain code isolated but shares the shell</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>vs. Pure micro-frontends:</strong> Micro-frontends have no central orchestrator — hub-and-spoke deliberately centralises shell concerns for consistency</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// Hub (shell) — App.tsx</span>
+<span class="kw">const</span> OrdersApp    = <span class="fn">lazy</span>(() => <span class="kw">import</span>(<span class="st">'ordersApp/App'</span>));   <span class="cm">// spoke 1</span>
+<span class="kw">const</span> InventoryApp = <span class="fn">lazy</span>(() => <span class="kw">import</span>(<span class="st">'inventoryApp/App'</span>)); <span class="cm">// spoke 2</span>
+<span class="kw">const</span> ReportsApp   = <span class="fn">lazy</span>(() => <span class="kw">import</span>(<span class="st">'reportsApp/App'</span>));   <span class="cm">// spoke 3</span>
+
+<span class="kw">function</span> <span class="fn">Shell</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">AuthProvider</span>&gt;           <span class="cm">// hub owns auth</span>
+      &lt;<span class="fn">DesignSystemProvider</span>&gt; <span class="cm">// hub owns design tokens</span>
+        &lt;<span class="fn">GlobalNav</span> /&gt;
+        &lt;<span class="fn">Routes</span>&gt;
+          &lt;<span class="fn">Route</span> path=<span class="st">"/orders/*"</span>    element={&lt;<span class="fn">OrdersApp</span> /&gt;}    /&gt;
+          &lt;<span class="fn">Route</span> path=<span class="st">"/inventory/*"</span> element={&lt;<span class="fn">InventoryApp</span> /&gt;} /&gt;
+          &lt;<span class="fn">Route</span> path=<span class="st">"/reports/*"</span>   element={&lt;<span class="fn">ReportsApp</span> /&gt;}   /&gt;
+        &lt;/<span class="fn">Routes</span>&gt;
+      &lt;/<span class="fn">DesignSystemProvider</span>&gt;
+    &lt;/<span class="fn">AuthProvider</span>&gt;
+  );
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Evaluates whether candidates understand enterprise-scale decomposition and can articulate trade-offs between consistency (hub concerns) and autonomy (spoke independence).</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q38 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q38" data-bs-parent="#acc-architecture">
+              <span class="q-num">38</span>
+              <span class="diff-hard me-2">Hard</span>
+              How do you handle backward compatibility in shared component libraries?
+            </button>
+          </h2>
+          <div id="architecture-q38" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Backward compatibility in shared component libraries means consumers can upgrade to a new version without changing their code — enforced through semantic versioning, deprecation cycles, prop aliasing, and automated codemods for breaking changes.</p>
+              <ul class="ans-list green">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Never remove, deprecate first:</strong> Mark old props with a <code>@deprecated</code> JSDoc comment and a console warning in dev mode; keep them working for at least one major version</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Prop aliasing:</strong> When renaming a prop, accept both the old and new name internally — <code>const resolvedLabel = label ?? title</code> — and warn when the old name is used</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Strict semver:</strong> Any prop removal, type narrowing, or behaviour change is a major version bump; additive changes (new optional props) are minor; bug fixes are patch</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Codemods:</strong> Ship a jscodeshift or Grit codemod with every breaking change so teams can run <code>npx your-lib-codemod v3</code> to auto-migrate their usage</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Consumer tests:</strong> Maintain a test suite in the library repo that imports and renders common consumer usage patterns — acts as a regression suite for breaking changes</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// Button.tsx — prop aliasing with deprecation warning</span>
+<span class="kw">interface</span> ButtonProps {
+  label?:    <span class="kw">string</span>;  <span class="cm">// new name</span>
+  <span class="cm">/** @deprecated Use `label` instead */</span>
+  text?:     <span class="kw">string</span>;  <span class="cm">// old name kept for compat</span>
+  children?: React.ReactNode;
+}
+
+<span class="kw">export function</span> <span class="fn">Button</span>({ label, text, children, ...rest }: ButtonProps) {
+  <span class="kw">if</span> (text !== <span class="kw">undefined</span> &amp;&amp; process.env.NODE_ENV !== <span class="st">'production'</span>) {
+    console.<span class="fn">warn</span>(<span class="st">'[Button] `text` prop is deprecated — use `label` instead'</span>);
+  }
+  <span class="kw">const</span> resolvedLabel = label ?? text;
+  <span class="kw">return</span> &lt;button {...rest}&gt;{resolvedLabel ?? children}&lt;/button&gt;;
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Library maintainers must balance innovation with stability — poor backward compatibility breaks dozens of consuming teams and erodes trust in the library.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q39 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q39" data-bs-parent="#acc-architecture">
+              <span class="q-num">39</span>
+              <span class="diff-hard me-2">Hard</span>
+              What is semantic versioning for component libraries?
+            </button>
+          </h2>
+          <div id="architecture-q39" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Semantic versioning (semver) for component libraries follows the <strong>MAJOR.MINOR.PATCH</strong> format where each number communicates the safety of upgrading — patch is always safe, minor is additive and safe, major requires migration work.</p>
+              <ul class="ans-list amber">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>PATCH (1.0.x):</strong> Bug fixes, visual micro-corrections, accessibility fixes — consumers should always upgrade, no API changes whatsoever</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>MINOR (1.x.0):</strong> New optional props, new components, new variants — fully backward compatible; consumers can adopt new features but don't have to</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>MAJOR (x.0.0):</strong> Removed props, renamed components, changed default behaviour, peer dependency bumps (React 17→18) — consumers must review the migration guide before upgrading</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Pre-release tags:</strong> Use <code>1.0.0-beta.1</code> or <code>2.0.0-rc.0</code> for early access versions — consumers opt in explicitly, not captured by <code>^</code> or <code>~</code> ranges</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Changelogs:</strong> Every version must have a <code>CHANGELOG.md</code> entry written for consumers — not commit messages, but user-facing descriptions of what changed and why</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// package.json versions communicated to consumers</span>
+<span class="st">"@company/ui": "^2.5.0"</span>  <span class="cm">// safe: gets 2.5.x and 2.6.0 but NOT 3.0.0</span>
+<span class="st">"@company/ui": "~2.5.0"</span>  <span class="cm">// stricter: gets only 2.5.x patches</span>
+<span class="st">"@company/ui": "2.5.0"</span>   <span class="cm">// pinned: never auto-updates</span>
+
+<span class="cm">// CHANGELOG.md entry for a major bump</span>
+<span class="cm">## [3.0.0] — 2024-11-01</span>
+<span class="cm">### Breaking Changes</span>
+<span class="cm">- `Button` prop `text` removed — use `label`</span>
+<span class="cm">- `Modal` now requires `id` prop for a11y</span>
+<span class="cm">### Migration</span>
+<span class="cm">Run: npx @company/ui-codemod v3 ./src</span></pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Misunderstanding semver leads to accidental breaking changes and angry teams — this question tests whether the candidate has maintained a library used by others.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q40 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q40" data-bs-parent="#acc-architecture">
+              <span class="q-num">40</span>
+              <span class="diff-hard me-2">Hard</span>
+              How do you document a React component library with Storybook?
+            </button>
+          </h2>
+          <div id="architecture-q40" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Storybook is the industry-standard tool for documenting React component libraries — each component gets a <code>.stories.tsx</code> file that defines interactive examples (stories), auto-generated prop tables from TypeScript types, and written documentation in MDX.</p>
+              <ul class="ans-list blue">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>CSF3 format:</strong> Component Story Format 3 uses a default export for component meta and named exports for each story — concise and discoverable by Storybook automatically</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Controls addon:</strong> Storybook reads TypeScript prop types and generates interactive controls in the UI so designers can tweak props without writing code</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Actions addon:</strong> Log callback prop invocations (onClick, onChange) in the Actions panel to show how events fire</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>MDX docs:</strong> Write <code>component.mdx</code> files for narrative documentation, usage guidelines, and design rationale alongside the live examples</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Accessibility checks:</strong> The <code>@storybook/addon-a11y</code> addon runs axe-core on every story and highlights violations directly in the Storybook UI</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Visual regression:</strong> Connect Chromatic (Storybook's cloud) to capture screenshots of every story on every PR, catching unintended visual changes</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// Button.stories.tsx — CSF3 format</span>
+<span class="kw">import type</span> { Meta, StoryObj } <span class="kw">from</span> <span class="st">'@storybook/react'</span>;
+<span class="kw">import</span> { <span class="fn">Button</span> } <span class="kw">from</span> <span class="st">'./Button'</span>;
+
+<span class="kw">const</span> meta: Meta&lt;<span class="kw">typeof</span> Button&gt; = {
+  title:     <span class="st">'Components/Button'</span>,
+  component: Button,
+  tags:      [<span class="st">'autodocs'</span>],  <span class="cm">// auto-generate Docs page</span>
+  argTypes: {
+    variant: { control: <span class="st">'select'</span>, options: [<span class="st">'primary'</span>, <span class="st">'secondary'</span>, <span class="st">'ghost'</span>] },
+  },
+};
+<span class="kw">export default</span> meta;
+
+<span class="kw">type</span> Story = StoryObj&lt;<span class="kw">typeof</span> Button&gt;;
+
+<span class="kw">export const</span> Primary: Story = {
+  args: { label: <span class="st">'Click me'</span>, variant: <span class="st">'primary'</span> },
+};
+
+<span class="kw">export const</span> Disabled: Story = {
+  args: { label: <span class="st">'Disabled'</span>, disabled: <span class="kw">true</span> },
+};
+
+<span class="kw">export const</span> Loading: Story = {
+  args: { label: <span class="st">'Saving...'</span>, loading: <span class="kw">true</span> },
+};</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> A component library without documentation is unusable — Storybook proficiency is expected of any senior frontend engineer working on a shared design system.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q41 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q41" data-bs-parent="#acc-architecture">
+              <span class="q-num">41</span>
+              <span class="diff-medium me-2">Medium</span>
+              What is the skeleton pattern for loading states?
+            </button>
+          </h2>
+          <div id="architecture-q41" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>The skeleton pattern replaces content areas with animated placeholder shapes that match the layout of the expected content, giving users a visual cue about the structure that is loading and reducing perceived wait time compared to a spinner.</p>
+              <ul class="ans-list green">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Why skeletons beat spinners:</strong> Spinners communicate "waiting" but give no information about what will appear; skeletons set spatial expectations and feel faster psychologically</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Implementation:</strong> Replace text with a grey shimmer rectangle of the same approximate width; replace images with a grey rectangle of the same aspect ratio</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Shimmer animation:</strong> A CSS <code>@keyframes</code> animation on <code>background-position</code> of a gradient creates the moving shimmer effect with zero JS</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Libraries:</strong> <code>react-loading-skeleton</code> provides a <code>&lt;Skeleton&gt;</code> component with theming support; MUI provides <code>&lt;Skeleton&gt;</code> natively</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Accessibility:</strong> Wrap the skeleton in <code>aria-busy="true"</code> and <code>aria-label="Loading..."</code> so screen readers announce the loading state correctly</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// ProductCard — skeleton vs loaded state</span>
+<span class="kw">import</span> Skeleton <span class="kw">from</span> <span class="st">'react-loading-skeleton'</span>;
+
+<span class="kw">function</span> <span class="fn">ProductCard</span>({ product, isLoading }: Props) {
+  <span class="kw">if</span> (isLoading) {
+    <span class="kw">return</span> (
+      &lt;div className=<span class="st">"card"</span> aria-busy=<span class="st">"true"</span>&gt;
+        &lt;<span class="fn">Skeleton</span> height={<span class="st">200</span>} /&gt;              <span class="cm">// image placeholder</span>
+        &lt;<span class="fn">Skeleton</span> width=<span class="st">"60%"</span> height={<span class="st">20</span>} /&gt;  <span class="cm">// title placeholder</span>
+        &lt;<span class="fn">Skeleton</span> count={<span class="st">2</span>} /&gt;                  <span class="cm">// description lines</span>
+        &lt;<span class="fn">Skeleton</span> width={<span class="st">80</span>} height={<span class="st">36</span>} /&gt;   <span class="cm">// button placeholder</span>
+      &lt;/div&gt;
+    );
+  }
+  <span class="kw">return</span> (
+    &lt;div className=<span class="st">"card"</span>&gt;
+      &lt;img src={product.imageUrl} alt={product.name} /&gt;
+      &lt;h3&gt;{product.name}&lt;/h3&gt;
+      &lt;p&gt;{product.description}&lt;/p&gt;
+      &lt;<span class="fn">Button</span>&gt;Add to Cart&lt;/<span class="fn">Button</span>&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Loading UX is a direct measure of UX quality — interviewers want to see awareness of perceived performance beyond raw metric optimisation.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q42 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q42" data-bs-parent="#acc-architecture">
+              <span class="q-num">42</span>
+              <span class="diff-medium me-2">Medium</span>
+              What is optimistic UI and when do you use it?
+            </button>
+          </h2>
+          <div id="architecture-q42" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Optimistic UI updates the interface immediately as if an action succeeded, before the server responds, then rolls back if the request fails — trading a small risk of visible correction for a dramatically snappier user experience.</p>
+              <ul class="ans-list amber">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Best for:</strong> High-probability-of-success actions on low-stakes data — liking a post, ticking a todo, reordering a list, toggling a setting</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Avoid for:</strong> Payments, destructive deletes, or anything where an incorrect optimistic update could confuse or harm the user</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Rollback:</strong> Store the previous state before the optimistic update; if the API call rejects, restore it and show an error notification</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>React Query:</strong> The <code>onMutate</code> / <code>onError</code> / <code>onSettled</code> callbacks in <code>useMutation</code> make the optimistic pattern trivial — React Query handles cache snapshots automatically</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// Optimistic like toggle with React Query</span>
+<span class="kw">const</span> likeMutation = <span class="fn">useMutation</span>({
+  mutationFn: (postId: <span class="kw">string</span>) => api.<span class="fn">toggleLike</span>(postId),
+
+  <span class="kw">async</span> <span class="fn">onMutate</span>(postId) {
+    <span class="kw">await</span> queryClient.<span class="fn">cancelQueries</span>({ queryKey: [<span class="st">'post'</span>, postId] });
+    <span class="cm">// snapshot current state</span>
+    <span class="kw">const</span> previous = queryClient.<span class="fn">getQueryData</span>([<span class="st">'post'</span>, postId]);
+    <span class="cm">// apply optimistic update immediately</span>
+    queryClient.<span class="fn">setQueryData</span>([<span class="st">'post'</span>, postId], (old: Post) => ({
+      ...old, liked: !old.liked, likeCount: old.liked ? old.likeCount - <span class="st">1</span> : old.likeCount + <span class="st">1</span>,
+    }));
+    <span class="kw">return</span> { previous };
+  },
+
+  <span class="fn">onError</span>(_, postId, context) {
+    <span class="cm">// roll back on failure</span>
+    queryClient.<span class="fn">setQueryData</span>([<span class="st">'post'</span>, postId], context?.previous);
+  },
+
+  <span class="fn">onSettled</span>(_, __, postId) {
+    queryClient.<span class="fn">invalidateQueries</span>({ queryKey: [<span class="st">'post'</span>, postId] });
+  },
+});</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Optimistic UI is a hallmark of polished UX — candidates who know it demonstrate that they think about user experience at the interaction level, not just the data level.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q43 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q43" data-bs-parent="#acc-architecture">
+              <span class="q-num">43</span>
+              <span class="diff-medium me-2">Medium</span>
+              What is the error state pattern for components?
+            </button>
+          </h2>
+          <div id="architecture-q43" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>The error state pattern means every data-driven component explicitly handles and renders a distinct error UI rather than silently showing nothing, displaying a stale value, or crashing — giving users the context they need to understand what went wrong and what to do next.</p>
+              <ul class="ans-list blue">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Three-state model:</strong> Any async component has three states — loading, error, and success — each requiring a dedicated UI branch; skipping the error branch is the most common omission</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Error granularity:</strong> Distinguish between network errors (retry button), permission errors (contact support), and not-found errors (navigate away) — each warrants a different message and action</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Inline vs. boundary:</strong> Use inline error UI for section-level failures; use React Error Boundaries for unexpected render errors that should not unmount the entire page</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Retry pattern:</strong> For transient network failures, show a retry button and reuse the same data-fetching function — React Query's <code>refetch</code> makes this trivial</li>
+              </ul>
+              <pre class="code-block"><span class="kw">function</span> <span class="fn">ProductList</span>() {
+  <span class="kw">const</span> { data, isLoading, isError, error, refetch } = <span class="fn">useProducts</span>();
+
+  <span class="kw">if</span> (isLoading) <span class="kw">return</span> &lt;<span class="fn">ProductListSkeleton</span> /&gt;;
+
+  <span class="kw">if</span> (isError) {
+    <span class="kw">const</span> message = error <span class="kw">instanceof</span> ForbiddenError
+      ? <span class="st">'You do not have permission to view products.'</span>
+      : <span class="st">'Could not load products. Check your connection.'</span>;
+
+    <span class="kw">return</span> (
+      &lt;div className=<span class="st">"error-state"</span> role=<span class="st">"alert"</span>&gt;
+        &lt;p&gt;{message}&lt;/p&gt;
+        {!(error <span class="kw">instanceof</span> ForbiddenError) &amp;&amp;
+          &lt;button onClick={() =&gt; <span class="fn">refetch</span>()}&gt;Try Again&lt;/button&gt;}
+      &lt;/div&gt;
+    );
+  }
+
+  <span class="kw">return</span> &lt;<span class="fn">ProductGrid</span> products={data} /&gt;;
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Error handling is where junior and senior engineers diverge most visibly — junior code assumes the happy path, senior code treats errors as first-class citizens.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q44 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q44" data-bs-parent="#acc-architecture">
+              <span class="q-num">44</span>
+              <span class="diff-medium me-2">Medium</span>
+              What is the empty state pattern?
+            </button>
+          </h2>
+          <div id="architecture-q44" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>The empty state pattern renders a purposeful, helpful UI when a list, table, or section has no data — rather than showing blank space or nothing — providing context about why it is empty and guiding the user toward the next action.</p>
+              <ul class="ans-list green">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Types of empty states:</strong> First use (user has not created any data yet), zero results from a filter/search, and cleared state (user deleted everything) — each warrants a different message</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Anatomy:</strong> An illustration or icon, a clear headline, a one-sentence explanation, and a primary CTA button — every element optional but each adding value</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>First-use empty states:</strong> The most important type — this is onboarding. Guide the user to their first meaningful action rather than showing a dead screen</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Search empty states:</strong> Confirm what the user searched for (<code>"No results for 'widget'"</code>), suggest corrective action (check spelling, clear filters)</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Pattern:</strong> Create a reusable <code>&lt;EmptyState&gt;</code> component accepting <code>icon</code>, <code>title</code>, <code>description</code>, and <code>action</code> props so every team uses the same design</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// components/EmptyState.tsx</span>
+<span class="kw">interface</span> EmptyStateProps {
+  icon:        React.ReactNode;
+  title:       <span class="kw">string</span>;
+  description: <span class="kw">string</span>;
+  action?:     { label: <span class="kw">string</span>; onClick: () => <span class="kw">void</span> };
+}
+
+<span class="kw">function</span> <span class="fn">EmptyState</span>({ icon, title, description, action }: EmptyStateProps) {
+  <span class="kw">return</span> (
+    &lt;div className=<span class="st">"empty-state"</span>&gt;
+      &lt;div className=<span class="st">"empty-state__icon"</span>&gt;{icon}&lt;/div&gt;
+      &lt;h3&gt;{title}&lt;/h3&gt;
+      &lt;p&gt;{description}&lt;/p&gt;
+      {action &amp;&amp; &lt;button onClick={action.onClick}&gt;{action.label}&lt;/button&gt;}
+    &lt;/div&gt;
+  );
+}
+
+<span class="cm">// Usage — first-use empty state</span>
+&lt;<span class="fn">EmptyState</span>
+  icon={&lt;<span class="fn">ShoppingBagIcon</span> /&gt;}
+  title=<span class="st">"Your cart is empty"</span>
+  description=<span class="st">"Browse products and add items to get started."</span>
+  action={{ label: <span class="st">"Browse Products"</span>, onClick: () =&gt; <span class="fn">navigate</span>(<span class="st">'/products'</span>) }}
+/&gt;</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Empty states are often overlooked and left as blank space — attention to this detail signals that a candidate thinks holistically about the complete user experience.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q45 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q45" data-bs-parent="#acc-architecture">
+              <span class="q-num">45</span>
+              <span class="diff-medium me-2">Medium</span>
+              What is accessibility-first component design?
+            </button>
+          </h2>
+          <div id="architecture-q45" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Accessibility-first design means treating WCAG compliance and keyboard/screen-reader support as non-negotiable requirements built into component architecture from the start — not bolted on afterward — by using semantic HTML, ARIA roles, focus management, and colour-contrast standards by default.</p>
+              <ul class="ans-list purple">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Semantic HTML first:</strong> Use <code>&lt;button&gt;</code> not <code>&lt;div onClick&gt;</code>, <code>&lt;nav&gt;</code> not <code>&lt;div id="nav"&gt;</code>, <code>&lt;table&gt;</code> for tabular data — semantics give screen readers meaning for free</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Keyboard navigation:</strong> Every interactive element must be reachable and operable via keyboard; custom components (dropdowns, modals, date pickers) must implement the correct ARIA keyboard patterns from WAI-ARIA Authoring Practices</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Focus management:</strong> When a modal opens, move focus to the first interactive element inside it; when it closes, return focus to the trigger element</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>ARIA:</strong> Use <code>aria-label</code> for icon buttons with no visible text, <code>aria-expanded</code> on accordions, <code>aria-live="polite"</code> for dynamic content updates</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Tooling:</strong> Install <code>eslint-plugin-jsx-a11y</code> to catch issues at write-time; add <code>@storybook/addon-a11y</code> for runtime axe-core checks; test with VoiceOver and NVDA before shipping</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// Accessible modal — focus trap + return focus</span>
+<span class="kw">function</span> <span class="fn">Modal</span>({ isOpen, onClose, title, children }: ModalProps) {
+  <span class="kw">const</span> modalRef = <span class="fn">useRef</span>&lt;HTMLDivElement&gt;(<span class="kw">null</span>);
+  <span class="kw">const</span> triggerRef = <span class="fn">useRef</span>&lt;Element | null&gt;(<span class="kw">null</span>);
+
+  <span class="fn">useEffect</span>(() => {
+    <span class="kw">if</span> (isOpen) {
+      triggerRef.current = document.activeElement;
+      modalRef.current?.focus();                   <span class="cm">// move focus in</span>
+    } <span class="kw">else</span> {
+      (triggerRef.current <span class="kw">as</span> HTMLElement)?.<span class="fn">focus</span>(); <span class="cm">// return focus out</span>
+    }
+  }, [isOpen]);
+
+  <span class="kw">if</span> (!isOpen) <span class="kw">return null</span>;
+  <span class="kw">return</span> (
+    &lt;div
+      role=<span class="st">"dialog"</span> aria-modal=<span class="st">"true"</span> aria-labelledby=<span class="st">"modal-title"</span>
+      ref={modalRef} tabIndex={-<span class="st">1</span>}
+    &gt;
+      &lt;h2 id=<span class="st">"modal-title"</span>&gt;{title}&lt;/h2&gt;
+      {children}
+      &lt;button onClick={onClose} aria-label=<span class="st">"Close dialog"</span>&gt;×&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Accessibility is both a legal requirement and a quality signal — companies increasingly mandate WCAG AA compliance, and senior engineers are expected to champion it.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q46 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q46" data-bs-parent="#acc-architecture">
+              <span class="q-num">46</span>
+              <span class="diff-hard me-2">Hard</span>
+              How do you implement real-time collaboration features (like Google Docs)?
+            </button>
+          </h2>
+          <div id="architecture-q46" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Real-time collaboration requires a conflict-resolution algorithm (OT or CRDT), a live transport layer (WebSockets), presence awareness, and careful UI design to show cursor positions and user identities — all without causing render thrashing in React.</p>
+              <ul class="ans-list blue">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>CRDTs (Conflict-free Replicated Data Types):</strong> The modern standard — Yjs and Automerge are the leading libraries. CRDTs guarantee that any two clients applying the same set of operations (in any order) converge to the same state, making them ideal for offline + async collaboration</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Transport:</strong> WebSockets (via Socket.io, Liveblocks, or a raw WebSocket server) push document deltas to all connected clients in sub-100ms; long-polling is too slow for collaborative editing</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Presence:</strong> Each client broadcasts its cursor position, selection range, and user identity on each change; store this as ephemeral state (not in the document CRDT) to avoid polluting history</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Liveblocks / PartyKit:</strong> Managed infrastructure options that provide presence, storage (Yjs-backed), and conflict resolution as a service, eliminating the need to run your own WebSocket servers</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>React integration:</strong> Use a context that holds the Yjs document; components subscribe to Yjs awareness events and update local React state, keeping the CRDT as the single source of truth</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// Minimal Yjs + Liveblocks collaboration setup</span>
+<span class="kw">import</span> * <span class="kw">as</span> Y <span class="kw">from</span> <span class="st">'yjs'</span>;
+<span class="kw">import</span> { <span class="fn">createClient</span> } <span class="kw">from</span> <span class="st">'@liveblocks/client'</span>;
+
+<span class="kw">const</span> ydoc = <span class="kw">new</span> Y.<span class="fn">Doc</span>();
+<span class="kw">const</span> yText = ydoc.<span class="fn">getText</span>(<span class="st">'document'</span>);
+
+<span class="cm">// Subscribe to remote changes</span>
+yText.<span class="fn">observe</span>(event => {
+  <span class="cm">// event.delta contains insert/delete/retain operations</span>
+  setContent(yText.<span class="fn">toString</span>());
+});
+
+<span class="cm">// Presence hook — broadcast cursor position</span>
+<span class="kw">const</span> { updateMyPresence, others } = <span class="fn">useRoom</span>();
+
+<span class="kw">function</span> <span class="fn">onSelectionChange</span>(range: Range) {
+  <span class="fn">updateMyPresence</span>({ cursor: { start: range.from, end: range.to } });
+}
+
+<span class="cm">// Render other users' cursors</span>
+{others.<span class="fn">map</span>(({ connectionId, presence }) =>
+  presence.cursor &amp;&amp; (
+    &lt;<span class="fn">RemoteCursor</span>
+      key={connectionId}
+      position={presence.cursor}
+      color={<span class="fn">getUserColor</span>(connectionId)}
+    /&gt;
+  )
+)}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Real-time collaboration is one of the hardest frontend problems — even a high-level answer about CRDTs, WebSockets, and presence architecture demonstrates significant architectural depth.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q47 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q47" data-bs-parent="#acc-architecture">
+              <span class="q-num">47</span>
+              <span class="diff-hard me-2">Hard</span>
+              How do you build an offline-first React application?
+            </button>
+          </h2>
+          <div id="architecture-q47" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>An offline-first React application is designed to function fully without a network connection by default — serving assets from a Service Worker cache, persisting data locally, and synchronising mutations when connectivity is restored.</p>
+              <ul class="ans-list green">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Service Worker (Workbox):</strong> Pre-cache the app shell (JS, CSS, HTML) at install time so the app loads instantly even offline; use Workbox's <code>StaleWhileRevalidate</code> or <code>CacheFirst</code> strategies per asset type</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Local data store:</strong> Persist domain data in IndexedDB (via <code>idb</code>, <code>Dexie.js</code>, or <code>localForage</code>) so reads never require a network; React Query's <code>persistQueryClient</code> plugin rehydrates the query cache from IndexedDB on boot</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Mutation queue:</strong> Write mutations to an IndexedDB queue immediately; a background sync service drains the queue when the network returns (use Background Sync API or a polling reconnect handler)</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Conflict resolution:</strong> Decide a strategy — last-write-wins, server-wins, or CRDT merge — before the first conflict occurs, not after</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Network status UI:</strong> Use the <code>navigator.onLine</code> event and a <code>useNetworkStatus</code> hook to show an offline banner and disable actions that require connectivity (e.g., payment processing)</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// hooks/useNetworkStatus.ts</span>
+<span class="kw">export function</span> <span class="fn">useNetworkStatus</span>() {
+  <span class="kw">const</span> [isOnline, setIsOnline] = <span class="fn">useState</span>(navigator.onLine);
+  <span class="fn">useEffect</span>(() => {
+    <span class="kw">const</span> on  = () => <span class="fn">setIsOnline</span>(<span class="kw">true</span>);
+    <span class="kw">const</span> off = () => <span class="fn">setIsOnline</span>(<span class="kw">false</span>);
+    window.<span class="fn">addEventListener</span>(<span class="st">'online'</span>, on);
+    window.<span class="fn">addEventListener</span>(<span class="st">'offline'</span>, off);
+    <span class="kw">return</span> () => {
+      window.<span class="fn">removeEventListener</span>(<span class="st">'online'</span>, on);
+      window.<span class="fn">removeEventListener</span>(<span class="st">'offline'</span>, off);
+    };
+  }, []);
+  <span class="kw">return</span> { isOnline };
+}
+
+<span class="cm">// Mutation queue — enqueue when offline, drain when online</span>
+<span class="kw">const</span> { isOnline } = <span class="fn">useNetworkStatus</span>();
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">if</span> (isOnline) <span class="fn">drainMutationQueue</span>();
+}, [isOnline]);</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Offline-first is required for PWAs, field-worker apps, and any product used in unreliable network conditions — it tests Service Worker knowledge, local storage strategies, and sync architecture simultaneously.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q48 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q48" data-bs-parent="#acc-architecture">
+              <span class="q-num">48</span>
+              <span class="diff-hard me-2">Hard</span>
+              What is the CQRS pattern applied to React state?
+            </button>
+          </h2>
+          <div id="architecture-q48" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>CQRS (Command Query Responsibility Segregation) applied to React state means separating the code path for reading data (queries) from the code path for writing data (commands), using different models, hooks, and sometimes different stores for each concern.</p>
+              <ul class="ans-list purple">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Query side:</strong> React Query / SWR handles all reads — it owns the server cache, loading states, and background refetching; components call <code>useProducts()</code> and get normalised, cached data</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Command side:</strong> Redux Toolkit (or <code>useMutation</code>) handles all writes — it owns the action dispatch, optimistic updates, and side effects; components dispatch <code>renameProduct()</code> without needing to think about refetching</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Why separate:</strong> Read models are often shaped for display (denormalised, paginated, filtered); write models are shaped for validation and domain rules — combining them forces awkward compromises</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Synchronisation:</strong> After a command succeeds, invalidate the relevant React Query cache keys so the query side refetches with the new state</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Practical application:</strong> A form that writes data uses a Zustand write store; the table that displays it uses React Query — they are completely decoupled, individually testable, and composable</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// QUERY side — React Query owns reads</span>
+<span class="kw">export function</span> <span class="fn">useProducts</span>(filters: ProductFilters) {
+  <span class="kw">return</span> <span class="fn">useQuery</span>({
+    queryKey: [<span class="st">'products'</span>, filters],
+    queryFn:  () => api.products.<span class="fn">list</span>(filters),
+    staleTime: <span class="st">30_000</span>,
+  });
+}
+
+<span class="cm">// COMMAND side — mutation owns writes</span>
+<span class="kw">export function</span> <span class="fn">useCreateProduct</span>() {
+  <span class="kw">const</span> queryClient = <span class="fn">useQueryClient</span>();
+  <span class="kw">return</span> <span class="fn">useMutation</span>({
+    mutationFn: api.products.create,
+    <span class="fn">onSuccess</span>() {
+      <span class="cm">// synchronise: tell query side to refetch</span>
+      queryClient.<span class="fn">invalidateQueries</span>({ queryKey: [<span class="st">'products'</span>] });
+    },
+  });
+}
+
+<span class="cm">// Component — query and command sides never directly touch</span>
+<span class="kw">function</span> <span class="fn">ProductsPage</span>() {
+  <span class="kw">const</span> { data }    = <span class="fn">useProducts</span>({});         <span class="cm">// query</span>
+  <span class="kw">const</span> createMutation = <span class="fn">useCreateProduct</span>();   <span class="cm">// command</span>
+  ...
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> CQRS is a backend-origin pattern that has a clear, practical mapping to modern React data-fetching libraries — knowing it shows the candidate thinks in architectural principles, not just API calls.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q49 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q49" data-bs-parent="#acc-architecture">
+              <span class="q-num">49</span>
+              <span class="diff-hard me-2">Hard</span>
+              How do you implement undo/redo in a React application?
+            </button>
+          </h2>
+          <div id="architecture-q49" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Undo/redo in React is implemented by maintaining a history stack of past states (or commands), moving a pointer backward (undo) or forward (redo) through that stack, and applying the state or command at the new pointer position.</p>
+              <ul class="ans-list amber">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>State snapshot approach:</strong> Store the full state snapshot on every meaningful change in a <code>past[]</code> array; undo pops from <code>past</code> and pushes to <code>future[]</code>; redo does the reverse — simple but memory-intensive for large state</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Command approach:</strong> Store command objects with <code>execute()</code> and <code>undo()</code> methods (see Q30) — memory-efficient because you store the diff not the snapshot, but requires every mutation to be encapsulated as a command</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Redux + redux-undo:</strong> The <code>redux-undo</code> higher-order reducer wraps any Redux slice and gives it <code>past</code>, <code>present</code>, and <code>future</code> arrays automatically — the easiest path for Redux-based state</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Immer patches:</strong> Immer's <code>produceWithPatches</code> generates forward and inverse patch arrays for every state transition — apply forward patches to redo, inverse patches to undo, with minimal memory usage</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Debouncing:</strong> For text input, debounce history entries (e.g., save a snapshot every 500ms or on word boundary) rather than on every keypress — mirrors how most editors behave</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// useUndoReducer.ts — state snapshot approach</span>
+<span class="kw">interface</span> History&lt;T&gt; {
+  past:    T[];
+  present: T;
+  future:  T[];
+}
+
+<span class="kw">type</span> UndoAction&lt;A&gt; = A | { type: <span class="st">'UNDO'</span> } | { type: <span class="st">'REDO'</span> };
+
+<span class="kw">function</span> <span class="fn">undoReducer</span>&lt;S, A&gt;(inner: React.Reducer&lt;S, A&gt;) {
+  <span class="kw">return</span> (hist: History&lt;S&gt;, action: UndoAction&lt;A&gt;): History&lt;S&gt; => {
+    <span class="kw">if</span> ((<span class="kw">action as any</span>).type === <span class="st">'UNDO'</span> &amp;&amp; hist.past.length) {
+      <span class="kw">const</span> previous = hist.past.<span class="fn">at</span>(-<span class="st">1</span>)!;
+      <span class="kw">return</span> {
+        past:    hist.past.<span class="fn">slice</span>(<span class="st">0</span>, -<span class="st">1</span>),
+        present: previous,
+        future:  [hist.present, ...hist.future],
+      };
+    }
+    <span class="kw">if</span> ((<span class="kw">action as any</span>).type === <span class="st">'REDO'</span> &amp;&amp; hist.future.length) {
+      <span class="kw">const</span> next = hist.future[<span class="st">0</span>];
+      <span class="kw">return</span> {
+        past:    [...hist.past, hist.present],
+        present: next,
+        future:  hist.future.<span class="fn">slice</span>(<span class="st">1</span>),
+      };
+    }
+    <span class="kw">const</span> next = <span class="fn">inner</span>(hist.present, action <span class="kw">as</span> A);
+    <span class="kw">return</span> {
+      past:    [...hist.past, hist.present],
+      present: next,
+      future:  [],
+    };
+  };
+}</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Undo/redo is a classic algorithm question with a direct frontend application — it tests both data structure reasoning (stacks) and React state management simultaneously.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q50 -->
+        <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#architecture-q50" data-bs-parent="#acc-architecture">
+              <span class="q-num">50</span>
+              <span class="diff-hard me-2">Hard</span>
+              What is event sourcing and can it apply to frontend React state?
+            </button>
+          </h2>
+          <div id="architecture-q50" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Event sourcing stores the full sequence of events that led to the current state rather than just the current state snapshot — the state is always derived by replaying the event log, making the complete history a first-class citizen of the data model.</p>
+              <ul class="ans-list blue">
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Core principle:</strong> State = <code>events.reduce(reducer, initialState)</code> — this is exactly what Redux does. Every dispatched action is an immutable event appended to the store's implicit event log</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Redux IS event sourcing (lightweight):</strong> Redux DevTools' time-travel debugger is event sourcing in practice — it replays actions from the beginning to jump to any historical state</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Full event sourcing on the frontend:</strong> Persist the entire action log to <code>localStorage</code> or IndexedDB; replay it on boot to restore state without ever storing the state snapshot itself</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Projections:</strong> Derive multiple different views (read models) from the same event log by writing different reducer functions — one event log, many state representations</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>When to use on frontend:</strong> Collaborative editors, audit trails, offline-first sync (events are the sync unit), and complex undo/redo — not for typical CRUD apps where it adds unnecessary complexity</li>
+                <li><i class="bi bi-arrow-right me-1"></i><strong>Trade-offs:</strong> The event log grows unboundedly — implement snapshotting (save a state snapshot + truncate older events) to cap storage and replay time</li>
+              </ul>
+              <pre class="code-block"><span class="cm">// Event sourcing with Redux — persist the action log</span>
+<span class="kw">const</span> eventLog: Action[] = <span class="fn">loadEventLogFromStorage</span>() ?? [];
+
+<span class="cm">// Middleware that appends every action to the log</span>
+<span class="kw">const</span> eventSourcingMiddleware: Middleware = () => next => action => {
+  eventLog.<span class="fn">push</span>(action);
+  <span class="fn">saveEventLogToStorage</span>(eventLog); <span class="cm">// persist after every action</span>
+  <span class="kw">return</span> <span class="fn">next</span>(action);
+};
+
+<span class="cm">// On boot — replay the persisted log to restore state</span>
+<span class="kw">function</span> <span class="fn">replayEventLog</span>(log: Action[], reducer: Reducer, initial: State) {
+  <span class="kw">return</span> log.<span class="fn">reduce</span>(reducer, initial);
+}
+
+<span class="cm">// Snapshotting — keep only last 100 events + snapshot</span>
+<span class="kw">function</span> <span class="fn">snapshot</span>(currentState: State) {
+  <span class="fn">saveSnapshot</span>(currentState);
+  eventLog.<span class="fn">splice</span>(<span class="st">0</span>); <span class="cm">// clear the log after snapshotting</span>
+}
+
+<span class="cm">// Multiple projections from the same event log</span>
+<span class="kw">const</span> auditView   = eventLog.<span class="fn">reduce</span>(auditReducer,   {});
+<span class="kw">const</span> summaryView = eventLog.<span class="fn">reduce</span>(summaryReducer, {});</pre>
+              <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Event sourcing is an advanced architectural concept — knowing it and recognising that Redux already implements its core principle demonstrates a candidate's ability to connect backend patterns to frontend implementations.</div>
+            </div>
+          </div>
+        </div>

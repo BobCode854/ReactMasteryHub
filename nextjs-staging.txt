@@ -1,0 +1,1701 @@
+<!-- ACCORDION ITEM 1 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q1">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q1" aria-expanded="false" aria-controls="nextjs-q1">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;1. What is Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q1" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q1" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Next.js is a React framework built and maintained by Vercel that adds production-grade capabilities on top of React: server-side rendering, static site generation, file-based routing, API routes, image optimization, font optimization, and more — all with zero configuration out of the box. While plain React is a UI library that handles only the view layer, Next.js is a full-stack framework that handles routing, data fetching, bundling (via Turbopack or Webpack), and deployment concerns. It is one of the most widely adopted React frameworks and is officially recommended in the React documentation as a starting point for new projects.</p>
+      <p>Next.js supports multiple rendering strategies in the same application — individual pages or even individual components can be statically generated, server-rendered, or client-rendered depending on their data requirements. This flexibility is its defining characteristic. With the App Router introduced in v13 and stabilized in v13.4, Next.js adopted React Server Components as the default rendering model, fundamentally changing how data fetching and component composition work. The framework integrates tightly with the Vercel deployment platform but can also be self-hosted on any Node.js server or exported as a static site.</p>
+      <pre class="code-block"># Create a new Next.js project
+npx create-next-app@latest my-app --typescript --tailwind --app
+
+# Project structure (App Router)
+my-app/
+├── app/
+│   ├── layout.tsx       # Root layout (Server Component)
+│   ├── page.tsx         # Home page route /
+│   ├── about/
+│   │   └── page.tsx     # Route /about
+│   └── api/
+│       └── hello/
+│           └── route.ts # API route /api/hello
+├── public/              # Static assets
+├── next.config.ts       # Next.js configuration
+└── package.json</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 2 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q2">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q2" aria-expanded="false" aria-controls="nextjs-q2">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;2. What is SSR (Server-Side Rendering)?
+    </button>
+  </h2>
+  <div id="nextjs-q2" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q2" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Server-Side Rendering (SSR) means that the HTML for a page is generated on the server on each incoming request, rather than in the browser. When a user navigates to an SSR page, the server fetches the necessary data, renders the React component tree to an HTML string, and sends the fully-formed HTML to the browser. The browser can display meaningful content immediately — before any JavaScript is downloaded or executed — which significantly improves Time to First Byte (TTFB) and First Contentful Paint (FCP) compared to a pure client-rendered Single Page Application (SPA).</p>
+      <p>After the HTML is delivered, React "hydrates" the page by attaching event listeners and making it interactive. SSR is ideal for pages whose content changes frequently and must be personalized or real-time (e.g., a dashboard showing live data, a logged-in user's profile page). In the Pages Router, SSR is opted into via <code>getServerSideProps</code>. In the App Router, any Server Component that fetches data without caching is effectively SSR. The main tradeoff of SSR vs. SSG is that the server must do work on every request, increasing server load and TTFB relative to serving a pre-built static file.</p>
+      <pre class="code-block">// Pages Router — SSR via getServerSideProps
+// pages/dashboard.tsx
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+
+interface DashboardProps { user: { name: string; email: string } }
+
+export const getServerSideProps: GetServerSideProps&lt;DashboardProps&gt; = async (ctx) =&gt; {
+  const session = await getSession(ctx.req);
+  if (!session) return { redirect: { destination: '/login', permanent: false } };
+
+  const user = await fetchUser(session.userId);
+  return { props: { user } };
+};
+
+export default function Dashboard({ user }: InferGetServerSidePropsType&lt;typeof getServerSideProps&gt;) {
+  return &lt;h1&gt;Welcome, {user.name}&lt;/h1&gt;;
+}
+
+// App Router — SSR is the default for Server Components with no-store cache
+// app/dashboard/page.tsx
+async function DashboardPage() {
+  const user = await fetch('/api/user', { cache: 'no-store' }).then(r =&gt; r.json());
+  return &lt;h1&gt;Welcome, {user.name}&lt;/h1&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 3 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q3">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q3" aria-expanded="false" aria-controls="nextjs-q3">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;3. What is SSG (Static Site Generation)?
+    </button>
+  </h2>
+  <div id="nextjs-q3" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q3" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Static Site Generation (SSG) means that HTML pages are pre-rendered at <strong>build time</strong> — when you run <code>next build</code> — rather than on each request. The generated HTML files are stored on disk (or in a CDN) and served directly to every user without any server-side computation per request. This makes SSG the fastest possible delivery method: a CDN serves a static file with extremely low latency, and the server never processes any logic per request. SSG is ideal for content that is the same for every user and does not change frequently — marketing pages, blog posts, documentation, product listings.</p>
+      <p>In the Pages Router, a page uses SSG by default if it has no data-fetching function, or explicitly via <code>getStaticProps</code>. For pages with dynamic routes (e.g., <code>/blog/[slug]</code>), <code>getStaticPaths</code> tells Next.js which paths to pre-render. In the App Router, a Server Component that fetches data with the default <code>force-cache</code> behavior is statically generated. The practical limitation of SSG is staleness: if data changes after the build, the page shows outdated content until the next build. This is addressed by ISR (Incremental Static Regeneration).</p>
+      <pre class="code-block">// Pages Router — SSG via getStaticProps
+// pages/blog/[slug].tsx
+import type { GetStaticProps, GetStaticPaths } from 'next';
+
+export const getStaticPaths: GetStaticPaths = async () =&gt; {
+  const posts = await fetchAllPosts();
+  return {
+    paths: posts.map(p =&gt; ({ params: { slug: p.slug } })),
+    fallback: 'blocking', // ISR for new posts not built yet
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) =&gt; {
+  const post = await fetchPost(params!.slug as string);
+  if (!post) return { notFound: true };
+  return { props: { post }, revalidate: 60 }; // ISR: rebuild every 60s
+};
+
+// App Router — static by default
+// app/blog/[slug]/page.tsx
+export async function generateStaticParams() {
+  const posts = await fetchAllPosts();
+  return posts.map(p =&gt; ({ slug: p.slug }));
+}
+
+async function BlogPost({ params }: { params: { slug: string } }) {
+  const post = await fetchPost(params.slug); // cached = static
+  return &lt;article&gt;{post.content}&lt;/article&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 4 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q4">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q4" aria-expanded="false" aria-controls="nextjs-q4">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;4. What is ISR (Incremental Static Regeneration)?
+    </button>
+  </h2>
+  <div id="nextjs-q4" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q4" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Incremental Static Regeneration (ISR) is a hybrid rendering strategy that combines the performance of SSG with the freshness of SSR. With ISR, pages are statically generated at build time, but Next.js will regenerate individual pages in the background after a specified time interval (<code>revalidate</code> seconds) when a new request comes in. The first request after the interval expires triggers a background rebuild; the current (possibly stale) page is served to that visitor, and the freshly rebuilt page is stored and served to subsequent visitors. This is called the "stale-while-revalidate" pattern.</p>
+      <p>ISR solves the primary pain point of SSG — stale content — without the per-request server cost of SSR. It is ideal for content that changes occasionally: e-commerce product pages, news articles, event listings. Next.js also supports <strong>on-demand ISR</strong>, where instead of a time-based interval, you explicitly trigger revalidation via an API call (e.g., from a CMS webhook), ensuring pages are always fresh immediately after content changes. In the App Router, on-demand ISR is handled via <code>revalidatePath()</code> and <code>revalidateTag()</code> from <code>next/cache</code>.</p>
+      <pre class="code-block">// Pages Router ISR — time-based
+export const getStaticProps: GetStaticProps = async ({ params }) =&gt; {
+  const product = await fetchProduct(params!.id);
+  return {
+    props: { product },
+    revalidate: 300, // regenerate at most every 5 minutes
+  };
+};
+
+// On-demand ISR via API route (triggered by CMS webhook)
+// pages/api/revalidate.ts
+export default async function handler(req, res) {
+  if (req.query.secret !== process.env.REVALIDATION_SECRET) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+  try {
+    await res.revalidate(`/products/${req.query.id}`);
+    return res.json({ revalidated: true });
+  } catch (err) {
+    return res.status(500).send('Error revalidating');
+  }
+}
+
+// App Router — on-demand revalidation via Server Action or Route Handler
+// app/api/revalidate/route.ts
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { NextRequest } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  const { path, tag } = await request.json();
+  if (path) revalidatePath(path);
+  if (tag) revalidateTag(tag);
+  return Response.json({ revalidated: true, now: Date.now() });
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 5 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q5">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q5" aria-expanded="false" aria-controls="nextjs-q5">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;5. What is CSR (Client-Side Rendering)?
+    </button>
+  </h2>
+  <div id="nextjs-q5" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q5" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Client-Side Rendering (CSR) means that the browser receives a minimal HTML shell with a JavaScript bundle, and React builds the entire page in the browser by executing JavaScript. The server sends no meaningful HTML content — typically just a <code>&lt;div id="root"&gt;&lt;/div&gt;</code> — and all rendering, data fetching, and UI construction happens on the client after the JavaScript loads. This is the model used by a standard Create React App (CRA) or Vite SPA setup. CSR results in a fast initial server response (just the shell HTML) but a slow Time to Interactive because the user sees a blank page or loading spinner until React bootstraps and fetches data.</p>
+      <p>In Next.js, CSR is used selectively for portions of the page that are highly interactive, user-specific, or real-time — things like dashboards with live polling, rich form interfaces, or components that depend on browser-only APIs (<code>window</code>, <code>localStorage</code>). In the App Router, a Client Component (<code>'use client'</code>) that fetches data via <code>useEffect</code> or React Query is effectively CSR. Next.js also provides a <code>dynamic</code> wrapper with <code>ssr: false</code> to explicitly opt a component into CSR and skip it during SSR, which is necessary for components that cannot run in a Node.js environment.</p>
+      <pre class="code-block">// Next.js — disable SSR for a component that uses browser-only APIs
+import dynamic from 'next/dynamic';
+
+const MapComponent = dynamic(() =&gt; import('@/components/Map'), {
+  ssr: false,  // skip server rendering; render only in browser
+  loading: () =&gt; &lt;div&gt;Loading map...&lt;/div&gt;,
+});
+
+export default function LocationPage() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Store Locations&lt;/h1&gt;
+      &lt;MapComponent /&gt; {/* rendered only in the browser */}
+    &lt;/div&gt;
+  );
+}
+
+// Client Component with CSR data fetching (useEffect pattern)
+'use client';
+import { useState, useEffect } from 'react';
+
+export function LiveStockPrice({ ticker }: { ticker: string }) {
+  const [price, setPrice] = useState&lt;number | null&gt;(null);
+
+  useEffect(() =&gt; {
+    const interval = setInterval(async () =&gt; {
+      const data = await fetch(`/api/price/${ticker}`).then(r =&gt; r.json());
+      setPrice(data.price);
+    }, 5000);
+    return () =&gt; clearInterval(interval);
+  }, [ticker]);
+
+  return &lt;span&gt;{ticker}: {price ?? 'Loading...'}&lt;/span&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 6 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q6">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q6" aria-expanded="false" aria-controls="nextjs-q6">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;6. What is the Pages Router in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q6" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q6" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>The Pages Router is Next.js's original routing system, present since v1.0. In the Pages Router, every file inside the <code>pages/</code> directory automatically becomes a URL route — <code>pages/about.tsx</code> becomes <code>/about</code>, <code>pages/blog/[slug].tsx</code> becomes <code>/blog/:slug</code>. Data fetching is done through special exported async functions: <code>getStaticProps</code> for SSG, <code>getServerSideProps</code> for SSR, and <code>getStaticPaths</code> for dynamic SSG routes. All components in the Pages Router are React Client Components by default and run in the browser after hydration.</p>
+      <p>The Pages Router uses a single root layout defined in <code>pages/_app.tsx</code> and a custom HTML document in <code>pages/_document.tsx</code>. API routes live in <code>pages/api/</code>. Despite being superseded by the App Router in Next.js 13+, the Pages Router remains fully supported, stable, and production-ready. Many large applications still use it, and migration to the App Router is opt-in. Both routers can coexist in the same Next.js project, allowing incremental migration.</p>
+      <pre class="code-block">// pages/_app.tsx — root layout for Pages Router
+import type { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
+import '../styles/globals.css';
+
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+  return (
+    &lt;SessionProvider session={session}&gt;
+      &lt;Component {...pageProps} /&gt;
+    &lt;/SessionProvider&gt;
+  );
+}
+
+// pages/blog/[slug].tsx — dynamic route
+import type { GetStaticProps, GetStaticPaths } from 'next';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+
+export default function BlogPost({ post }) {
+  const router = useRouter();
+  if (router.isFallback) return &lt;div&gt;Loading...&lt;/div&gt;;
+  return (
+    &lt;&gt;
+      &lt;Head&gt;&lt;title&gt;{post.title}&lt;/title&gt;&lt;/Head&gt;
+      &lt;article dangerouslySetInnerHTML={{ __html: post.htmlContent }} /&gt;
+    &lt;/&gt;
+  );
+}
+
+export const getStaticPaths: GetStaticPaths = async () =&gt; ({
+  paths: [], fallback: 'blocking',
+});
+
+export const getStaticProps: GetStaticProps = async ({ params }) =&gt; {
+  const post = await fetchPost(params!.slug as string);
+  return post ? { props: { post } } : { notFound: true };
+};</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 7 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q7">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q7" aria-expanded="false" aria-controls="nextjs-q7">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;7. What is the App Router in Next.js 13+?
+    </button>
+  </h2>
+  <div id="nextjs-q7" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q7" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>The App Router, introduced in Next.js 13 and stabilized in 13.4, is a completely new routing system built on top of React Server Components. It lives in the <code>app/</code> directory alongside (or instead of) the <code>pages/</code> directory. The App Router introduces several fundamental changes: components are Server Components by default (they run only on the server and never ship JavaScript to the client), data fetching happens directly inside components using async/await rather than special exported functions, layouts are defined with <code>layout.tsx</code> files that persist across navigations, and colocation of UI files (<code>loading.tsx</code>, <code>error.tsx</code>, <code>not-found.tsx</code>) is built into the routing convention.</p>
+      <p>The App Router enables nested layouts, where each route segment can have its own persistent layout that does not remount on navigation. It also supports parallel routes and intercepting routes for complex UI patterns like modals that are bookmarkable. Route handlers (<code>route.ts</code>) replace API routes (<code>pages/api/</code>). The App Router is the future of Next.js and the recommended choice for new projects, but it has a steeper learning curve than the Pages Router, particularly around understanding Server vs. Client Components and the new caching model.</p>
+      <pre class="code-block">// app/layout.tsx — root layout (persistent across all routes)
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: { template: '%s | My App', default: 'My App' },
+  description: 'My Next.js App Router application',
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    &lt;html lang="en"&gt;
+      &lt;body className={inter.className}&gt;
+        &lt;NavBar /&gt;       {/* Server Component — zero JS sent to client */}
+        &lt;main&gt;{children}&lt;/main&gt;
+        &lt;Footer /&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  );
+}
+
+// app/blog/layout.tsx — nested layout (only wraps /blog/* routes)
+export default function BlogLayout({ children }) {
+  return (
+    &lt;div className="grid grid-cols-[1fr_300px] gap-8"&gt;
+      &lt;div&gt;{children}&lt;/div&gt;
+      &lt;aside&gt;&lt;RecentPosts /&gt;&lt;/aside&gt;
+    &lt;/div&gt;
+  );
+}
+
+// app/blog/[slug]/page.tsx — page component
+async function BlogPost({ params }: { params: { slug: string } }) {
+  const post = await fetchPost(params.slug);
+  return &lt;article&gt;{post.content}&lt;/article&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 8 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q8">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q8" aria-expanded="false" aria-controls="nextjs-q8">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;8. What are React Server Components (RSC)?
+    </button>
+  </h2>
+  <div id="nextjs-q8" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q8" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>React Server Components (RSC) are a new type of React component that execute exclusively on the server and never run in the browser. They were introduced by the React team as a first-class primitive (not a Next.js-specific feature), but Next.js App Router is currently the primary production implementation. Because RSCs run on the server, they can directly access databases, file systems, and backend services without an intermediate API layer. Their output — a serialized React component tree (RSC payload, not HTML) — is sent to the client, where it is stitched together with the rest of the UI without shipping the component's JavaScript code to the browser.</p>
+      <p>The key insight of RSCs is the separation of "server concerns" from "client concerns." Components that display data, render markdown, query databases, or access server-only secrets can be Server Components — they have zero impact on the client JavaScript bundle size. Components that need interactivity (event handlers, state, effects, browser APIs) must be Client Components marked with <code>'use client'</code>. This enables a new architecture where the bulk of an application's logic stays on the server, and only the interactive leaves of the component tree are Client Components.</p>
+      <pre class="code-block">// Server Component — runs ONLY on the server
+// app/products/page.tsx (no 'use client' directive = Server Component by default)
+import { db } from '@/lib/db'; // Direct DB access — impossible in client components!
+
+async function ProductsPage() {
+  // Fetch directly in the component — no useEffect, no API route needed
+  const products = await db.product.findMany({
+    where: { inStock: true },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Products&lt;/h1&gt;
+      {/* ProductCard is also a Server Component */}
+      {products.map(p =&gt; &lt;ProductCard key={p.id} product={p} /&gt;)}
+      {/* AddToCartButton needs interactivity — must be Client Component */}
+      &lt;AddToCartButton productId={products[0].id} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Client Component — runs on server (for HTML) AND in the browser
+// components/AddToCartButton.tsx
+'use client';
+import { useState } from 'react';
+
+export function AddToCartButton({ productId }: { productId: string }) {
+  const [added, setAdded] = useState(false);
+  return (
+    &lt;button onClick={() =&gt; { addToCart(productId); setAdded(true); }}&gt;
+      {added ? 'Added!' : 'Add to Cart'}
+    &lt;/button&gt;
+  );
+}</pre>
+      <p>RSCs communicate with Client Components by passing serializable props (strings, numbers, plain objects, arrays). You cannot pass functions, class instances, or non-serializable values as props from a Server Component to a Client Component. Server Components can import Client Components, but Client Components cannot import Server Components (though they can receive them as <code>children</code> props — a critical pattern for composing the two).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 9 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q9">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q9" aria-expanded="false" aria-controls="nextjs-q9">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;9. What is the difference between Server Components and Client Components in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q9" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q9" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>The distinction is about <strong>where the component executes and what capabilities it has access to</strong>. Server Components execute only on the server (at request time or build time), have access to server-side resources (databases, file system, environment variables, backend services), and their code is never included in the browser's JavaScript bundle. Client Components are marked with <code>'use client'</code>, their code ships to the browser, and they run on both the server (for the initial HTML render) and in the browser (for hydration and subsequent interactions).</p>
+      <p>The practical rule is: default to Server Components, and reach for <code>'use client'</code> only when you need React state (<code>useState</code>), effects (<code>useEffect</code>), event handlers (<code>onClick</code>, <code>onChange</code>), browser APIs (<code>window</code>, <code>document</code>, <code>localStorage</code>), or third-party libraries that depend on these. Pushing the <code>'use client'</code> boundary as far down the component tree as possible maximizes the portion of your app that runs on the server, minimizing the client JavaScript bundle.</p>
+      <pre class="code-block">// Feature comparison table implemented as code:
+
+// SERVER COMPONENTS — can do:
+// ✅ async/await at the component level
+// ✅ Direct database queries
+// ✅ Access process.env (including secrets)
+// ✅ Import heavy server-only libraries (zero bundle cost)
+// ✅ Fetch with automatic deduplication and caching
+
+// SERVER COMPONENTS — cannot do:
+// ❌ useState, useReducer, useRef
+// ❌ useEffect, useLayoutEffect
+// ❌ Event handlers (onClick, onChange)
+// ❌ Browser APIs (window, document, localStorage)
+// ❌ Context (createContext, useContext)
+
+// CLIENT COMPONENTS — can do:
+// ✅ All React hooks
+// ✅ Event handlers
+// ✅ Browser APIs
+// ✅ Third-party libraries (Framer Motion, React Query, etc.)
+// ✅ Real-time subscriptions
+
+// CLIENT COMPONENTS — cannot do:
+// ❌ Direct DB/filesystem access (must use API routes or Server Actions)
+// ❌ Access server-only secrets directly</pre>
+      <pre class="code-block">// Pattern: Server Component passes data as props to Client Component
+// app/user-profile/page.tsx (Server Component)
+async function UserProfilePage({ params }) {
+  const user = await db.user.findUnique({ where: { id: params.id } }); // server-only
+  return &lt;ProfileEditor user={user} /&gt;; // Client Component handles interactions
+}
+
+// components/ProfileEditor.tsx (Client Component)
+'use client';
+export function ProfileEditor({ user }) {
+  const [name, setName] = useState(user.name);
+  // ...interactive form logic
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 10 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q10">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q10" aria-expanded="false" aria-controls="nextjs-q10">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;10. What is the "use client" directive?
+    </button>
+  </h2>
+  <div id="nextjs-q10" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q10" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p><code>'use client'</code> is a React directive (a string literal at the top of a file) that marks a module as a Client Component and defines a boundary between Server and Client Component trees. It does not mean the component only runs on the client — it still renders on the server for the initial HTML — but it means the component's JavaScript code is included in the browser bundle and the component runs in the browser for hydration and subsequent interactions. Without <code>'use client'</code>, a component in the App Router is a Server Component by default.</p>
+      <p>The <code>'use client'</code> directive is <strong>contagious downward</strong>: once a file is marked as a Client Component, all modules it imports are also treated as Client Components (they are part of the client bundle). This is why the placement of the boundary matters — ideally it should be at the leaves of the component tree (small interactive widgets) rather than at the root, to minimize how much code is shipped to the browser. A single <code>'use client'</code> at the root layout would make your entire application a client bundle, negating the benefits of RSC.</p>
+      <pre class="code-block">// WRONG — 'use client' at a high level pulls all children into client bundle
+'use client'; // ← This file + ALL its imports become client code
+// app/layout.tsx
+import { Header } from './Header';       // now client code
+import { Footer } from './Footer';       // now client code
+import { DataTable } from './DataTable'; // now client code — bad!
+
+// RIGHT — 'use client' only on the interactive leaf
+// app/layout.tsx (Server Component — no directive)
+import { Header } from './Header';         // Server Component ✅
+import { DataTable } from './DataTable';   // Server Component ✅
+import { SearchBar } from './SearchBar';   // Client Component (has 'use client')
+
+// components/SearchBar.tsx
+'use client'; // Only this component + its specific imports become client code
+import { useState } from 'react';
+
+export function SearchBar() {
+  const [query, setQuery] = useState('');
+  return (
+    &lt;input
+      value={query}
+      onChange={e =&gt; setQuery(e.target.value)}
+      placeholder="Search..."
+    /&gt;
+  );
+}</pre>
+      <p>An important pattern for working around the Client Component boundary is passing Server Components as <code>children</code> or other props to Client Components. The Client Component does not "own" the children — it renders a slot — so the children can remain Server Components even though they are rendered inside a Client Component. This enables a "donut" pattern: a Client Component shell with a Server Component hole in the middle.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 11 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q11">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q11" aria-expanded="false" aria-controls="nextjs-q11">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;11. What is the "use server" directive?
+    </button>
+  </h2>
+  <div id="nextjs-q11" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q11" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p><code>'use server'</code> is a React directive that marks a function (or all exports from a file) as a <strong>Server Action</strong> — a function that executes exclusively on the server but can be called from Client Components. Server Actions are the App Router's mechanism for handling form submissions and data mutations without writing a separate API route. When a Client Component calls a Server Action, Next.js automatically serializes the arguments, sends them to the server over an encrypted POST request, executes the function server-side, and returns the result to the client.</p>
+      <p>The <code>'use server'</code> directive can be placed at the top of an async function inside a Server Component file (inline Server Action), or at the top of a separate <code>actions.ts</code> file where every exported async function is a Server Action. Server Actions integrate natively with HTML <code>&lt;form&gt;</code> elements via the <code>action</code> prop, enabling progressive enhancement — forms work even before JavaScript loads. They also integrate with React's <code>useActionState</code> and <code>useFormStatus</code> hooks for managing pending states and validation errors.</p>
+      <pre class="code-block">// app/actions.ts — Server Actions file
+'use server';
+import { db } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
+
+const CreatePostSchema = z.object({
+  title: z.string().min(1).max(200),
+  content: z.string().min(10),
+});
+
+export async function createPost(prevState: unknown, formData: FormData) {
+  const parsed = CreatePostSchema.safeParse({
+    title: formData.get('title'),
+    content: formData.get('content'),
+  });
+
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+
+  const post = await db.post.create({ data: parsed.data });
+  revalidatePath('/blog');
+  redirect(`/blog/${post.slug}`);
+}</pre>
+      <pre class="code-block">// Client Component consuming the Server Action
+'use client';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
+import { createPost } from '@/app/actions';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return &lt;button disabled={pending}&gt;{pending ? 'Creating...' : 'Create Post'}&lt;/button&gt;;
+}
+
+export function CreatePostForm() {
+  const [state, action] = useActionState(createPost, undefined);
+  return (
+    &lt;form action={action}&gt;
+      &lt;input name="title" /&gt;
+      {state?.errors?.title &amp;&amp; &lt;p className="error"&gt;{state.errors.title}&lt;/p&gt;}
+      &lt;textarea name="content" /&gt;
+      &lt;SubmitButton /&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 12 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q12">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q12" aria-expanded="false" aria-controls="nextjs-q12">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;12. What is file-based routing in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q12" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q12" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>File-based routing means that the URL structure of your application is determined by the directory and file structure inside a special folder (<code>pages/</code> in the Pages Router, <code>app/</code> in the App Router). There is no central router configuration file; Next.js automatically creates routes by scanning the filesystem. This convention-over-configuration approach eliminates boilerplate and makes the route structure immediately obvious to anyone reading the project directory — the file tree IS the route tree.</p>
+      <p>In the App Router, a route is created whenever a directory contains a <code>page.tsx</code> file. Special files like <code>layout.tsx</code>, <code>loading.tsx</code>, <code>error.tsx</code>, and <code>route.ts</code> have reserved purposes within their directory segment. Route groups (directories wrapped in parentheses, e.g., <code>(auth)/</code>) allow organizing files without affecting the URL. Private folders (prefixed with underscore, e.g., <code>_components/</code>) are excluded from routing entirely.</p>
+      <pre class="code-block">// App Router file structure → URL mapping:
+app/
+├── page.tsx                    →  /
+├── about/
+│   └── page.tsx                →  /about
+├── blog/
+│   ├── page.tsx                →  /blog
+│   └── [slug]/
+│       └── page.tsx            →  /blog/:slug
+├── (marketing)/                →  Route group — no URL segment
+│   ├── layout.tsx              →  Shared layout for marketing pages
+│   ├── pricing/
+│   │   └── page.tsx            →  /pricing
+│   └── contact/
+│       └── page.tsx            →  /contact
+├── (dashboard)/
+│   ├── layout.tsx              →  Different layout for dashboard
+│   └── settings/
+│       └── page.tsx            →  /settings
+├── api/
+│   └── users/
+│       └── route.ts            →  GET/POST /api/users
+└── _components/                →  Private folder — NOT a route
+    └── Navbar.tsx</pre>
+      <pre class="code-block">// Catch-all routes
+app/
+└── docs/
+    └── [...slug]/
+        └── page.tsx   →  /docs/anything/nested/as/deep/as/needed
+// params.slug = ['anything', 'nested', 'as', 'deep', 'as', 'needed']
+
+// Optional catch-all
+└── [[...slug]]/
+    └── page.tsx       →  /docs AND /docs/anything (slug is optional)</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 13 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q13">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q13" aria-expanded="false" aria-controls="nextjs-q13">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;13. What are dynamic routes in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q13" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q13" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Dynamic routes are routes with URL segments that are variable — they match a pattern rather than a fixed string. In Next.js, dynamic segments are denoted by wrapping the folder or file name in square brackets: <code>[id]</code>, <code>[slug]</code>, <code>[...slug]</code> (catch-all), or <code>[[...slug]]</code> (optional catch-all). The dynamic segment value is available in the component via the <code>params</code> prop in the App Router, or <code>useRouter().query</code> / <code>getStaticProps</code> context in the Pages Router. Dynamic routes are essential for content-driven applications where the number of pages is determined by data — blog posts, product pages, user profiles.</p>
+      <p>In the App Router, dynamic routes work seamlessly with Server Components. The <code>params</code> prop is automatically provided to the <code>page.tsx</code>, <code>layout.tsx</code>, and other special files within the route segment. For static generation of dynamic routes, <code>generateStaticParams()</code> (App Router) or <code>getStaticPaths</code> (Pages Router) tells Next.js which param values to pre-render at build time. Routes not included in <code>generateStaticParams</code> are rendered on-demand (either SSR or ISR depending on the <code>dynamicParams</code> config).</p>
+      <pre class="code-block">// App Router dynamic routes
+// app/products/[id]/page.tsx
+interface Props {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+// Optional: pre-generate some product pages at build time
+export async function generateStaticParams() {
+  const featuredProducts = await fetchFeaturedProducts();
+  return featuredProducts.map(p =&gt; ({ id: p.id.toString() }));
+}
+
+// Optional: generate metadata dynamically
+export async function generateMetadata({ params }: Props) {
+  const product = await fetchProduct(params.id);
+  return { title: product.name, description: product.description };
+}
+
+export default async function ProductPage({ params, searchParams }: Props) {
+  const product = await fetchProduct(params.id);
+  const variant = searchParams.variant ?? 'default';
+
+  if (!product) notFound(); // renders not-found.tsx
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;{product.name}&lt;/h1&gt;
+      &lt;p&gt;Variant: {variant}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Catch-all: app/docs/[...slug]/page.tsx
+// Matches: /docs/intro, /docs/api/reference, /docs/a/b/c
+export default function DocsPage({ params }: { params: { slug: string[] } }) {
+  // params.slug = ['api', 'reference'] for /docs/api/reference
+  return &lt;div&gt;Viewing: {params.slug.join('/')}&lt;/div&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 14 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q14">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q14" aria-expanded="false" aria-controls="nextjs-q14">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;14. What are API routes in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q14" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q14" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>API routes in Next.js allow you to build backend API endpoints as part of the same Next.js project, without needing a separate server. In the Pages Router, API routes are created by placing files in <code>pages/api/</code>; each file exports a default handler function that receives <code>req</code> and <code>res</code> objects (similar to Express). In the App Router, API routes are replaced by <strong>Route Handlers</strong> defined in <code>route.ts</code> files — these use the standard Web <code>Request</code> and <code>Response</code> APIs and export named functions per HTTP method (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, etc.).</p>
+      <p>API routes run on the server and are not included in the client JavaScript bundle. They are useful for: proxying external APIs to hide credentials, handling webhooks, processing form data, building a BFF (Backend for Frontend) layer, and any server-side operation that needs to be triggered by the client. However, in the App Router, many use cases previously requiring an API route can now be handled directly by Server Components (for reads) or Server Actions (for mutations), eliminating the need for the API route entirely.</p>
+      <pre class="code-block">// Pages Router API route — pages/api/users/[id].ts
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { id } = req.query;
+
+  switch (req.method) {
+    case 'GET': {
+      const user = await db.user.findUnique({ where: { id: String(id) } });
+      return user ? res.json(user) : res.status(404).json({ error: 'Not found' });
+    }
+    case 'PUT': {
+      const user = await db.user.update({ where: { id: String(id) }, data: req.body });
+      return res.json(user);
+    }
+    default:
+      res.setHeader('Allow', ['GET', 'PUT']);
+      return res.status(405).end();
+  }
+}</pre>
+      <pre class="code-block">// App Router Route Handler — app/api/users/[id]/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const user = await db.user.findUnique({ where: { id: params.id } });
+  if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(user);
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const body = await request.json();
+  const user = await db.user.update({ where: { id: params.id }, data: body });
+  return NextResponse.json(user);
+}
+
+// Route Handlers also support streaming responses:
+export async function GET() {
+  const stream = new ReadableStream({ /* ... */ });
+  return new Response(stream, { headers: { 'Content-Type': 'text/event-stream' } });
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 15 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q15">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q15" aria-expanded="false" aria-controls="nextjs-q15">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;15. What is getStaticProps?
+    </button>
+  </h2>
+  <div id="nextjs-q15" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q15" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p><code>getStaticProps</code> is a Pages Router function that you export from a page file to tell Next.js to pre-render the page at build time using the data it returns. It runs at build time on the server (never in the browser), so it can access databases, the filesystem, and private environment variables safely. The returned <code>props</code> object is serialized to JSON and passed to the page component. It can also return <code>notFound: true</code> to render the 404 page, <code>redirect</code> to redirect to another URL, and <code>revalidate</code> (a number in seconds) to enable ISR.</p>
+      <p><code>getStaticProps</code> is the right choice when the page data is available at build time, is the same for all users, and changes infrequently. It produces the fastest possible page because the HTML is pre-built and served from a CDN. The main limitation is that you need to rebuild the project (or trigger ISR revalidation) to reflect data changes. In the App Router, the equivalent is simply fetching data in a Server Component — if the fetch is cached (the default), the page is statically generated; the ceremony of <code>getStaticProps</code> is eliminated.</p>
+      <pre class="code-block">// pages/blog/index.tsx
+import type { GetStaticProps, InferGetStaticPropsType } from 'next';
+
+interface Post { id: number; title: string; slug: string; excerpt: string; }
+
+export const getStaticProps: GetStaticProps&lt;{ posts: Post[] }&gt; = async () =&gt; {
+  try {
+    const posts = await fetchPosts(); // runs at BUILD TIME, not per request
+    return {
+      props: { posts },
+      revalidate: 3600, // ISR: regenerate at most every hour
+    };
+  } catch (error) {
+    // Return notFound if data fetch fails
+    return { notFound: true };
+  }
+};
+
+export default function BlogIndex({ posts }: InferGetStaticPropsType&lt;typeof getStaticProps&gt;) {
+  return (
+    &lt;ul&gt;
+      {posts.map(post =&gt; (
+        &lt;li key={post.id}&gt;
+          &lt;a href={`/blog/${post.slug}`}&gt;{post.title}&lt;/a&gt;
+          &lt;p&gt;{post.excerpt}&lt;/p&gt;
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+// App Router equivalent — no getStaticProps needed:
+// app/blog/page.tsx
+async function BlogIndex() {
+  const posts = await fetchPosts(); // cached by default = static
+  return &lt;ul&gt;{posts.map(post =&gt; &lt;li key={post.id}&gt;...&lt;/li&gt;)}&lt;/ul&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 16 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q16">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q16" aria-expanded="false" aria-controls="nextjs-q16">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;16. What is getServerSideProps?
+    </button>
+  </h2>
+  <div id="nextjs-q16" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q16" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p><code>getServerSideProps</code> is a Pages Router function that opts a page into SSR (Server-Side Rendering). Unlike <code>getStaticProps</code> which runs once at build time, <code>getServerSideProps</code> runs on <strong>every request</strong> to the page. It receives a <code>context</code> object containing the request (<code>req</code>), response (<code>res</code>), query parameters (<code>query</code>), route params (<code>params</code>), preview mode data, and locale information. Like <code>getStaticProps</code>, it returns a <code>props</code> object, or can return <code>notFound</code> or <code>redirect</code>.</p>
+      <p>Use <code>getServerSideProps</code> when the page content must be personalized per user (authentication-dependent data), must reflect real-time data (inventory levels, live feeds), or needs to read request headers or cookies to determine what to render. The tradeoff versus <code>getStaticProps</code> is performance: the server must do work on every request, increasing TTFB and server load. The response also cannot be cached by a CDN (unless you explicitly set <code>Cache-Control</code> headers). In the App Router, <code>getServerSideProps</code> is replaced by fetching with <code>cache: 'no-store'</code> or using <code>cookies()</code>/<code>headers()</code> from <code>next/headers</code>, which automatically opts the route into dynamic rendering.</p>
+      <pre class="code-block">// pages/dashboard.tsx
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
+
+interface DashboardProps {
+  user: { name: string; email: string };
+  stats: { orders: number; revenue: number };
+}
+
+export const getServerSideProps: GetServerSideProps&lt;DashboardProps&gt; = async (ctx) =&gt; {
+  // Access cookies/session — only possible in getServerSideProps
+  const session = await getServerSession(ctx.req, ctx.res, authOptions);
+
+  if (!session) {
+    return {
+      redirect: { destination: `/login?callbackUrl=${ctx.resolvedUrl}`, permanent: false },
+    };
+  }
+
+  // Fetch user-specific data
+  const [user, stats] = await Promise.all([
+    fetchUser(session.user.id),
+    fetchUserStats(session.user.id),
+  ]);
+
+  return { props: { user, stats } };
+};
+
+export default function Dashboard({
+  user, stats,
+}: InferGetServerSidePropsType&lt;typeof getServerSideProps&gt;) {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Welcome, {user.name}&lt;/h1&gt;
+      &lt;p&gt;Orders: {stats.orders} | Revenue: ${stats.revenue}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 17 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q17">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q17" aria-expanded="false" aria-controls="nextjs-q17">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;17. What is getStaticPaths?
+    </button>
+  </h2>
+  <div id="nextjs-q17" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q17" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p><code>getStaticPaths</code> is a Pages Router function required alongside <code>getStaticProps</code> for pages with <strong>dynamic routes</strong>. Because Next.js must pre-render a finite set of pages at build time, it needs to know which dynamic route values to generate — <code>getStaticPaths</code> answers that question by returning a <code>paths</code> array and a <code>fallback</code> strategy. The function runs at build time and is never included in the client bundle. It must be exported from every dynamic route page that also uses <code>getStaticProps</code>.</p>
+      <p>The <code>fallback</code> option controls what happens when a user visits a path not included in the <code>paths</code> array. <code>fallback: false</code> returns a 404 for unknown paths. <code>fallback: true</code> renders a loading state immediately, then generates the page on-demand in the background, caching it for future requests. <code>fallback: 'blocking'</code> waits server-side to fully generate the page before responding (no loading state), then caches it. In the App Router, <code>generateStaticParams()</code> is the direct replacement and the <code>dynamicParams</code> export controls fallback behavior.</p>
+      <pre class="code-block">// pages/products/[id].tsx
+import type { GetStaticPaths, GetStaticProps } from 'next';
+
+export const getStaticPaths: GetStaticPaths = async () =&gt; {
+  // Pre-build the top 100 most popular products
+  const topProducts = await fetchTopProducts(100);
+
+  return {
+    paths: topProducts.map(p =&gt; ({ params: { id: String(p.id) } })),
+    fallback: 'blocking', // other products rendered on-demand and cached
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) =&gt; {
+  const product = await fetchProduct(params!.id as string);
+  if (!product) return { notFound: true };
+  return { props: { product }, revalidate: 600 };
+};
+
+// App Router equivalent
+// app/products/[id]/page.tsx
+export async function generateStaticParams() {
+  const topProducts = await fetchTopProducts(100);
+  return topProducts.map(p =&gt; ({ id: String(p.id) }));
+}
+
+// next.config.ts (or export in page.tsx)
+export const dynamicParams = true; // = fallback: 'blocking' equivalent
+// export const dynamicParams = false; // = fallback: false equivalent</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 18 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q18">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q18" aria-expanded="false" aria-controls="nextjs-q18">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;18. What is the next/image component?
+    </button>
+  </h2>
+  <div id="nextjs-q18" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q18" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>The <code>next/image</code> component is Next.js's optimized image component that automatically handles the most impactful image performance optimizations: resizing images to the exact display size (avoiding sending a 4K image when a 400px thumbnail is needed), converting to modern formats (WebP, AVIF) when the browser supports them, lazy loading images below the fold, preventing layout shift by reserving space before the image loads, and serving images through a built-in on-demand image optimization API. These optimizations can dramatically improve Core Web Vitals, particularly LCP (Largest Contentful Paint) and CLS (Cumulative Layout Shift).</p>
+      <p>The component requires either explicit <code>width</code> and <code>height</code> props (for sized images) or the <code>fill</code> prop (for images that fill their container). Remote image domains must be explicitly allowed in <code>next.config.ts</code> for security. The <code>priority</code> prop should be set on the above-the-fold LCP image to prevent lazy loading and preload it. Next.js v13+ improved the API by removing the required wrapper <code>&lt;div&gt;</code> and making <code>alt</code> required for accessibility.</p>
+      <pre class="code-block">// next.config.ts — allow remote image sources
+import type { NextConfig } from 'next';
+
+const config: NextConfig = {
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'cdn.mystore.com', pathname: '/products/**' },
+    ],
+  },
+};
+export default config;</pre>
+      <pre class="code-block">import Image from 'next/image';
+import heroImage from '@/public/hero.jpg'; // local image — auto width/height
+
+// Local image — width/height inferred from import
+function Hero() {
+  return (
+    &lt;Image
+      src={heroImage}
+      alt="Hero banner showing our product"
+      priority // LCP image — disable lazy loading
+      placeholder="blur" // blurred placeholder while loading
+      className="rounded-xl"
+    /&gt;
+  );
+}
+
+// Remote image — explicit width/height required
+function ProductCard({ product }) {
+  return (
+    &lt;div className="relative"&gt;
+      &lt;Image
+        src={product.imageUrl}
+        alt={product.name}
+        width={400}
+        height={300}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+        className="object-cover rounded-lg"
+      /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Fill mode — image fills parent container
+function Banner() {
+  return (
+    &lt;div className="relative h-64 w-full"&gt;
+      &lt;Image src="/banner.jpg" alt="Banner" fill className="object-cover" /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 19 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q19">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q19" aria-expanded="false" aria-controls="nextjs-q19">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;19. What is the next/link component?
+    </button>
+  </h2>
+  <div id="nextjs-q19" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q19" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>The <code>next/link</code> component is Next.js's client-side navigation component that replaces the HTML <code>&lt;a&gt;</code> tag for internal navigation. It enables <strong>client-side page transitions</strong> without a full browser page reload, while still rendering as a standard <code>&lt;a&gt;</code> tag in the HTML for SEO and accessibility. Next.js automatically prefetches the linked page's JavaScript and data when the <code>&lt;Link&gt;</code> component enters the viewport (in production builds), making navigation feel nearly instant. This prefetching can be disabled with <code>prefetch={false}</code> for links that are expensive to prefetch.</p>
+      <p>In Next.js 13+, the <code>&lt;Link&gt;</code> component no longer requires a nested <code>&lt;a&gt;</code> tag — it renders the <code>&lt;a&gt;</code> directly. You can pass any <code>&lt;a&gt;</code> attribute (like <code>className</code>, <code>aria-label</code>) directly to the <code>&lt;Link&gt;</code>. The <code>usePathname()</code>, <code>useRouter()</code>, and <code>useSearchParams()</code> hooks from <code>next/navigation</code> (App Router) enable programmatic navigation and reading current route information in Client Components.</p>
+      <pre class="code-block">import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+// Basic navigation
+function Footer() {
+  return (
+    &lt;nav&gt;
+      &lt;Link href="/"&gt;Home&lt;/Link&gt;
+      &lt;Link href="/about"&gt;About&lt;/Link&gt;
+      &lt;Link href="/blog"&gt;Blog&lt;/Link&gt;
+      {/* Dynamic route */}
+      &lt;Link href={`/products/${product.id}`}&gt;{product.name}&lt;/Link&gt;
+    &lt;/nav&gt;
+  );
+}
+
+// Active link highlighting (Client Component required for usePathname)
+'use client';
+function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isActive = pathname === href || pathname.startsWith(`${href}/`);
+  return (
+    &lt;Link
+      href={href}
+      className={isActive ? 'text-blue-600 font-semibold' : 'text-gray-600'}
+      aria-current={isActive ? 'page' : undefined}
+    &gt;
+      {children}
+    &lt;/Link&gt;
+  );
+}
+
+// Programmatic navigation
+'use client';
+import { useRouter } from 'next/navigation';
+
+function SearchForm() {
+  const router = useRouter();
+  const handleSearch = (query: string) =&gt; {
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+    // router.replace() — replaces current history entry
+    // router.back() / router.forward()
+    // router.prefetch('/dashboard') — manual prefetch
+  };
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 20 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q20">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q20" aria-expanded="false" aria-controls="nextjs-q20">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;20. What is middleware in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q20" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q20" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Next.js Middleware is code that runs <strong>before a request is processed</strong>, at the edge (before the server) on every matched route. It is defined in a <code>middleware.ts</code> file at the root of the project and executes in a lightweight V8 isolate using the Edge Runtime, which has a subset of Node.js APIs but starts in microseconds. Middleware can read and modify the request, rewrite the URL, redirect, add headers, or return a response directly. Because it runs before the page is rendered, it is ideal for cross-cutting concerns that apply to many routes.</p>
+      <p>Common middleware use cases include: authentication (redirect unauthenticated users before any page code runs), authorization (check roles/permissions), internationalization (detect locale and rewrite to localized routes), A/B testing (assign users to variants via cookies), rate limiting, bot protection, and request logging. Middleware uses the <code>matcher</code>  config to specify which routes it applies to, preventing it from running on every static asset request.</p>
+      <pre class="code-block">// middleware.ts (root of project)
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Authentication check for protected routes
+  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+
+  if (!token &amp;&amp; pathname.startsWith('/dashboard')) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('callbackUrl', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // Role-based authorization
+  if (pathname.startsWith('/admin') &amp;&amp; token?.role !== 'admin') {
+    return NextResponse.redirect(new URL('/403', request.url));
+  }
+
+  // Internationalization — detect locale and rewrite
+  const locale = request.cookies.get('NEXT_LOCALE')?.value ?? 'en';
+  if (!pathname.startsWith(`/${locale}`) &amp;&amp; !pathname.startsWith('/api')) {
+    return NextResponse.rewrite(new URL(`/${locale}${pathname}`, request.url));
+  }
+
+  // Add security headers
+  const response = NextResponse.next();
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  return response;
+}
+
+// Only run middleware on these paths
+export const config = {
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|public/).*)',
+  ],
+};</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 21 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q21">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q21" aria-expanded="false" aria-controls="nextjs-q21">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;21. How does Next.js App Router streaming work?
+    </button>
+  </h2>
+  <div id="nextjs-q21" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q21" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Streaming in Next.js App Router leverages React 18's <code>renderToPipeableStream</code> / <code>renderToReadableStream</code> APIs to send HTML to the browser progressively as each piece of the UI is ready, rather than waiting for the entire page to render before sending anything. Traditionally, SSR is "all or nothing" — if one slow data fetch blocks the render, the user sees a blank screen until everything is ready. With streaming, fast parts of the page (the shell, navigation, static content) are sent and displayed immediately, while slow parts (data-heavy sections) stream in later as their data resolves.</p>
+      <p>The mechanism works through React's <code>Suspense</code> component. In the App Router, any Server Component that is wrapped in <code>&lt;Suspense&gt;</code> with a fallback will stream independently — the fallback is included in the initial HTML flush, and when the async component resolves, React sends a small script that swaps the fallback for the real content in the browser using DOM manipulation. The browser never needs to make an additional network request; everything arrives over the same initial HTTP connection via HTTP chunked transfer encoding.</p>
+      <pre class="code-block">// app/dashboard/page.tsx — streaming with Suspense
+import { Suspense } from 'react';
+import { DashboardSkeleton, StatsSkeleton } from '@/components/skeletons';
+
+// These async Server Components fetch their own data independently
+async function RevenueChart() {
+  const data = await fetchRevenueData(); // might take 2 seconds
+  return &lt;Chart data={data} /&gt;;
+}
+
+async function LatestInvoices() {
+  const invoices = await fetchLatestInvoices(); // might take 1 second
+  return &lt;InvoiceTable invoices={invoices} /&gt;;
+}
+
+async function KpiCards() {
+  const stats = await fetchKpiStats(); // fast, ~100ms
+  return &lt;StatCards stats={stats} /&gt;;
+}
+
+export default function DashboardPage() {
+  return (
+    &lt;div&gt;
+      {/* KPI cards stream in first (~100ms) */}
+      &lt;Suspense fallback={&lt;StatsSkeleton /&gt;}&gt;
+        &lt;KpiCards /&gt;
+      &lt;/Suspense&gt;
+
+      {/* Chart streams in second (~2s) — doesn't block invoices */}
+      &lt;Suspense fallback={&lt;DashboardSkeleton /&gt;}&gt;
+        &lt;RevenueChart /&gt;
+      &lt;/Suspense&gt;
+
+      {/* Invoices stream in independently (~1s) */}
+      &lt;Suspense fallback={&lt;div&gt;Loading invoices...&lt;/div&gt;}&gt;
+        &lt;LatestInvoices /&gt;
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+      <pre class="code-block">// loading.tsx — automatic Suspense boundary at the route segment level
+// app/dashboard/loading.tsx
+export default function DashboardLoading() {
+  return &lt;DashboardSkeleton /&gt;;  // shown while page.tsx awaits
+}
+
+// The above is equivalent to wrapping the entire page.tsx in:
+// &lt;Suspense fallback={&lt;DashboardLoading /&gt;}&gt;
+//   &lt;Page /&gt;
+// &lt;/Suspense&gt;</pre>
+      <p>Streaming dramatically improves Time to First Byte (TTFB) for pages that would otherwise be bottlenecked by a single slow query. The key insight is that component-level data fetching with Suspense allows each piece of UI to be sent as soon as its data is ready, making the effective TTFB equal to the fastest component rather than the slowest. This is one of the most significant performance advantages of the App Router over the Pages Router's monolithic <code>getServerSideProps</code>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 22 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q22">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q22" aria-expanded="false" aria-controls="nextjs-q22">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;22. What are Server Actions in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q22" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q22" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Server Actions are async functions marked with the <code>'use server'</code> directive that execute on the server and can be called from Client Components or from other Server Components. They are Next.js's mechanism for handling mutations (form submissions, data updates, deletes) without writing a separate API route. When a Server Action is invoked from the client, Next.js automatically creates a POST endpoint, serializes the arguments (using React's serialization protocol), executes the function on the server with full server-side capabilities (database access, secret environment variables, filesystem), and returns the result back to the client.</p>
+      <p>Server Actions integrate deeply with the React ecosystem: they work as the <code>action</code> prop on HTML <code>&lt;form&gt;</code> elements (enabling progressive enhancement — forms submit even before JS loads), they work with <code>useActionState</code> for managing state and errors returned from the action, and they work with <code>useFormStatus</code> for showing pending states. On the Next.js side, Server Actions can call <code>revalidatePath()</code>, <code>revalidateTag()</code>, <code>redirect()</code>, and <code>cookies()</code> from within the action to update cached data and navigate the user after a successful mutation.</p>
+      <pre class="code-block">// app/todos/actions.ts
+'use server';
+import { db } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
+
+const TodoSchema = z.object({ title: z.string().min(1, 'Title is required') });
+
+export type ActionState = { errors?: { title?: string[] }; message?: string };
+
+export async function createTodo(prevState: ActionState, formData: FormData): Promise&lt;ActionState&gt; {
+  const parsed = TodoSchema.safeParse({ title: formData.get('title') });
+
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+
+  await db.todo.create({ data: { title: parsed.data.title, completed: false } });
+  revalidatePath('/todos'); // invalidate the todos page cache
+  return { message: 'Todo created!' };
+}
+
+export async function toggleTodo(id: string) {
+  const todo = await db.todo.findUnique({ where: { id } });
+  await db.todo.update({ where: { id }, data: { completed: !todo!.completed } });
+  revalidatePath('/todos');
+}
+
+export async function deleteTodo(id: string) {
+  await db.todo.delete({ where: { id } });
+  revalidatePath('/todos');
+}</pre>
+      <pre class="code-block">// app/todos/CreateTodoForm.tsx (Client Component)
+'use client';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
+import { createTodo, type ActionState } from './actions';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    &lt;button type="submit" disabled={pending} className="btn btn-primary"&gt;
+      {pending ? 'Adding...' : 'Add Todo'}
+    &lt;/button&gt;
+  );
+}
+
+export function CreateTodoForm() {
+  const [state, formAction] = useActionState&lt;ActionState, FormData&gt;(createTodo, {});
+
+  return (
+    &lt;form action={formAction} className="flex gap-2"&gt;
+      &lt;input
+        name="title"
+        placeholder="What needs to be done?"
+        className="input"
+        aria-describedby="title-error"
+      /&gt;
+      {state.errors?.title &amp;&amp; (
+        &lt;p id="title-error" className="text-red-500"&gt;{state.errors.title[0]}&lt;/p&gt;
+      )}
+      &lt;SubmitButton /&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 23 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q23">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q23" aria-expanded="false" aria-controls="nextjs-q23">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;23. What is the difference between layout.tsx and page.tsx?
+    </button>
+  </h2>
+  <div id="nextjs-q23" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q23" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Both <code>layout.tsx</code> and <code>page.tsx</code> are special reserved files in the Next.js App Router, but they serve fundamentally different purposes and have different lifecycle behaviors. A <code>page.tsx</code> is the unique UI for a specific route — it only renders when that exact route is matched, and it re-renders (or refetches) on every navigation to that route. A <code>layout.tsx</code> is a shared UI wrapper that <strong>persists across navigations</strong> between its child routes — it renders once and does not remount or re-execute its data fetching when the user navigates between routes nested within it.</p>
+      <p>This persistence is the critical distinction. Because layouts do not remount on child route navigation, state and data in layouts survives navigation. This enables patterns impossible in the Pages Router: a sidebar with its own scroll position, a chat widget that keeps its open/closed state, or a layout-level data fetch that provides data to all child pages without being repeated. The root layout (<code>app/layout.tsx</code>) must render the <code>&lt;html&gt;</code> and <code>&lt;body&gt;</code> tags and is required in every Next.js App Router project. Nested layouts are composed automatically by Next.js based on the directory structure.</p>
+      <pre class="code-block">// Layout hierarchy example:
+// URL: /dashboard/settings
+
+// 1. app/layout.tsx — PERSISTS for entire app lifecycle
+export default function RootLayout({ children }) {
+  // Renders ONCE — does not remount on any navigation
+  const config = await fetchAppConfig(); // runs once, not per navigation
+  return (
+    &lt;html lang="en"&gt;
+      &lt;body&gt;
+        &lt;GlobalNav /&gt;
+        {children} {/* → DashboardLayout */}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  );
+}
+
+// 2. app/dashboard/layout.tsx — PERSISTS across all /dashboard/* routes
+export default async function DashboardLayout({ children }) {
+  // Runs ONCE when entering /dashboard — persists while navigating within /dashboard
+  const user = await getCurrentUser(); // NOT re-fetched on /dashboard → /dashboard/settings
+  return (
+    &lt;div className="flex"&gt;
+      &lt;Sidebar user={user} /&gt;
+      &lt;main&gt;{children}&lt;/main&gt; {/* → SettingsPage */}
+    &lt;/div&gt;
+  );
+}
+
+// 3. app/dashboard/settings/page.tsx — renders ONLY at /dashboard/settings
+export default async function SettingsPage() {
+  // Re-fetches on EVERY navigation to /dashboard/settings
+  const settings = await fetchUserSettings();
+  return &lt;SettingsForm settings={settings} /&gt;;
+}</pre>
+      <pre class="code-block">// Key behavioral differences:
+// layout.tsx — receives `children` prop, does NOT receive `searchParams`
+// page.tsx — receives `params` AND `searchParams`, does NOT receive `children`
+
+// page.tsx props
+interface PageProps {
+  params: { slug: string };            // route params
+  searchParams: { page?: string };     // query string ?page=2
+}
+
+// layout.tsx props
+interface LayoutProps {
+  children: React.ReactNode;           // nested page or layout
+  params: { slug: string };            // available in nested layouts
+  // No searchParams — layouts don't re-render on query string changes
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 24 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q24">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q24" aria-expanded="false" aria-controls="nextjs-q24">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;24. What is the loading.tsx and error.tsx convention?
+    </button>
+  </h2>
+  <div id="nextjs-q24" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q24" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p><code>loading.tsx</code> and <code>error.tsx</code> are special colocated files in the App Router that automatically create React Suspense and Error Boundary wrappers around the <code>page.tsx</code> in the same directory segment. They eliminate the need to manually write <code>&lt;Suspense&gt;</code> and <code>&lt;ErrorBoundary&gt;</code> wrapper components for every page — Next.js wires them up automatically based on their file names and location in the directory tree.</p>
+      <p><code>loading.tsx</code> exports a React component that is shown as the Suspense fallback while the <code>page.tsx</code> (and its async Server Components) are loading. Because it's in a Suspense boundary, the loading UI is shown immediately on navigation — the layout above it stays visible and interactive while only the page content shows the skeleton. <code>error.tsx</code> is a Client Component (<code>'use client'</code> is required) that catches JavaScript errors thrown during rendering of the page segment — both synchronous render errors and async errors from Server Components. It receives the <code>error</code> and a <code>reset</code> function to retry rendering.</p>
+      <pre class="code-block">// app/dashboard/loading.tsx — automatically wraps page.tsx in Suspense
+export default function DashboardLoading() {
+  return (
+    &lt;div className="animate-pulse space-y-4"&gt;
+      &lt;div className="h-32 bg-gray-200 rounded-lg" /&gt;
+      &lt;div className="grid grid-cols-3 gap-4"&gt;
+        {[1, 2, 3].map(i =&gt; &lt;div key={i} className="h-24 bg-gray-200 rounded" /&gt;)}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+// Next.js treats this as:
+// &lt;Suspense fallback={&lt;DashboardLoading /&gt;}&gt;
+//   &lt;DashboardPage /&gt;
+// &lt;/Suspense&gt;</pre>
+      <pre class="code-block">// app/dashboard/error.tsx — automatically wraps page.tsx in ErrorBoundary
+'use client'; // Error boundaries must be Client Components
+
+import { useEffect } from 'react';
+
+interface ErrorPageProps {
+  error: Error &amp; { digest?: string }; // digest = server-side error ID
+  reset: () =&gt; void;                  // retry — re-renders the segment
+}
+
+export default function DashboardError({ error, reset }: ErrorPageProps) {
+  useEffect(() =&gt; {
+    // Log to error tracking service (Sentry, Datadog, etc.)
+    console.error('Dashboard error:', error);
+  }, [error]);
+
+  return (
+    &lt;div className="flex flex-col items-center justify-center min-h-[400px] gap-4"&gt;
+      &lt;h2 className="text-xl font-semibold"&gt;Something went wrong&lt;/h2&gt;
+      &lt;p className="text-gray-500"&gt;
+        {error.message ?? 'An unexpected error occurred'}
+      &lt;/p&gt;
+      &lt;button onClick={reset} className="btn btn-primary"&gt;
+        Try again
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Special files in the same segment only affect THEIR segment:
+// app/dashboard/error.tsx catches errors in app/dashboard/page.tsx
+// NOT errors in app/dashboard/layout.tsx (those bubble up to app/error.tsx)
+// global-error.tsx at app root catches layout-level errors (replaces full page)</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 25 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q25">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q25" aria-expanded="false" aria-controls="nextjs-q25">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;25. How does Next.js handle caching in the App Router?
+    </button>
+  </h2>
+  <div id="nextjs-q25" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q25" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>The App Router has a multi-layer caching system that is one of its most powerful and most misunderstood features. Understanding all four cache layers and their interaction is essential for building correct, performant applications. The four caches are: <strong>Request Memoization</strong>, <strong>Data Cache</strong>, <strong>Full Route Cache</strong>, and <strong>Router Cache</strong>.</p>
+      <p><strong>1. Request Memoization (in-memory, per-request):</strong> React automatically deduplicates identical <code>fetch()</code> calls within a single server render cycle. If three Server Components call <code>fetchUser(id)</code> with the same URL, only one network request is made. This memo is cleared after the request completes. It enables safe data fetching co-location — every component can fetch what it needs without coordinating with siblings.</p>
+      <p><strong>2. Data Cache (persistent, cross-request):</strong> Next.js extends the native <code>fetch</code> API with a persistent server-side Data Cache. By default, <code>fetch()</code> responses are cached indefinitely (<code>force-cache</code>). <code>cache: 'no-store'</code> opts out entirely. <code>next: { revalidate: 3600 }</code> sets a time-based TTL. <code>next: { tags: ['posts'] }</code> enables on-demand invalidation via <code>revalidateTag('posts')</code>. This cache survives between server restarts in production deployments (stored in the filesystem or a distributed cache with platforms like Vercel).</p>
+      <p><strong>3. Full Route Cache (static HTML, per-deploy):</strong> Routes that are statically renderable (no dynamic functions, all fetches cached) have their HTML and RSC payload pre-rendered and stored at build time. These are served from the CDN without any server execution. ISR revalidation or on-demand revalidation can update entries in this cache post-deploy.</p>
+      <p><strong>4. Router Cache (client-side, per-session):</strong> The browser caches RSC payloads for visited and prefetched routes. Navigating back is instant (from cache). <code>router.refresh()</code> clears this cache for the current route and refetches from the server.</p>
+      <pre class="code-block">// Controlling the Data Cache per fetch call
+async function getData() {
+  // Cached indefinitely (default) → Full Route Cache candidate
+  const staticData = await fetch('https://api.example.com/config');
+
+  // Never cached → Dynamic rendering, fresh on every request
+  const dynamicData = await fetch('https://api.example.com/live-prices', {
+    cache: 'no-store',
+  });
+
+  // Time-based ISR — revalidate every 1 hour
+  const semiStaticData = await fetch('https://api.example.com/products', {
+    next: { revalidate: 3600 },
+  });
+
+  // Tag-based on-demand ISR
+  const taggedData = await fetch('https://api.example.com/posts', {
+    next: { tags: ['posts', 'blog'] },
+  });
+}
+
+// Opt entire route into dynamic rendering (bypasses Full Route Cache)
+export const dynamic = 'force-dynamic'; // equivalent to cache: 'no-store' on all fetches
+export const revalidate = 60; // ISR for the whole route
+
+// On-demand invalidation in a Server Action
+import { revalidateTag, revalidatePath } from 'next/cache';
+async function publishPost(id: string) {
+  await db.post.update({ where: { id }, data: { published: true } });
+  revalidateTag('posts');           // invalidates all fetches tagged 'posts'
+  revalidatePath('/blog');          // invalidates the /blog Full Route Cache entry
+  revalidatePath('/blog/[slug]', 'page'); // invalidates all dynamic blog post pages
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 26 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q26">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q26" aria-expanded="false" aria-controls="nextjs-q26">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;26. What is partial prerendering (PPR) in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q26" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q26" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Partial Prerendering (PPR) is an experimental Next.js rendering model that combines static and dynamic rendering within a single route request, at the component level rather than the page level. Before PPR, a route was either entirely static (served from CDN instantly) or entirely dynamic (server-rendered on each request). PPR allows the static shell of a page (navigation, layout, static content) to be prerendered at build time and served from the CDN with the fastest possible TTFB, while dynamic "holes" (personalized content, real-time data) are streamed in from the server concurrently with the static shell delivery.</p>
+      <p>PPR works by using React's <code>Suspense</code> boundaries as the signal for what is dynamic. The static shell (everything outside Suspense boundaries that has no dynamic dependencies) is built at compile time and stored as a static HTML+RSC payload. On a real request, the CDN serves the static shell immediately, and the server simultaneously begins computing the Suspense fallback content and streaming it in. The result is that users see the page shell in milliseconds (CDN speed) while personalized content arrives moments later via streaming — no hydration delay, no blank screen.</p>
+      <pre class="code-block">// next.config.ts — enable PPR (experimental)
+const config: NextConfig = {
+  experimental: { ppr: 'incremental' }, // 'incremental' enables per-route opt-in
+};
+
+// app/product/[id]/page.tsx — opt this route into PPR
+export const experimental_ppr = true;
+
+import { Suspense } from 'react';
+
+// Static shell — prerendered at build time, served from CDN
+async function ProductDetails({ id }: { id: string }) {
+  const product = await fetchProduct(id); // cached fetch → static
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;{product.name}&lt;/h1&gt;
+      &lt;p&gt;{product.description}&lt;/p&gt;
+      &lt;p&gt;${product.price}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Dynamic "hole" — computed at request time, streamed in
+async function PersonalizedRecommendations({ productId }: { productId: string }) {
+  const userId = await getCurrentUserId(); // reads cookies → dynamic
+  const recommendations = await fetchRecommendations(userId, productId);
+  return &lt;RecommendationList items={recommendations} /&gt;;
+}
+
+export default function ProductPage({ params }: { params: { id: string } }) {
+  return (
+    &lt;div&gt;
+      {/* Static — served from CDN edge immediately */}
+      &lt;ProductDetails id={params.id} /&gt;
+
+      {/* Dynamic hole — skeleton shown, then streamed in */}
+      &lt;Suspense fallback={&lt;RecommendationSkeleton /&gt;}&gt;
+        &lt;PersonalizedRecommendations productId={params.id} /&gt;
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+      <p>PPR represents a paradigm shift: rather than choosing between the performance of static sites and the personalization of dynamic sites, it delivers both simultaneously. It is analogous to "static hosting with real-time islands" — similar in concept to Astro's Island Architecture but applied to React Server Components with streaming. PPR became a stable feature in Next.js 15 after extensive testing and is positioned as the default rendering model for future Next.js versions.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 27 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q27">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q27" aria-expanded="false" aria-controls="nextjs-q27">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;27. How do you implement authentication in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q27" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q27" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Authentication in Next.js spans middleware (route protection), Server Components (data-fetching with session context), Client Components (login/logout UI), and API routes or Server Actions (auth mutations). The recommended solution for most projects is <strong>Auth.js (formerly NextAuth.js) v5</strong>, which integrates natively with the App Router, supports 70+ OAuth providers, credentials-based login, JWT and database sessions, and provides first-class middleware integration for route protection.</p>
+      <p>The authentication flow involves: (1) configuring Auth.js with providers and callbacks in <code>auth.ts</code>, (2) creating a Route Handler at <code>app/api/auth/[...nextauth]/route.ts</code> for OAuth redirects and session management, (3) protecting routes in <code>middleware.ts</code> by checking session before the page renders, (4) reading session in Server Components via the <code>auth()</code> helper, and (5) reading session in Client Components via the <code>useSession()</code> hook. Custom credential-based auth (username/password) uses Server Actions to validate credentials and call <code>signIn()</code>.</p>
+      <pre class="code-block">// auth.ts — Auth.js v5 configuration
+import NextAuth from 'next-auth';
+import GitHub from 'next-auth/providers/github';
+import Credentials from 'next-auth/providers/credentials';
+import { db } from '@/lib/db';
+import bcrypt from 'bcryptjs';
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  providers: [
+    GitHub({ clientId: process.env.AUTH_GITHUB_ID!, clientSecret: process.env.AUTH_GITHUB_SECRET! }),
+    Credentials({
+      async authorize(credentials) {
+        const user = await db.user.findUnique({ where: { email: String(credentials.email) } });
+        if (!user?.hashedPassword) return null;
+        const valid = await bcrypt.compare(String(credentials.password), user.hashedPassword);
+        return valid ? user : null;
+      },
+    }),
+  ],
+  callbacks: {
+    async session({ session, token }) {
+      session.user.id = token.sub!;
+      session.user.role = token.role as string;
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) token.role = (user as any).role;
+      return token;
+    },
+  },
+});</pre>
+      <pre class="code-block">// app/api/auth/[...nextauth]/route.ts
+import { handlers } from '@/auth';
+export const { GET, POST } = handlers;
+
+// middleware.ts — protect routes before rendering
+import { auth } from '@/auth';
+export default auth((req) =&gt; {
+  const isAuthenticated = !!req.auth;
+  const isProtected = req.nextUrl.pathname.startsWith('/dashboard');
+  if (isProtected &amp;&amp; !isAuthenticated) {
+    return Response.redirect(new URL('/login', req.url));
+  }
+});
+export const config = { matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'] };
+
+// Server Component — read session
+import { auth } from '@/auth';
+async function DashboardPage() {
+  const session = await auth(); // reads session cookie server-side
+  if (!session) redirect('/login');
+  return &lt;h1&gt;Welcome {session.user.name}&lt;/h1&gt;;
+}
+
+// Client Component — read session
+'use client';
+import { useSession, signOut } from 'next-auth/react';
+function UserMenu() {
+  const { data: session } = useSession();
+  return &lt;button onClick={() =&gt; signOut()}&gt;Sign out {session?.user?.name}&lt;/button&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 28 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q28">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q28" aria-expanded="false" aria-controls="nextjs-q28">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;28. How do you optimize images and fonts in Next.js?
+    </button>
+  </h2>
+  <div id="nextjs-q28" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q28" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Next.js provides built-in, zero-configuration optimization for both images and fonts that addresses the most common performance pitfalls automatically. For images, the <code>next/image</code> component handles resizing, format conversion (WebP/AVIF), lazy loading, and layout shift prevention. For fonts, <code>next/font</code> downloads fonts at build time, self-hosts them (eliminating third-party DNS lookups), automatically inlines font-display swap, and generates <code>size-adjust</code> CSS to prevent layout shift during font swap. Both optimizations are designed to improve Core Web Vitals (LCP, CLS) with minimal developer effort.</p>
+      <p>Advanced image optimization involves setting the <code>sizes</code> attribute correctly to tell the browser which image variant to download at each viewport width. Without <code>sizes</code>, the browser defaults to downloading the full-resolution variant. The <code>priority</code> attribute on the LCP image triggers resource hints (<code>&lt;link rel="preload"&gt;</code>) to start loading the image before React renders. For fonts, Next.js variable fonts are preferred (a single font file covers all weights and styles), and the <code>display: 'swap'</code> + <code>preload: true</code> combination ensures text is visible immediately with the fallback font, then swaps smoothly.</p>
+      <pre class="code-block">// next/font — Google Fonts with zero layout shift
+import { Inter, Playfair_Display } from 'next/font/google';
+import localFont from 'next/font/local';
+
+// Variable font — single file for all weights
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',  // CSS variable for Tailwind usage
+  display: 'swap',
+  preload: true,
+});
+
+// Specific weights only
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-playfair',
+});
+
+// Self-hosted local font
+const brandFont = localFont({
+  src: [
+    { path: './fonts/Brand-Regular.woff2', weight: '400' },
+    { path: './fonts/Brand-Bold.woff2',    weight: '700' },
+  ],
+  variable: '--font-brand',
+});
+
+// app/layout.tsx
+export default function RootLayout({ children }) {
+  return (
+    &lt;html lang="en" className={`${inter.variable} ${playfair.variable}`}&gt;
+      &lt;body className={inter.className}&gt;{children}&lt;/body&gt;
+    &lt;/html&gt;
+  );
+}</pre>
+      <pre class="code-block">// tailwind.config.js — use font CSS variables
+export default {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-playfair)', 'serif'],
+      },
+    },
+  },
+};
+
+// Advanced image optimization
+import Image from 'next/image';
+
+function HeroSection({ hero }) {
+  return (
+    &lt;div className="relative h-[600px]"&gt;
+      &lt;Image
+        src={hero.imageUrl}
+        alt={hero.altText}
+        fill
+        priority        // LCP image — generate preload link
+        quality={85}    // balance quality vs. file size (default: 75)
+        sizes="100vw"   // full viewport width at all breakpoints
+        className="object-cover object-center"
+        placeholder="blur"
+        blurDataURL={hero.blurDataUrl}  // base64 thumbnail for instant placeholder
+      /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 29 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q29">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q29" aria-expanded="false" aria-controls="nextjs-q29">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;29. What is the difference between revalidate tag and time-based revalidation?
+    </button>
+  </h2>
+  <div id="nextjs-q29" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q29" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Next.js offers two mechanisms for invalidating cached data in the Data Cache and Full Route Cache: <strong>time-based revalidation</strong> (ISR) and <strong>tag-based on-demand revalidation</strong>. They solve different problems and are often used together. Time-based revalidation sets a maximum age (TTL) for cached data — after the interval expires, the next request triggers a background regeneration using the stale-while-revalidate pattern. Tag-based revalidation allows you to explicitly and immediately invalidate specific cached data at any time, typically triggered by a CMS webhook, database mutation, or user action.</p>
+      <p><strong>Time-based revalidation</strong> (<code>revalidate: N</code>) is set per fetch call or per route segment. It guarantees that data is never more than N seconds stale. It requires no external trigger — the system manages it automatically. The downside is that content remains stale until the interval expires even if the data changed seconds after the last regeneration. This is acceptable for content that updates on a schedule (daily blog posts, weekly pricing updates).</p>
+      <p><strong>Tag-based revalidation</strong> (<code>revalidateTag('tag')</code>) lets you invalidate all fetches and routes that were tagged with a specific string, immediately, on demand. When a CMS publishes a new article, a webhook calls an API route that calls <code>revalidateTag('articles')</code>, which instantly marks all cached fetches tagged <code>'articles'</code> and all Full Route Cache entries that depend on them as stale. The next request to any affected route triggers a fresh regeneration. This enables true content freshness without polling overhead.</p>
+      <pre class="code-block">// Setting up tagged fetches
+async function fetchPosts() {
+  return fetch('https://cms.example.com/posts', {
+    next: {
+      tags: ['posts', 'content'],   // multiple tags for granular control
+      revalidate: 3600,              // fallback TTL if tag never invalidated
+    },
+  }).then(r =&gt; r.json());
+}
+
+async function fetchPost(slug: string) {
+  return fetch(`https://cms.example.com/posts/${slug}`, {
+    next: {
+      tags: [`post:${slug}`, 'posts'],  // per-item tag for surgical invalidation
+      revalidate: 86400,
+    },
+  }).then(r =&gt; r.json());
+}
+
+// Route-level revalidation
+// app/blog/page.tsx
+export const revalidate = 3600; // time-based ISR for the entire route
+
+// app/blog/[slug]/page.tsx
+export const revalidate = 86400; // each post page ISR daily</pre>
+      <pre class="code-block">// On-demand tag revalidation — called from CMS webhook
+// app/api/webhook/cms/route.ts
+import { revalidateTag, revalidatePath } from 'next/cache';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  const secret = request.headers.get('x-webhook-secret');
+  if (secret !== process.env.WEBHOOK_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { event, data } = await request.json();
+
+  switch (event) {
+    case 'post.published':
+    case 'post.updated':
+      revalidateTag(`post:${data.slug}`); // invalidate specific post
+      revalidateTag('posts');              // invalidate post listings
+      revalidatePath('/blog');            // invalidate Full Route Cache for /blog
+      revalidatePath(`/blog/${data.slug}`, 'page');
+      break;
+
+    case 'post.deleted':
+      revalidateTag('posts');
+      revalidatePath('/blog');
+      break;
+  }
+
+  return NextResponse.json({ revalidated: true, timestamp: Date.now() });
+}</pre>
+      <p>The combination of tag-based and time-based revalidation gives you a robust content freshness strategy: tag-based for immediate updates triggered by known events, and time-based as a safety net that ensures even untagged stale content eventually gets refreshed. For a high-traffic site, tag-based revalidation is dramatically more efficient than short TTL time-based ISR because it avoids unnecessary regeneration when data hasn't changed.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 30 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-nextjs-q30">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nextjs-q30" aria-expanded="false" aria-controls="nextjs-q30">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;30. How do you deploy a Next.js application?
+    </button>
+  </h2>
+  <div id="nextjs-q30" class="accordion-collapse collapse" aria-labelledby="heading-nextjs-q30" data-bs-parent="#acc-nextjs">
+    <div class="accordion-body">
+      <p>Next.js applications can be deployed in three modes: <strong>Node.js server</strong> (the default, supports all features), <strong>static export</strong> (generates pure HTML/CSS/JS files, no server required), and <strong>Edge Runtime</strong> (for specific routes/middleware). The choice of deployment mode and platform determines which Next.js features are available — some features like ISR, image optimization, and middleware require a Node.js (or compatible) runtime and cannot be done with static export.</p>
+      <p><strong>Vercel</strong> is the zero-configuration deployment platform built by Next.js creators. A <code>git push</code> to the linked repository automatically builds and deploys the application, with automatic ISR support, global edge CDN for static assets, serverless functions for dynamic routes and API routes, image optimization CDN, and preview deployments for every pull request. For teams already using GitHub/GitLab, Vercel is the fastest path to production.</p>
+      <p><strong>Self-hosted Node.js</strong> is used when you need to run on your own infrastructure (AWS, GCP, Azure, on-prem). Run <code>next build</code> to create the optimized production build in <code>.next/</code>, then <code>node server.js</code> or <code>next start</code> to run the server. For containerized deployments, Next.js has a standalone output mode (<code>output: 'standalone'</code> in <code>next.config.ts</code>) that produces a minimal self-contained build folder (~5-10MB) suitable for Docker without <code>node_modules</code>.</p>
+      <pre class="code-block"># Vercel deployment (zero config after initial setup)
+npm i -g vercel
+vercel          # deploy to preview
+vercel --prod   # deploy to production
+
+# Or connect GitHub repo at vercel.com for automatic deployments</pre>
+      <pre class="code-block"># Self-hosted Node.js
+npm run build   # creates .next/ directory
+npm start       # starts Next.js production server on port 3000
+
+# With PM2 for process management
+pm2 start npm --name "nextjs-app" -- start
+pm2 startup && pm2 save</pre>
+      <pre class="code-block"># Docker deployment with standalone output
+# next.config.ts
+const config: NextConfig = { output: 'standalone' };
+
+# Dockerfile
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production PORT=3000
+
+# Standalone output copies only what's needed
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+
+EXPOSE 3000
+CMD ["node", "server.js"]</pre>
+      <pre class="code-block"># Static export (no SSR/ISR/API routes)
+# next.config.ts
+const config: NextConfig = { output: 'export' };
+
+npm run build  # generates /out directory of static HTML files
+# Deploy /out to any static host: S3, Cloudflare Pages, GitHub Pages, Netlify
+aws s3 sync out/ s3://my-bucket --delete
+aws cloudfront create-invalidation --distribution-id XXXXX --paths "/*"</pre>
+      <p>For enterprise deployments, consider <strong>OpenNext</strong>, an open-source adapter that packages Next.js for deployment on AWS Lambda@Edge, Cloudflare Workers, and other serverless platforms without Vercel. It handles the complex parts of running the Next.js server on non-Node runtimes. Regardless of deployment platform, always set appropriate environment variables, configure error monitoring (Sentry), set up health check endpoints (<code>/api/health</code>), and implement proper cache headers for static assets to maximize CDN efficiency.</p>
+    </div>
+  </div>
+</div>

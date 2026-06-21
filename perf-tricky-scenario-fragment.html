@@ -1,0 +1,2475 @@
+<!-- Tab Navigation -->
+<ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="perf-tab" data-bs-toggle="tab" data-bs-target="#perf-pane" type="button" role="tab">
+      <i class="bi bi-speedometer2 me-2"></i>Performance <span class="badge bg-danger ms-1">25</span>
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="tricky-tab" data-bs-toggle="tab" data-bs-target="#tricky-pane" type="button" role="tab">
+      <i class="bi bi-puzzle me-2"></i>Tricky <span class="badge bg-danger ms-1" style="background-color:#e91e8c!important">30</span>
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="scenario-tab" data-bs-toggle="tab" data-bs-target="#scenario-pane" type="button" role="tab">
+      <i class="bi bi-diagram-3 me-2"></i>Scenarios <span class="badge bg-purple ms-1">20</span>
+    </button>
+  </li>
+</ul>
+
+<div class="tab-content" id="mainTabContent">
+
+  <!-- ==================== PERFORMANCE TAB ==================== -->
+  <div class="tab-pane fade show active" id="perf-pane" role="tabpanel">
+    <div class="accordion" id="perf-list">
+
+      <!-- P1 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p1">
+            <span class="q-num">P1</span><span class="diff-hard me-2">Perf</span>How do you identify performance issues in a React app?
+          </button>
+        </h2>
+        <div id="p1" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Use React DevTools Profiler + Chrome DevTools Performance tab + Lighthouse for Core Web Vitals. Always measure before optimizing.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React DevTools Profiler (record → find slow commits)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Chrome DevTools Performance tab for paint/layout</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Lighthouse for Core Web Vitals</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Look for: components rendering too often</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Long render durations</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Large bundle size</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Unnecessary network requests</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests ability to diagnose before jumping to solutions — a hallmark of experienced engineers.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P2 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p2">
+            <span class="q-num">P2</span><span class="diff-hard me-2">Perf</span>What is the React Profiler? How do you use it?
+          </button>
+        </h2>
+        <div id="p2" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>DevTools Profiler tab records commit timings. Flamegraph shows render duration; Ranked chart sorts slowest components.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Flamegraph: wider = longer render, grey = didn't render</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Ranked chart shows slowest components sorted by duration</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Enable "Record why each component rendered" in settings</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Look for commits &gt; 16ms (needed for 60fps)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Causes shown: props/state/hooks/parent</li>
+            </ul>
+            <pre class="code-block">// React DevTools Settings → Profiler
+// ✓ Record why each component rendered
+// Then: Record → interact → Stop → analyze</pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Profiler knowledge separates engineers who measure from those who guess.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P3 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p3">
+            <span class="q-num">P3</span><span class="diff-hard me-2">Perf</span>What causes unnecessary re-renders?
+          </button>
+        </h2>
+        <div id="p3" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Parent re-renders, new object/array/function references in props, Context value changes, and bad key usage are the main culprits.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Parent re-renders (children re-render unless memoized)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>New object/array/function reference in props (inline style={{}}, inline callbacks)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Context value change (all consumers re-render)</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Using index as key causing identity loss</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Unrelated state in same useState/component scope</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Core React knowledge — tested in almost every performance discussion.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P4 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p4">
+            <span class="q-num">P4</span><span class="diff-hard me-2">Perf</span>How does React.memo prevent re-renders?
+          </button>
+        </h2>
+        <div id="p4" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>React.memo shallowly compares previous vs next props using Object.is(). If all props pass, skips re-render and reuses last output.</p>
+            <pre class="code-block"><span class="kw">const</span> <span class="fn">MemoizedList</span> = React.memo(<span class="fn">List</span>);
+
+<span class="cm">// Custom comparator (return true to skip re-render)</span>
+<span class="kw">const</span> <span class="fn">MemoizedList</span> = React.memo(<span class="fn">List</span>, (prevProps, nextProps) => {
+  <span class="kw">return</span> prevProps.items === nextProps.items;
+});</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Wraps functional component</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Shallow comparison via Object.is()</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Skips re-render if all props pass</li>
+            </ul>
+            <ul class="ans-list amber">
+              <li><i class="bi bi-arrow-right me-1"></i>Only beneficial when parent renders more often than props change</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Second argument: custom comparator for deep equality</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Foundational memoization pattern — every React performance interview covers this.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P5 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p5">
+            <span class="q-num">P5</span><span class="diff-hard me-2">Perf</span>What is the correct way to use useMemo?
+          </button>
+        </h2>
+        <div id="p5" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Use useMemo for expensive computations (filtering/sorting large arrays). Do NOT use for trivial operations — overhead can exceed savings. Always profile to confirm benefit.</p>
+            <pre class="code-block"><span class="kw">const</span> filtered = <span class="fn">useMemo</span>(
+  () => data.<span class="fn">filter</span>(item => item.active && item.price > <span class="num">0</span>),
+  [data] <span class="cm">// re-compute only when data changes</span>
+);
+
+<span class="cm">// ❌ Don't: trivial operations</span>
+<span class="kw">const</span> doubled = <span class="fn">useMemo</span>(() => count * <span class="num">2</span>, [count]);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>For expensive computations (filtering/sorting large arrays, complex calculations)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Ensure deps array includes all used values</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Do NOT use for trivial operations — memoization overhead can exceed savings</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Always profile to confirm benefit</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Interviewers want to know you understand when NOT to optimize, not just how to apply the hook.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P6 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p6">
+            <span class="q-num">P6</span><span class="diff-hard me-2">Perf</span>What is the correct way to use useCallback?
+          </button>
+        </h2>
+        <div id="p6" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Use useCallback when passing callbacks to React.memo'd children or as deps to other hooks. Stabilizes function reference. Don't use for every function.</p>
+            <pre class="code-block"><span class="cm">// ✅ Correct: passed to memo'd child</span>
+<span class="kw">const</span> handleDelete = <span class="fn">useCallback</span>((id) => {
+  <span class="fn">dispatch</span>(<span class="fn">deleteItem</span>(id));
+}, [dispatch]);
+
+<span class="cm">// ❌ Pointless: not passed anywhere that needs stability</span>
+<span class="kw">const</span> localFn = <span class="fn">useCallback</span>(() => <span class="fn">doThing</span>(), []);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Use when passing to React.memo'd children</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use as deps to other hooks that rely on referential stability</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Stabilizes function reference across renders</li>
+            </ul>
+            <ul class="ans-list amber">
+              <li><i class="bi bi-arrow-right me-1"></i>Don't use for every function — only when stable reference matters</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Pair with React.memo on the receiving component</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests understanding of when stability matters vs. premature optimization.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P7 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p7">
+            <span class="q-num">P7</span><span class="diff-hard me-2">Perf</span>What is virtualization and when do you need it?
+          </button>
+        </h2>
+        <div id="p7" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Only render items visible in the viewport. For hundreds/thousands of items, renders ~20-30 DOM nodes instead of all. Essential for tables with 500+ rows.</p>
+            <pre class="code-block"><span class="kw">import</span> { FixedSizeList } <span class="kw">from</span> <span class="str">'react-window'</span>;
+
+<span class="kw">const</span> Row = ({ index, style }) => (
+  &lt;div style={style}&gt;{items[index].name}&lt;/div&gt;
+);
+
+&lt;FixedSizeList height={600} itemCount={items.length} itemSize={50}&gt;
+  {Row}
+&lt;/FixedSizeList&gt;</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>react-window (lightweight, fixed-size)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>TanStack Virtual (flexible, variable size)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Only ~20-30 DOM nodes regardless of list length</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Set up: fixed-height container, itemSize config, overscan for smooth scrolling</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use when rendering 100+ items</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Key optimization technique for data-heavy applications.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P8 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p8">
+            <span class="q-num">P8</span><span class="diff-hard me-2">Perf</span>What is code splitting and how do you implement it?
+          </button>
+        </h2>
+        <div id="p8" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Breaking the JS bundle into chunks loaded on demand. Reduces initial load. React.lazy + Suspense at route level gives biggest wins.</p>
+            <pre class="code-block"><span class="kw">const</span> Dashboard = React.<span class="fn">lazy</span>(() => <span class="kw">import</span>(<span class="str">'./Dashboard'</span>));
+<span class="kw">const</span> Settings = React.<span class="fn">lazy</span>(() => <span class="kw">import</span>(<span class="str">'./Settings'</span>));
+
+&lt;Suspense fallback={&lt;PageSkeleton /&gt;}&gt;
+  &lt;Routes&gt;
+    &lt;Route path=<span class="str">"/dashboard"</span> element={&lt;Dashboard /&gt;} /&gt;
+    &lt;Route path=<span class="str">"/settings"</span> element={&lt;Settings /&gt;} /&gt;
+  &lt;/Routes&gt;
+&lt;/Suspense&gt;</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React.lazy(() => import('./Component')) + Suspense fallback</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use at route level for biggest wins</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use at component level for heavy libraries</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Webpack/Vite creates separate chunks automatically for dynamic imports</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Prefetch with webpackPrefetch magic comment</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Fundamental optimization — tested in every performance interview.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P9 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p9">
+            <span class="q-num">P9</span><span class="diff-hard me-2">Perf</span>What is tree shaking?
+          </button>
+        </h2>
+        <div id="p9" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Dead code elimination by bundlers. Requires ES modules. Bundler drops exports not actually used. Enable with "sideEffects": false in package.json.</p>
+            <pre class="code-block"><span class="cm">// ✅ Tree-shakeable (named imports)</span>
+<span class="kw">import</span> { debounce } <span class="kw">from</span> <span class="str">'lodash-es'</span>;
+
+<span class="cm">// ❌ Imports entire lodash bundle</span>
+<span class="kw">import</span> _ <span class="kw">from</span> <span class="str">'lodash'</span>;
+
+<span class="cm">// package.json</span>
+{ <span class="str">"sideEffects"</span>: <span class="kw">false</span> }</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Requires ES modules (import/export syntax)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Bundler statically analyzes which exports are used</li>
+              <li><i class="bi bi-arrow-right me-1"></i>"sideEffects": false in package.json</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Avoid barrel files and import *</li>
+              <li><i class="bi bi-arrow-right me-1"></i>CommonJS require() is NOT tree-shakeable</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Shows knowledge of bundle optimization beyond just "use React.lazy".</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P10 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p10">
+            <span class="q-num">P10</span><span class="diff-hard me-2">Perf</span>How do you reduce bundle size?
+          </button>
+        </h2>
+        <div id="p10" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Analyze first (bundle analyzer), then replace heavy libs, use dynamic imports, optimize images, and enable server compression.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Analyze with webpack-bundle-analyzer or Vite's rollup-plugin-visualizer</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Replace moment→date-fns, lodash→lodash-es</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Dynamic imports for routes and heavy components</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Image optimization (WebP, next/image)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Remove unused dependencies (npm depcheck)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Check for duplicate React versions bundled</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Enable gzip/brotli on server (60-80% reduction)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>CDN for public assets</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests comprehensive optimization knowledge, not just single tricks.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P11 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p11">
+            <span class="q-num">P11</span><span class="diff-hard me-2">Perf</span>What is lazy loading of images?
+          </button>
+        </h2>
+        <div id="p11" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Load images only when they scroll into viewport. Native: loading="lazy". Custom: IntersectionObserver. Don't lazy load above-the-fold images — it hurts LCP.</p>
+            <pre class="code-block"><span class="cm">// Native (simplest)</span>
+&lt;img loading=<span class="str">"lazy"</span> src=<span class="str">"photo.webp"</span> width=<span class="str">"800"</span> height=<span class="str">"600"</span> alt=<span class="str">"..."</span> /&gt;
+
+<span class="cm">// ❌ Never lazy-load above the fold (hurts LCP)</span>
+&lt;img loading=<span class="str">"eager"</span> src=<span class="str">"hero.webp"</span> /&gt; <span class="cm">// hero image</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Native: loading="lazy" attribute</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Custom: IntersectionObserver API</li>
+              <li><i class="bi bi-arrow-right me-1"></i>react-lazy-load-image-component library</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Do NOT lazy load above-the-fold images (hurts LCP score)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Always set width/height to prevent CLS</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Core Web Vitals knowledge is increasingly expected in frontend roles.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P12 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p12">
+            <span class="q-num">P12</span><span class="diff-hard me-2">Perf</span>How do you optimize context to prevent unnecessary re-renders?
+          </button>
+        </h2>
+        <div id="p12" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Split contexts by update frequency, memoize Provider value, and move high-frequency state out of context.</p>
+            <pre class="code-block"><span class="cm">// ✅ Memoize the Provider value</span>
+<span class="kw">function</span> <span class="fn">AuthProvider</span>({ children }) {
+  <span class="kw">const</span> [user, setUser] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> value = <span class="fn">useMemo</span>(() => ({ user, setUser }), [user]);
+  <span class="kw">return</span> &lt;AuthContext.Provider value={value}&gt;{children}&lt;/AuthContext.Provider&gt;;
+}</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Split into multiple contexts by update frequency</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Memoize Provider value with useMemo</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Context selector pattern: consumer extracts only needed slice</li>
+            </ul>
+            <ul class="ans-list amber">
+              <li><i class="bi bi-arrow-right me-1"></i>Move high-frequency state out of context (useState in closer ancestor)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use Zustand/Jotai for frequently-changing global state</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Context misuse is a very common performance pitfall — interviewers probe for this.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P13 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p13">
+            <span class="q-num">P13</span><span class="diff-hard me-2">Perf</span>What is the purpose of shouldComponentUpdate?
+          </button>
+        </h2>
+        <div id="p13" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Class component lifecycle returning boolean — false skips re-render. React.PureComponent implements shallow comparison. Functional equivalent: React.memo.</p>
+            <pre class="code-block"><span class="cm">// Class component</span>
+<span class="fn">shouldComponentUpdate</span>(nextProps, nextState) {
+  <span class="kw">return</span> nextProps.value !== <span class="kw">this</span>.props.value;
+}
+
+<span class="cm">// PureComponent handles shallow comparison automatically</span>
+<span class="kw">class</span> MyComp <span class="kw">extends</span> React.PureComponent { ... }
+
+<span class="cm">// Functional equivalent</span>
+<span class="kw">const</span> MyComp = React.<span class="fn">memo</span>(({ value }) => &lt;div&gt;{value}&lt;/div&gt;);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Returns boolean: false = skip render</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React.PureComponent = shallow comparison built-in</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Functional equivalent: React.memo</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Rarely needed directly — prefer declarative solutions</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Can cause stale renders if incorrectly implemented</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests knowledge of class component patterns still found in legacy codebases.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P14 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p14">
+            <span class="q-num">P14</span><span class="diff-hard me-2">Perf</span>What is the difference between chunking and lazy loading?
+          </button>
+        </h2>
+        <div id="p14" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Chunking splits code at build time (bundler). Lazy loading loads those chunks at runtime on demand. They work together.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Chunking: bundler creates separate files at build time</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Lazy loading: dynamic import() triggers runtime chunk load</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Pre-fetching: loads chunk before it's needed</li>
+            </ul>
+            <pre class="code-block"><span class="cm">// Prefetch — browser loads chunk in background when idle</span>
+<span class="kw">const</span> Settings = React.<span class="fn">lazy</span>(() =>
+  <span class="kw">import</span>(<span class="cm">/* webpackPrefetch: true */</span> <span class="str">'./Settings'</span>)
+);</pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests precision — many developers conflate these two distinct concepts.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P15 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p15">
+            <span class="q-num">P15</span><span class="diff-hard me-2">Perf</span>What is a web worker and can React use it?
+          </button>
+        </h2>
+        <div id="p15" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Web workers run scripts in a background thread without blocking the main thread. React communicates via postMessage/onmessage.</p>
+            <pre class="code-block"><span class="cm">// worker.js</span>
+<span class="fn">onmessage</span> = ({ data }) => {
+  <span class="kw">const</span> result = heavyComputation(data);
+  <span class="fn">postMessage</span>(result);
+};
+
+<span class="cm">// Component</span>
+<span class="kw">const</span> worker = <span class="kw">new</span> <span class="fn">Worker</span>(<span class="kw">new</span> <span class="fn">URL</span>(<span class="str">'./worker.js'</span>, <span class="kw">import</span>.meta.url));
+worker.<span class="fn">postMessage</span>(largeDataset);
+worker.<span class="fn">onmessage</span> = ({ data }) => <span class="fn">setResult</span>(data);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Runs in background thread, no DOM access</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React UI stays responsive during heavy computation</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use for: large data transforms, image processing, computation &gt;50ms</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Libraries: comlink (type-safe wrapper), useWorker hook libraries</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Vite supports Worker via new URL() syntax</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Advanced optimization technique showing knowledge beyond basic React patterns.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P16 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p16">
+            <span class="q-num">P16</span><span class="diff-hard me-2">Perf</span>How do you measure First Contentful Paint (FCP) in a React app?
+          </button>
+        </h2>
+        <div id="p16" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Use web-vitals library for real-user measurement. Chrome DevTools Performance tab and Lighthouse for lab measurement. SSR and bundle reduction are the main levers.</p>
+            <pre class="code-block"><span class="kw">import</span> { onFCP, onLCP, onINP, onCLS } <span class="kw">from</span> <span class="str">'web-vitals'</span>;
+
+<span class="fn">onFCP</span>(metric => analytics.<span class="fn">send</span>({ name: metric.name, value: metric.value }));
+<span class="fn">onLCP</span>(metric => analytics.<span class="fn">send</span>({ name: metric.name, value: metric.value }));</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>web-vitals library for real user monitoring (RUM)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Chrome DevTools Performance tab shows FCP marker</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Lighthouse gives lab FCP score</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>For SSR: reduce TTFB, inline critical CSS</li>
+              <li><i class="bi bi-arrow-right me-1"></i>For SPA: reduce JS bundle, consider SSR/prerendering</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Core Web Vitals are now Google ranking signals — frontend engineers must know them.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P17 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p17">
+            <span class="q-num">P17</span><span class="diff-hard me-2">Perf</span>What is hydration in React SSR and why is it expensive?
+          </button>
+        </h2>
+        <div id="p17" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Hydration attaches event listeners to server-rendered HTML and reconstructs the fiber tree. Large HTML = slower hydration. React 18 selective hydration and streaming SSR improve this.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React traverses entire DOM, diffs with expected output, creates fiber nodes, runs all hooks</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React 18 selective hydration prioritizes high-priority parts first</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Streaming SSR hydrates progressively as HTML streams in</li>
+              <li><i class="bi bi-arrow-right me-1"></i>hydrateRoot() is the React 18 API</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Hydration mismatch errors = server/client render difference</li>
+            </ul>
+            <pre class="code-block"><span class="cm">// React 18 streaming SSR (Next.js App Router)</span>
+<span class="cm">// Server sends HTML progressively</span>
+<span class="cm">// React hydrates in priority order</span>
+<span class="cm">// Interaction on hydrated parts works before full hydration</span>
+ReactDOM.<span class="fn">hydrateRoot</span>(document.getElementById(<span class="str">'root'</span>), &lt;App /&gt;);</pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> SSR/hydration knowledge is critical for Next.js/Remix roles.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P18 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p18">
+            <span class="q-num">P18</span><span class="diff-hard me-2">Perf</span>How do you implement skeleton screens?
+          </button>
+        </h2>
+        <div id="p18" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Placeholder UI matching content layout during load. Better UX than spinners. CSS pulse animation on grey blocks. Prevents CLS by matching actual content dimensions.</p>
+            <pre class="code-block">/* CSS pulse animation */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>CSS pulse animation on grey blocks matching content shape</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Library: react-loading-skeleton</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Match dimensions to actual content to prevent CLS</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Show during initial fetch; hide when data arrives</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Better than spinners — reduces perceived wait time</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> UX-performance intersection — tests knowledge of perceived performance techniques.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P19 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p19">
+            <span class="q-num">P19</span><span class="diff-hard me-2">Perf</span>What is the impact of inline functions in JSX?
+          </button>
+        </h2>
+        <div id="p19" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Inline functions create new references every render. For plain DOM elements: negligible. For React.memo'd children: breaks memoization. Use useCallback to fix.</p>
+            <pre class="code-block"><span class="cm">// ❌ New function reference every render — breaks memo</span>
+&lt;MemoizedRow onClick={() => handleDelete(item.id)} /&gt;
+
+<span class="cm">// ✅ Stable reference with useCallback</span>
+<span class="kw">const</span> handleDelete = <span class="fn">useCallback</span>((id) => dispatch(<span class="fn">deleteItem</span>(id)), [dispatch]);
+&lt;MemoizedRow onClick={handleDelete} id={item.id} /&gt;
+
+<span class="cm">// ✅ Alternative: data attribute pattern</span>
+&lt;button data-id={item.id} onClick={handleClick}&gt;Delete&lt;/button&gt;</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Creates new function reference on every render</li>
+              <li><i class="bi bi-arrow-right me-1"></i>For plain DOM elements: negligible impact</li>
+              <li><i class="bi bi-arrow-right me-1"></i>For React.memo'd children: breaks memoization (new prop reference fails shallow check)</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Fix: useCallback, pass id as prop to child, or use data-id attribute pattern</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Common source of memoization bugs — tests attention to referential equality.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P20 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p20">
+            <span class="q-num">P20</span><span class="diff-hard me-2">Perf</span>How do you profile and fix slow renders?
+          </button>
+        </h2>
+        <div id="p20" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Structured profiling process: record → find slow commits → identify slowest components → check cause → apply targeted fix → verify improvement.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>1) Open DevTools Profiler, enable "Record why each component rendered"</li>
+              <li><i class="bi bi-arrow-right me-1"></i>2) Interact with slow feature</li>
+              <li><i class="bi bi-arrow-right me-1"></i>3) Stop recording</li>
+              <li><i class="bi bi-arrow-right me-1"></i>4) Find commits &gt;16ms</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>5) Ranked view → slowest components</li>
+              <li><i class="bi bi-arrow-right me-1"></i>6) Check "why rendered" cause</li>
+              <li><i class="bi bi-arrow-right me-1"></i>7) Apply React.memo / useMemo / useCallback as appropriate</li>
+              <li><i class="bi bi-arrow-right me-1"></i>8) Profile again to confirm improvement before shipping</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests the full optimize-measure-verify cycle, not just knowing hooks.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P21 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p21">
+            <span class="q-num">P21</span><span class="diff-hard me-2">Perf</span>What is the purpose of React.Profiler component?
+          </button>
+        </h2>
+        <div id="p21" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Programmatic profiling API for production use. Wraps specific subtrees. Callback receives timing data for real-user monitoring.</p>
+            <pre class="code-block">&lt;Profiler id=<span class="str">"TrailerTable"</span> onRender={(id, phase, actualDuration) => {
+  analytics.<span class="fn">track</span>(<span class="str">'render'</span>, { id, phase, duration: actualDuration });
+}}&gt;
+  &lt;TrailerTable /&gt;
+&lt;/Profiler&gt;
+
+<span class="cm">// Params: id, phase(mount|update), actualDuration,</span>
+<span class="cm">// baseDuration, startTime, commitTime</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Programmatic profiling API for production use</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Callback params: id, phase, actualDuration, baseDuration</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Minimal overhead — safe in production</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Send to analytics for real-user performance monitoring</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Wrap specific expensive subtrees, not entire app</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Shows knowledge of production monitoring, not just development tools.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P22 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p22">
+            <span class="q-num">P22</span><span class="diff-hard me-2">Perf</span>How do you handle heavy computation in React?
+          </button>
+        </h2>
+        <div id="p22" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Options by situation: Web Worker (off-thread), useMemo (cache), startTransition (defer), requestIdleCallback (chunk), or React Server Components (server-side).</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Web Worker for off-thread computation (&gt;50ms tasks)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>useMemo to cache results and avoid recomputation</li>
+              <li><i class="bi bi-arrow-right me-1"></i>startTransition to defer and not block urgent updates</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Chunked processing via requestIdleCallback/requestAnimationFrame</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React Server Components for server-side computation</li>
+              <li><i class="bi bi-arrow-right me-1"></i>WASM for extremely CPU-intensive work</li>
+            </ul>
+            <pre class="code-block"><span class="cm">// startTransition keeps typing responsive during heavy filter</span>
+<span class="kw">const</span> [query, setQuery] = <span class="fn">useState</span>(<span class="str">''</span>);
+<span class="kw">const</span> [filtered, setFiltered] = <span class="fn">useState</span>(data);
+
+<span class="kw">function</span> <span class="fn">handleSearch</span>(e) {
+  setQuery(e.target.value); <span class="cm">// urgent</span>
+  <span class="fn">startTransition</span>(() => {
+    <span class="fn">setFiltered</span>(data.<span class="fn">filter</span>(item => item.name.<span class="fn">includes</span>(e.target.value)));
+  });
+}</pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Multi-option awareness separates mid-level from senior engineers.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P23 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p23">
+            <span class="q-num">P23</span><span class="diff-hard me-2">Perf</span>What are Core Web Vitals and how does React affect them?
+          </button>
+        </h2>
+        <div id="p23" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>LCP, INP, CLS — Google's user-experience metrics. React 18 concurrent features directly improve INP. SSR improves LCP. Always set image dimensions to prevent CLS.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>LCP (Largest Contentful Paint): use SSR, optimize images, reduce render-blocking JS</li>
+              <li><i class="bi bi-arrow-right me-1"></i>INP (Interaction to Next Paint): avoid long tasks, use startTransition, reduce event handler work</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>CLS (Cumulative Layout Shift): always set image dimensions, avoid inserting content above existing, use CSS aspect-ratio</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React 18 concurrent features directly improve INP</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Core Web Vitals are ranking signals — increasingly required frontend knowledge.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P24 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p24">
+            <span class="q-num">P24</span><span class="diff-hard me-2">Perf</span>How does concurrent mode improve perceived performance?
+          </button>
+        </h2>
+        <div id="p24" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Concurrent rendering lets React interrupt low-priority work for urgent updates. Typing stays responsive while filtering a large list. startTransition and useDeferredValue are the user-facing APIs.</p>
+            <pre class="code-block"><span class="cm">// useDeferredValue: defer expensive re-render</span>
+<span class="kw">const</span> deferredQuery = <span class="fn">useDeferredValue</span>(query);
+<span class="kw">const</span> filtered = <span class="fn">useMemo</span>(
+  () => items.<span class="fn">filter</span>(i => i.name.<span class="fn">includes</span>(deferredQuery)),
+  [deferredQuery, items]
+);
+<span class="cm">// Input stays responsive; list updates when React has time</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React can interrupt low-priority work to handle urgent updates (typing)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Can show stale UI while preparing next version</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Suspense boundaries show fallbacks for slow loading</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>startTransition marks updates as non-urgent</li>
+              <li><i class="bi bi-arrow-right me-1"></i>useDeferredValue defers expensive derivations</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Result: 60fps even during heavy renders</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> React 18's headline feature — every senior interview covers this.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P25 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#p25">
+            <span class="q-num">P25</span><span class="diff-hard me-2">Perf</span>What is the difference between debounce and throttle?
+          </button>
+        </h2>
+        <div id="p25" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Debounce fires once after a quiet period. Throttle fires at most once per N ms. Both prevent excessive calls — use debounce for search input, throttle for scroll/mousemove.</p>
+            <pre class="code-block"><span class="kw">import</span> { debounce, throttle } <span class="kw">from</span> <span class="str">'lodash-es'</span>;
+
+<span class="cm">// Debounce: fires after 300ms quiet period</span>
+<span class="kw">const</span> handleSearch = <span class="fn">useMemo</span>(
+  () => <span class="fn">debounce</span>(query => <span class="fn">fetchResults</span>(query), <span class="num">300</span>),
+  []
+);
+
+<span class="cm">// Throttle: fires at most once per 100ms</span>
+<span class="kw">const</span> handleScroll = <span class="fn">useMemo</span>(
+  () => <span class="fn">throttle</span>(e => <span class="fn">updatePosition</span>(e), <span class="num">100</span>),
+  []
+);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Debounce: delay until N ms after last call — groups rapid calls into one</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use for: search input, form validation, resize events</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Throttle: execute at most once per N ms regardless of frequency</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use for: scroll handlers, mousemove, animations</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Common interview question testing event optimization knowledge.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /accordion perf-list -->
+  </div><!-- /perf-pane -->
+
+  <!-- ==================== TRICKY TAB ==================== -->
+  <div class="tab-pane fade" id="tricky-pane" role="tabpanel">
+    <div class="accordion" id="tricky-list">
+
+      <!-- T1 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t1">
+            <span class="q-num">T1</span><span class="diff-tricky me-2">Tricky</span>What happens when you call setState inside render()?
+          </button>
+        </h2>
+        <div id="t1" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Causes infinite loop: render → setState → re-render → setState → ... React throws "Too many re-renders" error. Never call setState unconditionally in the component body.</p>
+            <pre class="code-block"><span class="cm">// ❌ Infinite loop — never do this</span>
+<span class="kw">function</span> <span class="fn">BadComponent</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="fn">setCount</span>(count + <span class="num">1</span>); <span class="cm">// runs every render → causes render → runs again</span>
+  <span class="kw">return</span> &lt;div&gt;{count}&lt;/div&gt;;
+}
+<span class="cm">// Error: Too many re-renders.</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Causes infinite loop</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React detects and throws "Too many re-renders" error</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Never call setState/useState setter unconditionally in component body</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Use useEffect for side effects, event handlers for user interactions</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Derive values instead of storing them</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests understanding of the render/state cycle — common beginner trap.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T2 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t2">
+            <span class="q-num">T2</span><span class="diff-tricky me-2">Tricky</span>Why does useState return an array, not an object?
+          </button>
+        </h2>
+        <div id="t2" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Array destructuring lets you name the state and setter anything you want. Object destructuring would require verbose renaming for multiple state instances.</p>
+            <pre class="code-block"><span class="cm">// ✅ Array: name anything you want</span>
+<span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+<span class="kw">const</span> [name, setName] = <span class="fn">useState</span>(<span class="str">''</span>);
+
+<span class="cm">// ❌ If it were an object, you'd need to rename:</span>
+<span class="kw">const</span> { state: count, setState: setCount } = <span class="fn">useState</span>(<span class="num">0</span>);
+<span class="kw">const</span> { state: name, setState: setName } = <span class="fn">useState</span>(<span class="str">''</span>);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Array destructuring lets you choose any variable name</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Object destructuring would require renaming for each instance</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Deliberate API design for ergonomic multiple instances</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests understanding of deliberate API design decisions.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T3 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t3">
+            <span class="q-num">T3</span><span class="diff-tricky me-2">Tricky</span>What is the difference between null, undefined, false and 0 in JSX rendering?
+          </button>
+        </h2>
+        <div id="t3" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>null/undefined/false render nothing. 0 renders the character "0" — the most common JSX bug. Use <code>array.length &gt; 0 &amp;&amp;</code> not <code>array.length &amp;&amp;</code>.</p>
+            <pre class="code-block"><span class="cm">// ❌ Classic bug: renders "0" when array is empty</span>
+{items.length && &lt;List items={items} /&gt;}
+
+<span class="cm">// ✅ Correct: explicit boolean check</span>
+{items.length &gt; <span class="num">0</span> && &lt;List items={items} /&gt;}
+
+<span class="cm">// null/undefined/false → nothing rendered</span>
+<span class="cm">// 0 → renders "0"  ← THE TRAP</span>
+<span class="cm">// NaN → renders "NaN"</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>null → renders nothing</li>
+              <li><i class="bi bi-arrow-right me-1"></i>undefined → renders nothing</li>
+              <li><i class="bi bi-arrow-right me-1"></i>false → renders nothing</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>0 → renders the character "0" (visible — this is the bug!)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>NaN → renders "NaN" (also visible)</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Extremely common bug — nearly every React dev has hit this. Tests attention to JSX rendering rules.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T4 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t4">
+            <span class="q-num">T4</span><span class="diff-tricky me-2">Tricky</span>If you have useState([]) and push to the array, does React re-render?
+          </button>
+        </h2>
+        <div id="t4" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>No. Direct mutation doesn't change the reference, so Object.is() passes and no re-render is scheduled. Always create a new array with spread.</p>
+            <pre class="code-block"><span class="cm">// ❌ Mutates in place — React won't re-render</span>
+<span class="kw">const</span> [items, setItems] = <span class="fn">useState</span>([]);
+items.<span class="fn">push</span>(newItem); <span class="cm">// same reference!</span>
+
+<span class="cm">// ✅ New reference — React re-renders</span>
+<span class="fn">setItems</span>(prev => [...prev, newItem]);
+
+<span class="cm">// ✅ Also correct</span>
+<span class="fn">setItems</span>([...items, newItem]);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Direct mutation doesn't change the reference</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React compares state by reference (Object.is)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>No re-render scheduled — UI becomes stale</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Also corrupts React DevTools time-travel</li>
+              <li><i class="bi bi-arrow-right me-1"></i>On next unrelated re-render, mutated value shows up unexpectedly</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Always create a new array: setState(prev => [...prev, item])</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Fundamental immutability concept — source of many subtle state bugs.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T5 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t5">
+            <span class="q-num">T5</span><span class="diff-tricky me-2">Tricky</span>What happens if useEffect's cleanup runs before the effect runs again?
+          </button>
+        </h2>
+        <div id="t5" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>That IS the correct behavior. On each re-render with changed deps: cleanup from previous run fires first (with old captured values), then new effect runs. This prevents duplicate subscriptions.</p>
+            <pre class="code-block"><span class="fn">useEffect</span>(() => {
+  console.<span class="fn">log</span>(<span class="str">'Effect runs'</span>, id);
+  <span class="kw">const</span> sub = <span class="fn">subscribe</span>(id);
+
+  <span class="kw">return</span> () => {
+    console.<span class="fn">log</span>(<span class="str">'Cleanup runs first'</span>, id); <span class="cm">// previous id</span>
+    sub.<span class="fn">unsubscribe</span>();
+  };
+}, [id]); <span class="cm">// id changes → cleanup(old) → effect(new)</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Cleanup from previous render runs first (with previous captured values)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Then new effect runs with new values</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Ensures listeners/timers from old render are torn down before new ones set up</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Prevents memory leaks and duplicate event handlers</li>
+              <li><i class="bi bi-arrow-right me-1"></i>This is intentional React behavior, not a bug</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests deep understanding of the useEffect lifecycle.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T6 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t6">
+            <span class="q-num">T6</span><span class="diff-tricky me-2">Tricky</span>Why does React.StrictMode run effects twice in development?
+          </button>
+        </h2>
+        <div id="t6" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>React 18 StrictMode intentionally mounts → unmounts → remounts in development to expose cleanup bugs. Production mounts once. If double-mount breaks your app, you have a missing cleanup.</p>
+            <pre class="code-block"><span class="cm">// StrictMode dev behavior:</span>
+<span class="cm">// 1. Mount → effect runs</span>
+<span class="cm">// 2. Unmount → cleanup runs</span>
+<span class="cm">// 3. Remount → effect runs again</span>
+
+<span class="cm">// If this breaks your app:</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">const</span> connection = <span class="fn">connect</span>();  <span class="cm">// must be idempotent</span>
+  <span class="kw">return</span> () => connection.<span class="fn">disconnect</span>(); <span class="cm">// cleanup required</span>
+}, []);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Intentional: mount → unmount → remount in development only</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Reveals cleanup bugs (duplicate subscriptions, uncleared timers)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Production mounts once — extra mount is dev-only</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>If your app breaks with double-mounting, it has a cleanup bug</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Suppressing StrictMode to fix the symptom hides the real bug</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> StrictMode confusion is extremely common — tests understanding of React's dev tools.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T7 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t7">
+            <span class="q-num">T7</span><span class="diff-tricky me-2">Tricky</span>What is the difference between rendering and committing in React?
+          </button>
+        </h2>
+        <div id="t7" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Render phase: calls component functions, builds fiber tree — pure, interruptible. Commit phase: applies DOM changes, runs effects — synchronous, not interruptible.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Render phase: calls components, builds virtual DOM, can be interrupted, may run multiple times (concurrent mode)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Commit phase: applies DOM changes, runs useLayoutEffect, then useEffect</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Commit is synchronous and not interruptible</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Never cause side effects in render phase (may run multiple times!)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>This is why render functions must be pure</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Core React internals — separates candidates who understand React's architecture.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T8 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t8">
+            <span class="q-num">T8</span><span class="diff-tricky me-2">Tricky</span>If two components use the same Context, do they always re-render together?
+          </button>
+        </h2>
+        <div id="t8" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>They both re-render when the Provider value changes — but they're independent for other reasons. They don't re-render "together"; each responds to its own state/props.</p>
+            <pre class="code-block"><span class="cm">// Both re-render when Provider value changes</span>
+<span class="kw">function</span> <span class="fn">ComponentA</span>() { <span class="kw">const</span> ctx = <span class="fn">useContext</span>(MyCtx); ... }
+<span class="kw">function</span> <span class="fn">ComponentB</span>() { <span class="kw">const</span> ctx = <span class="fn">useContext</span>(MyCtx); ... }
+
+<span class="cm">// But ComponentA re-rendering doesn't cause ComponentB to re-render</span>
+<span class="cm">// unless they share ancestor state or the context value changed</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Both re-render when Provider value reference changes</li>
+              <li><i class="bi bi-arrow-right me-1"></i>They don't re-render due to each other's local state/prop changes</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Context only links them on context value changes</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests precise understanding of Context propagation rules.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T9 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t9">
+            <span class="q-num">T9</span><span class="diff-tricky me-2">Tricky</span>What happens if you return nothing from a component (no return statement)?
+          </button>
+        </h2>
+        <div id="t9" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Returning undefined (implicit no-return) throws: "Nothing was returned from render." Return null explicitly to render nothing.</p>
+            <pre class="code-block"><span class="cm">// ❌ Throws — arrow function with block body returns undefined</span>
+<span class="kw">const</span> MyComp = () => { &lt;div&gt;Oops&lt;/div&gt; };
+
+<span class="cm">// ✅ Arrow shorthand — implicit return of JSX</span>
+<span class="kw">const</span> MyComp = () => &lt;div&gt;Works&lt;/div&gt;;
+
+<span class="cm">// ✅ Return null to render nothing</span>
+<span class="kw">const</span> MyComp = () => <span class="kw">null</span>;</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Returns undefined throws "Nothing was returned from render"</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Must return null (not undefined) to render nothing</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Arrow function shorthand () =&gt; expr works; () =&gt; { expr } returns undefined</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Common syntax gotcha, especially for developers coming from other frameworks.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T10 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t10">
+            <span class="q-num">T10</span><span class="diff-tricky me-2">Tricky</span>Can you use hooks in class components?
+          </button>
+        </h2>
+        <div id="t10" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>No. Hooks rely on a linked list attached to the function component's fiber node. Class components have a different internal representation.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Hooks rely on linked list on function component's fiber node</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Class components use this.state/this.props — different internals</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Cannot retrofit hooks into class components</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Workaround: wrap hook logic in functional component HOC</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Or use render props with functional component inside</li>
+              <li><i class="bi bi-arrow-right me-1"></i>To migrate: gradually convert class components to functional</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests knowledge of hook implementation constraints and migration strategies.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T11 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t11">
+            <span class="q-num">T11</span><span class="diff-tricky me-2">Tricky</span>What is the output of rendering false, null, undefined, and 0 in JSX?
+          </button>
+        </h2>
+        <div id="t11" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>false/null/undefined → nothing. 0 → "0" character (visible). NaN → "NaN" (visible). Only 0 and NaN produce visible output — this surprises developers.</p>
+            <pre class="code-block">{<span class="kw">false</span>}     <span class="cm">// → nothing</span>
+{<span class="kw">null</span>}      <span class="cm">// → nothing</span>
+{<span class="kw">undefined</span>} <span class="cm">// → nothing</span>
+{<span class="num">0</span>}         <span class="cm">// → "0"  ← VISIBLE!</span>
+{<span class="fn">NaN</span>}       <span class="cm">// → "NaN" ← VISIBLE!</span>
+{<span class="str">""</span>}        <span class="cm">// → nothing (empty string)</span></pre>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>0 → renders "0" (visible — the infamous bug!)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>NaN → renders "NaN" (also visible)</li>
+            </ul>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>false/null/undefined all render nothing</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Empty string "" renders nothing</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Precise knowledge of JSX rendering rules. 0 bug trips up even experienced developers.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T12 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t12">
+            <span class="q-num">T12</span><span class="diff-tricky me-2">Tricky</span>Why can't you use async functions directly as useEffect callbacks?
+          </button>
+        </h2>
+        <div id="t12" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>useEffect expects undefined or a synchronous cleanup function. Async functions always return a Promise. Define async function inside the effect and call it.</p>
+            <pre class="code-block"><span class="cm">// ❌ useEffect receives a Promise as "cleanup" — ignored</span>
+<span class="fn">useEffect</span>(<span class="kw">async</span> () => { <span class="kw">await</span> <span class="fn">fetchData</span>(); }, []);
+
+<span class="cm">// ✅ Correct: define async function inside, call it</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">const</span> controller = <span class="kw">new</span> <span class="fn">AbortController</span>();
+  <span class="kw">async function</span> <span class="fn">load</span>() {
+    <span class="kw">const</span> data = <span class="kw">await</span> <span class="fn">fetchData</span>({ signal: controller.signal });
+    <span class="fn">setData</span>(data);
+  }
+  <span class="fn">load</span>();
+  <span class="kw">return</span> () => controller.<span class="fn">abort</span>(); <span class="cm">// synchronous cleanup</span>
+}, []);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>useEffect expects undefined or a synchronous cleanup function</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Async functions always return a Promise</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React receives Promise as "cleanup" and silently ignores it</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Fix: define async function inside effect, call it, return separate synchronous cleanup</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use AbortController to cancel fetch on cleanup</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Very common mistake — tests understanding of useEffect's contract.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T13 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t13">
+            <span class="q-num">T13</span><span class="diff-tricky me-2">Tricky</span>What happens when you setState to the same value?
+          </button>
+        </h2>
+        <div id="t13" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>React uses Object.is(). Primitive same value = bail out, no re-render. Same-content object with different reference still triggers re-render (different reference).</p>
+            <pre class="code-block"><span class="cm">// Primitives: bails out (no re-render)</span>
+<span class="fn">setCount</span>(<span class="num">5</span>); <span class="cm">// if count is already 5 → no re-render</span>
+<span class="fn">setName</span>(<span class="str">'Alice'</span>); <span class="cm">// if name is already 'Alice' → no re-render</span>
+
+<span class="cm">// Objects: always re-renders (different reference)</span>
+<span class="fn">setUser</span>({ name: <span class="str">'Alice'</span> }); <span class="cm">// new object → re-render</span>
+<span class="fn">setUser</span>(currentUser); <span class="cm">// same reference → no re-render</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React uses Object.is() for comparison</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Primitives with same value: bails out, no re-render</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Objects/arrays: same content but different reference = re-render</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests understanding of React's bail-out optimization and referential equality.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T14 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t14">
+            <span class="q-num">T14</span><span class="diff-tricky me-2">Tricky</span>How many times does a React component render when mounted?
+          </button>
+        </h2>
+        <div id="t14" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Production: 1 render. StrictMode development: 2 renders (double-invocation). Never rely on render count for business logic.</p>
+            <pre class="code-block"><span class="cm">// Without StrictMode (production): 1 render</span>
+<span class="cm">// With StrictMode (development): 2 renders</span>
+<span class="cm">// This is why effects must be cleanup-safe:</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">const</span> sub = events.<span class="fn">subscribe</span>();
+  <span class="kw">return</span> () => sub.<span class="fn">unsubscribe</span>(); <span class="cm">// handles double-mount</span>
+}, []);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Without StrictMode (production): 1 render</li>
+              <li><i class="bi bi-arrow-right me-1"></i>With StrictMode (development): 2 renders (double-invocation)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Never rely on render count for business logic</li>
+            </ul>
+            <ul class="ans-list amber">
+              <li><i class="bi bi-arrow-right me-1"></i>Cleanup must be idempotent to handle double-mount in StrictMode</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> StrictMode behavior surprises developers; tests understanding of dev vs production differences.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T15 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t15">
+            <span class="q-num">T15</span><span class="diff-tricky me-2">Tricky</span>Why does {} !== {} in JavaScript, and why does this matter for React.memo?
+          </button>
+        </h2>
+        <div id="t15" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Objects compare by reference, not content. Each {} literal creates a new object. Props passed as inline objects always fail React.memo's shallow check.</p>
+            <pre class="code-block"><span class="cm">// JavaScript truth</span>
+console.<span class="fn">log</span>({} === {}); <span class="cm">// false (different references)</span>
+
+<span class="cm">// ❌ Breaks memo: new object every render</span>
+&lt;MemoizedChart style={{ color: <span class="str">'red'</span> }} /&gt;
+
+<span class="cm">// ✅ Stable reference: defined outside component</span>
+<span class="kw">const</span> CHART_STYLE = { color: <span class="str">'red'</span> };
+&lt;MemoizedChart style={CHART_STYLE} /&gt;
+
+<span class="cm">// ✅ Or memoize the object</span>
+<span class="kw">const</span> style = <span class="fn">useMemo</span>(() => ({ color }), [color]);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Objects compared by reference (identity), not content</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Each {} literal creates a new object in memory</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React.memo uses Object.is() — new reference always fails</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Inline style={{}}, config={{}}, handlers={{}} all break memoization</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Fix: constant outside component, useMemo, or restructure props</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Reference equality is the #1 source of memoization failures.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T16 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t16">
+            <span class="q-num">T16</span><span class="diff-tricky me-2">Tricky</span>What happens if you update state inside useEffect without the right deps?
+          </button>
+        </h2>
+        <div id="t16" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Missing dep = stale closure (reads old value). State in deps that you update = infinite loop. Use functional updates to break the loop.</p>
+            <pre class="code-block"><span class="cm">// ❌ Stale closure: count never updates inside effect</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">const</span> id = setInterval(() => <span class="fn">setCount</span>(count + <span class="num">1</span>), <span class="num">1000</span>);
+  <span class="kw">return</span> () => <span class="fn">clearInterval</span>(id);
+}, []); <span class="cm">// count missing from deps</span>
+
+<span class="cm">// ✅ Functional update removes need for count as dep</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">const</span> id = setInterval(() => <span class="fn">setCount</span>(c => c + <span class="num">1</span>), <span class="num">1000</span>);
+  <span class="kw">return</span> () => <span class="fn">clearInterval</span>(id);
+}, []);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Missing dep from deps array = stale closure (effect reads old value forever)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>State in deps that you update inside = infinite loop</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Fix stale closure: add to deps</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Fix loop: use functional update form setState(prev => ...) which doesn't need state as dep</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Stale closures are one of the trickiest useEffect bugs.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T17 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t17">
+            <span class="q-num">T17</span><span class="diff-tricky me-2">Tricky</span>Can two different calls to useState share the same state?
+          </button>
+        </h2>
+        <div id="t17" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>No. Each useState call creates independent state, keyed by hook call position. Each component instance also has its own isolated state.</p>
+            <pre class="code-block"><span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [countA, setCountA] = <span class="fn">useState</span>(<span class="num">0</span>); <span class="cm">// hook position 1</span>
+  <span class="kw">const</span> [countB, setCountB] = <span class="fn">useState</span>(<span class="num">0</span>); <span class="cm">// hook position 2</span>
+  <span class="cm">// Completely independent state cells</span>
+}
+
+<span class="cm">// Two instances also have independent state</span>
+&lt;&gt;&lt;Counter /&gt;&lt;Counter /&gt;&lt;/&gt; <span class="cm">// each has own countA, countB</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Each useState call creates independent state</li>
+              <li><i class="bi bi-arrow-right me-1"></i>State is keyed by hook call position in the fiber</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Each component instance has its own isolated state</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>This is why hooks must be called in the same order every render (Rules of Hooks)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>No sharing between calls — use Context/store for shared state</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests understanding of React's hook internals and rules.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T18 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t18">
+            <span class="q-num">T18</span><span class="diff-tricky me-2">Tricky</span>What happens when a key changes on a component?
+          </button>
+        </h2>
+        <div id="t18" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>React treats it as a completely different component. Old: cleanup runs, unmounts, state destroyed. New: mounts fresh, state initialized. Useful pattern for resetting state.</p>
+            <pre class="code-block"><span class="cm">// Reset form state by changing the key</span>
+<span class="kw">const</span> [formKey, setFormKey] = <span class="fn">useState</span>(<span class="num">0</span>);
+
+<span class="kw">function</span> <span class="fn">handleReset</span>() {
+  <span class="fn">setFormKey</span>(k => k + <span class="num">1</span>); <span class="cm">// new key = new instance = clean slate</span>
+}
+
+&lt;UserForm key={formKey} /&gt; <span class="cm">// completely re-mounts on key change</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>New key = completely different component to React</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Old component: cleanup runs, unmounts, state destroyed</li>
+              <li><i class="bi bi-arrow-right me-1"></i>New component: mounts fresh, state initialized, effects run</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Useful pattern: deliberately change key to reset component state</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Common use: reset a form after submission, switching between user profiles</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Key's role beyond list rendering is a powerful and often-missed pattern.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T19 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t19">
+            <span class="q-num">T19</span><span class="diff-tricky me-2">Tricky</span>Why should you never define a component inside another component?
+          </button>
+        </h2>
+        <div id="t19" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Inner component gets new function reference every parent render. React unmounts/remounts because the "type" changed. State is destroyed, focus lost, performance tanks.</p>
+            <pre class="code-block"><span class="cm">// ❌ InputRow recreated every render of Form</span>
+<span class="kw">function</span> <span class="fn">Form</span>() {
+  <span class="kw">function</span> <span class="fn">InputRow</span>({ label }) { <span class="cm">// new function each render</span>
+    <span class="kw">return</span> &lt;input placeholder={label} /&gt;;
+  }
+  <span class="kw">return</span> &lt;InputRow label=<span class="str">"Name"</span> /&gt;; <span class="cm">// unmounts/remounts!</span>
+}
+
+<span class="cm">// ✅ Define at module level</span>
+<span class="kw">function</span> <span class="fn">InputRow</span>({ label }) {
+  <span class="kw">return</span> &lt;input placeholder={label} /&gt;;
+}
+<span class="kw">function</span> <span class="fn">Form</span>() { <span class="kw">return</span> &lt;InputRow label=<span class="str">"Name"</span> /&gt;; }</pre>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>New function reference = different type = unmount old + mount new</li>
+              <li><i class="bi bi-arrow-right me-1"></i>State is destroyed on every parent re-render</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Input focus lost, performance tanks</li>
+            </ul>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Always define components at module level</li>
+              <li><i class="bi bi-arrow-right me-1"></i>This is also the cause of the "input loses focus on every keystroke" bug</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Very common bug — tests understanding of component identity.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T20 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t20">
+            <span class="q-num">T20</span><span class="diff-tricky me-2">Tricky</span>What is the difference between React 17 and React 18 root API?
+          </button>
+        </h2>
+        <div id="t20" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>React 17 uses ReactDOM.render(). React 18 uses ReactDOM.createRoot(). New API enables concurrent features, automatic batching, and Suspense improvements.</p>
+            <pre class="code-block"><span class="cm">// React 17</span>
+ReactDOM.<span class="fn">render</span>(&lt;App /&gt;, document.<span class="fn">getElementById</span>(<span class="str">'root'</span>));
+
+<span class="cm">// React 18 — enables concurrent features</span>
+<span class="kw">const</span> root = ReactDOM.<span class="fn">createRoot</span>(document.<span class="fn">getElementById</span>(<span class="str">'root'</span>));
+root.<span class="fn">render</span>(&lt;App /&gt;);
+
+<span class="cm">// SSR: hydrateRoot replaces ReactDOM.hydrate</span>
+ReactDOM.<span class="fn">hydrateRoot</span>(container, &lt;App /&gt;);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React 17: ReactDOM.render() — legacy, no concurrent features</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React 18: createRoot() enables startTransition, Suspense improvements, automatic batching</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Using legacy render() in React 18 opts out of concurrent mode</li>
+              <li><i class="bi bi-arrow-right me-1"></i>hydrateRoot() replaces ReactDOM.hydrate() for SSR</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> React 18 migration knowledge expected for most mid-senior roles.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T21 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t21">
+            <span class="q-num">T21</span><span class="diff-tricky me-2">Tricky</span>What happens if you throw an error in useEffect?
+          </button>
+        </h2>
+        <div id="t21" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Errors in useEffect are NOT caught by Error Boundaries. They propagate to the browser's uncaught error handler. Use try/catch inside useEffect for async operations.</p>
+            <pre class="code-block"><span class="cm">// ❌ Error Boundary won't catch this</span>
+<span class="fn">useEffect</span>(() => { <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">'oops'</span>); }, []);
+
+<span class="cm">// ✅ Catch errors inside the effect</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">async function</span> <span class="fn">load</span>() {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> data = <span class="kw">await</span> <span class="fn">fetchData</span>();
+      <span class="fn">setData</span>(data);
+    } <span class="kw">catch</span> (err) {
+      <span class="fn">setError</span>(err); <span class="cm">// handle gracefully</span>
+    }
+  }
+  <span class="fn">load</span>();
+}, []);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Errors in useEffect NOT caught by Error Boundaries</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Error propagates to browser's uncaught error handler</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Async errors inside useEffect also not caught by Error Boundaries</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Use try/catch inside useEffect for async operations</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Set error state to handle gracefully in render</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Error Boundary limitations are frequently misunderstood.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T22 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t22">
+            <span class="q-num">T22</span><span class="diff-tricky me-2">Tricky</span>Is setState synchronous or asynchronous?
+          </button>
+        </h2>
+        <div id="t22" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>In React 18: always asynchronous and batched. Calling setState schedules a re-render; state variable keeps old value in current execution.</p>
+            <pre class="code-block"><span class="cm">// ❌ Reads stale state immediately after set</span>
+<span class="fn">setCount</span>(count + <span class="num">1</span>);
+console.<span class="fn">log</span>(count); <span class="cm">// still old value!</span>
+
+<span class="cm">// ✅ To read new value: useEffect or next render</span>
+<span class="fn">useEffect</span>(() => {
+  console.<span class="fn">log</span>(<span class="str">'New count:'</span>, count);
+}, [count]);
+
+<span class="cm">// React 18 batches ALL updates (even in setTimeout)</span>
+setTimeout(() => {
+  <span class="fn">setA</span>(<span class="num">1</span>); <span class="fn">setB</span>(<span class="num">2</span>); <span class="cm">// single re-render (React 18)</span>
+}, <span class="num">100</span>);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React 18: always asynchronous and batched</li>
+              <li><i class="bi bi-arrow-right me-1"></i>setState schedules a re-render — doesn't mutate current variable</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React 18: automatic batching even in setTimeout/Promises</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>React 17: inside event handlers batched; outside (setTimeout/Promises) was synchronous</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React 18 removed this inconsistency</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Classic interview question — tests async state update understanding.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T23 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t23">
+            <span class="q-num">T23</span><span class="diff-tricky me-2">Tricky</span>What happens when you call setState in componentWillUnmount?
+          </button>
+        </h2>
+        <div id="t23" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>React ignores the state update (component is unmounting). Usually indicates an async operation completed after unmount. Fix with AbortController/clearTimeout in cleanup.</p>
+            <pre class="code-block"><span class="cm">// ❌ setState called after unmount (async operation)</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="fn">fetchData</span>().then(data => <span class="fn">setData</span>(data)); <span class="cm">// might unmount first!</span>
+}, []);
+
+<span class="cm">// ✅ Cancel with AbortController</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">const</span> ctrl = <span class="kw">new</span> <span class="fn">AbortController</span>();
+  <span class="fn">fetchData</span>({ signal: ctrl.signal }).then(data => <span class="fn">setData</span>(data));
+  <span class="kw">return</span> () => ctrl.<span class="fn">abort</span>();
+}, []);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React ignores state update during unmount (no re-render occurs)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Usually: async operation completed after component unmounted</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React 18 relaxed the "Can't perform state update on unmounted" warning</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Fix: cancel async ops in cleanup — AbortController for fetch, clearTimeout for timers</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Common memory leak pattern — tests cleanup best practices.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T24 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t24">
+            <span class="q-num">T24</span><span class="diff-tricky me-2">Tricky</span>What is the difference between controlled and uncontrolled checkbox?
+          </button>
+        </h2>
+        <div id="t24" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Controlled: checked bound to React state, onChange required. Uncontrolled: defaultChecked + ref, DOM manages state. Mixing checked without onChange causes React warning.</p>
+            <pre class="code-block"><span class="cm">// ✅ Controlled</span>
+&lt;input
+  type=<span class="str">"checkbox"</span>
+  checked={isChecked}
+  onChange={e => <span class="fn">setIsChecked</span>(e.target.checked)}
+/&gt;
+
+<span class="cm">// ✅ Uncontrolled</span>
+&lt;input
+  type=<span class="str">"checkbox"</span>
+  defaultChecked={<span class="kw">true</span>}
+  ref={checkboxRef}
+/&gt;
+<span class="cm">// Read: checkboxRef.current.checked</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Controlled: checked prop bound to React state, onChange required (or read-only)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Uncontrolled: defaultChecked sets initial value, DOM manages ongoing state</li>
+            </ul>
+            <ul class="ans-list amber">
+              <li><i class="bi bi-arrow-right me-1"></i>Mixing checked without onChange causes React warning</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Can't switch between controlled/uncontrolled after mount</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use controlled for form validation, uncontrolled for simple cases</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Controlled vs uncontrolled is a standard form handling interview topic.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T25 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t25">
+            <span class="q-num">T25</span><span class="diff-tricky me-2">Tricky</span>Why does console.log(state) after setState show the old value?
+          </button>
+        </h2>
+        <div id="t25" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>setState is asynchronous. The current execution context still holds the old value. New value is available in the next render or via useEffect([state]).</p>
+            <pre class="code-block"><span class="kw">function</span> <span class="fn">handleClick</span>() {
+  <span class="fn">setCount</span>(count + <span class="num">1</span>);
+  console.<span class="fn">log</span>(count); <span class="cm">// ← old value! update is async</span>
+}
+
+<span class="cm">// ✅ Observe in next render</span>
+<span class="fn">useEffect</span>(() => {
+  console.<span class="fn">log</span>(<span class="str">'Updated count:'</span>, count);
+}, [count]);
+
+<span class="cm">// ✅ Or use functional update to work with new value</span>
+<span class="fn">setCount</span>(prev => {
+  console.<span class="fn">log</span>(<span class="str">'Will be:'</span>, prev + <span class="num">1</span>);
+  <span class="kw">return</span> prev + <span class="num">1</span>;
+});</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>setState schedules re-render but doesn't mutate current render's variable</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Current execution still sees old value</li>
+              <li><i class="bi bi-arrow-right me-1"></i>New value available in next render</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>To observe new value: useEffect([state]) or log inside component body</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Functional update form gives access to previous value during update</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Async state is one of the most common React confusions for newcomers.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T26 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t26">
+            <span class="q-num">T26</span><span class="diff-tricky me-2">Tricky</span>What happens when you mutate state directly (state.name = 'new')?
+          </button>
+        </h2>
+        <div id="t26" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Object mutated in memory, but React's Object.is() passes (same reference), so no re-render scheduled. UI shows stale data. On next unrelated re-render, mutated value appears unexpectedly.</p>
+            <pre class="code-block"><span class="cm">// ❌ Mutates object — same reference, no re-render</span>
+<span class="kw">const</span> [user, setUser] = <span class="fn">useState</span>({ name: <span class="str">'Alice'</span> });
+user.name = <span class="str">'Bob'</span>; <span class="cm">// mutated but React won't notice</span>
+
+<span class="cm">// ✅ Create new object — triggers re-render</span>
+<span class="fn">setUser</span>(prev => ({ ...prev, name: <span class="str">'Bob'</span> }));
+
+<span class="cm">// ✅ With Immer for complex nested state</span>
+<span class="fn">setUser</span>(<span class="fn">produce</span>(draft => { draft.name = <span class="str">'Bob'</span>; }));</pre>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Same reference passes Object.is() — no re-render scheduled</li>
+              <li><i class="bi bi-arrow-right me-1"></i>UI becomes stale (shows old values)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Corrupts React DevTools time-travel debugging</li>
+            </ul>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>On next unrelated re-render, mutated value shows up unexpectedly</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Always create new state: setState({ ...state, name: 'new' })</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use Immer for complex nested state mutations</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Immutability is fundamental — tested constantly in React interviews.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T27 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t27">
+            <span class="q-num">T27</span><span class="diff-tricky me-2">Tricky</span>What is the difference between React.createElement and document.createElement?
+          </button>
+        </h2>
+        <div id="t27" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>React.createElement creates a plain JS object (virtual DOM). document.createElement creates an actual DOM node. React.createElement is pure and cheap; DOM creation happens in commit phase.</p>
+            <pre class="code-block"><span class="cm">// React.createElement — creates a lightweight object</span>
+React.<span class="fn">createElement</span>(<span class="str">'div'</span>, { className: <span class="str">'box'</span> }, <span class="str">'Hello'</span>);
+<span class="cm">// → { type: 'div', props: { className: 'box', children: 'Hello' } }</span>
+
+<span class="cm">// JSX compiles to React.createElement</span>
+<span class="cm">// &lt;div className="box"&gt;Hello&lt;/div&gt;</span>
+
+<span class="cm">// document.createElement — creates actual DOM node</span>
+document.<span class="fn">createElement</span>(<span class="str">'div'</span>); <span class="cm">// real browser DOM node</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React.createElement: creates lightweight plain JS object (virtual DOM descriptor)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>No DOM touch — pure JS, cheap to create</li>
+              <li><i class="bi bi-arrow-right me-1"></i>document.createElement: creates actual DOM node in browser</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>React's commit phase calls document.createElement when needed</li>
+              <li><i class="bi bi-arrow-right me-1"></i>JSX compiles to React.createElement</li>
+              <li><i class="bi bi-arrow-right me-1"></i>This is why React renders are safe to interrupt (no DOM side effects in render)</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests understanding of virtual DOM concept at the implementation level.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T28 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t28">
+            <span class="q-num">T28</span><span class="diff-tricky me-2">Tricky</span>Why do React events use synthetic events instead of native events?
+          </button>
+        </h2>
+        <div id="t28" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>SyntheticEvent normalizes cross-browser differences. React uses event delegation (one listener at root). Access native event via e.nativeEvent.</p>
+            <pre class="code-block"><span class="kw">function</span> <span class="fn">handleClick</span>(e) {
+  <span class="cm">// e is SyntheticEvent (normalized, cross-browser)</span>
+  e.<span class="fn">preventDefault</span>(); <span class="cm">// works same in all browsers</span>
+  e.<span class="fn">stopPropagation</span>(); <span class="cm">// stops React event bubbling</span>
+
+  <span class="cm">// Access native event if needed</span>
+  console.<span class="fn">log</span>(e.nativeEvent); <span class="cm">// actual browser event</span>
+}</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>SyntheticEvent wraps native events to normalize cross-browser differences</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React uses event delegation (one listener at root, not per element)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Matches W3C spec interface</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>React 17: event delegation moved from document to React root</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React 17+: event pooling removed (events no longer reused/nullified)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Access native event via e.nativeEvent</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Tests knowledge of React's event system architecture.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T29 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t29">
+            <span class="q-num">T29</span><span class="diff-tricky me-2">Tricky</span>What happens to the DOM when React renders the same element twice?
+          </button>
+        </h2>
+        <div id="t29" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>React UPDATES the existing DOM node — it does NOT unmount/remount. Component state is preserved. Unmount only happens when element type changes or key changes.</p>
+            <pre class="code-block"><span class="cm">// Same type at same position → updates existing DOM node</span>
+<span class="cm">// Before: &lt;Input value="hello" /&gt;</span>
+<span class="cm">// After:  &lt;Input value="world" /&gt;</span>
+<span class="cm">// React: updates value prop on existing DOM input</span>
+
+<span class="cm">// Type changes → unmount + remount (state lost)</span>
+<span class="cm">// Before: &lt;Input /&gt;</span>
+<span class="cm">// After:  &lt;Textarea /&gt;</span>
+<span class="cm">// React: unmounts Input, mounts Textarea</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Same element type at same tree position: updates existing DOM node</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Component state is PRESERVED (React just applies prop changes)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Only unmounts when: element type changes OR key changes</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>This is reconciliation — React's diffing algorithm</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Understanding this explains why conditional rendering matters (type must stay consistent)</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Core reconciliation concept — tests understanding of how React minimizes DOM operations.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T30 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#t30">
+            <span class="q-num">T30</span><span class="diff-tricky me-2">Tricky</span>Why does ESLint warn about missing dependencies in useEffect?
+          </button>
+        </h2>
+        <div id="t30" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>The exhaustive-deps rule prevents stale closure bugs. Values not in deps array are captured at initial render and never update. Suppressing with eslint-disable almost always masks a real bug.</p>
+            <pre class="code-block"><span class="cm">// ❌ ESLint: 'userId' missing from deps</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="fn">fetchUser</span>(userId); <span class="cm">// stale! always uses initial userId</span>
+}, []);
+
+<span class="cm">// ✅ Add userId to deps</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="fn">fetchUser</span>(userId); <span class="cm">// re-fetches when userId changes</span>
+}, [userId]);
+
+<span class="cm">// eslint-disable-next-line react-hooks/exhaustive-deps</span>
+<span class="cm">// ↑ Almost always a mistake — investigate first</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>exhaustive-deps rule prevents stale closure bugs</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Value not in deps = effect captures initial value, never updates</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Part of eslint-plugin-react-hooks</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Suppressing with eslint-disable almost always masks a real bug</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Adding the dep and refactoring to avoid infinite loops is the correct fix</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Stale closures from missing deps are one of the most common useEffect bugs.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /accordion tricky-list -->
+  </div><!-- /tricky-pane -->
+
+  <!-- ==================== SCENARIO TAB ==================== -->
+  <div class="tab-pane fade" id="scenario-pane" role="tabpanel">
+    <div class="accordion" id="scenario-list">
+
+      <!-- SC1 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc1">
+            <span class="q-num">SC1</span><span class="diff-expert me-2">Scenario</span>Your React app is slow. Walk me through diagnosis and fix.
+          </button>
+        </h2>
+        <div id="sc1" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Measure first. Profiler → find slow commits → ranked view → apply targeted fix → re-profile. Never optimize without measuring.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Step 1: React DevTools Profiler — record the slow interaction</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 2: Find commits &gt;16ms in Timeline</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 3: Ranked view shows slowest components</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 4: "Why rendered" shows exact cause</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Step 5: React.memo for pure components, useMemo for expensive derivations, useCallback for passed callbacks</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 6: Check bundle size (bundle analyzer)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 7: Virtualize large lists (react-window)</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Step 8: Code split heavy routes with React.lazy</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 9: Check Context re-render scope (split or memoize Provider value)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Always re-profile after each fix to confirm improvement</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Open-ended performance question tests structured debugging approach.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC2 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc2">
+            <span class="q-num">SC2</span><span class="diff-expert me-2">Scenario</span>Users report a white flash when navigating between pages. How do you fix it?
+          </button>
+        </h2>
+        <div id="sc2" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Causes: lazy-loaded chunk loading, FOUC, or state reset. Fix with Suspense skeleton fallback, route prefetching, and useTransition.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Lazy-loaded route chunk loading (blank during chunk fetch)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>FOUC (Flash of Unstyled Content from CSS-in-JS)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>State reset clearing previous page content</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Add Suspense fallback with skeleton matching page layout near the Router</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Prefetch route chunks: webpackPrefetch magic comment</li>
+            </ul>
+            <pre class="code-block"><span class="cm">// Prefetch on hover for instant navigation</span>
+<span class="kw">const</span> Dashboard = React.<span class="fn">lazy</span>(() =>
+  <span class="kw">import</span>(<span class="cm">/* webpackPrefetch: true */</span> <span class="str">'./Dashboard'</span>)
+);
+
+<span class="cm">// useTransition: keep current page visible during navigation</span>
+<span class="kw">const</span> [isPending, startTransition] = <span class="fn">useTransition</span>();
+<span class="kw">function</span> <span class="fn">navigate</span>(path) {
+  <span class="fn">startTransition</span>(() => router.<span class="fn">push</span>(path));
+}</pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Real-world UX bug requiring knowledge of lazy loading, Suspense, and transitions.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC3 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc3">
+            <span class="q-num">SC3</span><span class="diff-expert me-2">Scenario</span>A form input loses focus on every keystroke. What's the bug?
+          </button>
+        </h2>
+        <div id="sc3" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Almost always: a component defined inside another component. Each keystroke → parent re-renders → new function reference → React unmounts/remounts the input → focus lost.</p>
+            <pre class="code-block"><span class="cm">// ❌ InputField defined inside Form — focus lost each keystroke</span>
+<span class="kw">function</span> <span class="fn">Form</span>() {
+  <span class="kw">const</span> [value, setValue] = <span class="fn">useState</span>(<span class="str">''</span>);
+  <span class="kw">function</span> <span class="fn">InputField</span>() { <span class="cm">// new type each render!</span>
+    <span class="kw">return</span> &lt;input value={value} onChange={e => <span class="fn">setValue</span>(e.target.value)} /&gt;;
+  }
+  <span class="kw">return</span> &lt;InputField /&gt;;
+}
+
+<span class="cm">// ✅ Move InputField outside Form</span>
+<span class="kw">function</span> <span class="fn">InputField</span>({ value, onChange }) {
+  <span class="kw">return</span> &lt;input value={value} onChange={onChange} /&gt;;
+}</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Component defined inside another = new function reference every render</li>
+              <li><i class="bi bi-arrow-right me-1"></i>New reference = different type = unmount old, mount new input</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Focus lost and state reset on every keystroke</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Fix: move component definition to module level</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Also check: key prop changing on every render, or component conditionally rendered by type</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Classic React gotcha — tests knowledge of component identity and stability.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC4 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc4">
+            <span class="q-num">SC4</span><span class="diff-expert me-2">Scenario</span>Your useEffect runs infinitely. How do you debug it?
+          </button>
+        </h2>
+        <div id="sc4" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Confirm with console.log, then check deps for unstable references (objects/arrays/functions created each render) or state updates that trigger their own effect.</p>
+            <pre class="code-block"><span class="cm">// ❌ Infinite loop: options is new array each render</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="fn">fetchData</span>(options);
+}, [options]); <span class="cm">// [{id: 1}] !== [{id: 1}] each render</span>
+
+<span class="cm">// ✅ Stabilize with useMemo</span>
+<span class="kw">const</span> stableOptions = <span class="fn">useMemo</span>(() => ({ id: userId }), [userId]);
+<span class="fn">useEffect</span>(() => { <span class="fn">fetchData</span>(stableOptions); }, [stableOptions]);
+
+<span class="cm">// ❌ Loop: data in deps + setData in effect</span>
+<span class="fn">useEffect</span>(() => { <span class="fn">setData</span>(<span class="fn">transform</span>(data)); }, [data]);</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Step 1: console.log at effect start to confirm infinite loop</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 2: Check deps — is an object/array/function created on every render included?</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 3: Is state being set inside effect that's also in deps?</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Fix unstable deps: useCallback/useMemo</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Fix state-deps loop: use functional update setState(prev => ...) to remove state from deps</li>
+              <li><i class="bi bi-arrow-right me-1"></i>ESLint exhaustive-deps rule helps identify</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Infinite useEffect loops are common in real codebases — tests systematic debugging.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC5 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc5">
+            <span class="q-num">SC5</span><span class="diff-expert me-2">Scenario</span>State updates are getting lost in an event handler. What's happening?
+          </button>
+        </h2>
+        <div id="sc5" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Multiple setState calls reading the same stale state value. Both read count=5, both set to 6 — one increment lost. Fix: always use functional updates for dependent state.</p>
+            <pre class="code-block"><span class="cm">// ❌ Lost update: both async ops read count=5</span>
+<span class="kw">async function</span> <span class="fn">handleTwoIncrements</span>() {
+  <span class="kw">await</span> <span class="fn">operationA</span>();
+  <span class="fn">setCount</span>(count + <span class="num">1</span>); <span class="cm">// reads count=5, sets to 6</span>
+  <span class="kw">await</span> <span class="fn">operationB</span>();
+  <span class="fn">setCount</span>(count + <span class="num">1</span>); <span class="cm">// reads count=5 again! sets to 6</span>
+}
+
+<span class="cm">// ✅ Functional update: always uses latest value</span>
+<span class="fn">setCount</span>(prev => prev + <span class="num">1</span>); <span class="cm">// 5→6</span>
+<span class="fn">setCount</span>(prev => prev + <span class="num">1</span>); <span class="cm">// 6→7 ✓</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Multiple setState calls all read same stale closure value</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Async operations both see state at time of handler call</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Not a React bug — this is closure behavior</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Always use functional updates for state that depends on previous: setState(prev => ...)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Consolidate related updates into single useReducer dispatch</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Fix applies to all batched and async scenarios</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Stale closure in event handlers is a real production bug pattern.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC6 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc6">
+            <span class="q-num">SC6</span><span class="diff-expert me-2">Scenario</span>You need to share state between two components far apart in the tree.
+          </button>
+        </h2>
+        <div id="sc6" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Choose the simplest solution: lift state → Context → URL state → Zustand/Jotai → Redux. Match the tool to the complexity.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>1) Lift state to nearest common ancestor (simplest)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>2) React Context for subtree-wide sharing</li>
+              <li><i class="bi bi-arrow-right me-1"></i>3) URL state (useSearchParams) for shareable/bookmarkable state</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>4) Zustand/Jotai for minimal-boilerplate global state</li>
+              <li><i class="bi bi-arrow-right me-1"></i>5) Redux for complex state with devtools, middleware, normalization</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Choose the simplest option that doesn't cause pain</li>
+            </ul>
+            <pre class="code-block"><span class="cm">// Zustand: minimal global state (no Provider needed)</span>
+<span class="kw">const</span> useStore = <span class="fn">create</span>(set => ({
+  selectedTrailer: <span class="kw">null</span>,
+  <span class="fn">selectTrailer</span>: trailer => <span class="fn">set</span>({ selectedTrailer: trailer })
+}));
+
+<span class="cm">// In any component:</span>
+<span class="kw">const</span> { selectedTrailer, selectTrailer } = <span class="fn">useStore</span>();</pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> State sharing strategy — tests knowledge of the full state management spectrum.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC7 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc7">
+            <span class="q-num">SC7</span><span class="diff-expert me-2">Scenario</span>A modal needs to render above the header's z-index but lives deep in the tree.
+          </button>
+        </h2>
+        <div id="sc7" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>React Portal renders outside the parent DOM hierarchy (escaping z-index stacking context) while remaining in the React tree (events still bubble correctly).</p>
+            <pre class="code-block"><span class="kw">import</span> { createPortal } <span class="kw">from</span> <span class="str">'react-dom'</span>;
+
+<span class="kw">function</span> <span class="fn">Modal</span>({ children, onClose }) {
+  <span class="kw">return</span> <span class="fn">createPortal</span>(
+    &lt;div className=<span class="str">"modal-overlay"</span> onClick={onClose}&gt;
+      &lt;div className=<span class="str">"modal-content"</span>&gt;{children}&lt;/div&gt;
+    &lt;/div&gt;,
+    document.body <span class="cm">// renders at body level</span>
+  );
+}
+<span class="cm">// z-index only competes at body level now</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>createPortal renders outside parent DOM hierarchy (not constrained by parent stacking context)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Remains in React tree — events bubble through React tree correctly</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Attach to document.body so z-index only competes at body level</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Manage focus trap for accessibility (Tab cycling inside modal)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use aria-modal="true" and role="dialog"</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Return focus to trigger element on close</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Portal pattern is essential for modals, tooltips, and dropdowns — frequently asked.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC8 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc8">
+            <span class="q-num">SC8</span><span class="diff-expert me-2">Scenario</span>Your React app sends duplicate API requests. What are the possible causes and fixes?
+          </button>
+        </h2>
+        <div id="sc8" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Main causes: StrictMode double-mounting (dev), missing useEffect cleanup, multiple components fetching independently, or race conditions. Fix with React Query or AbortController.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>React StrictMode double-mounting in dev (mounts twice)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>useEffect missing cleanup (subscription fires twice)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Multiple components independently fetching same data</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>React Query/RTK Query: built-in deduplication, caching, and stale-while-revalidate</li>
+              <li><i class="bi bi-arrow-right me-1"></i>AbortController in useEffect cleanup to cancel in-flight requests</li>
+            </ul>
+            <pre class="code-block"><span class="cm">// ✅ AbortController cleanup prevents duplicate requests</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">const</span> ctrl = <span class="kw">new</span> <span class="fn">AbortController</span>();
+  <span class="fn">fetchTrailers</span>({ signal: ctrl.signal })
+    .then(data => <span class="fn">setTrailers</span>(data))
+    .<span class="fn">catch</span>(err => { <span class="kw">if</span> (!ctrl.signal.aborted) <span class="fn">setError</span>(err); });
+  <span class="kw">return</span> () => ctrl.<span class="fn">abort</span>();
+}, []);</pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Network efficiency and data fetching patterns — tests real-world React experience.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC9 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc9">
+            <span class="q-num">SC9</span><span class="diff-expert me-2">Scenario</span>A component is receiving old data even after a state update. What's the cause?
+          </button>
+        </h2>
+        <div id="sc9" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Stale closure, React.memo blocking on reference equality, or memoized selector not invalidating. Debug by removing memo layers and tracing data flow.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Stale closure in useEffect — effect captured old value, missing dep</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React.memo blocking re-render (new data not reflected in props comparison)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Memoized selector not invalidating (same reference but mutated content)</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Parent not passing updated prop down</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Debug: check useEffect deps, temporarily remove React.memo, log at each level to trace where data stops updating</li>
+            </ul>
+            <pre class="code-block"><span class="cm">// Debug: add logs at each level</span>
+console.<span class="fn">log</span>(<span class="str">'Parent data:'</span>, data); <span class="cm">// does parent have new data?</span>
+console.<span class="fn">log</span>(<span class="str">'Child prop:'</span>, props.data); <span class="cm">// is it passed down?</span>
+<span class="cm">// If prop shows new but UI shows old → stale closure in effect</span>
+<span class="cm">// If prop shows old → React.memo blocking or parent not re-rendering</span></pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Stale data bugs require systematic debugging across the component tree.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC10 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc10">
+            <span class="q-num">SC10</span><span class="diff-expert me-2">Scenario</span>You're building a large table with 10,000 rows. How do you handle this?
+          </button>
+        </h2>
+        <div id="sc10" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Virtualize (react-window/TanStack Virtual) + server-side pagination + memoized rows. Never render all rows upfront under any circumstances.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Virtualize with react-window FixedSizeList or TanStack Virtual (only ~20-30 DOM nodes)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Server-side pagination (fetch page of 50 rows at a time)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Memoize row components with React.memo</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Debounce filtering/sorting triggers</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Web Worker for heavy sort/filter computation on large local datasets</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Use AG Grid or TanStack Table with built-in virtualization</li>
+            </ul>
+            <pre class="code-block"><span class="cm">// TanStack Virtual example</span>
+<span class="kw">const</span> rowVirtualizer = <span class="fn">useVirtualizer</span>({
+  count: rows.length,
+  getScrollElement: () => parentRef.current,
+  estimateSize: () => <span class="num">48</span>, <span class="cm">// row height in px</span>
+  overscan: <span class="num">5</span>,
+});
+<span class="cm">// Renders only visible rows + 5 overscan</span></pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Classic performance scenario — tests knowledge of virtualization as the primary tool.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC11 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc11">
+            <span class="q-num">SC11</span><span class="diff-expert me-2">Scenario</span>A feature should only be visible to admin users. How do you implement this securely?
+          </button>
+        </h2>
+        <div id="sc11" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Frontend guards are UI-only for UX. Security MUST be enforced on the backend. Never put sensitive operations in frontend-only guards.</p>
+            <pre class="code-block"><span class="cm">// Frontend: UI guard (UX only, not security)</span>
+{user.role === <span class="str">'admin'</span> && &lt;AdminPanel /&gt;}
+
+<span class="cm">// Backend: MUST check on every API call</span>
+<span class="cm">// @PreAuthorize("hasRole('ADMIN')")</span>
+<span class="cm">// GET /api/admin/users → 403 if not admin</span>
+
+<span class="cm">// Never rely on frontend alone:</span>
+<span class="cm">// Users can open DevTools and modify JS/state</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Frontend: hide UI with role check — UX improvement only</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Backend: every API endpoint MUST check authorization</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Defense in depth: both layers check</li>
+            </ul>
+            <ul class="ans-list red">
+              <li><i class="bi bi-arrow-right me-1"></i>Never put sensitive data in frontend-only guards</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Users can inspect/modify frontend code and state</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Security through obscurity is not security</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Security awareness is critical — tests understanding that frontend guards are not security controls.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC12 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc12">
+            <span class="q-num">SC12</span><span class="diff-expert me-2">Scenario</span>You need to implement real-time updates (like a chat). What's your architecture?
+          </button>
+        </h2>
+        <div id="sc12" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>WebSocket in custom hook with reconnection logic. Dispatch messages to store. Optimistic updates for sent messages. AbortController-style cleanup on unmount.</p>
+            <pre class="code-block"><span class="kw">function</span> <span class="fn">useWebSocket</span>(url) {
+  <span class="fn">useEffect</span>(() => {
+    <span class="kw">let</span> ws = <span class="kw">new</span> <span class="fn">WebSocket</span>(url);
+    ws.onmessage = ({ data }) => <span class="fn">dispatch</span>(<span class="fn">receiveMessage</span>(<span class="fn">JSON</span>.<span class="fn">parse</span>(data)));
+    ws.onclose = () => setTimeout(() => <span class="fn">reconnect</span>(), <span class="num">3000</span>); <span class="cm">// reconnect</span>
+    <span class="kw">return</span> () => ws.<span class="fn">close</span>();
+  }, [url]);
+}</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>WebSocket in useWebSocket custom hook (connects on mount, cleanup on unmount)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Received messages dispatched to store</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Optimistic updates for sent messages</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Reconnection with exponential backoff</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Presence indicators via join/leave events</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Message queue for offline buffering</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Libraries: Socket.io, native WebSocket API</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Real-time architecture is common in modern apps — tests beyond basic React patterns.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC13 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc13">
+            <span class="q-num">SC13</span><span class="diff-expert me-2">Scenario</span>The user's session expires while they're on a page. How do you handle this gracefully?
+          </button>
+        </h2>
+        <div id="sc13" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Axios interceptor catches 401 → attempt token refresh → retry or redirect to login with return URL. Pre-emptive warning toast 2 min before expiry.</p>
+            <pre class="code-block"><span class="cm">// Axios interceptor for token refresh</span>
+axios.interceptors.response.<span class="fn">use</span>(<span class="kw">null</span>, <span class="kw">async</span> (error) => {
+  <span class="kw">if</span> (error.response?.status === <span class="num">401</span>) {
+    <span class="kw">try</span> {
+      <span class="kw">await</span> <span class="fn">refreshToken</span>();
+      <span class="kw">return</span> axios.<span class="fn">request</span>(error.config); <span class="cm">// retry</span>
+    } <span class="kw">catch</span> {
+      <span class="fn">redirectToLogin</span>(window.location.pathname); <span class="cm">// with return URL</span>
+    }
+  }
+  <span class="kw">return</span> Promise.<span class="fn">reject</span>(error);
+});</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Axios interceptor catches 401 responses</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Attempt token refresh via refresh token (httpOnly cookie)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>If refresh succeeds: retry original request transparently</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>If refresh fails: clear auth state, redirect to /login with current URL as redirect query param</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Pre-emptive warning: set timer for (expiry - 2min), show "Session expiring soon" toast</li>
+              <li><i class="bi bi-arrow-right me-1"></i>After login, redirect back to original URL</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Auth flow handling is expected knowledge for production React applications.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC14 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc14">
+            <span class="q-num">SC14</span><span class="diff-expert me-2">Scenario</span>You need to implement undo functionality for a text editor. How would you approach it?
+          </button>
+        </h2>
+        <div id="sc14" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>useReducer with {past, present, future} history stack. EDIT moves to past, UNDO pops from past, REDO pops from future. Limit history size to prevent memory growth.</p>
+            <pre class="code-block"><span class="kw">const</span> [history, dispatch] = <span class="fn">useReducer</span>(historyReducer, {
+  past: [], present: <span class="str">''</span>, future: []
+});
+
+<span class="cm">// UNDO: past → present → future</span>
+<span class="kw">case</span> <span class="str">'UNDO'</span>:
+  <span class="kw">return</span> {
+    past: state.past.<span class="fn">slice</span>(<span class="num">0</span>, -<span class="num">1</span>),
+    present: state.past.at(-<span class="num">1</span>),
+    future: [state.present, ...state.future]
+  };
+
+<span class="cm">// Keyboard: Ctrl+Z / Ctrl+Shift+Z</span></pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Store history as {past: [], present: content, future: []}</li>
+              <li><i class="bi bi-arrow-right me-1"></i>EDIT: move present to past, clear future, set new present</li>
+              <li><i class="bi bi-arrow-right me-1"></i>UNDO: move present to future, pop last from past into present</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>REDO: move present to past, pop first from future into present</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Limit history size (splice past to maxLength)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>For large docs: store diffs (Immer patches) not full snapshots</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Keyboard: Ctrl+Z / Ctrl+Shift+Z</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> useReducer + state history is a real design pattern interview.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC15 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc15">
+            <span class="q-num">SC15</span><span class="diff-expert me-2">Scenario</span>Your app needs to work offline. How do you implement this with React?
+          </button>
+        </h2>
+        <div id="sc15" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Service Worker (Workbox) for asset caching. IndexedDB for offline data. Sync queue for mutations. Network status hook for UI indicator.</p>
+            <pre class="code-block"><span class="cm">// Network status hook</span>
+<span class="kw">function</span> <span class="fn">useNetworkStatus</span>() {
+  <span class="kw">const</span> [online, setOnline] = <span class="fn">useState</span>(navigator.onLine);
+  <span class="fn">useEffect</span>(() => {
+    <span class="kw">const</span> on = () => <span class="fn">setOnline</span>(<span class="kw">true</span>);
+    <span class="kw">const</span> off = () => <span class="fn">setOnline</span>(<span class="kw">false</span>);
+    window.<span class="fn">addEventListener</span>(<span class="str">'online'</span>, on);
+    window.<span class="fn">addEventListener</span>(<span class="str">'offline'</span>, off);
+    <span class="kw">return</span> () => {
+      window.<span class="fn">removeEventListener</span>(<span class="str">'online'</span>, on);
+      window.<span class="fn">removeEventListener</span>(<span class="str">'offline'</span>, off);
+    };
+  }, []);
+  <span class="kw">return</span> online;
+}</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Service Worker (Workbox) caches app shell and static assets</li>
+              <li><i class="bi bi-arrow-right me-1"></i>IndexedDB for structured offline storage (localForage wrapper)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>React Query offline mode with persistQueryClient</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Sync queue: store mutations in IndexedDB offline, replay on reconnect</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Network status hook: navigator.onLine + online/offline events</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Show offline indicator banner</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Conflict resolution strategy for sync</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> PWA/offline capability is increasingly expected — tests beyond basic React patterns.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC16 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc16">
+            <span class="q-num">SC16</span><span class="diff-expert me-2">Scenario</span>A third-party library is breaking your component tree. How do you isolate it?
+          </button>
+        </h2>
+        <div id="sc16" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Error Boundary catches render errors and shows fallback. Dynamic import prevents blocking main bundle. Adapter component normalizes API.</p>
+            <pre class="code-block"><span class="cm">// Error Boundary isolates library crashes</span>
+&lt;ErrorBoundary fallback={&lt;div&gt;Chart unavailable&lt;/div&gt;}&gt;
+  &lt;HeavyChartLibrary data={data} /&gt;
+&lt;/ErrorBoundary&gt;
+
+<span class="cm">// Adapter: normalize library API to your conventions</span>
+<span class="kw">function</span> <span class="fn">ChartAdapter</span>({ data }) {
+  <span class="kw">return</span> &lt;ThirdPartyChart
+    dataset={<span class="fn">transformToLibFormat</span>(data)}
+    onSelect={item => <span class="fn">onSelect</span>(item.id)}
+  /&gt;;
+}</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Error Boundary: catch render errors, show fallback instead of crashing entire app</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Dynamic import: prevent library from blocking main bundle</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Adapter component: normalize library API to your conventions</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>If library accesses globals dangerously: sandbox in iframe with postMessage</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Pin version strictly in package.json</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Check GitHub issues for specific error</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Consider replacing with alternatives</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Library integration problems are real — tests defensive coding practices.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC17 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc17">
+            <span class="q-num">SC17</span><span class="diff-expert me-2">Scenario</span>You need to animate a list where items are added and removed. How do you implement this?
+          </button>
+        </h2>
+        <div id="sc17" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>CSS transitions can't animate unmounting. Use Framer Motion AnimatePresence to keep elements in DOM until exit animation completes.</p>
+            <pre class="code-block"><span class="kw">import</span> { AnimatePresence, motion } <span class="kw">from</span> <span class="str">'framer-motion'</span>;
+
+&lt;AnimatePresence&gt;
+  {items.<span class="fn">map</span>(item => (
+    &lt;motion.div
+      key={item.id} <span class="cm">// key is essential for AnimatePresence</span>
+      initial={{ opacity: <span class="num">0</span>, y: -<span class="num">20</span> }}
+      animate={{ opacity: <span class="num">1</span>, y: <span class="num">0</span> }}
+      exit={{ opacity: <span class="num">0</span>, x: <span class="num">100</span> }}
+    &gt;
+      {item.name}
+    &lt;/motion.div&gt;
+  ))}
+&lt;/AnimatePresence&gt;</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>CSS transitions alone can't animate unmounting (element removed before transition)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Framer Motion AnimatePresence: wraps list, tracks items by key</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Items stay in DOM until exit animation completes before unmounting</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Each motion.div gets initial (enter), animate (present), exit (leave) props</li>
+              <li><i class="bi bi-arrow-right me-1"></i>key prop is essential — AnimatePresence tracks items by key</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Alternative: React Spring useTransition hook</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Animation with list mutations is a real UI challenge — tests knowledge of specialized libraries.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC18 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc18">
+            <span class="q-num">SC18</span><span class="diff-expert me-2">Scenario</span>Your bundle is 5MB and initial load is slow. List all optimizations.
+          </button>
+        </h2>
+        <div id="sc18" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Analyze → replace heavy libs → dynamic imports → image optimization → server compression → CDN → remove duplicates. Systematic approach across multiple layers.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>1) webpack-bundle-analyzer or rollup-plugin-visualizer to find largest packages</li>
+              <li><i class="bi bi-arrow-right me-1"></i>2) Replace moment.js → date-fns (reduces ~60KB), lodash → lodash-es with cherry-picks</li>
+              <li><i class="bi bi-arrow-right me-1"></i>3) Dynamic imports for all route components with React.lazy</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>4) Lazy load non-critical heavy components (rich text editor, chart library)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>5) Image optimization: WebP, srcset, lazy loading</li>
+              <li><i class="bi bi-arrow-right me-1"></i>6) Remove unused dependencies (npm depcheck)</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>7) Enable gzip/brotli on server (60-80% size reduction)</li>
+              <li><i class="bi bi-arrow-right me-1"></i>8) CDN for static assets</li>
+              <li><i class="bi bi-arrow-right me-1"></i>9) Check for duplicate React versions bundled</li>
+              <li><i class="bi bi-arrow-right me-1"></i>10) Consider SSR for critical path rendering</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Comprehensive bundle optimization is a senior frontend skill — tests breadth of knowledge.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC19 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc19">
+            <span class="q-num">SC19</span><span class="diff-expert me-2">Scenario</span>You're building a micro frontend where multiple React apps share a header component.
+          </button>
+        </h2>
+        <div id="sc19" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Webpack Module Federation exposes the Header as a shared remote. Shell app and MFEs share React/ReactDOM to avoid duplicate instances. Independent deployment pipelines per MFE.</p>
+            <pre class="code-block"><span class="cm">// shell's webpack.config.js (exposes Header)</span>
+<span class="kw">new</span> ModuleFederationPlugin({
+  name: <span class="str">'shell'</span>,
+  filename: <span class="str">'remoteEntry.js'</span>,
+  exposes: { <span class="str">'./Header'</span>: <span class="str">'./src/Header'</span> },
+  shared: { react: { singleton: <span class="kw">true</span> }, <span class="str">'react-dom'</span>: { singleton: <span class="kw">true</span> } }
+});
+
+<span class="cm">// In MFE (consumes Header)</span>
+<span class="kw">const</span> Header = React.<span class="fn">lazy</span>(() => <span class="kw">import</span>(<span class="str">'shell/Header'</span>));</pre>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Webpack Module Federation: shell exposes Header as remote</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Each MFE imports Header from 'shell/Header'</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Shared React/ReactDOM: singleton: true prevents duplicate instances</li>
+            </ul>
+            <ul class="ans-list purple">
+              <li><i class="bi bi-arrow-right me-1"></i>Versioning: semver-compatible sharing, fallback to self-load</li>
+              <li><i class="bi bi-arrow-right me-1"></i>CSS variables or design tokens for consistent theming</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Event bus or URL state for cross-MFE communication</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Independent deployment pipeline for each MFE</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Preload critical remotes for performance</li>
+            </ul>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Micro frontend architecture is increasingly common at scale — advanced scenario.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC20 -->
+      <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#sc20">
+            <span class="q-num">SC20</span><span class="diff-expert me-2">Scenario</span>A user reports that clicking a button triggers the wrong event. How do you debug it?
+          </button>
+        </h2>
+        <div id="sc20" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <p class="ans-hero"><i class="bi bi-check-circle me-2"></i>Systematically check: handler correctness → event bubbling → overlapping invisible elements → portal event routing → z-index/pointer-events CSS.</p>
+            <ul class="ans-list blue">
+              <li><i class="bi bi-arrow-right me-1"></i>Step 1: console.log in button's onClick to confirm correct handler</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 2: Check event bubbling — parent element may catch via bubbling (add e.stopPropagation())</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 3: Check for overlapping elements with Chrome DevTools element inspector (invisible div on top?)</li>
+            </ul>
+            <ul class="ans-list green">
+              <li><i class="bi bi-arrow-right me-1"></i>Step 4: React portals — events bubble through React tree, not DOM tree — check portal context</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 5: Verify event delegation isn't routing to wrong component</li>
+              <li><i class="bi bi-arrow-right me-1"></i>Step 6: Check z-index and pointer-events CSS (pointer-events: none on wrong element?)</li>
+            </ul>
+            <pre class="code-block"><span class="cm">// Debug: log event target to see what's actually clicked</span>
+button.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, e => {
+  console.<span class="fn">log</span>(<span class="str">'target:'</span>, e.target);
+  console.<span class="fn">log</span>(<span class="str">'currentTarget:'</span>, e.currentTarget);
+});
+
+<span class="cm">// CSS: check if invisible element intercepts clicks</span>
+<span class="cm">// pointer-events: none; — disables click events on element</span></pre>
+            <div class="why-asks"><i class="bi bi-question-circle me-1"></i><strong>Why interviewers ask:</strong> Event debugging tests systematic problem-solving and knowledge of event propagation.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /accordion scenario-list -->
+  </div><!-- /scenario-pane -->
+
+</div><!-- /tab-content -->

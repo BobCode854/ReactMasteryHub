@@ -1,0 +1,1113 @@
+<!-- ACCORDION ITEM 1 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q1">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q1" aria-expanded="false" aria-controls="styling-q1">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;1. What are CSS Modules in React?
+    </button>
+  </h2>
+  <div id="styling-q1" class="accordion-collapse collapse" aria-labelledby="heading-styling-q1" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>CSS Modules is a CSS file in which all class names and animation names are scoped locally by default. When you import a CSS Module into a JavaScript or TypeScript file, the build tool (Webpack, Vite, etc.) transforms the class names into unique, auto-generated strings, preventing any accidental name collisions with classes defined elsewhere in the application. This mechanism works by treating every CSS file with the <code>.module.css</code> extension as a module, where each selector is compiled into a unique hash-based identifier. The original author-written class name exists only in your source code; the browser sees a transformed, collision-safe version.</p>
+      <p>In React you import the module as a JavaScript object and reference class names as object properties. This makes your CSS entirely co-located and component-scoped without any runtime overhead, since the transformation happens at build time. CSS Modules support composition via the <code>composes</code> keyword, allowing one rule to inherit styles from another without duplication.</p>
+      <pre class="code-block">/* Button.module.css */
+.button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #005bb5;
+}
+
+.large {
+  composes: button;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+}</pre>
+      <pre class="code-block">// Button.tsx
+import styles from './Button.module.css';
+
+interface ButtonProps {
+  label: string;
+  size?: 'default' | 'large';
+  onClick?: () => void;
+}
+
+export function Button({ label, size = 'default', onClick }: ButtonProps) {
+  const className = size === 'large' ? styles.large : styles.button;
+  return (
+    &lt;button className={className} onClick={onClick}&gt;
+      {label}
+    &lt;/button&gt;
+  );
+}</pre>
+      <p>The compiled output in the browser will render something like <code>class="Button_button__3xYzK"</code>, guaranteeing uniqueness even across a large application with thousands of components. Because everything is standard CSS, browser DevTools, linters, and IDE auto-complete all work without special plugins.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 2 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q2">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q2" aria-expanded="false" aria-controls="styling-q2">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;2. What is the benefit of CSS Modules over global CSS?
+    </button>
+  </h2>
+  <div id="styling-q2" class="accordion-collapse collapse" aria-labelledby="heading-styling-q2" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>The primary benefit of CSS Modules over global CSS is <strong>automatic local scoping</strong>. In global CSS, any class name you define can clash with another class name defined anywhere else in your application or in a third-party library. In a large codebase with many developers, this leads to unintentional style overrides, specificity wars, and fragile code where changing one component's style can silently break a completely unrelated component. CSS Modules eliminate this problem at the tooling level — you never need to manually namespace classes like <code>.Header__logo</code> because the build tool does it for you.</p>
+      <p>A second major benefit is <strong>dead-code elimination</strong>. Because class names are imported as JavaScript object properties, a bundler or static analysis tool can determine which class names are actually referenced and which are not, enabling tree-shaking of unused CSS. Global CSS has no such mechanism; a stylesheet is either entirely included or entirely excluded. CSS Modules also improve maintainability because the CSS for a component lives right next to it, making it immediately obvious which styles belong to which component — you delete the component file, you delete its CSS Module, and nothing else is affected.</p>
+      <pre class="code-block">/* Global CSS — collision-prone */
+/* styles.css */
+.title { font-size: 2rem; }      /* Header component */
+.title { font-size: 1.2rem; }    /* Card component — OVERWRITES Header! */
+
+/* CSS Modules — collision-safe */
+/* Header.module.css */
+.title { font-size: 2rem; }      /* → compiled: Header_title__a1b2c */
+
+/* Card.module.css */
+.title { font-size: 1.2rem; }    /* → compiled: Card_title__d3e4f — no conflict */</pre>
+      <p>CSS Modules also work seamlessly with TypeScript using the <code>typed-css-modules</code> or the Vite/Webpack built-in types, providing compile-time errors when you reference a class that does not exist in the module. This gives developers the same type safety for styling that TypeScript provides for component props.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 3 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q3">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q3" aria-expanded="false" aria-controls="styling-q3">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;3. What is Styled Components?
+    </button>
+  </h2>
+  <div id="styling-q3" class="accordion-collapse collapse" aria-labelledby="heading-styling-q3" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Styled Components is a CSS-in-JS library that allows you to write actual CSS syntax directly inside your JavaScript/TypeScript files using ES6 tagged template literals. Instead of creating separate CSS files or applying class names, you define a styled React component by calling <code>styled.div</code>, <code>styled.button</code>, etc., and embedding CSS inside backtick strings. The library generates unique class names at runtime, injects the styles into a <code>&lt;style&gt;</code> tag in the document head, and returns a React component that applies those styles.</p>
+      <p>The most compelling feature of Styled Components is its ability to receive React props and dynamically adapt styles based on them without switching class names. This eliminates the need for utility functions like <code>clsx</code> for simple prop-driven styling and keeps the logic co-located with the style declaration. It also supports theming through a <code>ThemeProvider</code> context, inheritance via the <code>styled(AnotherComponent)</code> pattern, and global styles via <code>createGlobalStyle</code>.</p>
+      <pre class="code-block">import styled from 'styled-components';
+
+interface ButtonProps {
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const Button = styled.button&lt;ButtonProps&gt;`
+  padding: ${({ size }) =>
+    size === 'lg' ? '12px 24px' : size === 'sm' ? '4px 8px' : '8px 16px'};
+  background-color: ${({ variant }) =>
+    variant === 'secondary' ? 'transparent' : '#0070f3'};
+  color: ${({ variant }) => (variant === 'secondary' ? '#0070f3' : '#fff')};
+  border: 2px solid #0070f3;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+  }
+`;
+
+// Usage
+function App() {
+  return (
+    &lt;&gt;
+      &lt;Button variant="primary" size="md"&gt;Submit&lt;/Button&gt;
+      &lt;Button variant="secondary" size="sm"&gt;Cancel&lt;/Button&gt;
+    &lt;/&gt;
+  );
+}</pre>
+      <p>Styled Components v6 introduced improvements including better TypeScript inference, a smaller runtime, and compatibility with React Server Components when used with the Babel or SWC plugin that extracts styles at build time. Despite its popularity, Styled Components does carry a runtime cost because styles are generated and injected dynamically, which can affect First Contentful Paint in SSR scenarios.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 4 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q4">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q4" aria-expanded="false" aria-controls="styling-q4">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;4. What is Tailwind CSS and how do you use it with React?
+    </button>
+  </h2>
+  <div id="styling-q4" class="accordion-collapse collapse" aria-labelledby="heading-styling-q4" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Tailwind CSS is a utility-first CSS framework that provides a large set of low-level, single-purpose CSS classes — such as <code>flex</code>, <code>pt-4</code>, <code>text-center</code>, <code>bg-blue-500</code>, and <code>hover:opacity-80</code> — which you compose directly in your HTML or JSX to build designs. Instead of writing custom CSS and inventing class names, you build your UI entirely from these atomic utility classes. Tailwind's build step (PostCSS plugin) scans your source files for used class names and generates a CSS file containing only those classes, resulting in extremely small production bundles.</p>
+      <p>To use Tailwind with a React (Vite) project you install the package and configure PostCSS. In React you apply utility classes via the standard <code>className</code> prop. Conditional classes are typically managed with the <code>clsx</code> or <code>cn</code> utility to keep JSX readable. Tailwind v3+ ships with JIT (Just-In-Time) mode enabled by default, which generates styles on-demand and supports arbitrary values like <code>w-[137px]</code>.</p>
+      <pre class="code-block"># Installation
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p</pre>
+      <pre class="code-block">// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        brand: { 500: '#0070f3', 600: '#005bb5' },
+      },
+    },
+  },
+  plugins: [],
+};</pre>
+      <pre class="code-block">// Card.tsx
+import { clsx } from 'clsx';
+
+interface CardProps {
+  title: string;
+  description: string;
+  highlighted?: boolean;
+}
+
+export function Card({ title, description, highlighted }: CardProps) {
+  return (
+    &lt;div
+      className={clsx(
+        'rounded-xl p-6 shadow-md transition-shadow hover:shadow-lg',
+        highlighted ? 'bg-brand-500 text-white' : 'bg-white text-gray-800'
+      )}
+    &gt;
+      &lt;h3 className="text-xl font-semibold mb-2"&gt;{title}&lt;/h3&gt;
+      &lt;p className="text-sm leading-relaxed"&gt;{description}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+      <p>Tailwind encourages a design system mindset by centralizing spacing, colors, typography, and breakpoints in <code>tailwind.config.js</code>. This means every developer on the team uses the same scale, leading to visual consistency without writing a single line of custom CSS for common patterns.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 5 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q5">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q5" aria-expanded="false" aria-controls="styling-q5">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;5. What is inline styling in React?
+    </button>
+  </h2>
+  <div id="styling-q5" class="accordion-collapse collapse" aria-labelledby="heading-styling-q5" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Inline styling in React means passing a JavaScript object directly to the <code>style</code> prop of a JSX element instead of using a CSS class. The object keys are camelCased versions of CSS property names (<code>backgroundColor</code> instead of <code>background-color</code>, <code>fontSize</code> instead of <code>font-size</code>), and the values are strings or numbers. When a number is provided for properties that accept pixel values (like <code>width</code>, <code>margin</code>, <code>padding</code>), React automatically appends <code>px</code>.</p>
+      <p>Inline styles are useful for truly dynamic styles that must be computed at render time from props or state — for instance, animating a progress bar whose width is a percentage calculated from data. They are also zero-setup: no CSS file, no class name management. However, they have significant limitations: you cannot use pseudo-classes (<code>:hover</code>, <code>:focus</code>), pseudo-elements (<code>::before</code>), media queries, or CSS animations. Inline styles also bypass the browser's CSS cascade and have the highest specificity, which can make them difficult to override and debug.</p>
+      <pre class="code-block">// Simple usage
+function Badge({ count }: { count: number }) {
+  const style: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 24,
+    height: 24,
+    borderRadius: '50%',
+    backgroundColor: count > 0 ? '#e53e3e' : '#a0aec0',
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 700,
+  };
+
+  return &lt;span style={style}&gt;{count}&lt;/span&gt;;
+}
+
+// Dynamic style based on props
+function ProgressBar({ percent }: { percent: number }) {
+  return (
+    &lt;div style={{ width: '100%', height: 8, backgroundColor: '#e2e8f0', borderRadius: 4 }}&gt;
+      &lt;div
+        style={{
+          width: `${Math.min(percent, 100)}%`,
+          height: '100%',
+          backgroundColor: '#0070f3',
+          borderRadius: 4,
+          transition: 'width 0.3s ease',
+        }}
+      /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+      <p>For most production use cases, inline styles should be reserved for genuinely dynamic values; all static and semi-static styles belong in CSS Modules, Tailwind utilities, or a CSS-in-JS solution that supports the full CSS feature set. Defining the style object outside the component or memoizing it with <code>useMemo</code> also prevents unnecessary object re-creation on every render.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 6 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q6">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q6" aria-expanded="false" aria-controls="styling-q6">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;6. What is CSS-in-JS? Name some libraries.
+    </button>
+  </h2>
+  <div id="styling-q6" class="accordion-collapse collapse" aria-labelledby="heading-styling-q6" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>CSS-in-JS is a styling paradigm where CSS rules are authored inside JavaScript or TypeScript files, co-located with the component logic, and processed by a JavaScript library rather than a standalone stylesheet. The library is responsible for generating unique class names, injecting <code>&lt;style&gt;</code> tags into the document, and optionally extracting styles to static files at build time. The core motivation is that JavaScript is a more powerful language than CSS for expressing conditional and dynamic styles — you get full access to variables, functions, loops, theme objects, and component props without any CSS-specific workarounds.</p>
+      <p>CSS-in-JS libraries fall into two categories: <strong>runtime</strong> (styles are generated in the browser at runtime using JavaScript) and <strong>zero-runtime / build-time</strong> (styles are extracted to static CSS files during the build, with zero JavaScript execution cost in the browser). Popular libraries include:</p>
+      <ul>
+        <li><strong>Styled Components</strong> — runtime, tagged template literals, very popular</li>
+        <li><strong>Emotion</strong> — runtime with optional zero-runtime mode, smaller bundle than Styled Components</li>
+        <li><strong>Stitches</strong> — near-zero runtime, token-based design system focus</li>
+        <li><strong>Vanilla Extract</strong> — zero-runtime, generates static CSS at build time, TypeScript-first</li>
+        <li><strong>Linaria</strong> — zero-runtime, extracts CSS at build time, similar API to Styled Components</li>
+        <li><strong>Panda CSS</strong> — zero-runtime, works with React Server Components, design token–first</li>
+      </ul>
+      <pre class="code-block">// Emotion (runtime) — @emotion/react
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
+
+const buttonStyle = css`
+  padding: 8px 16px;
+  background: #0070f3;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  &:hover { background: #005bb5; }
+`;
+
+export const Button = ({ children }) =&gt; (
+  &lt;button css={buttonStyle}&gt;{children}&lt;/button&gt;
+);
+
+// Vanilla Extract (zero-runtime)
+// button.css.ts
+import { style } from '@vanilla-extract/css';
+export const button = style({
+  padding: '8px 16px',
+  background: '#0070f3',
+  color: 'white',
+  borderRadius: 4,
+  ':hover': { background: '#005bb5' },
+});</pre>
+      <p>The choice between runtime and zero-runtime CSS-in-JS is one of the most important architectural decisions for a React project, especially if you are using SSR or React Server Components, which are incompatible with runtime CSS-in-JS that relies on React context.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 7 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q7">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q7" aria-expanded="false" aria-controls="styling-q7">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;7. What are the tradeoffs of CSS-in-JS?
+    </button>
+  </h2>
+  <div id="styling-q7" class="accordion-collapse collapse" aria-labelledby="heading-styling-q7" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>CSS-in-JS offers significant developer experience advantages: styles are co-located with components, dead-code elimination is automatic, dynamic styles are expressed naturally in JavaScript, TypeScript provides type safety for theme tokens, and there is no risk of class name collisions. These benefits make it attractive for design system development and component libraries. However, the tradeoffs depend heavily on whether you choose a runtime or a zero-runtime solution.</p>
+      <p><strong>Runtime CSS-in-JS tradeoffs (Styled Components, Emotion):</strong> Every component render may trigger style serialization and injection. On the server, styles must be collected and embedded in the HTML response, adding complexity to SSR setup. In React 18 concurrent mode, style injection can cause issues with streaming SSR. Most critically, runtime CSS-in-JS does not work with React Server Components because style injection relies on React context, which is unavailable in server components. Bundle size also increases by roughly 15–40 KB (gzipped) for the library itself.</p>
+      <p><strong>Zero-runtime CSS-in-JS tradeoffs (Vanilla Extract, Linaria, Panda CSS):</strong> These avoid all runtime costs and work with Server Components, but require a build-time plugin (Babel, Vite, or Webpack transform) and do not support fully dynamic styles — styles must be deterministic at build time. The developer experience can feel more constrained than runtime alternatives.</p>
+      <pre class="code-block">// Runtime cost example — new object created every render
+// BAD: style object is recreated on every render
+function MyComponent({ active }) {
+  return &lt;div css={{ color: active ? 'blue' : 'gray' }}&gt;...&lt;/div&gt;;
+}
+
+// BETTER: variants pattern avoids serialization cost
+const variants = {
+  active: css`color: blue;`,
+  inactive: css`color: gray;`,
+};
+function MyComponent({ active }) {
+  return &lt;div css={active ? variants.active : variants.inactive}&gt;...&lt;/div&gt;;
+}</pre>
+      <p>The React core team and Next.js team have explicitly recommended zero-runtime or static CSS solutions (CSS Modules, Tailwind, Vanilla Extract) for App Router projects. If you need full dynamic styling capabilities in a Server Component architecture, Panda CSS's atomic approach is currently one of the best options as it generates static CSS files from design tokens while allowing runtime class composition.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 8 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q8">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q8" aria-expanded="false" aria-controls="styling-q8">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;8. What is Emotion (CSS-in-JS library)?
+    </button>
+  </h2>
+  <div id="styling-q8" class="accordion-collapse collapse" aria-labelledby="heading-styling-q8" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Emotion is a performant and flexible CSS-in-JS library that provides two APIs: <code>@emotion/css</code> (framework-agnostic) and <code>@emotion/react</code> (React-specific, adds the <code>css</code> prop). It was designed to be faster than Styled Components through an optimized style serialization and insertion algorithm, and it supports both string and object syntax for declaring styles. Emotion is widely adopted as the underlying styling engine for Material UI (MUI), Chakra UI, and several other major component libraries.</p>
+      <p>The <code>css</code> prop (enabled via a Babel pragma or JSX runtime configuration) is Emotion's most powerful feature — it lets you write styles directly on any JSX element without creating a wrapper component. The <code>styled</code> API mirrors Styled Components' tagged template literal syntax for those who prefer it. Emotion also provides <code>Global</code> for global styles, <code>keyframes</code> for animations, and <code>ThemeProvider</code> for token-based theming.</p>
+      <pre class="code-block">// Setup: vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [
+    react({
+      jsxImportSource: '@emotion/react', // enables css prop
+      babel: {
+        plugins: ['@emotion/babel-plugin'],
+      },
+    }),
+  ],
+});</pre>
+      <pre class="code-block">/** @jsxImportSource @emotion/react */
+import { css, Global, keyframes, ThemeProvider, useTheme } from '@emotion/react';
+import styled from '@emotion/styled';
+
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
+
+// Object style syntax
+const cardStyle = css({
+  borderRadius: 8,
+  padding: '16px 24px',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+  animation: `${fadeIn} 0.3s ease`,
+});
+
+// Styled API
+const Title = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: ${({ theme }) =&gt; theme.colors.primary};
+`;
+
+export function Card({ title, children }) {
+  return (
+    &lt;div css={cardStyle}&gt;
+      &lt;Title&gt;{title}&lt;/Title&gt;
+      {children}
+    &lt;/div&gt;
+  );
+}</pre>
+      <p>Emotion also offers server-side rendering support via <code>@emotion/server</code>, which provides a <code>renderStylesToString</code> utility for extracting critical CSS during SSR. However, like all runtime CSS-in-JS solutions, Emotion does not work natively with React Server Components and requires the component using Emotion to be a Client Component.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 9 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q9">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q9" aria-expanded="false" aria-controls="styling-q9">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;9. What is the cx/clsx utility for conditional class names?
+    </button>
+  </h2>
+  <div id="styling-q9" class="accordion-collapse collapse" aria-labelledby="heading-styling-q9" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p><code>clsx</code> (and its predecessor <code>classnames</code>) is a tiny utility function (~228 bytes) for constructing <code>className</code> strings conditionally in React. Without it, combining conditional class names requires manual string concatenation with ternary operators or template literals, which becomes verbose and error-prone as the number of conditions grows. <code>clsx</code> accepts any combination of strings, objects (where the key is a class name and the value is a boolean), and arrays, and returns a single space-delimited class name string containing only the truthy entries.</p>
+      <p>The <code>cn</code> utility — popularized by shadcn/ui — is a thin wrapper that combines <code>clsx</code> with <code>tailwind-merge</code>. The <code>tailwind-merge</code> layer is specifically designed for Tailwind CSS: it intelligently resolves conflicting Tailwind utilities (e.g., if both <code>p-2</code> and <code>p-4</code> are present, it keeps only the last one), preventing class duplication and unexpected style overrides that vanilla <code>clsx</code> cannot handle.</p>
+      <pre class="code-block">// clsx usage
+import { clsx } from 'clsx';
+
+function Button({ variant, disabled, className, children }) {
+  return (
+    &lt;button
+      className={clsx(
+        'px-4 py-2 rounded font-medium transition-colors',
+        {
+          'bg-blue-600 text-white hover:bg-blue-700': variant === 'primary',
+          'bg-gray-100 text-gray-800 hover:bg-gray-200': variant === 'secondary',
+          'opacity-50 cursor-not-allowed pointer-events-none': disabled,
+        },
+        className  // allows caller to pass additional classes
+      )}
+      disabled={disabled}
+    &gt;
+      {children}
+    &lt;/button&gt;
+  );
+}</pre>
+      <pre class="code-block">// cn utility (clsx + tailwind-merge)
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+// Usage — tailwind-merge resolves conflicting utilities
+cn('px-4 py-2', 'px-6')        // → 'py-2 px-6'  (px-4 replaced)
+cn('text-red-500', 'text-blue-500') // → 'text-blue-500' (last wins)</pre>
+      <p>The <code>cn</code> pattern has become the de-facto standard in the Tailwind + React ecosystem. Component libraries like shadcn/ui, Radix UI themes, and Catalyst all ship with this utility. For non-Tailwind projects, plain <code>clsx</code> is sufficient and avoids the extra <code>tailwind-merge</code> dependency.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 10 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q10">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q10" aria-expanded="false" aria-controls="styling-q10">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;10. How do you implement dark mode in React?
+    </button>
+  </h2>
+  <div id="styling-q10" class="accordion-collapse collapse" aria-labelledby="heading-styling-q10" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Dark mode in React is typically implemented by toggling a class (e.g., <code>dark</code>) on the <code>&lt;html&gt;</code> or <code>&lt;body&gt;</code> element, which then activates a set of CSS custom properties or Tailwind's dark-mode utilities that override the default light-mode values. The user's preference is stored in <code>localStorage</code> so it persists across sessions, and the system preference is read via the <code>prefers-color-scheme</code> media query for first-time visitors. A React context exposes the current theme and a toggle function to all components.</p>
+      <p>With Tailwind CSS, adding <code>darkMode: 'class'</code> to <code>tailwind.config.js</code> enables the <code>dark:</code> variant prefix, which applies utilities only when the <code>dark</code> class is present on an ancestor element. With CSS custom properties, you define a <code>:root</code> block for light tokens and a <code>.dark</code> block that overrides them, so all components that reference the variables automatically switch.</p>
+      <pre class="code-block">// hooks/useTheme.ts
+import { useState, useEffect } from 'react';
+
+type Theme = 'light' | 'dark';
+
+export function useTheme() {
+  const [theme, setTheme] = useState&lt;Theme&gt;(() =&gt; {
+    if (typeof window === 'undefined') return 'light';
+    return (localStorage.getItem('theme') as Theme)
+      ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  });
+
+  useEffect(() =&gt; {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () =&gt; setTheme(t =&gt; (t === 'dark' ? 'light' : 'dark'));
+  return { theme, toggleTheme };
+}</pre>
+      <pre class="code-block">/* CSS custom properties approach */
+:root {
+  --bg-primary: #ffffff;
+  --text-primary: #1a202c;
+  --surface: #f7fafc;
+}
+
+.dark {
+  --bg-primary: #1a202c;
+  --text-primary: #f7fafc;
+  --surface: #2d3748;
+}
+
+/* Components just use the variables — no dark-mode logic needed */
+.card {
+  background: var(--surface);
+  color: var(--text-primary);
+}</pre>
+      <pre class="code-block">// Tailwind dark mode
+// tailwind.config.js
+export default { darkMode: 'class', ... };
+
+// Component
+function Card({ title }) {
+  return (
+    &lt;div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg p-6"&gt;
+      {title}
+    &lt;/div&gt;
+  );
+}</pre>
+      <p>To prevent a flash of incorrect theme on page load (especially in SSR/Next.js), inject a blocking inline script in the <code>&lt;head&gt;</code> that reads <code>localStorage</code> and sets the class before React hydrates. Next.js's <code>next-themes</code> package handles this automatically and is the recommended solution for Next.js projects.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 11 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q11">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q11" aria-expanded="false" aria-controls="styling-q11">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;11. What are CSS custom properties (variables) and how do you use them in React theming?
+    </button>
+  </h2>
+  <div id="styling-q11" class="accordion-collapse collapse" aria-labelledby="heading-styling-q11" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>CSS custom properties (also called CSS variables) are entities defined by CSS authors that contain specific values to be reused throughout the document. They are defined with a <code>--</code> prefix (e.g., <code>--color-primary: #0070f3</code>) and accessed with the <code>var()</code> function. Unlike preprocessor variables (Sass <code>$variable</code>), CSS custom properties are <strong>live in the browser</strong> — they participate in the cascade, can be scoped to specific elements, can be overridden by more specific selectors, and can be read and modified with JavaScript at runtime.</p>
+      <p>For React theming, CSS custom properties are the most performant approach because changing a single variable on the root element automatically updates every component that references it, without any JavaScript re-renders. This is dramatically more efficient than updating a React context value, which causes all context consumers to re-render. You can even animate CSS variables using CSS transitions or the Web Animations API.</p>
+      <pre class="code-block">/* src/styles/tokens.css */
+:root {
+  /* Color tokens */
+  --color-primary-500: #0070f3;
+  --color-primary-600: #005bb5;
+  --color-neutral-100: #f7fafc;
+  --color-neutral-900: #1a202c;
+
+  /* Semantic tokens */
+  --color-bg: var(--color-neutral-100);
+  --color-text: var(--color-neutral-900);
+  --color-action: var(--color-primary-500);
+
+  /* Typography tokens */
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --line-height-base: 1.6;
+
+  /* Spacing */
+  --space-4: 1rem;
+  --space-8: 2rem;
+}
+
+[data-theme="dark"] {
+  --color-bg: var(--color-neutral-900);
+  --color-text: var(--color-neutral-100);
+}</pre>
+      <pre class="code-block">// useThemeTokens.ts — update tokens via JavaScript
+export function setTheme(tokens: Record&lt;string, string&gt;) {
+  const root = document.documentElement;
+  Object.entries(tokens).forEach(([key, value]) =&gt; {
+    root.style.setProperty(`--${key}`, value);
+  });
+}
+
+// Read a token value
+export function getToken(name: string): string {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(`--${name}`)
+    .trim();
+}</pre>
+      <p>CSS custom properties compose well with every React styling solution: CSS Modules can reference them, Tailwind can use them as arbitrary values, and CSS-in-JS libraries can read them via JavaScript. This makes them an excellent foundation for a design token system that is framework-agnostic and can be driven from a design tool like Figma using token exporters.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 12 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q12">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q12" aria-expanded="false" aria-controls="styling-q12">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;12. How do you implement responsive design in React?
+    </button>
+  </h2>
+  <div id="styling-q12" class="accordion-collapse collapse" aria-labelledby="heading-styling-q12" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Responsive design in React is primarily achieved through <strong>CSS media queries</strong>, which are the same mechanism used in plain HTML/CSS projects. The React-specific approaches involve how you author and apply those media queries: using CSS Modules with <code>@media</code> blocks, Tailwind's responsive prefixes (<code>sm:</code>, <code>md:</code>, <code>lg:</code>), or CSS-in-JS template literals. Flexbox and CSS Grid are the layout tools of choice; both are inherently flexible and reduce the need for breakpoint-specific overrides.</p>
+      <p>For layout decisions that require JavaScript (e.g., rendering a completely different component tree for mobile vs. desktop, or reading viewport dimensions to drive logic), React provides two approaches: a custom <code>useMediaQuery</code> hook using the browser's <code>matchMedia</code> API, or the <code>useWindowSize</code> pattern. However, these introduce hydration complexity in SSR apps; CSS-only responsive design should always be preferred over JavaScript-driven layout switching when possible.</p>
+      <pre class="code-block">/* CSS Modules approach */
+/* Layout.module.css */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}</pre>
+      <pre class="code-block">// Tailwind responsive prefixes
+function ProductGrid({ products }) {
+  return (
+    &lt;div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"&gt;
+      {products.map(p =&gt; &lt;ProductCard key={p.id} {...p} /&gt;)}
+    &lt;/div&gt;
+  );
+}</pre>
+      <pre class="code-block">// useMediaQuery hook
+import { useState, useEffect } from 'react';
+
+export function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(
+    () =&gt; typeof window !== 'undefined' &amp;&amp; window.matchMedia(query).matches
+  );
+
+  useEffect(() =&gt; {
+    const mql = window.matchMedia(query);
+    const handler = (e: MediaQueryListEvent) =&gt; setMatches(e.matches);
+    mql.addEventListener('change', handler);
+    return () =&gt; mql.removeEventListener('change', handler);
+  }, [query]);
+
+  return matches;
+}
+
+// Usage
+function Navigation() {
+  const isMobile = useMediaQuery('(max-width: 767px)');
+  return isMobile ? &lt;MobileNav /&gt; : &lt;DesktopNav /&gt;;
+}</pre>
+      <p>For truly responsive typography and spacing, CSS <code>clamp()</code> with viewport units provides smooth scaling without discrete breakpoints: <code>font-size: clamp(1rem, 2.5vw, 1.5rem)</code>. Container queries (<code>@container</code>), now available in all modern browsers, allow components to be responsive to their parent container size rather than the viewport, enabling fully portable responsive components.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 13 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q13">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q13" aria-expanded="false" aria-controls="styling-q13">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;13. What is the MUI (Material UI) theming system?
+    </button>
+  </h2>
+  <div id="styling-q13" class="accordion-collapse collapse" aria-labelledby="heading-styling-q13" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Material UI's theming system is a centralized configuration object (<code>theme</code>) that controls the visual appearance of all MUI components simultaneously. Created via <code>createTheme()</code> and provided to the application through <code>ThemeProvider</code>, the theme defines a complete design system: color palette (primary, secondary, error, warning, info, success palettes with shades), typography scale (h1–h6, body1, body2, etc.), spacing function, breakpoints, shadows, shape (border radius), and z-index values. Every MUI component references this theme object, so changing a single value in the theme propagates across your entire application.</p>
+      <p>MUI v6 uses Emotion as its CSS-in-JS engine by default, but can be configured to use Styled Components or Pigment CSS (a zero-runtime build-time extraction system). The <code>sx</code> prop, available on all MUI components, provides a shorthand API for inline theme-aware styles that supports responsive breakpoints, pseudo-selectors, and nested selectors.</p>
+      <pre class="code-block">// src/theme/index.ts
+import { createTheme, alpha } from '@mui/material/styles';
+
+export const theme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#0070f3',
+      light: '#4da3ff',
+      dark: '#004fc4',
+      contrastText: '#ffffff',
+    },
+    secondary: { main: '#7928ca' },
+  },
+  typography: {
+    fontFamily: '"Inter", "Roboto", sans-serif',
+    h1: { fontSize: '2.5rem', fontWeight: 700 },
+    button: { textTransform: 'none', fontWeight: 600 },
+  },
+  shape: { borderRadius: 8 },
+  components: {
+    // Global component overrides
+    MuiButton: {
+      defaultProps: { disableElevation: true },
+      styleOverrides: {
+        root: ({ theme }) =&gt; ({
+          '&amp;:hover': {
+            backgroundColor: alpha(theme.palette.primary.main, 0.85),
+          },
+        }),
+      },
+    },
+  },
+});</pre>
+      <pre class="code-block">// main.tsx
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { theme } from './theme';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  &lt;ThemeProvider theme={theme}&gt;
+    &lt;CssBaseline /&gt;
+    &lt;App /&gt;
+  &lt;/ThemeProvider&gt;
+);
+
+// Component using sx prop
+function Card() {
+  return (
+    &lt;Box sx={{
+      p: 3,  // theme.spacing(3) = 24px
+      borderRadius: 2,  // theme.shape.borderRadius * 2
+      bgcolor: 'primary.main',
+      color: 'primary.contrastText',
+      '&amp;:hover': { bgcolor: 'primary.dark' },
+    }}&gt;
+      Hello
+    &lt;/Box&gt;
+  );
+}</pre>
+      <p>MUI also supports CSS variables mode (<code>cssVariables: true</code>) in v6, which generates CSS custom properties from the theme object, enabling dark mode switching without a React re-render and eliminating the SSR color flicker problem. This bridges the gap between MUI's theming system and native CSS variable–based approaches.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 14 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q14">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q14" aria-expanded="false" aria-controls="styling-q14">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;14. What is Tailwind's JIT (Just-In-Time) mode?
+    </button>
+  </h2>
+  <div id="styling-q14" class="accordion-collapse collapse" aria-labelledby="heading-styling-q14" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Tailwind's Just-In-Time (JIT) mode, introduced in Tailwind CSS v2.1 and made the default in v3.0, is a compiler that generates CSS utilities on-demand as you author your template files rather than pre-generating the entire utility set upfront. Before JIT, Tailwind would generate a massive CSS file (often 3–4 MB uncompressed) containing every possible combination of every utility, then purge unused classes in production builds. JIT inverts this: it watches your source files, detects which class names are actually used, and generates only those styles — both in development and production.</p>
+      <p>JIT provides four major improvements over the classic approach. First, development builds are nearly instant and the CSS bundle is tiny — exactly the same size as the production build. Second, JIT enables <strong>arbitrary value support</strong> using bracket notation, where you can write any CSS value inline without extending the configuration: <code>w-[137px]</code>, <code>bg-[#1da1f2]</code>, <code>grid-cols-[1fr_2fr_1fr]</code>. Third, it makes variant stacking effortless: <code>dark:hover:md:text-lg</code> is generated on the fly. Fourth, it removed the need for <code>@layer</code> workarounds for specificity ordering.</p>
+      <pre class="code-block">/* JIT arbitrary values — zero config required */
+
+/* Custom colors */
+&lt;div className="bg-[#1da1f2] text-[#fff]"&gt;Twitter blue&lt;/div&gt;
+
+/* Custom sizes */
+&lt;div className="w-[calc(100%-2rem)] h-[min(50vh,400px)]"&gt;...&lt;/div&gt;
+
+/* Custom grid */
+&lt;div className="grid grid-cols-[200px_1fr_200px] gap-4"&gt;...&lt;/div&gt;
+
+/* CSS properties via arbitrary properties (v3.3+) */
+&lt;div className="[mask-image:linear-gradient(to_bottom,black,transparent)]"&gt;...&lt;/div&gt;
+
+/* Stacked variants */
+&lt;button className="dark:hover:focus:ring-2 dark:hover:focus:ring-blue-400"&gt;
+  Click
+&lt;/button&gt;</pre>
+      <pre class="code-block">// tailwind.config.js — JIT is the default, content scanning is required
+export default {
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+    // Include component libraries that use Tailwind classes
+    './node_modules/@my-company/ui/**/*.{js,ts}',
+  ],
+  // ...
+};
+
+// IMPORTANT: Never construct class names dynamically with string interpolation!
+// BAD — JIT scanner cannot detect this:
+const color = 'blue';
+&lt;div className={`text-${color}-500`}&gt;...&lt;/div&gt;  // text-blue-500 won't be generated
+
+// GOOD — use full class name strings:
+const colorClass = 'text-blue-500';
+&lt;div className={colorClass}&gt;...&lt;/div&gt;</pre>
+      <p>The key constraint of JIT is that class names must appear as complete, unbroken strings in files matched by the <code>content</code> glob patterns. Dynamic class name construction via string interpolation will not work because the static scanner cannot evaluate JavaScript expressions. The solution is to use a lookup object mapping values to full class name strings, or to use <code>safelist</code> in the config for programmatically generated classes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 15 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q15">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q15" aria-expanded="false" aria-controls="styling-q15">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;15. What are the runtime performance differences between CSS Modules, Styled Components, and Tailwind?
+    </button>
+  </h2>
+  <div id="styling-q15" class="accordion-collapse collapse" aria-labelledby="heading-styling-q15" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>The three approaches have fundamentally different performance characteristics at multiple levels: build time, initial load, and runtime rendering. Understanding these differences is critical for making an informed architectural decision for performance-sensitive applications.</p>
+      <p><strong>CSS Modules:</strong> All CSS is extracted to static files at build time. The browser receives a normal CSS file which is parsed and applied before any JavaScript runs. There is zero JavaScript runtime cost for styling — no style serialization, no <code>&lt;style&gt;</code> tag injection, no style recalculation triggered by JavaScript. Class names are immutable strings resolved at build time, so there is no per-render computation. CSS Modules are the best-performing option for initial load and runtime updates when styles are static or semi-static.</p>
+      <p><strong>Tailwind CSS:</strong> Also extracts to a static CSS file at build time, but the file contains only atomic single-property utility classes. Because Tailwind utilities are tiny and highly cacheable, the browser can apply them extremely fast during style recalculation. In React, applying Tailwind classes is just string manipulation on the <code>className</code> prop — a trivial CPU cost. The tradeoff is larger HTML due to many class names on each element, but the browser's style engine is highly optimized for atomic class matching. Tailwind's runtime performance is essentially identical to CSS Modules.</p>
+      <p><strong>Styled Components / Emotion (runtime CSS-in-JS):</strong> Has three layers of runtime cost. First, style serialization: on every render, the library hashes the template literal or object to determine if the style has changed and generate a class name (typically a constant-time hash, but not free). Second, style injection: new styles require inserting a rule into a CSSStyleSheet via <code>insertRule</code>, which triggers a browser style recalculation. Third, style collection for SSR: the server must walk the React tree, collect all styles, and embed them in the HTML — this adds to TTFB. In React 18 with concurrent features and streaming SSR, runtime CSS-in-JS can cause style flicker because styles may arrive out of order relative to their component HTML.</p>
+      <pre class="code-block">// Benchmarking style serialization cost
+// This pattern avoids re-serialization on every render:
+
+// BAD — new object/template on every render, full re-serialization
+function Item({ color }) {
+  return &lt;div css={{ color, padding: 8 }}&gt;...&lt;/div&gt;;
+}
+
+// GOOD — stable reference, cached hash
+const baseStyle = css`padding: 8px;`;
+const colorStyles = {
+  red: css`color: red;`,
+  blue: css`color: blue;`,
+};
+function Item({ color }) {
+  return &lt;div css={[baseStyle, colorStyles[color]]}&gt;...&lt;/div&gt;;
+}
+
+// CSS Modules — zero runtime cost regardless of pattern
+import s from './Item.module.css';
+function Item({ color }) {
+  return &lt;div className={clsx(s.base, s[color])}&gt;...&lt;/div&gt;;
+}</pre>
+      <p>In practice, for most applications with &lt;500 styled components, the runtime cost of Styled Components or Emotion is imperceptible. The real performance cliff appears at large scale (1000+ component instances in the tree), on low-powered mobile devices, and in SSR scenarios. Meta's research into Stylex (their zero-runtime atomic CSS-in-JS solution) and Vercel/Facebook's work on React Server Components both point to zero-runtime solutions as the long-term direction for high-performance React styling.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 16 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q16">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q16" aria-expanded="false" aria-controls="styling-q16">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;16. How do you implement a design token system in React?
+    </button>
+  </h2>
+  <div id="styling-q16" class="accordion-collapse collapse" aria-labelledby="heading-styling-q16" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>A design token system is a shared vocabulary of design decisions — colors, typography, spacing, elevation, motion — stored as named key-value pairs that serve as the single source of truth for both designers (in Figma) and engineers (in code). Tokens are organized in a two-layer hierarchy: <strong>primitive tokens</strong> (raw values like <code>blue-500: #0070f3</code>) and <strong>semantic tokens</strong> (purpose-driven aliases like <code>color-action-primary: {blue-500}</code>). This separation means a designer can change the brand color globally by updating one primitive token, and every semantic token that references it updates automatically.</p>
+      <p>In React, tokens are typically delivered as CSS custom properties, a TypeScript constants file, or both. The pipeline is: Figma → token export (Style Dictionary, Tokens Studio plugin) → build step that transforms raw JSON tokens into CSS variables and TypeScript types → consumed by CSS Modules, Tailwind config, or MUI theme. The key tool is <strong>Style Dictionary</strong> by Amazon, which accepts a token JSON file and generates outputs for any target format.</p>
+      <pre class="code-block">// tokens/tokens.json (source of truth, often exported from Figma)
+{
+  "color": {
+    "brand": {
+      "blue": { "500": { "value": "#0070f3" }, "600": { "value": "#005bb5" } }
+    },
+    "semantic": {
+      "action": { "primary": { "value": "{color.brand.blue.500}" } },
+      "action": { "hover":   { "value": "{color.brand.blue.600}" } }
+    }
+  },
+  "spacing": {
+    "1": { "value": "4px" },
+    "2": { "value": "8px" },
+    "4": { "value": "16px" },
+    "8": { "value": "32px" }
+  }
+}</pre>
+      <pre class="code-block">// style-dictionary.config.js
+import StyleDictionary from 'style-dictionary';
+
+export default {
+  source: ['tokens/**/*.json'],
+  platforms: {
+    css: {
+      transformGroup: 'css',
+      prefix: 'ds',
+      buildPath: 'src/styles/',
+      files: [{ destination: 'tokens.css', format: 'css/variables' }],
+    },
+    ts: {
+      transformGroup: 'js',
+      buildPath: 'src/styles/',
+      files: [{ destination: 'tokens.ts', format: 'javascript/esm' }],
+    },
+  },
+};</pre>
+      <pre class="code-block">/* Generated: src/styles/tokens.css */
+:root {
+  --ds-color-brand-blue-500: #0070f3;
+  --ds-color-brand-blue-600: #005bb5;
+  --ds-color-semantic-action-primary: var(--ds-color-brand-blue-500);
+  --ds-spacing-4: 16px;
+}
+
+// Generated: src/styles/tokens.ts
+export const tokens = {
+  color: { brand: { blue: { 500: '#0070f3' } } },
+  spacing: { 4: '16px' },
+} as const;</pre>
+      <p>The most robust implementations also generate TypeScript types from the token structure, so developers get autocomplete and compile-time errors when using a token that doesn't exist. At runtime, semantic tokens implemented as CSS variables can be swapped per theme (light/dark, brand A/brand B) by overriding the variable values on a scoped selector, without touching any component code. This makes white-labeling and multi-theme support trivial at scale.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 17 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q17">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q17" aria-expanded="false" aria-controls="styling-q17">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;17. What is critical CSS and how does it affect React SSR?
+    </button>
+  </h2>
+  <div id="styling-q17" class="accordion-collapse collapse" aria-labelledby="heading-styling-q17" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Critical CSS is the minimum set of CSS rules required to render the above-the-fold content of a page without waiting for the full stylesheet to load. By inlining this subset directly in the <code>&lt;head&gt;</code> of the HTML response, the browser can paint the visible portion of the page immediately without being blocked by a network request for the external CSS file. The remaining non-critical CSS is then loaded asynchronously. For React SSR, where the goal is to ship a fully rendered HTML document from the server, critical CSS is especially important for achieving a good Largest Contentful Paint (LCP) metric.</p>
+      <p>Critical CSS intersects with React SSR in two ways. First, for <strong>static CSS approaches</strong> (CSS Modules, Tailwind), tools like <code>critical</code> (npm) or Vite's SSR plugin can analyze the rendered HTML and extract only the rules that match elements in the initial HTML, inlining them in the <code>&lt;style&gt;</code> tag. Second, for <strong>runtime CSS-in-JS</strong> (Styled Components, Emotion), the library itself performs critical CSS extraction during SSR by collecting all styles generated while rendering the component tree and embedding them in the server response — this is why Styled Components has a <code>ServerStyleSheet</code> API and Emotion has <code>renderStylesToString</code>.</p>
+      <pre class="code-block">// Styled Components SSR — manual critical CSS collection
+import { ServerStyleSheet } from 'styled-components';
+import { renderToString } from 'react-dom/server';
+
+export function renderPage(url: string) {
+  const sheet = new ServerStyleSheet();
+
+  try {
+    const html = renderToString(
+      sheet.collectStyles(&lt;App /&gt;)
+    );
+    const styleTags = sheet.getStyleTags(); // &lt;style&gt; tags with critical CSS
+
+    return `
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+        &lt;head&gt;
+          ${styleTags}
+        &lt;/head&gt;
+        &lt;body&gt;
+          &lt;div id="root"&gt;${html}&lt;/div&gt;
+        &lt;/body&gt;
+      &lt;/html&gt;
+    `;
+  } finally {
+    sheet.seal();
+  }
+}</pre>
+      <pre class="code-block">// Next.js App Router — uses Pigment CSS or CSS Modules
+// No manual critical CSS needed; Next.js handles it automatically
+// for CSS Modules and global CSS.
+
+// For Emotion/MUI in Next.js App Router, use the registry pattern:
+// app/registry.tsx
+'use client';
+import { useServerInsertedHTML } from 'next/navigation';
+import { useState } from 'react';
+import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
+
+export function MUIRegistry({ children }) {
+  const [cache] = useState(() =&gt; createCache({ key: 'css' }));
+  useServerInsertedHTML(() =&gt; (
+    &lt;style
+      data-emotion={`${cache.key} ${Object.keys(cache.inserted).join(' ')}`}
+      dangerouslySetInnerHTML={{
+        __html: Object.values(cache.inserted).join(''),
+      }}
+    /&gt;
+  ));
+  return &lt;CacheProvider value={cache}&gt;{children}&lt;/CacheProvider&gt;;
+}</pre>
+      <p>The <code>useServerInsertedHTML</code> hook in Next.js App Router is specifically designed for this streaming SSR scenario — it allows CSS-in-JS libraries to inject their collected styles into the HTML stream at the correct position, before the component HTML that depends on them, avoiding the flash of unstyled content (FOUC) that would occur if styles arrived after the HTML that needs them.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 18 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q18">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q18" aria-expanded="false" aria-controls="styling-q18">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;18. How do you prevent CSS specificity conflicts in large React apps?
+    </button>
+  </h2>
+  <div id="styling-q18" class="accordion-collapse collapse" aria-labelledby="heading-styling-q18" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>CSS specificity conflicts in large applications arise when multiple rules target the same element and their specificity scores conflict in unintended ways — leading to styles that are hard to override without resorting to <code>!important</code>, deeply nested selectors, or arbitrary class stacking. The root cause is almost always global CSS without scoping conventions. Preventing specificity conflicts is therefore fundamentally a <strong>scoping and specificity budgeting</strong> problem.</p>
+      <p><strong>Strategy 1: Adopt a scoping mechanism.</strong> CSS Modules (local scoping by build tool), Tailwind (atomic utilities with no custom selectors), or CSS-in-JS (unique generated class names) each eliminate specificity conflicts within their own scope. The issue appears at boundaries: component library styles vs. application styles vs. third-party styles.</p>
+      <p><strong>Strategy 2: Use <code>@layer</code> for explicit cascade ordering.</strong> The CSS <code>@layer</code> rule (now baseline in all major browsers) allows you to declare named cascade layers and their order. Rules in a lower-priority layer are always overridden by rules in a higher-priority layer, regardless of specificity. This is the modern, standards-based solution to the "library vs. app styles" conflict problem.</p>
+      <pre class="code-block">/* Define layer order upfront — lower layers lose to higher layers */
+@layer reset, base, components, utilities, overrides;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+}
+
+@layer base {
+  body { font-family: var(--font-sans); }
+}
+
+@layer components {
+  /* Third-party component library styles */
+  .btn { padding: 8px 16px; } /* specificity 0-1-0 */
+}
+
+@layer utilities {
+  /* Application-level utilities */
+  .mt-4 { margin-top: 1rem; } /* overrides .btn even though same specificity */
+}
+
+@layer overrides {
+  /* Emergency overrides — always win without !important */
+  .visually-hidden { ... }
+}</pre>
+      <pre class="code-block">// Tailwind's approach — prefix configuration for conflict avoidance
+// tailwind.config.js
+export default {
+  prefix: 'tw-',  // all utilities become tw-flex, tw-px-4, etc.
+  // Now Tailwind cannot conflict with Bootstrap, MUI, or other class names
+};
+
+// MUI v6 — configure emotion's insertionPoint to control CSS order
+// This ensures MUI styles appear before app styles in the document,
+// giving app styles higher priority even at equal specificity
+const emotionCache = createCache({
+  key: 'mui',
+  insertionPoint: document.querySelector('#emotion-insertion-point'),
+});</pre>
+      <p>Additional strategies include: using the <code>:where()</code> pseudo-class to write zero-specificity selectors (useful for reset layers); keeping component styles at the lowest possible specificity (single class, no element qualifiers); using CSS custom properties for values that need to be overridden rather than overriding the property declaration itself; and enforcing naming conventions like BEM (<code>.block__element--modifier</code>) which, while not technically preventing specificity issues, makes the intended specificity hierarchy explicit through structure.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 19 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q19">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q19" aria-expanded="false" aria-controls="styling-q19">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;19. What is the CSS cascade and how do CSS-in-JS libraries handle it?
+    </button>
+  </h2>
+  <div id="styling-q19" class="accordion-collapse collapse" aria-labelledby="heading-styling-q19" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>The CSS cascade is the algorithm browsers use to determine which CSS declaration wins when multiple rules target the same property on the same element. It evaluates rules in priority order: <strong>importance</strong> (<code>!important</code> beats normal declarations), then <strong>origin</strong> (user agent stylesheet &lt; author stylesheet &lt; user stylesheet, though this is rarely relevant in apps), then <strong>specificity</strong> (inline styles &gt; IDs &gt; classes/attributes/pseudo-classes &gt; elements/pseudo-elements, scored as a four-part value), and finally <strong>source order</strong> (later declarations win when everything else is equal).</p>
+      <p>CSS-in-JS libraries interact with the cascade in distinctive ways. Runtime CSS-in-JS (Styled Components, Emotion) generates a unique class name per style rule and injects the rule into a <code>CSSStyleSheet</code> via <code>insertRule</code>. Because each rule has exactly one class selector (specificity 0-1-0) and all rules are injected dynamically, the cascade winner is determined entirely by source order — the last-injected rule wins. This is predictable within a single library but can cause subtle conflicts with external stylesheets at equal specificity.</p>
+      <p>Zero-runtime CSS-in-JS libraries like Vanilla Extract and StyleX take a different approach: they generate atomic CSS at build time (one class per property-value pair) and use the <code>@layer</code> cascade layer to control ordering. StyleX (Meta's solution) is particularly rigorous — it composes styles by array order at call time, and the last style in the array always wins because all StyleX rules live in the same cascade layer at the same specificity, with source order determined at build time by the composition order.</p>
+      <pre class="code-block">// Emotion's cascade behavior
+const baseStyle = css`color: red; font-size: 16px;`;
+const overrideStyle = css`color: blue;`;  // injected after base
+
+// This works correctly because overrideStyle is injected later:
+&lt;div css={[baseStyle, overrideStyle]}&gt;  // final: color=blue, font-size=16px
+
+// BUT: ordering is fragile. If overrideStyle was already injected before
+// baseStyle (from another component instance), you might get color=red.
+// This is the "style injection order" problem in runtime CSS-in-JS.</pre>
+      <pre class="code-block">// Vanilla Extract — deterministic atomic CSS with @layer
+// button.css.ts
+import { style, composeStyles } from '@vanilla-extract/css';
+
+const base = style({
+  '@layer': {
+    components: { color: 'red', fontSize: 16 }
+  }
+});
+
+const override = style({
+  '@layer': {
+    utilities: { color: 'blue' }  // utilities layer wins over components layer
+  }
+});
+
+// Composition is order-independent — layer hierarchy determines the winner
+export const button = composeStyles(base, override); // always blue</pre>
+      <pre class="code-block">// StyleX — explicit composition order determines winner
+import * as stylex from '@stylexjs/stylex';
+
+const styles = stylex.create({
+  base: { color: 'red', fontSize: 16 },
+  highlighted: { color: 'blue' },
+});
+
+// Last prop wins — deterministic regardless of injection order
+&lt;div {...stylex.props(styles.base, styles.highlighted)}&gt;  // blue
+&lt;div {...stylex.props(styles.highlighted, styles.base)}&gt;  // red</pre>
+      <p>Understanding the cascade is critical when mixing CSS-in-JS with external stylesheets (e.g., a component library, Bootstrap base, or third-party widget). The safest approach is to place your CSS-in-JS styles in an explicit <code>@layer</code> with a defined position in the layer order, removing specificity as a variable and relying purely on deliberate layer hierarchy for override behavior.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCORDION ITEM 20 -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-styling-q20">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#styling-q20" aria-expanded="false" aria-controls="styling-q20">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;20. How do you implement animation in React? Compare CSS transitions, Framer Motion, and React Spring.
+    </button>
+  </h2>
+  <div id="styling-q20" class="accordion-collapse collapse" aria-labelledby="heading-styling-q20" data-bs-parent="#acc-styling">
+    <div class="accordion-body">
+      <p>Animation in React spans a spectrum from simple CSS transitions to complex orchestrated sequences, and the right tool depends on the animation's nature — whether it's state-driven, physics-based, gesture-linked, or triggered by mount/unmount lifecycle events. The three dominant approaches are pure CSS transitions/animations, the Framer Motion library, and React Spring.</p>
+      <p><strong>CSS Transitions and Animations:</strong> The lowest-overhead option. CSS <code>transition</code> smoothly interpolates property changes triggered by class or style updates. CSS <code>@keyframes</code> handles looping or multi-step sequences. React integrates via <code>className</code> toggling or the <code>style</code> prop. The limitation is that CSS cannot animate elements entering or leaving the DOM (mounting/unmounting) without the help of a lifecycle-aware wrapper like <code>react-transition-group</code>, which adds/removes classes at the right lifecycle moment.</p>
+      <p><strong>Framer Motion:</strong> A production-ready, declarative animation library with a React-first API. The core primitive is the <code>motion</code> component (e.g., <code>&lt;motion.div&gt;</code>), which accepts <code>initial</code>, <code>animate</code>, and <code>exit</code> props for enter/exit transitions, <code>whileHover</code> and <code>whileTap</code> for gesture animations, <code>variants</code> for orchestrated parent-child sequences, and <code>layout</code> for automatic layout change animations. Framer Motion uses the Web Animations API internally for GPU-accelerated transforms. Its <code>AnimatePresence</code> component handles exit animations when components unmount — a notoriously difficult problem with pure CSS.</p>
+      <p><strong>React Spring:</strong> A physics-based animation library that models animations as spring simulations rather than duration-based easing curves. Instead of specifying <code>duration: 300ms, easing: ease-out</code>, you specify spring parameters like <code>tension</code>, <code>friction</code>, and <code>mass</code>. This produces animations that feel physically natural and can be interrupted mid-animation with the motion naturally reversing, unlike CSS transitions which snap back. React Spring uses <code>useSpring</code>, <code>useSprings</code>, <code>useTrail</code>, and <code>useTransition</code> hooks.</p>
+      <pre class="code-block">// CSS Transitions + react-transition-group
+import { CSSTransition } from 'react-transition-group';
+import './fade.css';
+
+function Modal({ show, children }) {
+  return (
+    &lt;CSSTransition in={show} timeout={300} classNames="fade" unmountOnExit&gt;
+      &lt;div className="modal"&gt;{children}&lt;/div&gt;
+    &lt;/CSSTransition&gt;
+  );
+}
+/* fade.css */
+.fade-enter { opacity: 0; }
+.fade-enter-active { opacity: 1; transition: opacity 300ms ease; }
+.fade-exit { opacity: 1; }
+.fade-exit-active { opacity: 0; transition: opacity 300ms ease; }</pre>
+      <pre class="code-block">// Framer Motion
+import { motion, AnimatePresence } from 'framer-motion';
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.3, ease: 'easeOut' } },
+  exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
+};
+
+function CardList({ cards, selectedId }) {
+  return (
+    &lt;AnimatePresence&gt;
+      {cards.map(card =&gt; (
+        &lt;motion.div
+          key={card.id}
+          variants={cardVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          layout  // animates position changes automatically
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        &gt;
+          {card.content}
+        &lt;/motion.div&gt;
+      ))}
+    &lt;/AnimatePresence&gt;
+  );
+}</pre>
+      <pre class="code-block">// React Spring — physics-based
+import { useSpring, useTransition, animated } from '@react-spring/web';
+
+// Simple spring
+function Toggle({ open }) {
+  const springs = useSpring({
+    height: open ? 200 : 0,
+    opacity: open ? 1 : 0,
+    config: { tension: 280, friction: 20 },  // spring physics
+  });
+  return &lt;animated.div style={springs}&gt;content&lt;/animated.div&gt;;
+}
+
+// List transitions (mount/unmount)
+function AnimatedList({ items }) {
+  const transitions = useTransition(items, {
+    keys: item =&gt; item.id,
+    from: { opacity: 0, transform: 'translate3d(-40px,0,0)' },
+    enter: { opacity: 1, transform: 'translate3d(0,0,0)' },
+    leave: { opacity: 0, transform: 'translate3d(40px,0,0)' },
+  });
+  return transitions((style, item) =&gt; (
+    &lt;animated.div style={style}&gt;{item.content}&lt;/animated.div&gt;
+  ));
+}</pre>
+      <p><strong>Performance note:</strong> All three approaches should animate only GPU-composited properties — <code>transform</code> and <code>opacity</code> — to avoid layout thrashing. Properties like <code>width</code>, <code>height</code>, <code>top</code>, and <code>left</code> trigger layout recalculation on every frame and should be replaced with <code>translate()</code> and <code>scale()</code>. Framer Motion's <code>layout</code> prop uses the FLIP technique (First, Last, Invert, Play) to animate layout changes using only transforms, achieving smooth 60fps animations even for complex reflow-heavy changes. For the simplest hover/focus effects and entry animations, CSS transitions remain the best choice due to zero JavaScript overhead.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Animations — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0;}
+    .compare-card{border-radius:12px;padding:1.2rem;border:2px solid transparent;}
+    .compare-card.left{background:#eff6ff;border-color:#93c5fd;}
+    .compare-card.right{background:#f0fdf4;border-color:#6ee7b7;}
+    [data-theme="dark"] .compare-card.left{background:#1e3a5f;border-color:#3b82f6;}
+    [data-theme="dark"] .compare-card.right{background:#14532d;border-color:#22c55e;}
+    /* Live demo animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+    @keyframes slide-in {
+      from { transform: translateX(-30px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .demo-fade { animation: fadeInUp 0.6s ease-out forwards; }
+    .demo-slide { animation: slide-in 0.5s ease-out forwards; }
+    .demo-box { width: 60px; height: 60px; border-radius: 10px; display: inline-block; margin: 4px; }
+    .stagger-demo > .demo-box { animation: fadeInUp 0.4s ease-out both; }
+    .stagger-demo > .demo-box:nth-child(1) { animation-delay: 0.05s; background: #3b82f6; }
+    .stagger-demo > .demo-box:nth-child(2) { animation-delay: 0.10s; background: #8b5cf6; }
+    .stagger-demo > .demo-box:nth-child(3) { animation-delay: 0.15s; background: #ec4899; }
+    .stagger-demo > .demo-box:nth-child(4) { animation-delay: 0.20s; background: #f59e0b; }
+    .library-badge { border-radius: 8px; padding: .4rem .8rem; font-size: .75rem; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge rounded-pill px-3 py-2" style="background:rgba(97,218,251,.15);color:#61dafb;font-size:.85rem;border:1px solid rgba(97,218,251,.3);">Section 27</span>
+      <span class="badge rounded-pill px-3 py-2" style="background:#ec4899;">UI Polish</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.4rem;">Animations in React</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;max-width:640px;">From pure CSS transitions to physics-based spring animations — choose the right tool for the job.</p>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- Why Animation Matters -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-stars me-2" style="color:#f59e0b;"></i>Why Animation Matters</h2>
+    <div class="row g-3">
+      <div class="col-md-8">
+        <p>Good animations do three things: <strong>communicate state changes</strong>, <strong>guide user attention</strong>, and <strong>provide spatial context</strong>. Bad animations are distracting, slow, and inaccessible.</p>
+        <div class="concept-box green">
+          <div class="fw-700 mb-2">The Performance Rule</div>
+          <ul class="mb-0 small">
+            <li>Only animate <code>transform</code> and <code>opacity</code> — these run on the GPU compositor thread</li>
+            <li>Avoid animating <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code> — these trigger layout recalculation</li>
+            <li>Use <code>will-change: transform</code> sparingly to promote elements to their own layer</li>
+            <li>Respect <code>prefers-reduced-motion</code> — always provide a no-animation fallback</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="concept-box amber">
+          <div class="fw-700 mb-2 small">Stagger Demo (CSS only)</div>
+          <div class="stagger-demo" id="staggerDemo">
+            <div class="demo-box"></div>
+            <div class="demo-box"></div>
+            <div class="demo-box"></div>
+            <div class="demo-box"></div>
+          </div>
+          <button class="btn btn-sm btn-outline-secondary mt-2" onclick="restartStagger()">Replay</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CSS Transitions -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="library-badge" style="background:#eff6ff;color:#3b82f6;border:1px solid #93c5fd;">No Library Required</span>
+      <h2 class="fw-700 mb-0" style="font-size:1.4rem;">CSS Transitions &amp; Keyframes</h2>
+    </div>
+    <p class="mb-3">For simple enter/exit animations, pure CSS is the best choice — zero bundle overhead, GPU-composited, works without JS.</p>
+
+    <div class="code-block"><span class="cm">/* ── Fade In with upward motion ───────────────────────── */</span>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+<span class="cm">/* ── Slide in from left ────────────────────────────────── */</span>
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+<span class="cm">/* ── Scale in (modal / tooltip) ────────────────────────── */</span>
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+<span class="cm">/* ── Stagger children ──────────────────────────────────── */</span>
+.stagger-list > * {
+  animation: fadeIn 0.4s ease-out both;
+}
+.stagger-list > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-list > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger-list > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-list > *:nth-child(4) { animation-delay: 0.20s; }
+.stagger-list > *:nth-child(5) { animation-delay: 0.25s; }
+
+<span class="cm">/* ── Hover transitions ─────────────────────────────────── */</span>
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}</div>
+
+    <h6 class="fw-700 mt-3 mb-2">Using CSS Classes in React</h6>
+    <div class="code-block"><span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">FadeInCard</span>({ children }) {
+  <span class="kw">const</span> [visible, setVisible] = <span class="fn">useState</span>(<span class="kw">false</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="cm">// Trigger on next frame so CSS transition fires</span>
+    <span class="kw">const</span> id = requestAnimationFrame(() =&gt; <span class="fn">setVisible</span>(<span class="kw">true</span>));
+    <span class="kw">return</span> () =&gt; cancelAnimationFrame(id);
+  }, []);
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">div</span> className={visible ? <span class="st">'fade-in'</span> : <span class="st">'opacity-0'</span>}&gt;
+      {children}
+    &lt;/<span class="fn">div</span>&gt;
+  );
+}
+
+<span class="cm">// Respect reduced motion preference</span>
+<span class="kw">const</span> prefersReducedMotion =
+  window.matchMedia(<span class="st">'(prefers-reduced-motion: reduce)'</span>).matches;
+
+<span class="kw">function</span> <span class="fn">AnimatedCard</span>({ children }) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">div</span> style={{
+      animation: prefersReducedMotion
+        ? <span class="st">'none'</span>
+        : <span class="st">'fadeIn 0.4s ease-out forwards'</span>
+    }}&gt;
+      {children}
+    &lt;/<span class="fn">div</span>&gt;
+  );
+}</div>
+  </div>
+
+  <!-- React Spring -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="library-badge" style="background:#fef3c7;color:#b45309;border:1px solid #fcd34d;">@react-spring/web</span>
+      <h2 class="fw-700 mb-0" style="font-size:1.4rem;">React Spring — Physics-Based Animations</h2>
+    </div>
+    <p class="mb-3">React Spring uses a <strong>spring physics model</strong> instead of duration/easing — animations feel natural because they mimic real-world spring tension. No more "robotic" linear animations.</p>
+
+    <div class="concept-box blue mb-3">
+      <div class="fw-700 mb-2">Spring Physics Config</div>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="fw-600 small">mass</div>
+          <div class="small text-muted">Weight of the object. Higher = slower, more momentum.</div>
+        </div>
+        <div class="col-md-4">
+          <div class="fw-600 small">tension</div>
+          <div class="small text-muted">Spring stiffness. Higher = faster, snappier.</div>
+        </div>
+        <div class="col-md-4">
+          <div class="fw-600 small">friction</div>
+          <div class="small text-muted">Resistance. Higher = less bouncy, stops sooner.</div>
+        </div>
+      </div>
+    </div>
+
+    <h6 class="fw-700 mb-2">useSpring — Flip Card Example</h6>
+    <div class="code-block"><span class="kw">import</span> { useSpring, animated } <span class="kw">from</span> <span class="st">'@react-spring/web'</span>;
+
+<span class="kw">function</span> <span class="fn">FlipCard</span>({ flipped }) {
+  <span class="kw">const</span> { transform, opacity } = <span class="fn">useSpring</span>({
+    opacity: flipped ? <span class="st">1</span> : <span class="st">0</span>,
+    transform: <span class="st">`perspective(600px) rotateX(${flipped ? 180 : 0}deg)`</span>,
+    config: { mass: <span class="st">5</span>, tension: <span class="st">500</span>, friction: <span class="st">80</span> },
+  });
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">div</span> className=<span class="st">"flip-card"</span>&gt;
+      &lt;<span class="fn">animated.div</span>
+        style={{
+          opacity: opacity.<span class="fn">to</span>(o =&gt; <span class="st">1</span> - o),
+          transform,
+        }}
+      &gt;
+        Front
+      &lt;/<span class="fn">animated.div</span>&gt;
+      &lt;<span class="fn">animated.div</span>
+        style={{
+          opacity,
+          transform: transform.<span class="fn">to</span>(t =&gt; <span class="st">`${t} rotateX(180deg)`</span>),
+        }}
+      &gt;
+        Back
+      &lt;/<span class="fn">animated.div</span>&gt;
+    &lt;/<span class="fn">div</span>&gt;
+  );
+}</div>
+
+    <h6 class="fw-700 mt-3 mb-2">useTrail — Staggered List</h6>
+    <div class="code-block"><span class="kw">import</span> { useTrail, animated } <span class="kw">from</span> <span class="st">'@react-spring/web'</span>;
+
+<span class="kw">function</span> <span class="fn">AnimatedList</span>({ items }) {
+  <span class="cm">// Trail: each item starts animating after the previous one</span>
+  <span class="kw">const</span> trail = <span class="fn">useTrail</span>(items.length, {
+    from: { opacity: <span class="st">0</span>, y: <span class="st">30</span> },
+    to:   { opacity: <span class="st">1</span>, y: <span class="st">0</span>  },
+    config: { tension: <span class="st">300</span>, friction: <span class="st">30</span> },
+  });
+
+  <span class="kw">return</span> (
+    &lt;&gt;
+      {trail.<span class="fn">map</span>((style, i) =&gt; (
+        &lt;<span class="fn">animated.div</span> key={items[i].id} style={style} className=<span class="st">"list-item"</span>&gt;
+          {items[i].name}
+        &lt;/<span class="fn">animated.div</span>&gt;
+      ))}
+    &lt;/&gt;
+  );
+}
+
+<span class="cm">// useTransition — animate items entering/leaving a list</span>
+<span class="kw">import</span> { useTransition, animated } <span class="kw">from</span> <span class="st">'@react-spring/web'</span>;
+
+<span class="kw">function</span> <span class="fn">TransitionList</span>({ items }) {
+  <span class="kw">const</span> transitions = <span class="fn">useTransition</span>(items, {
+    keys: item =&gt; item.id,
+    from:  { opacity: <span class="st">0</span>, transform: <span class="st">'translateX(-20px)'</span> },
+    enter: { opacity: <span class="st">1</span>, transform: <span class="st">'translateX(0px)'</span>  },
+    leave: { opacity: <span class="st">0</span>, transform: <span class="st">'translateX(20px)'</span>  },
+  });
+
+  <span class="kw">return</span> transitions((style, item) =&gt; (
+    &lt;<span class="fn">animated.div</span> style={style}&gt;{item.name}&lt;/<span class="fn">animated.div</span>&gt;
+  ));
+}</div>
+  </div>
+
+  <!-- Framer Motion -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="library-badge" style="background:#fdf4ff;color:#9333ea;border:1px solid #d8b4fe;">framer-motion</span>
+      <h2 class="fw-700 mb-0" style="font-size:1.4rem;">Framer Motion — Declarative Animations</h2>
+    </div>
+    <p class="mb-3">Framer Motion wraps HTML elements with <code>&lt;motion.div&gt;</code> and adds animation props inline. It's the most developer-friendly API and handles mount/unmount animations elegantly with <code>AnimatePresence</code>.</p>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">Page Transitions</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="kw">import</span> { motion } <span class="kw">from</span> <span class="st">'framer-motion'</span>;
+
+<span class="kw">function</span> <span class="fn">Page</span>({ children }) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">motion.div</span>
+      initial={{ opacity: <span class="st">0</span>, y: <span class="st">20</span> }}
+      animate={{ opacity: <span class="st">1</span>, y: <span class="st">0</span>  }}
+      exit={{ opacity: <span class="st">0</span>, y: <span class="st">-20</span> }}
+      transition={{ duration: <span class="st">0.3</span> }}
+    &gt;
+      {children}
+    &lt;/<span class="fn">motion.div</span>&gt;
+  );
+}
+
+<span class="cm">// Wrap routes with AnimatePresence</span>
+&lt;<span class="fn">AnimatePresence</span> mode=<span class="st">"wait"</span>&gt;
+  &lt;<span class="fn">Routes</span> location={location} key={location.pathname}&gt;
+    &lt;<span class="fn">Route</span> path=<span class="st">"/"</span> element={&lt;<span class="fn">Page</span>&gt;&lt;<span class="fn">Home</span> /&gt;&lt;/<span class="fn">Page</span>&gt;} /&gt;
+    &lt;<span class="fn">Route</span> path=<span class="st">"/about"</span> element={&lt;<span class="fn">Page</span>&gt;&lt;<span class="fn">About</span> /&gt;&lt;/<span class="fn">Page</span>&gt;} /&gt;
+  &lt;/<span class="fn">Routes</span>&gt;
+&lt;/<span class="fn">AnimatePresence</span>&gt;</div>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-2">AnimatePresence (Mount/Unmount)</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="kw">import</span> { AnimatePresence, motion } <span class="kw">from</span> <span class="st">'framer-motion'</span>;
+
+<span class="cm">// AnimatePresence animates children when they unmount</span>
+<span class="kw">function</span> <span class="fn">Modal</span>({ show, children }) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">AnimatePresence</span>&gt;
+      {show && (
+        &lt;<span class="fn">motion.div</span>
+          initial={{ opacity: <span class="st">0</span>, scale: <span class="st">0.9</span> }}
+          animate={{ opacity: <span class="st">1</span>, scale: <span class="st">1</span>   }}
+          exit={{ opacity: <span class="st">0</span>, scale: <span class="st">0.9</span>   }}
+          transition={{ type: <span class="st">'spring'</span>, stiffness: <span class="st">300</span>, damping: <span class="st">25</span> }}
+          className=<span class="st">"modal-overlay"</span>
+        &gt;
+          {children}
+        &lt;/<span class="fn">motion.div</span>&gt;
+      )}
+    &lt;/<span class="fn">AnimatePresence</span>&gt;
+  );
+}</div>
+      </div>
+    </div>
+
+    <h6 class="fw-700 mb-2">Drag Gestures with useMotionValue</h6>
+    <div class="code-block"><span class="kw">import</span> { motion, useMotionValue, useTransform } <span class="kw">from</span> <span class="st">'framer-motion'</span>;
+
+<span class="kw">function</span> <span class="fn">DraggableCard</span>() {
+  <span class="kw">const</span> x = <span class="fn">useMotionValue</span>(<span class="st">0</span>);
+
+  <span class="cm">// Map x position to rotation: -200px = -30deg, +200px = +30deg</span>
+  <span class="kw">const</span> rotate  = <span class="fn">useTransform</span>(x, [-<span class="st">200</span>, <span class="st">200</span>], [-<span class="st">30</span>, <span class="st">30</span>]);
+  <span class="cm">// Fade out card when dragged far left or far right</span>
+  <span class="kw">const</span> opacity = <span class="fn">useTransform</span>(x, [-<span class="st">200</span>, -<span class="st">100</span>, <span class="st">0</span>, <span class="st">100</span>, <span class="st">200</span>], [<span class="st">0</span>, <span class="st">1</span>, <span class="st">1</span>, <span class="st">1</span>, <span class="st">0</span>]);
+  <span class="cm">// Show left/right intent labels</span>
+  <span class="kw">const</span> leftOpacity  = <span class="fn">useTransform</span>(x, [-<span class="st">150</span>, -<span class="st">50</span>], [<span class="st">1</span>, <span class="st">0</span>]);
+  <span class="kw">const</span> rightOpacity = <span class="fn">useTransform</span>(x, [<span class="st">50</span>,  <span class="st">150</span>], [<span class="st">0</span>, <span class="st">1</span>]);
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">motion.div</span>
+      drag=<span class="st">"x"</span>
+      dragConstraints={{ left: -<span class="st">200</span>, right: <span class="st">200</span> }}
+      style={{ x, rotate, opacity }}
+      className=<span class="st">"draggable-card"</span>
+      onDragEnd={(e, info) =&gt; {
+        <span class="kw">if</span> (info.offset.x &gt; <span class="st">100</span>)  <span class="fn">onSwipeRight</span>();
+        <span class="kw">if</span> (info.offset.x &lt; -<span class="st">100</span>) <span class="fn">onSwipeLeft</span>();
+      }}
+    &gt;
+      &lt;<span class="fn">motion.div</span> style={{ opacity: leftOpacity }}&gt; Reject &lt;/<span class="fn">motion.div</span>&gt;
+      &lt;<span class="fn">motion.div</span> style={{ opacity: rightOpacity }}&gt; Accept &lt;/<span class="fn">motion.div</span>&gt;
+    &lt;/<span class="fn">motion.div</span>&gt;
+  );
+}
+
+<span class="cm">// Variants — reusable animation presets</span>
+<span class="kw">const</span> listVariants = {
+  hidden:  { opacity: <span class="st">0</span> },
+  visible: { opacity: <span class="st">1</span>, transition: { staggerChildren: <span class="st">0.1</span> } }
+};
+<span class="kw">const</span> itemVariants = {
+  hidden:  { opacity: <span class="st">0</span>, y: <span class="st">20</span> },
+  visible: { opacity: <span class="st">1</span>, y: <span class="st">0</span>  }
+};
+
+<span class="kw">function</span> <span class="fn">StaggerList</span>({ items }) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">motion.ul</span> variants={listVariants} initial=<span class="st">"hidden"</span> animate=<span class="st">"visible"</span>&gt;
+      {items.<span class="fn">map</span>(item =&gt; (
+        &lt;<span class="fn">motion.li</span> key={item.id} variants={itemVariants}&gt;{item.name}&lt;/<span class="fn">motion.li</span>&gt;
+      ))}
+    &lt;/<span class="fn">motion.ul</span>&gt;
+  );
+}</div>
+  </div>
+
+  <!-- AOS -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="library-badge" style="background:#f0fdf4;color:#16a34a;border:1px solid #6ee7b7;">AOS.js</span>
+      <h2 class="fw-700 mb-0" style="font-size:1.4rem;">AOS — Animate On Scroll</h2>
+    </div>
+    <p class="mb-3">AOS (Animate On Scroll) is the simplest option for scroll-triggered animations. Just add <code>data-aos</code> attributes — no JS component wrapping needed.</p>
+
+    <div class="code-block"><span class="cm">&lt;!-- Setup in index.html or _app.tsx --&gt;</span>
+&lt;link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" /&gt;
+&lt;script src="https://unpkg.com/aos@2.3.4/dist/aos.js"&gt;&lt;/script&gt;
+
+<span class="cm">&lt;!-- Initialize once (React: in useEffect at root) --&gt;</span>
+AOS.init({ duration: 600, once: true, offset: 80 });
+
+<span class="cm">&lt;!-- Usage: add data-aos attributes to any element --&gt;</span>
+&lt;div data-aos="fade-up"   data-aos-duration="600" data-aos-delay="0"  &gt;First item&lt;/div&gt;
+&lt;div data-aos="fade-up"   data-aos-duration="600" data-aos-delay="100"&gt;Second item&lt;/div&gt;
+&lt;div data-aos="fade-left" data-aos-duration="600" data-aos-delay="200"&gt;Third item&lt;/div&gt;
+&lt;div data-aos="zoom-in"   data-aos-duration="400" data-aos-delay="300"&gt;Fourth item&lt;/div&gt;
+&lt;div data-aos="flip-up"   data-aos-duration="800" data-aos-delay="0"  &gt;Fifth item&lt;/div&gt;</div>
+
+    <div class="code-block"><span class="cm">// React integration — useEffect in root App.tsx</span>
+<span class="kw">import</span> AOS <span class="kw">from</span> <span class="st">'aos'</span>;
+<span class="kw">import</span> <span class="st">'aos/dist/aos.css'</span>;
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="fn">useEffect</span>(() =&gt; {
+    AOS.<span class="fn">init</span>({ duration: <span class="st">600</span>, once: <span class="kw">true</span> });
+    <span class="cm">// Refresh AOS when content changes (e.g., dynamic lists)</span>
+    <span class="kw">return</span> () =&gt; AOS.<span class="fn">refresh</span>();
+  }, []);
+
+  <span class="kw">return</span> &lt;<span class="fn">RouterProvider</span> router={router} /&gt;;
+}</div>
+
+    <div class="tip-box">
+      <i class="bi bi-lightbulb me-2"></i>Set <code>once: true</code> so animations only play when the element first enters the viewport — not every time the user scrolls past it. Use <code>data-aos-anchor-placement="top-bottom"</code> to control exactly when the animation triggers.
+    </div>
+  </div>
+
+  <!-- Library Comparison -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-grid-3x3-gap me-2" style="color:#3b82f6;"></i>Animation Library Comparison</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Library</th>
+            <th>Bundle Size</th>
+            <th>Learning Curve</th>
+            <th>Best For</th>
+            <th>Mount/Unmount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>CSS only</strong></td>
+            <td class="text-success fw-600">0 KB</td>
+            <td><span class="badge bg-success">Easy</span></td>
+            <td>Simple transitions, hover effects</td>
+            <td>Manual with CSS classes</td>
+          </tr>
+          <tr>
+            <td><strong>AOS.js</strong></td>
+            <td class="text-success fw-600">~13 KB</td>
+            <td><span class="badge bg-success">Easy</span></td>
+            <td>Scroll-triggered animations</td>
+            <td>Not designed for this</td>
+          </tr>
+          <tr>
+            <td><strong>React Spring</strong></td>
+            <td class="text-warning fw-600">~60 KB</td>
+            <td><span class="badge bg-warning text-dark">Medium</span></td>
+            <td>Physics-based, gestures, data viz</td>
+            <td>useTransition</td>
+          </tr>
+          <tr>
+            <td><strong>Framer Motion</strong></td>
+            <td class="text-warning fw-600">~95 KB</td>
+            <td><span class="badge bg-success">Easy-Medium</span></td>
+            <td>Page transitions, drag, layout anim</td>
+            <td>AnimatePresence (excellent)</td>
+          </tr>
+          <tr>
+            <td><strong>GSAP</strong></td>
+            <td class="text-danger fw-600">~130 KB</td>
+            <td><span class="badge bg-danger">Hard</span></td>
+            <td>Complex timelines, SVG, scroll storytelling</td>
+            <td>Timeline-based, manual</td>
+          </tr>
+          <tr>
+            <td><strong>Lottie</strong></td>
+            <td class="text-warning fw-600">~60 KB</td>
+            <td><span class="badge bg-success">Easy</span></td>
+            <td>Playing After Effects / Bodymovin exports</td>
+            <td>JSON animation data</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="concept-box amber mt-2">
+      <div class="fw-700 mb-2">Quick Decision Guide</div>
+      <ul class="mb-0 small">
+        <li><strong>CSS only</strong> — hover effects, loading spinners, simple fade/slide on mount</li>
+        <li><strong>AOS.js</strong> — marketing/landing pages, scroll reveal sections</li>
+        <li><strong>Framer Motion</strong> — React apps needing page transitions, modal/drawer animations, drag interactions</li>
+        <li><strong>React Spring</strong> — data-driven animations, physics feel, complex gesture interactions</li>
+        <li><strong>GSAP</strong> — interactive storytelling, SVG path animations, scroll-pinned timelines</li>
+        <li><strong>Lottie</strong> — high-fidelity branded illustrations and icon animations from designers</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-chat-left-quote me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+
+    <div class="interview-q">1. Why should animations only use transform and opacity? What happens if you animate width or height?</div>
+    <div class="mb-3 ps-3 small">Animating <code>transform</code> and <code>opacity</code> triggers only the "compositing" stage of the browser rendering pipeline — handled entirely on the GPU. Animating <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code> triggers "layout" (reflow) — the browser must recalculate positions of all affected elements on every frame, causing jank and dropped frames (60fps = 16ms budget per frame).</div>
+
+    <div class="interview-q">2. What is AnimatePresence in Framer Motion and why do you need it?</div>
+    <div class="mb-3 ps-3 small">React removes components from the DOM immediately when they're unmounted. AnimatePresence intercepts unmounting and delays the actual DOM removal until the exit animation completes. Without it, you can't animate components as they leave. It tracks which children are being removed and runs their exit animation before destroying the DOM node.</div>
+
+    <div class="interview-q">3. What is the difference between CSS transitions and React Spring's physics model?</div>
+    <div class="mb-3 ps-3 small">CSS transitions use duration + easing curves (linear, ease-in, cubic-bezier). React Spring uses mass, tension, and friction — no fixed duration. The animation "settles" when velocity reaches zero, like a real spring. This produces more natural-feeling motion because real objects don't stop at a precise predetermined time — they decelerate naturally.</div>
+
+    <div class="interview-q">4. How do you handle the prefers-reduced-motion accessibility preference in React?</div>
+    <div class="mb-3 ps-3 small">Use <code>window.matchMedia('(prefers-reduced-motion: reduce)').matches</code> to detect the preference. Conditionally skip or simplify animations. Framer Motion has built-in support via <code>useReducedMotion()</code> hook. React Spring checks it automatically. For CSS, use <code>@media (prefers-reduced-motion: reduce) { animation: none; }</code>.</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+
+function restartStagger() {
+  const el = document.getElementById('staggerDemo');
+  el.style.display = 'none';
+  requestAnimationFrame(() => {
+    el.style.display = '';
+  });
+}
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

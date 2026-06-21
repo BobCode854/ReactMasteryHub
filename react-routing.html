@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Routing — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--text:#f1f5f9;--border:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.5rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;}
+    .content-section{background:#fff;border-radius:16px;padding:2rem;margin-bottom:2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-section{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-redux.html">Redux</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;border:1px solid #61dafb;font-size:.85rem;">Section 11</span>
+      <span class="text-white-50">React Mastery Hub</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.5rem;">React Routing</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;">React Router v6 — nested routes, protected routes, lazy loading, and navigation hooks</p>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+
+  <!-- Setup -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-diagram-3 me-2 text-primary"></i>React Router v6 Setup</h2>
+    <p class="text-muted mb-3">React Router v6 is the standard client-side routing solution. It uses JSX-based route definitions and a hooks-first API.</p>
+    <div class="concept-box blue mb-3">
+      <strong>v6 key changes:</strong> <code>Switch</code> replaced by <code>Routes</code>, <code>component</code> prop replaced by <code>element</code>, nested routes use <code>Outlet</code>, and <code>useHistory</code> is now <code>useNavigate</code>.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { BrowserRouter, Routes, Route, Link, NavLink, Outlet } <span class="kw">from</span> <span class="st">'react-router-dom'</span>;
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    &lt;BrowserRouter&gt;
+      &lt;nav&gt;
+        &lt;NavLink to=<span class="st">"/"</span> className={({isActive}) =&gt; isActive ? <span class="st">'active'</span> : <span class="st">''</span>}&gt;Home&lt;/NavLink&gt;
+        &lt;NavLink to=<span class="st">"/products"</span>&gt;Products&lt;/NavLink&gt;
+        &lt;NavLink to=<span class="st">"/about"</span>&gt;About&lt;/NavLink&gt;
+      &lt;/nav&gt;
+      &lt;Routes&gt;
+        &lt;Route path=<span class="st">"/"</span> element={&lt;Home /&gt;} /&gt;
+        &lt;Route path=<span class="st">"/products"</span> element={&lt;Products /&gt;} /&gt;
+        &lt;Route path=<span class="st">"/products/:id"</span> element={&lt;ProductDetail /&gt;} /&gt;
+        &lt;Route path=<span class="st">"/about"</span> element={&lt;About /&gt;} /&gt;
+        &lt;Route path=<span class="st">"*"</span> element={&lt;NotFound /&gt;} /&gt;  <span class="cm">// catch-all 404</span>
+      &lt;/Routes&gt;
+    &lt;/BrowserRouter&gt;
+  );
+}</pre>
+  </div>
+
+  <!-- Nested Routing -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-layers me-2 text-success"></i>Nested Routing with Outlet</h2>
+    <p class="text-muted mb-3">Nested routes allow child routes to render inside a parent layout component via <code>&lt;Outlet /&gt;</code> — perfect for dashboards, admin panels, and multi-section layouts.</p>
+    <pre class="code-block"><span class="cm">// Dashboard with nested routes</span>
+&lt;Route path=<span class="st">"/dashboard"</span> element={&lt;DashboardLayout /&gt;}&gt;
+  &lt;Route index element={&lt;DashboardHome /&gt;} /&gt;      <span class="cm">// /dashboard</span>
+  &lt;Route path=<span class="st">"profile"</span> element={&lt;Profile /&gt;} /&gt;   <span class="cm">// /dashboard/profile</span>
+  &lt;Route path=<span class="st">"settings"</span> element={&lt;Settings /&gt;} /&gt; <span class="cm">// /dashboard/settings</span>
+&lt;/Route&gt;
+
+<span class="kw">function</span> <span class="fn">DashboardLayout</span>() {
+  <span class="kw">return</span> (
+    &lt;div style={{ display: <span class="st">'flex'</span> }}&gt;
+      &lt;Sidebar /&gt;
+      &lt;main&gt;
+        &lt;Outlet /&gt; <span class="cm">// nested routes render here</span>
+      &lt;/main&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    <div class="concept-box green">
+      <strong>index route:</strong> The <code>index</code> prop marks the default child route — rendered when the parent path matches exactly (no additional segment).
+    </div>
+  </div>
+
+  <!-- Dynamic Routes -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-hash me-2 text-warning"></i>Dynamic Routes + useParams</h2>
+    <p class="text-muted mb-3">URL parameters (prefixed with <code>:</code>) are accessible via <code>useParams()</code> inside any component rendered by that route.</p>
+    <pre class="code-block"><span class="kw">function</span> <span class="fn">ProductDetail</span>() {
+  <span class="kw">const</span> { id } = <span class="fn">useParams</span>();
+  <span class="kw">const</span> { data, loading } = <span class="fn">useFetch</span>(`/api/products/${id}`);
+
+  <span class="kw">if</span> (loading) <span class="kw">return</span> &lt;Spinner /&gt;;
+  <span class="kw">return</span> (
+    &lt;div&gt;
+      &lt;h1&gt;{data.name}&lt;/h1&gt;
+      &lt;p&gt;{data.description}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+  </div>
+
+  <!-- Protected Routes -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-shield-lock-fill me-2 text-danger"></i>Protected Routes</h2>
+    <p class="text-muted mb-3">Protected routes guard pages that require authentication. They redirect unauthenticated users to login while preserving the intended destination for post-login redirect.</p>
+    <pre class="code-block"><span class="kw">function</span> <span class="fn">ProtectedRoute</span>({ children }) {
+  <span class="kw">const</span> { user } = <span class="fn">useAuth</span>();
+  <span class="kw">const</span> location = <span class="fn">useLocation</span>();
+
+  <span class="kw">if</span> (!user) {
+    <span class="kw">return</span> &lt;Navigate to=<span class="st">"/login"</span> state={{ from: location }} replace /&gt;;
+  }
+
+  <span class="kw">return</span> children;
+}
+
+<span class="cm">// Usage — wrap any route that needs auth</span>
+&lt;Route path=<span class="st">"/dashboard"</span> element={
+  &lt;ProtectedRoute&gt;
+    &lt;Dashboard /&gt;
+  &lt;/ProtectedRoute&gt;
+} /&gt;
+
+<span class="cm">// After login — redirect back to the page the user tried to visit</span>
+<span class="kw">function</span> <span class="fn">LoginPage</span>() {
+  <span class="kw">const</span> navigate = <span class="fn">useNavigate</span>();
+  <span class="kw">const</span> location = <span class="fn">useLocation</span>();
+  <span class="kw">const</span> from = location.state?.from?.pathname || <span class="st">'/'</span>;
+
+  <span class="kw">const</span> <span class="fn">handleLogin</span> = <span class="kw">async</span> () => {
+    <span class="kw">await</span> <span class="fn">login</span>();
+    <span class="fn">navigate</span>(from, { replace: <span class="kw">true</span> });
+  };
+}</pre>
+  </div>
+
+  <!-- Lazy Loading -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-rocket-takeoff-fill me-2 text-info"></i>Lazy Loading Routes</h2>
+    <p class="text-muted mb-3">Route-based code splitting is the highest-impact performance optimisation for large SPAs — each route becomes a separate JS chunk only loaded when visited.</p>
+    <pre class="code-block"><span class="kw">import</span> { lazy, Suspense } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">const</span> Home = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./pages/Home'</span>));
+<span class="kw">const</span> Dashboard = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./pages/Dashboard'</span>));
+<span class="kw">const</span> Analytics = <span class="fn">lazy</span>(() =&gt; <span class="kw">import</span>(<span class="st">'./pages/Analytics'</span>));
+
+&lt;Suspense fallback={&lt;PageLoader /&gt;}&gt;
+  &lt;Routes&gt;
+    &lt;Route path=<span class="st">"/"</span> element={&lt;Home /&gt;} /&gt;
+    &lt;Route path=<span class="st">"/dashboard"</span> element={&lt;Dashboard /&gt;} /&gt;
+    &lt;Route path=<span class="st">"/analytics"</span> element={&lt;Analytics /&gt;} /&gt;
+  &lt;/Routes&gt;
+&lt;/Suspense&gt;</pre>
+    <div class="concept-box amber">
+      <strong>Tip:</strong> Place <code>&lt;Suspense&gt;</code> as high as possible (wrapping all routes) so a single fallback handles all lazy route loading.
+    </div>
+  </div>
+
+  <!-- useNavigate + useSearchParams -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-1" style="font-size:1.4rem;"><i class="bi bi-search me-2 text-secondary"></i>useNavigate + useSearchParams</h2>
+    <p class="text-muted mb-3">These hooks handle programmatic navigation and URL query string management — essential for search pages, filters, and pagination.</p>
+    <pre class="code-block"><span class="kw">function</span> <span class="fn">SearchPage</span>() {
+  <span class="kw">const</span> navigate = <span class="fn">useNavigate</span>();
+  <span class="kw">const</span> [searchParams, setSearchParams] = <span class="fn">useSearchParams</span>();
+  <span class="kw">const</span> query = searchParams.<span class="fn">get</span>(<span class="st">'q'</span>) || <span class="st">''</span>;
+  <span class="kw">const</span> page = Number(searchParams.<span class="fn">get</span>(<span class="st">'page'</span>)) || 1;
+
+  <span class="kw">return</span> (
+    &lt;div&gt;
+      &lt;input
+        value={query}
+        <span class="fn">onChange</span>={e =&gt; <span class="fn">setSearchParams</span>({ q: e.target.value, page: <span class="st">'1'</span> })}
+      /&gt;
+      &lt;button <span class="fn">onClick</span>={() =&gt; <span class="fn">navigate</span>(-1)}&gt;Back&lt;/button&gt;
+      &lt;button <span class="fn">onClick</span>={() =&gt; <span class="fn">setSearchParams</span>({ q: query, page: String(page + 1) })}&gt;
+        Next Page
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    <div class="row g-3 mt-2">
+      <div class="col-md-6">
+        <div class="tip-box">
+          <strong>useNavigate(-1)</strong> — go back (like browser back button)<br/>
+          <strong>useNavigate(1)</strong> — go forward<br/>
+          <strong>navigate('/path', &#123; replace: true &#125;)</strong> — replace history entry (no back)
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box blue">
+          <strong>useSearchParams</strong> keeps filters in the URL, making them shareable and bookmarkable without any extra state management.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-section">
+    <h2 class="fw-700 mb-3" style="font-size:1.4rem;"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the difference between BrowserRouter and HashRouter?</div>
+    <div class="concept-box purple mb-3">
+      <code>BrowserRouter</code> uses the HTML5 History API (<code>pushState</code>) for clean URLs like <code>/products/1</code> — requires server-side fallback config. <code>HashRouter</code> uses <code>#</code> fragments (<code>/#/products/1</code>) — works without server config but looks less clean and breaks anchor links.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does Outlet work in React Router v6?</div>
+    <div class="concept-box purple mb-3">
+      <code>&lt;Outlet /&gt;</code> is a placeholder in a parent route's component where matching child routes render. It's how nested routing is implemented — the parent provides shared layout, and the outlet swaps in the active child content.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you redirect after login while preserving the intended URL?</div>
+    <div class="concept-box purple mb-3">
+      In the <code>ProtectedRoute</code>, pass <code>state=&#123;&#123; from: location &#125;&#125;</code> to the <code>Navigate</code> component. After successful login, read <code>location.state?.from?.pathname</code> and call <code>navigate(from, &#123; replace: true &#125;)</code> to send the user to their original destination.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the purpose of the index route?</div>
+    <div class="concept-box purple mb-3">
+      An <code>index</code> route renders when its parent route path matches exactly with no additional segments. It's the default child — equivalent to a route with path="" — and avoids needing to repeat the parent path.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Why should you use NavLink instead of Link for navigation menus?</div>
+    <div class="concept-box purple mb-3">
+      <code>NavLink</code> automatically receives an <code>isActive</code> boolean in its <code>className</code> and <code>style</code> callbacks, letting you apply active styles without manually comparing the current URL. <code>Link</code> provides no active state awareness.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does code splitting with lazy() reduce initial load time?</div>
+    <div class="concept-box purple mb-3">
+      <code>lazy()</code> wraps a dynamic <code>import()</code>, telling the bundler (Webpack/Vite) to emit each lazy-loaded module as a separate chunk. On initial page load, only the chunks for the visited route are downloaded — other route bundles load on demand when navigated to.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What does replace: true do in useNavigate?</div>
+    <div class="concept-box purple mb-3">
+      <code>navigate('/path', &#123; replace: true &#125;)</code> replaces the current entry in the browser history stack instead of pushing a new one. This means the back button won't return to the replaced page — useful for login redirects and wizard flows where back-navigation would be confusing.
+    </div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you persist filters/pagination in the URL with React Router?</div>
+    <div class="concept-box purple mb-3">
+      Use <code>useSearchParams</code> to read and write URL query parameters (<code>?q=react&page=2</code>). Call <code>setSearchParams(&#123; q: value &#125;)</code> to update — it pushes a new history entry preserving the URL, making the state shareable, bookmarkable, and recoverable on refresh.
+    </div>
+  </div>
+
+</div>
+
+<footer class="py-4 mt-2" style="background:#0f172a;color:#64748b;">
+  <div class="container-xl text-center">
+    <span>React Mastery Hub &mdash; Section 11: Routing</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

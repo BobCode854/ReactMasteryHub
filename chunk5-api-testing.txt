@@ -1,0 +1,2139 @@
+<div class="tab-pane fade" id="tab-api" role="tabpanel">
+  <div class="accordion" id="acc-api">
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q1">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is React Query (TanStack Query)?
+    </button>
+  </h2>
+  <div id="api-q1" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      React Query (now TanStack Query) is a data-fetching and server-state management library for React. It handles all the complexity of fetching, caching, synchronizing, and updating server state. Unlike Redux which manages client state, React Query manages server state — data that lives on the server and needs to be fetched, cached, and kept fresh. Key features: automatic caching with configurable stale times, background refetching, query invalidation, optimistic updates, infinite queries, and request deduplication. It eliminates the need for useEffect-based fetching patterns and dramatically reduces boilerplate.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q2">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the difference between server state and client state?
+    </button>
+  </h2>
+  <div id="api-q2" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Server state is data that lives on the server — it's asynchronous, can become stale, needs to be fetched, and may be modified by other users (product inventory, user profiles, posts). Client state is local UI state that exists only in the browser — synchronous, always up-to-date, owned entirely by the client (modal open/closed, form input values, selected tab). Most state management libraries (Redux, Zustand, Context) are designed for client state. React Query, SWR, and Apollo Client are designed for server state. The mistake of managing server state in Redux leads to complex async middleware, manual cache invalidation, and stale data problems that these dedicated libraries solve automatically.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q3">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the useQuery hook?
+    </button>
+  </h2>
+  <div id="api-q3" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      <code>useQuery({ queryKey, queryFn })</code> fetches and caches data from an API. <code>queryKey</code> is an array that uniquely identifies the query — it's used for caching, deduplication, and invalidation. <code>queryFn</code> is an async function that fetches and returns the data. It returns <code>{ data, isLoading, isError, error, refetch, status }</code>. React Query automatically: fetches on mount, caches the result, refetches on window focus (configurable), deduplicates concurrent requests with the same key, and retries failed requests. The query key is like a cache key — changing any element in the array triggers a new fetch.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q4">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is useMutation in React Query?
+    </button>
+  </h2>
+  <div id="api-q4" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      <code>useMutation({ mutationFn, onSuccess, onError, onSettled })</code> manages write operations — creating, updating, or deleting data. Unlike <code>useQuery</code> (which runs automatically), mutations are triggered manually by calling <code>mutate(variables)</code>. It tracks <code>isLoading</code>, <code>isError</code>, <code>data</code>, and <code>error</code> state. Callbacks: <code>onSuccess(data, variables)</code> runs after success, <code>onError(error, variables)</code> after failure, <code>onSettled</code> after either. The most powerful pattern: <code>onSuccess</code> invalidates related queries (<code>queryClient.invalidateQueries(['posts'])</code>) so the UI reflects the mutation result. This is how React Query keeps server state synchronized after mutations.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q5">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is SWR?
+    </button>
+  </h2>
+  <div id="api-q5" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      SWR (Stale-While-Revalidate) is Vercel's data-fetching library for React. The name comes from the HTTP cache-control strategy: return cached (stale) data immediately, then revalidate in the background. <code>useSWR(key, fetcher)</code> returns <code>{ data, error, isLoading, mutate }</code>. Key features: global cache, request deduplication, focus revalidation, interval polling, error retry, and optimistic updates via <code>mutate</code>. SWR is simpler and lighter than React Query but has fewer features (no mutations API, no query cancellation, less control over cache behavior). SWR is popular in Next.js projects (same creator — Vercel).
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q6">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How does React Query's caching work?
+    </button>
+  </h2>
+  <div id="api-q6" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      React Query maintains an in-memory cache keyed by <code>queryKey</code>. When a query is fetched, the result is cached with a <code>staleTime</code> (default: 0 — immediately stale) and <code>gcTime</code> (formerly cacheTime, default: 5 minutes). <code>staleTime</code> controls how long cached data is considered fresh — during this period, components receive cached data without refetching. After staleTime, data is "stale" but still shown while a background refetch occurs. <code>gcTime</code> controls how long unused query data stays in cache before garbage collection. Understanding the distinction: fresh data is never refetched; stale data is shown immediately but refetched in the background; inactive data stays in cache for gcTime then is removed.
+      <pre class="code-block">import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,       // data is fresh for 1 minute — no background refetch
+      gcTime: 5 * 60 * 1000,      // cache kept for 5 minutes after component unmounts
+      retry: 2,                   // retry failed requests twice
+      refetchOnWindowFocus: true, // refetch when user returns to the tab
+    },
+  },
+});
+
+function UserProfile({ userId }) {
+  const { data, isLoading, isStale } = useQuery({
+    queryKey: ['user', userId], // cache key — changing userId triggers new fetch
+    queryFn: () =&gt; fetch(`/api/users/${userId}`).then(r =&gt; r.json()),
+    staleTime: 30 * 1000, // override: fresh for 30 seconds
+  });
+  return &lt;div&gt;{isStale ? '(refreshing...)' : ''} {data?.name}&lt;/div&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q7">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you invalidate queries in React Query?
+    </button>
+  </h2>
+  <div id="api-q7" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      <code>queryClient.invalidateQueries({ queryKey: ['posts'] })</code> marks matching queries as stale and triggers an immediate background refetch if the query is actively subscribed. This is the primary mechanism for keeping server state synchronized after mutations. Invalidation patterns: (1) Exact match: <code>{ queryKey: ['posts', postId], exact: true }</code>; (2) Prefix match: <code>{ queryKey: ['posts'] }</code> matches all queries starting with 'posts' (including ['posts', 1], ['posts', { status: 'published' }]); (3) Invalidate all: <code>queryClient.invalidateQueries()</code>. Best practice: after a mutation that creates/modifies a post, invalidate the posts list so it refetches with the latest data.
+      <pre class="code-block">const queryClient = useQueryClient();
+
+const createPost = useMutation({
+  mutationFn: (newPost) =&gt; fetch('/api/posts', {
+    method: 'POST',
+    body: JSON.stringify(newPost)
+  }).then(r =&gt; r.json()),
+  onSuccess: (createdPost) =&gt; {
+    // Invalidate the posts list (triggers background refetch)
+    queryClient.invalidateQueries({ queryKey: ['posts'] });
+
+    // Optionally pre-populate the cache for the individual post
+    queryClient.setQueryData(['post', createdPost.id], createdPost);
+  },
+  onError: (error) =&gt; {
+    console.error('Failed to create post:', error);
+  },
+});
+
+function CreatePostForm() {
+  const [title, setTitle] = React.useState('');
+  return (
+    &lt;form onSubmit={(e) =&gt; { e.preventDefault(); createPost.mutate({ title }); }}&gt;
+      &lt;input value={title} onChange={(e) =&gt; setTitle(e.target.value)} /&gt;
+      &lt;button type="submit" disabled={createPost.isLoading}&gt;Create&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q8">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is useInfiniteQuery?
+    </button>
+  </h2>
+  <div id="api-q8" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      <code>useInfiniteQuery</code> fetches paginated data where each page is determined by a cursor or page number. It accumulates pages in <code>data.pages</code> (an array of page results) and provides <code>fetchNextPage</code>, <code>fetchPreviousPage</code>, <code>hasNextPage</code>, and <code>isFetchingNextPage</code>. The <code>getNextPageParam(lastPage, allPages)</code> function tells React Query how to derive the next page's identifier from the last fetched page. This is the canonical pattern for infinite scroll and load-more pagination.
+      <pre class="code-block">function useInfinitePosts() {
+  return useInfiniteQuery({
+    queryKey: ['posts'],
+    queryFn: ({ pageParam = 1 }) =&gt;
+      fetch(`/api/posts?page=${pageParam}&amp;limit=10`).then(r =&gt; r.json()),
+    getNextPageParam: (lastPage, allPages) =&gt;
+      lastPage.hasMore ? allPages.length + 1 : undefined,
+    initialPageParam: 1,
+  });
+}
+
+function PostList() {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfinitePosts();
+  const sentinelRef = React.useRef(null);
+
+  React.useEffect(() =&gt; {
+    const observer = new IntersectionObserver(([entry]) =&gt; {
+      if (entry.isIntersecting &amp;&amp; hasNextPage) fetchNextPage();
+    });
+    if (sentinelRef.current) observer.observe(sentinelRef.current);
+    return () =&gt; observer.disconnect();
+  }, [hasNextPage, fetchNextPage]);
+
+  return (
+    &lt;div&gt;
+      {data?.pages.flatMap(page =&gt; page.posts).map(post =&gt; (
+        &lt;PostCard key={post.id} post={post} /&gt;
+      ))}
+      &lt;div ref={sentinelRef}&gt;{isFetchingNextPage &amp;&amp; &lt;Spinner /&gt;}&lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q9">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you implement optimistic updates with React Query?
+    </button>
+  </h2>
+  <div id="api-q9" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Optimistic updates in React Query update the cache immediately before the mutation completes, providing instant feedback. If the mutation fails, the previous cache value is restored. The pattern uses <code>onMutate</code> (to save the current cache and apply the optimistic update), <code>onError</code> (to rollback), and <code>onSettled</code> (to invalidate and refetch for the true server state). This gives users instant UI feedback while ensuring eventual consistency with the server.
+      <pre class="code-block">const toggleLike = useMutation({
+  mutationFn: (postId) =&gt;
+    fetch(`/api/posts/${postId}/like`, { method: 'POST' }).then(r =&gt; r.json()),
+
+  onMutate: async (postId) =&gt; {
+    // Cancel outgoing refetches to avoid overwriting the optimistic update
+    await queryClient.cancelQueries({ queryKey: ['post', postId] });
+
+    // Snapshot the current value for rollback
+    const previousPost = queryClient.getQueryData(['post', postId]);
+
+    // Optimistically update the cache
+    queryClient.setQueryData(['post', postId], (old) =&gt; ({
+      ...old,
+      liked: !old.liked,
+      likeCount: old.liked ? old.likeCount - 1 : old.likeCount + 1,
+    }));
+
+    return { previousPost, postId };
+  },
+
+  onError: (err, postId, context) =&gt; {
+    // Rollback to the snapshot on error
+    queryClient.setQueryData(['post', context.postId], context.previousPost);
+  },
+
+  onSettled: (data, error, postId) =&gt; {
+    // Always refetch to get the real server state
+    queryClient.invalidateQueries({ queryKey: ['post', postId] });
+  },
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q10">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is prefetching in React Query?
+    </button>
+  </h2>
+  <div id="api-q10" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Prefetching loads query data into the cache before it's needed — so when a component mounts and calls <code>useQuery</code>, the data is already available with no loading state. Use cases: preload the next page of results on hover, preload detail data when hovering a list item, preload data on route transitions. <code>queryClient.prefetchQuery({ queryKey, queryFn })</code> behaves like a query fetch but doesn't trigger a re-render — it just populates the cache silently.
+      <pre class="code-block">function usePostListPrefetch() {
+  const queryClient = useQueryClient();
+
+  const prefetchPost = React.useCallback((postId) =&gt; {
+    queryClient.prefetchQuery({
+      queryKey: ['post', postId],
+      queryFn: () =&gt; fetch(`/api/posts/${postId}`).then(r =&gt; r.json()),
+      staleTime: 10 * 1000, // don't prefetch if already fresh
+    });
+  }, [queryClient]);
+
+  return prefetchPost;
+}
+
+function PostListItem({ post }) {
+  const prefetchPost = usePostListPrefetch();
+  return (
+    &lt;div
+      onMouseEnter={() =&gt; prefetchPost(post.id)}
+      onFocus={() =&gt; prefetchPost(post.id)}
+    &gt;
+      &lt;a href={`/posts/${post.id}`}&gt;{post.title}&lt;/a&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q11">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is RTK Query and how does it compare to React Query?
+    </button>
+  </h2>
+  <div id="api-q11" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      RTK Query is Redux Toolkit's built-in data fetching solution. It generates hooks (<code>useGetPostQuery</code>, <code>useCreatePostMutation</code>) from an API definition using <code>createApi</code>. Key difference: RTK Query stores fetched data in the Redux store, making it accessible to Redux DevTools and Redux state selectors. React Query stores data in its own cache outside Redux. RTK Query is the right choice when your app already uses Redux and you want a unified state story; React Query is framework-agnostic and simpler to adopt. Both provide: caching, deduplication, invalidation, optimistic updates, and automatic background refetching.
+      <pre class="code-block">import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+const postsApi = createApi({
+  reducerPath: 'postsApi',
+  baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
+  tagTypes: ['Post'],
+  endpoints: (builder) =&gt; ({
+    getPosts: builder.query({
+      query: () =&gt; 'posts',
+      providesTags: ['Post'],
+    }),
+    createPost: builder.mutation({
+      query: (body) =&gt; ({ url: 'posts', method: 'POST', body }),
+      invalidatesTags: ['Post'], // auto-invalidate getPosts after mutation
+    }),
+  }),
+});
+
+export const { useGetPostsQuery, useCreatePostMutation } = postsApi;
+
+function PostList() {
+  const { data: posts, isLoading } = useGetPostsQuery();
+  const [createPost] = useCreatePostMutation();
+  return &lt;div&gt;{posts?.map(p =&gt; &lt;Post key={p.id} post={p} /&gt;)}&lt;/div&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q12">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you handle API errors in React Query?
+    </button>
+  </h2>
+  <div id="api-q12" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      React Query retries failed requests automatically (3 times by default with exponential backoff). After retries are exhausted, it sets <code>isError: true</code> and <code>error</code> to the thrown error. Error handling options: (1) per-query <code>onError</code> callback; (2) global <code>QueryClient</code> <code>defaultOptions.queries.onError</code>; (3) React Query 5's <code>throwOnError: true</code> to throw to the nearest Error Boundary; (4) checking <code>isError</code> in the component. For authentication errors (401), use a global error handler to redirect to login.
+      <pre class="code-block">const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) =&gt; {
+        if (error.status &gt;= 400 &amp;&amp; error.status &lt; 500) return false;
+        return failureCount &lt; 3;
+      },
+    },
+  },
+  queryCache: new QueryCache({
+    onError: (error) =&gt; {
+      if (error.status === 401) navigate('/login');
+      if (error.status === 403) showToast('Insufficient permissions');
+    },
+  }),
+});
+
+function UserProfile({ userId }) {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () =&gt; fetchUser(userId),
+    throwOnError: false,
+  });
+
+  if (isLoading) return &lt;Skeleton /&gt;;
+  if (isError) return &lt;ErrorAlert message={error.message} /&gt;;
+  return &lt;Profile user={data} /&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q13">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What are dependent queries in React Query?
+    </button>
+  </h2>
+  <div id="api-q13" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Dependent queries are queries that should only run after another query completes — e.g., fetch user first, then use the user's ID to fetch their projects. The <code>enabled</code> option controls this: <code>enabled: !!userId</code> makes the query wait until userId is truthy. React Query automatically runs the query when <code>enabled</code> changes to true. For parallel independent queries, use <code>useQueries</code> to run multiple queries simultaneously without unnecessary waterfalls.
+      <pre class="code-block">function UserProjects({ username }) {
+  // Step 1: fetch user by username
+  const { data: user } = useQuery({
+    queryKey: ['user', username],
+    queryFn: () =&gt; fetchUserByUsername(username),
+  });
+
+  // Step 2: only runs when user.id is available
+  const { data: projects, isLoading } = useQuery({
+    queryKey: ['projects', user?.id],
+    queryFn: () =&gt; fetchProjectsByUser(user.id),
+    enabled: !!user?.id,
+  });
+
+  if (isLoading) return &lt;Skeleton /&gt;;
+  return &lt;ProjectList projects={projects} /&gt;;
+}
+
+// Parallel queries — use useQueries
+function Dashboard({ userId }) {
+  const results = useQueries({
+    queries: [
+      { queryKey: ['user', userId], queryFn: () =&gt; fetchUser(userId) },
+      { queryKey: ['stats', userId], queryFn: () =&gt; fetchStats(userId) },
+      { queryKey: ['activity', userId], queryFn: () =&gt; fetchActivity(userId) },
+    ],
+  });
+  const [user, stats, activity] = results;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q14">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you handle race conditions in data fetching?
+    </button>
+  </h2>
+  <div id="api-q14" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Race conditions occur when multiple fetch requests are in-flight simultaneously and responses arrive out of order — an earlier request's response overwrites the more recent request's result. In React Query, race conditions are handled automatically — it tracks the latest request per query key and ignores responses from superseded requests. For manual <code>useEffect</code> fetching, use either a <code>cancelled</code> flag or <code>AbortController</code>. React Query v5 additionally uses <code>AbortController</code> internally to cancel superseded requests at the network level.
+      <pre class="code-block">// Manual fix: cancelled flag
+React.useEffect(() =&gt; {
+  let cancelled = false;
+  setLoading(true);
+  fetchData(query)
+    .then(data =&gt; { if (!cancelled) setData(data); })
+    .finally(() =&gt; { if (!cancelled) setLoading(false); });
+  return () =&gt; { cancelled = true; };
+}, [query]);
+
+// Manual fix: AbortController
+React.useEffect(() =&gt; {
+  const controller = new AbortController();
+  fetch(`/api/search?q=${query}`, { signal: controller.signal })
+    .then(r =&gt; r.json())
+    .then(setData)
+    .catch(err =&gt; { if (err.name !== 'AbortError') setError(err); });
+  return () =&gt; controller.abort();
+}, [query]);
+
+// React Query: handled automatically
+const { data } = useQuery({
+  queryKey: ['search', query],
+  queryFn: ({ signal }) =&gt;
+    fetch(`/api/search?q=${query}`, { signal }).then(r =&gt; r.json()),
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q15">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is request deduplication in React Query?
+    </button>
+  </h2>
+  <div id="api-q15" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Request deduplication means that if multiple components mount at the same time and call <code>useQuery</code> with the same <code>queryKey</code>, only ONE network request is made — all components receive the same data when it arrives. Without deduplication, 10 components on a page could each trigger the same API request. React Query handles this by checking if a query with that key is already in-flight before starting a new fetch. This dramatically reduces redundant network requests on initial page load. The deduplication window is during the initial fetch — once data is in cache, new subscribers just read from cache instantly.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q16">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you implement pagination with React Query?
+    </button>
+  </h2>
+  <div id="api-q16" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Standard pagination uses a page number parameter in the query key. Each page is a separate cache entry. <code>placeholderData: keepPreviousData</code> (React Query v5) maintains the previous page's data visible while the next page loads — preventing a loading flash on page change. Prefetching the next page when the current page loads gives users instant navigation.
+      <pre class="code-block">import { useQuery, keepPreviousData } from '@tanstack/react-query';
+
+function PostsPage() {
+  const [page, setPage] = React.useState(1);
+
+  const { data, isPlaceholderData, isFetching } = useQuery({
+    queryKey: ['posts', page],
+    queryFn: () =&gt; fetch(`/api/posts?page=${page}&amp;limit=10`).then(r =&gt; r.json()),
+    placeholderData: keepPreviousData,
+  });
+
+  const queryClient = useQueryClient();
+  React.useEffect(() =&gt; {
+    if (!isPlaceholderData &amp;&amp; data?.hasMore) {
+      queryClient.prefetchQuery({
+        queryKey: ['posts', page + 1],
+        queryFn: () =&gt; fetch(`/api/posts?page=${page + 1}`).then(r =&gt; r.json()),
+      });
+    }
+  }, [data, page, isPlaceholderData, queryClient]);
+
+  return (
+    &lt;div&gt;
+      {data?.posts.map(post =&gt; &lt;PostCard key={post.id} post={post} /&gt;)}
+      &lt;button onClick={() =&gt; setPage(p =&gt; p - 1)} disabled={page === 1}&gt;Prev&lt;/button&gt;
+      &lt;span&gt;Page {page}&lt;/span&gt;
+      &lt;button onClick={() =&gt; setPage(p =&gt; p + 1)} disabled={!data?.hasMore}&gt;Next&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q17">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you use AbortController with React Query?
+    </button>
+  </h2>
+  <div id="api-q17" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      React Query v5 automatically passes an <code>AbortSignal</code> to the <code>queryFn</code> via the <code>signal</code> property of the query function context. Pass it to <code>fetch()</code> or axios to automatically cancel in-flight requests when the query is cancelled (component unmounts, query key changes, or query becomes disabled). This saves bandwidth and prevents race conditions at the network level without any manual cleanup code.
+      <pre class="code-block">const { data } = useQuery({
+  queryKey: ['user', userId],
+  queryFn: async ({ signal }) =&gt; {
+    const response = await fetch(`/api/users/${userId}`, { signal });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  },
+});
+
+// With axios (v0.22+ supports AbortSignal natively)
+const queryFn = async ({ signal }) =&gt; {
+  const { data } = await axios.get(`/api/users/${userId}`, { signal });
+  return data;
+};
+
+// Custom fetcher that wraps axios
+const axiosFetcher = (url) =&gt; async ({ signal }) =&gt; {
+  const { data } = await axios.get(url, { signal });
+  return data;
+};</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q18">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement WebSocket subscriptions with React Query?
+    </button>
+  </h2>
+  <div id="api-q18" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      React Query is primarily for HTTP request-response patterns. For WebSockets, the pattern is: use <code>useQuery</code> for the initial data load and use <code>queryClient.setQueryData</code> to update the cache when WebSocket messages arrive. This keeps React Query as the single source of truth while WebSocket events trigger cache updates. The component re-renders automatically whenever the cache updates, just as it would after a refetch.
+      <pre class="code-block">function useLivePost(postId) {
+  const queryClient = useQueryClient();
+
+  // Initial data via HTTP
+  const query = useQuery({
+    queryKey: ['post', postId],
+    queryFn: () =&gt; fetch(`/api/posts/${postId}`).then(r =&gt; r.json()),
+  });
+
+  // Live updates via WebSocket
+  React.useEffect(() =&gt; {
+    const ws = new WebSocket(`wss://api.example.com/posts/${postId}`);
+    ws.onmessage = (e) =&gt; {
+      const update = JSON.parse(e.data);
+      // Update the React Query cache directly
+      queryClient.setQueryData(['post', postId], (old) =&gt; ({
+        ...old,
+        ...update,
+      }));
+    };
+    return () =&gt; ws.close();
+  }, [postId, queryClient]);
+
+  return query;
+}
+
+// Alternative: use queryClient.invalidateQueries on WS message
+// triggers refetch instead of manual cache update — simpler but one extra request</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q19">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What are Server-Sent Events (SSE) and how do you use them in React?
+    </button>
+  </h2>
+  <div id="api-q19" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      SSE (Server-Sent Events) is a server-push technology where the server streams events to the browser over a persistent HTTP connection. Unlike WebSockets (bidirectional), SSE is unidirectional (server to client). Use cases: live feeds, notifications, progress updates, real-time dashboards. The browser <code>EventSource</code> API manages the connection and automatically reconnects on disconnect. SSE uses standard HTTP, works through firewalls and proxies, and supports the <code>Last-Event-ID</code> header for resuming streams after reconnection.
+      <pre class="code-block">function useServerSentEvents(url) {
+  const [events, setEvents] = React.useState([]);
+  const [status, setStatus] = React.useState('connecting');
+
+  React.useEffect(() =&gt; {
+    const eventSource = new EventSource(url);
+
+    eventSource.onopen = () =&gt; setStatus('connected');
+    eventSource.onerror = () =&gt; setStatus('error');
+
+    eventSource.onmessage = (e) =&gt; {
+      const event = JSON.parse(e.data);
+      setEvents(prev =&gt; [...prev, event]);
+    };
+
+    eventSource.addEventListener('notification', (e) =&gt; {
+      showNotification(JSON.parse(e.data));
+    });
+
+    return () =&gt; {
+      eventSource.close();
+      setStatus('disconnected');
+    };
+  }, [url]);
+
+  return { events, status };
+}
+
+function NotificationFeed({ userId }) {
+  const { events, status } = useServerSentEvents(`/api/events?userId=${userId}`);
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Status: {status}&lt;/p&gt;
+      {events.map((event, i) =&gt; &lt;NotificationItem key={i} event={event} /&gt;)}
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q20">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you handle authentication tokens with React Query?
+    </button>
+  </h2>
+  <div id="api-q20" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Authentication headers (Bearer tokens) should be added to every request via an Axios interceptor or custom fetch wrapper — not inside individual query functions. Token refresh: use an Axios response interceptor that detects 401 responses, refreshes the token silently, and retries the original request. This pattern centralizes auth logic in one place rather than duplicating it across every query.
+      <pre class="code-block">const apiClient = axios.create({ baseURL: '/api' });
+
+// Add auth token to every request
+apiClient.interceptors.request.use((config) =&gt; {
+  const token = authStore.getToken();
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+// Token refresh on 401
+apiClient.interceptors.response.use(
+  (response) =&gt; response,
+  async (error) =&gt; {
+    if (error.response?.status === 401 &amp;&amp; !error.config._retry) {
+      error.config._retry = true;
+      const newToken = await authStore.refreshToken();
+      error.config.headers.Authorization = `Bearer ${newToken}`;
+      return apiClient(error.config); // retry original request
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Use the client in React Query
+const { data } = useQuery({
+  queryKey: ['profile'],
+  queryFn: () =&gt; apiClient.get('/profile').then(r =&gt; r.data),
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q21">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the staleTime vs gcTime difference in React Query?
+    </button>
+  </h2>
+  <div id="api-q21" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      <code>staleTime</code> (default: 0) determines how long data is considered "fresh" — during this window React Query serves cached data without any background refetch. After staleTime expires, data is "stale" and will be refetched in the background when a component subscribes. <code>gcTime</code> (formerly <code>cacheTime</code>, default: 5 minutes) determines how long query data remains in memory after all subscribed components unmount. During gcTime the data can be served instantly if a component remounts; after gcTime the data is garbage collected and the next mount triggers a fresh fetch with a loading state. Key rule: staleTime should always be less than or equal to gcTime, since there is no point keeping data in cache longer than it can be considered usable.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q22">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement a global loading indicator with React Query?
+    </button>
+  </h2>
+  <div id="api-q22" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      <code>useIsFetching()</code> returns the count of currently fetching queries across the entire app. Use it to drive a global loading bar whenever any query is fetching. This is perfect for slim top-bar progress indicators that give subtle feedback without blocking the UI. Place the indicator component at the app root outside the router so it is always visible regardless of route.
+      <pre class="code-block">import { useIsFetching } from '@tanstack/react-query';
+
+function GlobalFetchingIndicator() {
+  const isFetching = useIsFetching();
+  return isFetching &gt; 0
+    ? &lt;div className="global-loading-bar" role="progressbar" aria-label="Loading..." /&gt;
+    : null;
+}
+
+function App() {
+  return (
+    &lt;QueryClientProvider client={queryClient}&gt;
+      &lt;GlobalFetchingIndicator /&gt;
+      &lt;Router&gt;{/* routes */}&lt;/Router&gt;
+    &lt;/QueryClientProvider&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q23">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you mock API calls for React Query in tests?
+    </button>
+  </h2>
+  <div id="api-q23" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      The recommended approach is MSW (Mock Service Worker) — it intercepts real network requests so your actual fetch/axios code runs unchanged. Wrap the component in a <code>QueryClientProvider</code> with a fresh <code>QueryClient</code> per test and retries disabled to prevent slow tests on expected errors.
+      <pre class="code-block">import { render, screen, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+
+const server = setupServer(
+  rest.get('/api/users/:id', (req, res, ctx) =&gt;
+    res(ctx.json({ id: '1', name: 'Alice' }))
+  )
+);
+beforeAll(() =&gt; server.listen());
+afterEach(() =&gt; server.resetHandlers());
+afterAll(() =&gt; server.close());
+
+function createWrapper() {
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return ({ children }) =&gt; (
+    &lt;QueryClientProvider client={qc}&gt;{children}&lt;/QueryClientProvider&gt;
+  );
+}
+
+test('displays user name', async () =&gt; {
+  render(&lt;UserProfile userId="1" /&gt;, { wrapper: createWrapper() });
+  expect(screen.getByText('Loading...')).toBeInTheDocument();
+  await waitFor(() =&gt; expect(screen.getByText('Alice')).toBeInTheDocument());
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q24">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What are query key best practices in React Query?
+    </button>
+  </h2>
+  <div id="api-q24" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Query keys serve as cache keys serialized for uniqueness. Best practices: (1) Always use arrays — <code>['user', userId]</code> is composable; (2) Include every variable used in queryFn so cache auto-invalidates when inputs change; (3) Use a query key factory to centralize definitions and prevent typos; (4) Order from general to specific so prefix invalidation works — <code>['posts']</code> matches <code>['posts', 1]</code> and <code>['posts', { status: 'published' }]</code>; (5) Include user identity in user-scoped queries to prevent data leakage between accounts on shared devices.
+      <pre class="code-block">const queryKeys = {
+  all: ['posts'] as const,
+  lists: () =&gt; [...queryKeys.all, 'list'] as const,
+  list: (filters: PostFilters) =&gt; [...queryKeys.lists(), filters] as const,
+  details: () =&gt; [...queryKeys.all, 'detail'] as const,
+  detail: (id: number) =&gt; [...queryKeys.details(), id] as const,
+};
+
+useQuery({ queryKey: queryKeys.list({ status: 'published' }), queryFn: ... });
+useQuery({ queryKey: queryKeys.detail(postId), queryFn: ... });
+
+// Invalidate all lists
+queryClient.invalidateQueries({ queryKey: queryKeys.lists() });
+// Invalidate one detail
+queryClient.invalidateQueries({ queryKey: queryKeys.detail(postId) });</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q25">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the difference between isFetching and isLoading in React Query?
+    </button>
+  </h2>
+  <div id="api-q25" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      <code>isLoading</code> (renamed <code>isPending</code> in React Query v5) is <code>true</code> only on the very first fetch when there is no cached data — it signals "nothing to show yet, render a skeleton." <code>isFetching</code> is <code>true</code> whenever a request is in-flight, including background refetches where stale data is already visible. Use <code>isLoading</code> to gate the initial skeleton. Use <code>isFetching &amp;&amp; !isLoading</code> (equivalently <code>isRefetching</code>) to show a subtle corner spinner alongside existing content during a background refresh. Combining them correctly avoids both the "blank flash" problem and the "stale data without any indicator" problem.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q26">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you use React Query with TypeScript?
+    </button>
+  </h2>
+  <div id="api-q26" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      React Query is fully typed via generics. Provide <code>useQuery&lt;TData, TError&gt;</code> so <code>data</code> is inferred as <code>TData | undefined</code> and <code>error</code> as <code>TError | null</code>. The best pattern is wrapping queries in typed custom hooks so callers get full IntelliSense without repeating generic annotations.
+      <pre class="code-block">interface User { id: number; name: string; email: string; }
+interface ApiError { message: string; status: number; }
+
+function useUser(userId: number) {
+  return useQuery&lt;User, ApiError&gt;({
+    queryKey: ['user', userId],
+    queryFn: async (): Promise&lt;User&gt; =&gt; {
+      const res = await fetch(`/api/users/${userId}`);
+      if (!res.ok) throw { message: 'Not found', status: res.status } as ApiError;
+      return res.json();
+    },
+  });
+}
+
+function UserCard({ userId }: { userId: number }) {
+  const { data: user, isLoading, error } = useUser(userId);
+  if (isLoading) return &lt;Skeleton /&gt;;
+  if (error) return &lt;p&gt;{error.message}&lt;/p&gt;;
+  return &lt;div&gt;{user?.name}&lt;/div&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q27">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the select option in useQuery?
+    </button>
+  </h2>
+  <div id="api-q27" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      The <code>select</code> option transforms cached data at read time before it reaches the component's <code>data</code> property. The full queryFn result is stored in cache; <code>select</code> applies a transformation on every render. Multiple components can read the same cache key but each receive a different slice. Crucially, <code>select</code> participates in structural sharing — if the transformed result is referentially equal to the previous one the component will not re-render, even if unrelated parts of the cached response changed.
+      <pre class="code-block">// Component only receives the name string, not the full User object
+function useUserName(userId: number) {
+  return useQuery({
+    queryKey: ['user', userId],
+    queryFn: () =&gt; fetchUser(userId),
+    select: (user) =&gt; user.name,
+  });
+}
+
+function UserNameDisplay({ userId }) {
+  const name = useUserName(userId);  // data: string | undefined
+  return &lt;span&gt;{name}&lt;/span&gt;;
+}
+
+// Extract a single post from a cached list query
+function usePost(postId: number) {
+  return useQuery({
+    queryKey: ['posts'],
+    queryFn: fetchAllPosts,
+    select: (posts) =&gt; posts.find(p =&gt; p.id === postId),
+  });
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q28">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;Your app fetches the same user data in 10 different components. How does React Query handle this efficiently?
+    </button>
+  </h2>
+  <div id="api-q28" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      React Query handles this through automatic request deduplication and a shared in-memory cache. When 10 components mount simultaneously and all call <code>useQuery({ queryKey: ['user', userId] })</code>, React Query detects the key is already in-flight and makes exactly ONE network request. All 10 components receive data when that single request resolves — zero configuration required. After data is cached, subsequent mounts receive it instantly from cache until the data becomes stale. When a background refetch is triggered, again only ONE refetch is made regardless of subscriber count. Without React Query, preventing duplicate requests would require manual coordination via a global flag, shared context, or Redux — React Query provides this behavior as a built-in core principle.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q29">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How would you design a real-time notification system using SSE and React Query?
+    </button>
+  </h2>
+  <div id="api-q29" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Combine an initial HTTP fetch for existing notifications with an SSE stream for live updates. React Query owns the cache; SSE events write into it via <code>queryClient.setQueryData</code> so all subscribed components re-render automatically. The browser EventSource reconnects automatically on connection drop.
+      <pre class="code-block">function useNotifications(userId: string) {
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ['notifications', userId],
+    queryFn: () =&gt;
+      fetch(`/api/notifications?userId=${userId}`).then(r =&gt; r.json()),
+  });
+
+  React.useEffect(() =&gt; {
+    const es = new EventSource(`/api/notifications/stream?userId=${userId}`);
+
+    es.addEventListener('notification', (e) =&gt; {
+      const incoming = JSON.parse(e.data);
+      queryClient.setQueryData(['notifications', userId], (old: any) =&gt; ({
+        ...old,
+        items: [incoming, ...(old?.items ?? [])],
+        unreadCount: (old?.unreadCount ?? 0) + 1,
+      }));
+    });
+
+    es.addEventListener('mark-read', () =&gt; {
+      queryClient.invalidateQueries({ queryKey: ['notifications', userId] });
+    });
+
+    return () =&gt; es.close();
+  }, [userId, queryClient]);
+
+  return query;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q30">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How do you handle loading states at different granularities in a complex React app?
+    </button>
+  </h2>
+  <div id="api-q30" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Large apps need loading feedback at multiple levels. (1) Global: <code>useIsFetching()</code> drives a slim top-bar progress bar visible on every page. (2) Page-level: use <code>isPending</code> from the primary query to show a full skeleton layout before any content exists. (3) Component-level: each widget reads its own query's <code>isRefetching</code> for a local spinner alongside existing content. (4) Action-level: <code>useMutation</code>'s <code>isPending</code> disables submit buttons to prevent double-sends. (5) Declarative tree-level: wrap subtrees in React Suspense boundaries so the boundary shows a fallback until all child queries resolve. Stagger these visually so the page loads progressively rather than flashing between empty and full states.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q31">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the QueryClient and why is it important?
+    </button>
+  </h2>
+  <div id="api-q31" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      <code>QueryClient</code> is the central cache and orchestration object for React Query. It holds all cached data, manages background refetching, and exposes imperative APIs: <code>getQueryData</code>, <code>setQueryData</code>, <code>prefetchQuery</code>, <code>invalidateQueries</code>, <code>resetQueries</code>, and <code>cancelQueries</code>. One instance is shared app-wide via <code>QueryClientProvider</code>. In tests, always create a fresh instance per test to prevent cache leakage. The constructor's <code>defaultOptions</code> is the single configuration point for staleTime, retry logic, refetchOnWindowFocus, and global error handlers — changing these once applies to every query in the app.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q32">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the difference between React Query and Apollo Client?
+    </button>
+  </h2>
+  <div id="api-q32" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Both manage server state but for different protocols. Apollo Client is purpose-built for GraphQL — it normalizes the cache by entity (all data for User id:1 lives in one place regardless of which query fetched it), automatically updates the cache when mutations return affected entities, and supports real-time via GraphQL subscriptions. React Query is protocol-agnostic — REST, GraphQL, IndexedDB, or any async source. React Query's cache is query-based (each unique key stores one response blob); Apollo's cache is entity-normalized. Choose Apollo for pure GraphQL apps that benefit from automatic cache normalization; choose React Query for REST APIs, mixed protocols, or teams who want less GraphQL-specific abstraction.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q33">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you refetch queries on demand?
+    </button>
+  </h2>
+  <div id="api-q33" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      The <code>refetch</code> function from <code>useQuery</code> triggers a fetch immediately regardless of staleness — perfect for a Refresh button. <code>queryClient.invalidateQueries</code> marks queries stale and refetches active (mounted) ones. <code>refetchInterval</code> enables polling. <code>isRefetching</code> is true during a background refresh while data is already shown, enabling a subtle indicator without hiding content.
+      <pre class="code-block">function PostList() {
+  const { data, isRefetching, refetch } = useQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts,
+  });
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; refetch()} disabled={isRefetching}&gt;
+        {isRefetching ? 'Refreshing...' : 'Refresh'}
+      &lt;/button&gt;
+      {data?.posts.map(post =&gt; &lt;Post key={post.id} post={post} /&gt;)}
+    &lt;/div&gt;
+  );
+}
+
+// Polling
+const { data } = useQuery({
+  queryKey: ['live-metrics'],
+  queryFn: fetchMetrics,
+  refetchInterval: 5000,
+  refetchIntervalInBackground: false,
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q34">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is query persistence in React Query?
+    </button>
+  </h2>
+  <div id="api-q34" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Query persistence serializes the React Query cache to a storage layer (localStorage, IndexedDB, AsyncStorage) so data survives page reloads. On startup the cache is hydrated from storage before any network requests, giving users instant data while a background refetch confirms currency. The <code>@tanstack/query-persist-client-core</code> package and <code>PersistQueryClientProvider</code> enable this pattern. Only queries with <code>gcTime &gt; 0</code> that match a persistence filter are serialized. This is especially powerful for mobile-first and PWA apps where perceived performance and offline resilience both matter.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q35">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement retry with exponential backoff in React Query?
+    </button>
+  </h2>
+  <div id="api-q35" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      The <code>retry</code> option accepts a number or a predicate <code>(failureCount, error) =&gt; boolean</code>. The <code>retryDelay</code> option accepts a number or a function receiving the attempt index. The smart pattern skips retries on 4xx errors (client mistakes that won't succeed on retry) while retrying 5xx errors with capped exponential backoff.
+      <pre class="code-block">const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) =&gt; {
+        if (error?.status &gt;= 400 &amp;&amp; error?.status &lt; 500) return false;
+        return failureCount &lt; 3;
+      },
+      retryDelay: (attemptIndex) =&gt;
+        Math.min(1000 * 2 ** attemptIndex, 30000), // 1s, 2s, 4s … cap 30s
+    },
+  },
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q36">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is background refetching and how does it affect UX?
+    </button>
+  </h2>
+  <div id="api-q36" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Background refetching shows stale cached data immediately while React Query silently fetches fresh data in the background. When fresh data arrives the UI updates in place — no loading spinner, no blank state. This is the stale-while-revalidate pattern: users always see something instantly, and content updates smoothly when the server responds. Triggers include window focus (<code>refetchOnWindowFocus</code>), network reconnection (<code>refetchOnReconnect</code>), manual invalidation, and interval polling (<code>refetchInterval</code>). The <code>isRefetching</code> flag (true when fetching but data already exists) lets you add a subtle corner indicator without hiding existing content behind a full loading overlay.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q37">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How would you architect the API layer for a large React application?
+    </button>
+  </h2>
+  <div id="api-q37" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      A scalable API architecture has four layers. (1) API client — one Axios or fetch instance configured with base URL, auth interceptors, error normalisation, and request IDs. (2) Service functions — pure async functions per domain (<code>getUser(id)</code>, <code>createPost(data)</code>) that call the client and return typed data; independently testable with mocked HTTP. (3) React Query hooks — custom hooks wrapping <code>useQuery</code>/<code>useMutation</code> that call service functions and expose component-friendly state. (4) Query key factory — centralised definitions preventing typos and enabling consistent prefix invalidation. This layering means you can swap the HTTP client without touching hooks, change caching strategy without touching service functions, and test each layer in isolation.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q38">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;A user reports they see stale data after updating their profile. How do you fix this?
+    </button>
+  </h2>
+  <div id="api-q38" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      This is a cache invalidation bug. The mutation succeeds on the server but the React Query cache still holds the pre-update snapshot. Fix: add <code>queryClient.invalidateQueries({ queryKey: ['user', userId] })</code> in the mutation's <code>onSuccess</code> callback. This marks the query stale and triggers an immediate background refetch. For instant feedback without a loading flash, also apply an optimistic update in <code>onMutate</code> — write the new values to cache immediately, then let the server refetch confirm the final state. If the user's name or avatar appears in other queries (post authors, comments), invalidate those keys as well or use a broad prefix invalidation covering all user-related data.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q39">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the initialData vs placeholderData option in React Query?
+    </button>
+  </h2>
+  <div id="api-q39" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      Both provide data before the query fetches, but are treated fundamentally differently. <code>initialData</code> is stored in the cache as real data — it obeys staleTime, may trigger a background refetch if already stale, and is shared between components via the cache. Use it for SSR-hydrated data or data derived from a parent query. <code>placeholderData</code> is never stored in cache and never considered fresh — it is a pure UI placeholder shown while the real fetch runs, then discarded. Use it for the <code>keepPreviousData</code> pagination pattern (pass the built-in <code>keepPreviousData</code> helper) or for showing a skeletal content shape while loading. The key distinction: <code>initialData</code> can eliminate a network request; <code>placeholderData</code> never prevents one.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#api-q40">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How do you handle offline support in a React Query app?
+    </button>
+  </h2>
+  <div id="api-q40" class="accordion-collapse collapse" data-bs-parent="#acc-api">
+    <div class="accordion-body">
+      React Query v5 has built-in offline support via network mode options. <code>networkMode: 'online'</code> (default) pauses queries and mutations when offline and resumes them automatically on reconnect. <code>networkMode: 'always'</code> runs queries regardless of connectivity, useful for cache-only or service-worker scenarios. <code>networkMode: 'offlineFirst'</code> attempts one run even offline. For full offline support combine three things: (1) cache persistence to IndexedDB via <code>PersistQueryClientProvider</code> so data survives reloads; (2) a service worker to cache API responses at the network layer; (3) mutation queuing — mutations that fail offline get <code>isPaused: true</code> and are retried automatically on reconnect. The mutation <code>isPaused</code> state lets you surface a "changes pending sync" indicator to users.
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<div class="tab-pane fade" id="tab-testing" role="tabpanel">
+  <div class="accordion" id="acc-testing">
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q1">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is React Testing Library?
+    </button>
+  </h2>
+  <div id="testing-q1" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      React Testing Library (RTL) is a testing utility that encourages testing React components the way users interact with them — by querying by role, label, text, and other accessible attributes, not by implementation details like component names or CSS classes. The guiding principle is: "The more your tests resemble the way your software is used, the more confidence they can give you." RTL wraps components in a real DOM environment via jsdom and provides <code>render</code>, <code>screen</code>, <code>fireEvent</code>, <code>userEvent</code>, and <code>waitFor</code>. It deliberately avoids exposing component internals (state, lifecycle methods), keeping tests focused on observable behavior that users actually experience.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q2">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the difference between getBy, queryBy, and findBy queries?
+    </button>
+  </h2>
+  <div id="testing-q2" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      These three prefixes differ in timing and failure behavior. <code>getBy*</code> throws immediately if the element is not found — use it when the element must be present right now; it also throws if multiple matches exist (use <code>getAllBy*</code> for multiples). <code>queryBy*</code> returns <code>null</code> if not found without throwing — use it to assert an element is NOT present: <code>expect(screen.queryByText('Error')).not.toBeInTheDocument()</code>. <code>findBy*</code> returns a Promise and waits (via <code>waitFor</code> internally) for the element to appear — use it for elements that render asynchronously after data loads. Using <code>getBy</code> where <code>findBy</code> is needed is one of the most common RTL mistakes, causing tests to fail before async operations complete.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q3">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is userEvent vs fireEvent?
+    </button>
+  </h2>
+  <div id="testing-q3" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      <code>fireEvent.click(element)</code> dispatches a single synthetic DOM click event. <code>userEvent.click(element)</code> from <code>@testing-library/user-event</code> simulates the full browser event sequence a real user generates: pointerover, pointerenter, mouseover, mouseenter, pointermove, mousemove, pointerdown, mousedown, focus, pointerup, mouseup, click. <code>userEvent.type(input, 'hello')</code> fires keydown, keypress, input, and keyup for each character and respects <code>maxLength</code>. Always prefer <code>userEvent</code> over <code>fireEvent</code> — it catches bugs that <code>fireEvent</code> misses (handlers listening to <code>keydown</code> rather than <code>change</code>, focus management issues). Set up with <code>const user = userEvent.setup()</code> at the top of each test.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q4">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is Jest and how does it relate to React Testing Library?
+    </button>
+  </h2>
+  <div id="testing-q4" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Jest is a JavaScript test runner and assertion library providing <code>describe</code>, <code>it</code>/<code>test</code>, <code>expect</code>, <code>beforeEach</code>, <code>afterEach</code>, and mocking utilities (<code>jest.fn()</code>, <code>jest.mock()</code>, <code>jest.spyOn()</code>). React Testing Library provides rendering and DOM querying utilities that run on top of Jest. They are complementary: Jest handles test execution, assertions, and mocking; RTL handles mounting React components into a virtual DOM and querying that DOM. Vitest is a faster, Jest-compatible alternative popular in Vite projects — RTL works identically with Vitest, substituting <code>vi</code> for <code>jest</code> in mock calls.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q5">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is render in React Testing Library?
+    </button>
+  </h2>
+  <div id="testing-q5" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      <code>render(component)</code> mounts a React component into a virtual DOM (jsdom) for testing. It returns querying utilities, but the preferred approach is to use the global <code>screen</code> object after rendering: <code>screen.getByRole</code>, <code>screen.getByText</code>, etc. RTL automatically cleans up the DOM after each test. The <code>wrapper</code> option wraps the component in providers: <code>render(&lt;App /&gt;, { wrapper: ({ children }) =&gt; &lt;Provider&gt;{children}&lt;/Provider&gt; })</code>. You can also create a custom <code>render</code> function that always includes your providers, and export it in place of RTL's built-in render.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q6">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you test asynchronous behavior in RTL?
+    </button>
+  </h2>
+  <div id="testing-q6" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Async behavior — data fetching, timers, state updates from async operations — requires waiting for the DOM to update. <code>waitFor(callback)</code> retries the callback in a loop until it stops throwing or times out. <code>findBy*</code> queries are syntactic sugar for <code>waitFor(() =&gt; getBy*(...))</code>. Wrap every <code>userEvent</code> call with <code>await</code> since v14 userEvent returns promises. For timer-based tests use <code>jest.useFakeTimers()</code> with <code>act(() =&gt; jest.advanceTimersByTime(ms))</code>.
+      <pre class="code-block">test('displays user name after loading', async () =&gt; {
+  server.use(rest.get('/api/user', (req, res, ctx) =&gt;
+    res(ctx.json({ name: 'Alice' }))
+  ));
+
+  render(&lt;UserProfile /&gt;);
+
+  // Assert loading state is shown first
+  expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+  // findBy waits automatically for async data
+  const name = await screen.findByText('Alice');
+  expect(name).toBeInTheDocument();
+
+  // Or use waitFor explicitly for complex assertions
+  await waitFor(() =&gt;
+    expect(screen.getByText('Alice')).toBeInTheDocument()
+  );
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q7">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you test forms with React Testing Library?
+    </button>
+  </h2>
+  <div id="testing-q7" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Form testing involves rendering, simulating user input with <code>userEvent</code>, submitting, and asserting on outcomes. Test the full user flow rather than internal state. Query inputs by their label text (<code>getByLabelText</code>) and buttons by role and accessible name (<code>getByRole('button', { name: 'Sign In' })</code>).
+      <pre class="code-block">import userEvent from '@testing-library/user-event';
+
+test('submits login form with valid credentials', async () =&gt; {
+  const user = userEvent.setup();
+  const mockLogin = jest.fn().mockResolvedValue({ success: true });
+  render(&lt;LoginForm onLogin={mockLogin} /&gt;);
+
+  await user.type(screen.getByLabelText('Email'), 'alice@example.com');
+  await user.type(screen.getByLabelText('Password'), 'password123');
+  await user.click(screen.getByRole('button', { name: 'Sign In' }));
+
+  expect(mockLogin).toHaveBeenCalledWith({
+    email: 'alice@example.com',
+    password: 'password123',
+  });
+  await screen.findByText('Welcome, Alice!');
+});
+
+test('shows validation error for empty email', async () =&gt; {
+  const user = userEvent.setup();
+  render(&lt;LoginForm /&gt;);
+  await user.click(screen.getByRole('button', { name: 'Sign In' }));
+  expect(await screen.findByText('Email is required')).toBeInTheDocument();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q8">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is MSW (Mock Service Worker)?
+    </button>
+  </h2>
+  <div id="testing-q8" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      MSW intercepts network requests at the service worker level (browser) or Node.js request level (tests), returning mock responses without modifying your fetch/axios code. Unlike mocking <code>fetch</code> directly, MSW intercepts real HTTP requests — your code cannot tell it is being mocked. The same handlers work in tests and in development for a live mock server. Define handlers with <code>rest.get('/api/users', handler)</code> or <code>graphql.query('GetUser', handler)</code>. In Jest/Vitest use <code>msw/node</code> with <code>setupServer</code>.
+      <pre class="code-block">// handlers.ts
+import { rest } from 'msw';
+
+export const handlers = [
+  rest.get('/api/users/:id', (req, res, ctx) =&gt; {
+    return res(ctx.json({ id: req.params.id, name: 'Alice' }));
+  }),
+  rest.post('/api/users', async (req, res, ctx) =&gt; {
+    const body = await req.json();
+    return res(ctx.status(201), ctx.json({ id: 'new-id', ...body }));
+  }),
+];
+
+// setupTests.ts
+import { setupServer } from 'msw/node';
+import { handlers } from './handlers';
+
+export const server = setupServer(...handlers);
+beforeAll(() =&gt; server.listen({ onUnhandledRequest: 'error' }));
+afterEach(() =&gt; server.resetHandlers());
+afterAll(() =&gt; server.close());</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q9">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you test components that use Redux?
+    </button>
+  </h2>
+  <div id="testing-q9" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Components using Redux need a <code>Provider</code> in their render tree. Create a custom render utility that wraps with a real store. Test with a real store (not mocked) — this tests the component's interaction with actual reducers and selectors. Use <code>preloadedState</code> to set up specific scenarios.
+      <pre class="code-block">import { render as rtlRender } from '@testing-library/react';
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
+import { cartReducer, userReducer } from './store/reducers';
+
+function renderWithStore(ui, { preloadedState = {}, ...options } = {}) {
+  const store = configureStore({
+    reducer: { cart: cartReducer, user: userReducer },
+    preloadedState,
+  });
+  const Wrapper = ({ children }) =&gt;
+    &lt;Provider store={store}&gt;{children}&lt;/Provider&gt;;
+  return { store, ...rtlRender(ui, { wrapper: Wrapper, ...options }) };
+}
+
+test('displays cart item count from store', () =&gt; {
+  renderWithStore(&lt;CartIcon /&gt;, {
+    preloadedState: {
+      cart: { items: [{ id: 1 }, { id: 2 }] },
+    },
+  });
+  expect(screen.getByText('2')).toBeInTheDocument();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q10">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is renderHook and how do you use it?
+    </button>
+  </h2>
+  <div id="testing-q10" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      <code>renderHook(() =&gt; useMyHook(args))</code> renders a minimal component that calls the hook and returns <code>{ result, rerender, unmount }</code>. <code>result.current</code> holds the current return value. <code>rerender(newArgs)</code> re-renders with updated arguments. Wrap any state-updating calls in <code>act()</code>. This is the standard way to test custom hooks without writing a component around them.
+      <pre class="code-block">import { renderHook, act } from '@testing-library/react';
+import { useCounter } from './useCounter';
+
+test('useCounter increments and decrements', () =&gt; {
+  const { result } = renderHook(() =&gt; useCounter(10));
+
+  expect(result.current.count).toBe(10);
+
+  act(() =&gt; { result.current.increment(); });
+  expect(result.current.count).toBe(11);
+
+  act(() =&gt; { result.current.decrement(); });
+  expect(result.current.count).toBe(10);
+});
+
+test('useDebounce updates after delay', async () =&gt; {
+  jest.useFakeTimers();
+  const { result, rerender } = renderHook(
+    ({ value }) =&gt; useDebounce(value, 300),
+    { initialProps: { value: 'initial' } }
+  );
+  rerender({ value: 'updated' });
+  expect(result.current).toBe('initial');
+
+  act(() =&gt; { jest.advanceTimersByTime(300); });
+  expect(result.current).toBe('updated');
+  jest.useRealTimers();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q11">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is act() and when do you need it?
+    </button>
+  </h2>
+  <div id="testing-q11" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      <code>act(callback)</code> ensures all React state updates and effects triggered by the callback are flushed before assertions run. React Testing Library wraps its query interactions and <code>userEvent</code> calls in <code>act</code> automatically, so you rarely need to call it manually. You DO need <code>act</code> when: advancing fake timers (<code>act(() =&gt; jest.advanceTimersByTime(1000))</code>), calling hook methods that update state in <code>renderHook</code> tests, or manually triggering events outside RTL utilities. React 18's automatic batching reduced some manual <code>act</code> needs, but timer manipulation still requires it. A console warning "not wrapped in act" is a signal that a state update is happening outside an act boundary.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q12">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you test error states?
+    </button>
+  </h2>
+  <div id="testing-q12" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Testing error states requires triggering the error condition and asserting on the error UI. For fetch errors use MSW to return an error response. For error boundaries suppress expected <code>console.error</code> output (React logs caught errors) then assert on the fallback UI.
+      <pre class="code-block">test('shows error message when API fails', async () =&gt; {
+  server.use(
+    rest.get('/api/users/1', (req, res, ctx) =&gt;
+      res(ctx.status(500), ctx.json({ message: 'Internal Server Error' }))
+    )
+  );
+  render(&lt;UserProfile userId={1} /&gt;);
+  await waitFor(() =&gt;
+    expect(screen.getByRole('alert')).toBeInTheDocument()
+  );
+  expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+});
+
+test('error boundary shows fallback when child throws', () =&gt; {
+  const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() =&gt; {});
+  render(
+    &lt;ErrorBoundary fallback={&lt;p&gt;Something went wrong&lt;/p&gt;}&gt;
+      &lt;ComponentThatThrows /&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+  expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+  consoleSpy.mockRestore();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q13">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you test React Router navigation?
+    </button>
+  </h2>
+  <div id="testing-q13" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Components using React Router need a Router in their render tree. Use <code>MemoryRouter</code> for unit tests (no browser URL dependency). Test navigation by asserting on rendered content after the navigation occurs, not on the URL string itself.
+      <pre class="code-block">import { MemoryRouter, Routes, Route } from 'react-router-dom';
+
+function renderWithRouter(ui, { initialEntries = ['/'] } = {}) {
+  return render(
+    &lt;MemoryRouter initialEntries={initialEntries}&gt;{ui}&lt;/MemoryRouter&gt;
+  );
+}
+
+test('navigates to detail page on click', async () =&gt; {
+  const user = userEvent.setup();
+  renderWithRouter(
+    &lt;Routes&gt;
+      &lt;Route path="/" element={&lt;PostList /&gt;} /&gt;
+      &lt;Route path="/posts/:id" element={&lt;PostDetail /&gt;} /&gt;
+    &lt;/Routes&gt;
+  );
+  await user.click(screen.getByText('Post Title'));
+  expect(await screen.findByText('Post Detail Content')).toBeInTheDocument();
+});
+
+// Test component rendered at a specific route
+test('post detail renders for given ID', () =&gt; {
+  renderWithRouter(&lt;PostDetail /&gt;, { initialEntries: ['/posts/42'] });
+  expect(screen.getByText('Post #42')).toBeInTheDocument();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q14">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What are snapshot tests?
+    </button>
+  </h2>
+  <div id="testing-q14" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Snapshot tests capture a component's rendered output as a serialized string and compare it against a saved snapshot on future runs. If the output changes, the test fails until you update the snapshot with <code>--updateSnapshot</code>. RTL's <code>asFragment()</code> returns a DocumentFragment for snapshotting. Snapshots are useful for detecting unintentional UI regressions in stable component trees. The downsides: they are brittle (minor changes break them), they do not test behavior, large snapshots are meaningless in code review, and they get updated automatically without thought. Best practice: use snapshots only for small, stable, intentionally specific markup; prefer behavioral assertions for everything else.
+      <pre class="code-block">test('Button snapshot', () =&gt; {
+  const { asFragment } = render(
+    &lt;Button variant="primary"&gt;Click me&lt;/Button&gt;
+  );
+  expect(asFragment()).toMatchSnapshot();
+});
+
+// Inline snapshot (stored in the test file itself)
+test('Badge inline snapshot', () =&gt; {
+  const { asFragment } = render(&lt;Badge count={5} /&gt;);
+  expect(asFragment()).toMatchInlineSnapshot(`
+    &lt;DocumentFragment&gt;
+      &lt;span class="badge"&gt;5&lt;/span&gt;
+    &lt;/DocumentFragment&gt;
+  `);
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q15">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you test accessibility with React Testing Library?
+    </button>
+  </h2>
+  <div id="testing-q15" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      RTL's semantic query selectors inherently test accessibility — if you can find an element by role or label, it has correct semantic markup. For deeper WCAG testing, use <code>jest-axe</code>: it runs the axe accessibility engine against the rendered DOM and flags violations. Test keyboard navigation with <code>userEvent.tab()</code> and <code>userEvent.keyboard()</code>.
+      <pre class="code-block">import { axe, toHaveNoViolations } from 'jest-axe';
+expect.extend(toHaveNoViolations);
+
+test('form is accessible', async () =&gt; {
+  const { container } = render(&lt;ContactForm /&gt;);
+
+  // Semantic queries implicitly verify a11y
+  expect(screen.getByRole('form', { name: 'Contact us' })).toBeInTheDocument();
+  expect(screen.getByLabelText('Email address')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
+
+  // jest-axe: full WCAG audit
+  const results = await axe(container);
+  expect(results).toHaveNoViolations();
+});
+
+test('modal closes on Escape key', async () =&gt; {
+  const user = userEvent.setup();
+  render(&lt;Modal isOpen onClose={jest.fn()} /&gt;);
+  await user.keyboard('{Escape}');
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q16">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you test components with Context?
+    </button>
+  </h2>
+  <div id="testing-q16" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Components that consume Context need to be rendered inside the corresponding Provider. Create a utility function that wraps the component with the Provider and allows overriding context values per test.
+      <pre class="code-block">const ThemeContext = React.createContext({ theme: 'light', toggle: () =&gt; {} });
+
+function renderWithTheme(ui, value = {}) {
+  const themeValue = { theme: 'light', toggle: jest.fn(), ...value };
+  return {
+    ...render(
+      &lt;ThemeContext.Provider value={themeValue}&gt;{ui}&lt;/ThemeContext.Provider&gt;
+    ),
+    themeValue,
+  };
+}
+
+test('applies dark class when theme is dark', () =&gt; {
+  renderWithTheme(&lt;ThemedButton /&gt;, { theme: 'dark' });
+  expect(screen.getByRole('button')).toHaveClass('button--dark');
+});
+
+test('calls toggle when theme button is clicked', async () =&gt; {
+  const user = userEvent.setup();
+  const { themeValue } = renderWithTheme(&lt;ThemeToggle /&gt;);
+  await user.click(screen.getByRole('button', { name: /toggle theme/i }));
+  expect(themeValue.toggle).toHaveBeenCalledTimes(1);
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q17">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you mock modules in Jest/Vitest?
+    </button>
+  </h2>
+  <div id="testing-q17" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      <code>jest.mock('./module')</code> replaces a module with an auto-mocked version at the top of the file (it is hoisted even if written lower). Provide a factory for manual control: <code>jest.mock('./module', () =&gt; ({ fn: jest.fn() }))</code>. <code>vi.mock</code> is the Vitest equivalent. <code>jest.spyOn(object, 'method')</code> wraps a specific method without replacing the whole module. Always call <code>jest.clearAllMocks()</code> in <code>beforeEach</code> to prevent test pollution.
+      <pre class="code-block">jest.mock('../api/userApi', () =&gt; ({
+  fetchUser: jest.fn(),
+  updateUser: jest.fn(),
+}));
+import { fetchUser } from '../api/userApi';
+
+beforeEach(() =&gt; { jest.clearAllMocks(); });
+
+test('displays user data', async () =&gt; {
+  fetchUser.mockResolvedValue({ id: 1, name: 'Alice' });
+  render(&lt;UserProfile userId={1} /&gt;);
+  expect(await screen.findByText('Alice')).toBeInTheDocument();
+  expect(fetchUser).toHaveBeenCalledWith(1);
+});
+
+test('shows error when fetch fails', async () =&gt; {
+  fetchUser.mockRejectedValue(new Error('Network error'));
+  render(&lt;UserProfile userId={1} /&gt;);
+  expect(await screen.findByRole('alert')).toBeInTheDocument();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q18">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you test React Query hooks in isolation?
+    </button>
+  </h2>
+  <div id="testing-q18" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Use <code>renderHook</code> with a <code>QueryClientProvider</code> wrapper. Create a fresh <code>QueryClient</code> per test with retries disabled. Use MSW to handle network requests so the hook runs against real (mocked) HTTP.
+      <pre class="code-block">import { renderHook, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useUser } from './useUser';
+
+function createWrapper() {
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return ({ children }) =&gt; (
+    &lt;QueryClientProvider client={qc}&gt;{children}&lt;/QueryClientProvider&gt;
+  );
+}
+
+test('useUser returns user data', async () =&gt; {
+  server.use(rest.get('/api/users/1', (req, res, ctx) =&gt;
+    res(ctx.json({ id: 1, name: 'Alice' }))
+  ));
+
+  const { result } = renderHook(() =&gt; useUser(1), { wrapper: createWrapper() });
+
+  expect(result.current.isLoading).toBe(true);
+  await waitFor(() =&gt; expect(result.current.isSuccess).toBe(true));
+  expect(result.current.data).toEqual({ id: 1, name: 'Alice' });
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q19">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you test Error Boundaries?
+    </button>
+  </h2>
+  <div id="testing-q19" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Error Boundaries catch rendering errors from children. Testing requires: a component that throws on demand, suppressing React's expected <code>console.error</code> output, and asserting the fallback UI is shown.
+      <pre class="code-block">function BuggyComponent({ shouldThrow }) {
+  if (shouldThrow) throw new Error('Test error');
+  return &lt;p&gt;Normal render&lt;/p&gt;;
+}
+
+test('Error Boundary shows fallback when child throws', () =&gt; {
+  const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() =&gt; {});
+
+  render(
+    &lt;ErrorBoundary fallback={&lt;p&gt;Something went wrong&lt;/p&gt;}&gt;
+      &lt;BuggyComponent shouldThrow={true} /&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+
+  expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+  expect(screen.queryByText('Normal render')).not.toBeInTheDocument();
+  consoleSpy.mockRestore();
+});
+
+test('renders children normally when no error', () =&gt; {
+  render(
+    &lt;ErrorBoundary fallback={&lt;p&gt;Error&lt;/p&gt;}&gt;
+      &lt;BuggyComponent shouldThrow={false} /&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+  expect(screen.getByText('Normal render')).toBeInTheDocument();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q20">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What are the best querying practices in RTL?
+    </button>
+  </h2>
+  <div id="testing-q20" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Query priority order (most to least preferred): (1) <code>getByRole</code> — most accessible and reliable; (2) <code>getByLabelText</code> — for form inputs; (3) <code>getByPlaceholderText</code>; (4) <code>getByText</code> — for non-interactive text; (5) <code>getByDisplayValue</code> — current value of inputs; (6) <code>getByAltText</code> — images; (7) <code>getByTitle</code>; (8) <code>getByTestId</code> — last resort only. Avoid <code>querySelector</code> and class-based queries — they test implementation details and break when styling changes.
+      <pre class="code-block">// Preferred
+screen.getByRole('button', { name: 'Submit' });
+screen.getByLabelText('Email address');
+screen.getByText('Welcome, Alice!');
+
+// Avoid
+document.querySelector('.submit-btn');       // CSS class — brittle
+screen.getByTestId('submit-button');         // data-testid — last resort
+container.firstChild.children[1];            // DOM traversal
+
+// Common role values
+screen.getByRole('heading', { level: 1 });   // h1
+screen.getByRole('textbox');                 // input[type=text]
+screen.getByRole('combobox');                // select
+screen.getByRole('dialog');                  // modal
+screen.getByRole('alert');                   // error/status messages</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q21">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is Vitest and how does it differ from Jest?
+    </button>
+  </h2>
+  <div id="testing-q21" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Vitest is a Vite-native test runner that uses Vite's own transformation pipeline. It is significantly faster than Jest because tests share the same Vite transform pass as the app (no separate compilation), has native ESM support with no CommonJS transformation, and uses Vite HMR for instant watch-mode re-runs. The API is Jest-compatible — <code>describe</code>, <code>test</code>, <code>expect</code>, and lifecycle hooks all work the same. The differences: use <code>vi</code> instead of <code>jest</code> for mocks (<code>vi.fn()</code>, <code>vi.mock()</code>); configure in <code>vite.config.ts</code> instead of <code>jest.config.js</code>; TypeScript works out of the box. For any React + Vite project, Vitest is the natural and recommended choice.
+      <pre class="code-block">// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './src/setupTests.ts',
+  },
+});
+
+// setupTests.ts
+import '@testing-library/jest-dom';
+import { beforeAll, afterAll, afterEach } from 'vitest';
+import { server } from './mocks/server';
+beforeAll(() =&gt; server.listen());
+afterEach(() =&gt; server.resetHandlers());
+afterAll(() =&gt; server.close());
+
+// Test: vi instead of jest
+import { vi } from 'vitest';
+const mockFetch = vi.fn().mockResolvedValue({ name: 'Alice' });
+vi.mock('./api', () =&gt; ({ fetchUser: mockFetch }));</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q22">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you test components with external libraries like MUI or AG Grid?
+    </button>
+  </h2>
+  <div id="testing-q22" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Components using MUI need a <code>ThemeProvider</code> if they depend on custom theme tokens. For complex table libraries like AG Grid, test the component's observable behavior from the user's perspective — what data appears, what happens on interaction — rather than AG Grid's internal rendering. Mock complex third-party components that add excessive setup overhead: replace AG Grid with a simple <code>&lt;table&gt;</code> for unit tests, then use real AG Grid in integration/E2E tests. This keeps unit tests fast and focused on your own component logic while still verifying the integration in higher-level tests.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q23">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you test components that use timers?
+    </button>
+  </h2>
+  <div id="testing-q23" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Timer-based tests use <code>jest.useFakeTimers()</code> to replace real timers with controllable fakes. <code>jest.advanceTimersByTime(ms)</code> moves time forward. <code>jest.runAllTimers()</code> runs all pending timers to completion. Wrap timer advances in <code>act()</code> to ensure React processes state updates triggered by callbacks. Always restore real timers in <code>afterEach</code> or at the end of the test.
+      <pre class="code-block">test('success message disappears after 3 seconds', async () =&gt; {
+  jest.useFakeTimers();
+  const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+  render(&lt;NotificationForm /&gt;);
+
+  await user.click(screen.getByRole('button', { name: 'Submit' }));
+  expect(screen.getByText('Saved successfully!')).toBeInTheDocument();
+
+  act(() =&gt; { jest.advanceTimersByTime(3000); });
+
+  expect(screen.queryByText('Saved successfully!')).not.toBeInTheDocument();
+  jest.useRealTimers();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q24">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you test Suspense and lazy-loaded components?
+    </button>
+  </h2>
+  <div id="testing-q24" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Lazy-loaded components must be wrapped in <code>Suspense</code> in the test. Dynamic imports resolve asynchronously — use <code>findBy*</code> queries or <code>waitFor</code> to wait for the lazy component to load and render its content.
+      <pre class="code-block">const LazyComponent = React.lazy(() =&gt; import('./HeavyComponent'));
+
+test('renders lazy component after loading', async () =&gt; {
+  render(
+    &lt;React.Suspense fallback={&lt;p&gt;Loading...&lt;/p&gt;}&gt;
+      &lt;LazyComponent /&gt;
+    &lt;/React.Suspense&gt;
+  );
+
+  // Suspense shows fallback initially
+  expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+  // Wait for the lazy component to finish loading
+  expect(await screen.findByText('Heavy Component Content')).toBeInTheDocument();
+  expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q25">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the Testing Trophy vs Testing Pyramid?
+    </button>
+  </h2>
+  <div id="testing-q25" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      The Testing Pyramid (classic) recommends many unit tests, fewer integration tests, and few E2E tests. Kent C. Dodds's Testing Trophy (the philosophy behind RTL) recommends the largest investment in integration tests. Integration tests test how multiple units work together — a form component with validation, state, and submission — and provide more real-world confidence than unit tests that mock all dependencies. The rationale: unit tests that test implementation details (internal state, method calls) can pass even when the visible feature is broken; integration tests that test user behavior catch real bugs. The Trophy shape: static analysis (TypeScript, ESLint) at the base, a few unit tests for pure functions, many integration tests for component behavior, and a few E2E tests for critical complete flows (login, checkout).
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q26">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you write integration tests for a multi-step form?
+    </button>
+  </h2>
+  <div id="testing-q26" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Multi-step form integration tests simulate the full user flow through every step. Fill in each step's fields, advance, and finally assert on the submission call and confirmation state. This single test covers all the routing logic, validation, and data aggregation in one shot.
+      <pre class="code-block">test('completes checkout flow successfully', async () =&gt; {
+  const user = userEvent.setup();
+  const mockCheckout = jest.fn().mockResolvedValue({ orderId: 'ORD-123' });
+  render(&lt;CheckoutWizard onCheckout={mockCheckout} /&gt;);
+
+  // Step 1: Shipping
+  expect(screen.getByText('Step 1: Shipping')).toBeInTheDocument();
+  await user.type(screen.getByLabelText('Street'), '123 Main St');
+  await user.type(screen.getByLabelText('City'), 'Seattle');
+  await user.click(screen.getByRole('button', { name: 'Next' }));
+
+  // Step 2: Payment
+  expect(await screen.findByText('Step 2: Payment')).toBeInTheDocument();
+  await user.type(screen.getByLabelText('Card Number'), '4111111111111111');
+  await user.click(screen.getByRole('button', { name: 'Next' }));
+
+  // Step 3: Review &amp; Submit
+  expect(await screen.findByText('Step 3: Review')).toBeInTheDocument();
+  expect(screen.getByText('123 Main St')).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: 'Place Order' }));
+
+  expect(await screen.findByText('Order ORD-123 placed!')).toBeInTheDocument();
+  expect(mockCheckout).toHaveBeenCalledWith(
+    expect.objectContaining({ shipping: { street: '123 Main St', city: 'Seattle' } })
+  );
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q27">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is Cypress and how does it differ from RTL?
+    </button>
+  </h2>
+  <div id="testing-q27" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Cypress is an end-to-end testing framework that runs tests in a real browser against a running application, exercising the complete stack (frontend, backend, database). React Testing Library runs tests in Node.js with a simulated DOM against components in isolation with mocked dependencies. Cypress is slower (must start the app and browser) but provides the highest confidence that the complete system works together. RTL is fast and deterministic. The right strategy: use RTL for component behavior (unit and integration tests), and use Cypress for critical user journeys (login, checkout, signup) where you need proof the full system works end-to-end.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q28">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you test a component that uses portals?
+    </button>
+  </h2>
+  <div id="testing-q28" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Portals render children outside the component tree (e.g., to <code>document.body</code>). React Testing Library handles portals correctly — <code>screen.*</code> queries search the entire <code>document.body</code>, so portal content is found automatically with no special setup. Write the test exactly as you would for a non-portal component.
+      <pre class="code-block">function Modal({ isOpen, onClose, children }) {
+  if (!isOpen) return null;
+  return ReactDOM.createPortal(
+    &lt;div role="dialog" aria-modal="true"&gt;
+      {children}
+      &lt;button onClick={onClose}&gt;Close&lt;/button&gt;
+    &lt;/div&gt;,
+    document.body
+  );
+}
+
+test('modal renders and can be closed', async () =&gt; {
+  const user = userEvent.setup();
+  const onClose = jest.fn();
+  render(&lt;Modal isOpen={true} onClose={onClose}&gt;Modal content&lt;/Modal&gt;);
+
+  // screen searches entire document including the portal
+  expect(screen.getByRole('dialog')).toBeInTheDocument();
+  expect(screen.getByText('Modal content')).toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: 'Close' }));
+  expect(onClose).toHaveBeenCalled();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q29">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you handle test setup and teardown?
+    </button>
+  </h2>
+  <div id="testing-q29" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Jest/Vitest provide four lifecycle hooks: <code>beforeAll</code> (once before all tests in the file), <code>beforeEach</code> (before each test), <code>afterEach</code> (after each test), <code>afterAll</code> (once after all tests). Use <code>beforeEach</code> to reset mocks and set default MSW handlers. Use <code>afterEach</code> to reset MSW handler overrides. Use <code>beforeAll</code>/<code>afterAll</code> for expensive one-time setup like starting/stopping test servers.
+      <pre class="code-block">describe('UserProfile', () =&gt; {
+  beforeAll(() =&gt; server.listen({ onUnhandledRequest: 'error' }));
+
+  beforeEach(() =&gt; {
+    jest.clearAllMocks();
+    server.use(rest.get('/api/user', (req, res, ctx) =&gt;
+      res(ctx.json(defaultUser))
+    ));
+  });
+
+  afterEach(() =&gt; server.resetHandlers());
+
+  afterAll(() =&gt; server.close());
+
+  test('shows user name', async () =&gt; { /* ... */ });
+  test('shows loading state', async () =&gt; { /* ... */ });
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q30">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is test coverage and what are good targets for React apps?
+    </button>
+  </h2>
+  <div id="testing-q30" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Test coverage measures what percentage of lines, branches, functions, and statements are executed during the test suite. Run it with <code>npx vitest --coverage</code> (Vitest) or <code>jest --coverage</code>. An 80% line coverage baseline is a common target, but coverage percentage is a proxy metric — 100% coverage with weak assertions gives less confidence than 70% coverage with strong behavioral assertions. Prioritize coverage of: business-critical logic (auth, payments, data transformation), error handling paths, and complex conditional branches. Avoid chasing 100% — testing trivial getters, generated code, and pure configuration adds maintenance burden. The more useful question is: "Are my critical user flows tested end-to-end with meaningful assertions?"
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q31">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How do you test a component that fetches data on mount?
+    </button>
+  </h2>
+  <div id="testing-q31" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Components that fetch on mount need MSW to intercept the request and <code>findBy*</code> queries to wait for the async data to render. Assert on the loading state first, then await the data.
+      <pre class="code-block">function ProductList() {
+  const [products, setProducts] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() =&gt; {
+    fetch('/api/products').then(r =&gt; r.json()).then(data =&gt; {
+      setProducts(data);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return &lt;p&gt;Loading products...&lt;/p&gt;;
+  return &lt;ul&gt;{products.map(p =&gt; &lt;li key={p.id}&gt;{p.name}&lt;/li&gt;)}&lt;/ul&gt;;
+}
+
+test('displays products after loading', async () =&gt; {
+  server.use(rest.get('/api/products', (req, res, ctx) =&gt;
+    res(ctx.json([{ id: 1, name: 'Widget' }, { id: 2, name: 'Gadget' }]))
+  ));
+
+  render(&lt;ProductList /&gt;);
+
+  expect(screen.getByText('Loading products...')).toBeInTheDocument();
+
+  expect(await screen.findByText('Widget')).toBeInTheDocument();
+  expect(screen.getByText('Gadget')).toBeInTheDocument();
+  expect(screen.queryByText('Loading products...')).not.toBeInTheDocument();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q32">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How do you prevent tests from being brittle?
+    </button>
+  </h2>
+  <div id="testing-q32" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Brittle tests fail for reasons unrelated to real bugs — styling changes, refactors, renamed internal methods. Prevention strategies: (1) Use semantic queries (<code>getByRole</code>, <code>getByLabelText</code>) not CSS classes or DOM structure; (2) Test behavior (what the user sees and can do), not implementation (component state, internal method calls); (3) Use <code>expect.objectContaining()</code> instead of exact object matching in <code>toHaveBeenCalledWith</code>; (4) Avoid snapshot tests for large dynamic components; (5) Don't test that React or third-party libraries work; (6) Use <code>within(container)</code> to scope queries when duplicate text exists rather than relying on DOM order; (7) Keep test data realistic and meaningful so failures are self-explanatory.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q33">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is Playwright and how does it complement React Testing Library?
+    </button>
+  </h2>
+  <div id="testing-q33" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Playwright is a modern E2E testing framework from Microsoft that drives real browsers (Chromium, Firefox, WebKit) in parallel. Key features: auto-wait (Playwright waits for elements to be visible, enabled, and stable before interacting — dramatically reducing flakiness), cross-browser coverage, visual regression testing, network interception for mocking, and parallel test execution. Playwright's <code>locator</code> API prioritizes accessible queries similar to RTL's <code>getByRole</code>. In a complete testing strategy: RTL handles fast, isolated component tests with mocked dependencies; Playwright handles slow, full-stack user journeys in real browsers. The two tools cover different levels of the testing trophy and are complementary, not competing.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q34">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you test custom hooks that have side effects?
+    </button>
+  </h2>
+  <div id="testing-q34" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Custom hooks with side effects (event listeners, timers, async operations) need careful setup and cleanup verification. Use <code>renderHook</code> with <code>act</code> for synchronous side effects. Call <code>unmount()</code> and assert cleanup ran to verify the hook does not leak.
+      <pre class="code-block">test('useWindowSize updates on resize', () =&gt; {
+  Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true });
+  Object.defineProperty(window, 'innerHeight', { value: 768, configurable: true });
+
+  const { result } = renderHook(() =&gt; useWindowSize());
+  expect(result.current).toEqual({ width: 1024, height: 768 });
+
+  act(() =&gt; {
+    Object.defineProperty(window, 'innerWidth', { value: 480, configurable: true });
+    window.dispatchEvent(new Event('resize'));
+  });
+
+  expect(result.current).toEqual({ width: 480, height: 768 });
+});
+
+test('useEventListener cleans up on unmount', () =&gt; {
+  const removeSpy = jest.spyOn(window, 'removeEventListener');
+  const { unmount } = renderHook(() =&gt; useEventListener('scroll', () =&gt; {}));
+
+  unmount();
+
+  expect(removeSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q35">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How do you structure a test suite for a large React application?
+    </button>
+  </h2>
+  <div id="testing-q35" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Large applications need organized, maintainable test suites. Best practices: (1) Colocate tests with source files (<code>Button.test.tsx</code> next to <code>Button.tsx</code>); (2) Use <code>describe</code> blocks to group related scenarios within a file; (3) Create a shared test utilities file — custom render functions with all providers, data factory functions (<code>createUser({ role: 'admin' })</code>), and common assertion helpers; (4) Separate unit tests from integration tests by naming convention (<code>*.unit.test.ts</code> vs <code>*.integration.test.ts</code>) to run them separately in CI; (5) Maintain a <code>__mocks__</code> directory for module-level mocks that are reused across tests; (6) Run tests in parallel in CI; (7) Keep tests independent — each test sets up its own state and does not rely on prior test execution order. The goal: writing a new test should be as easy as reading an existing one.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q36">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you test keyboard interactions?
+    </button>
+  </h2>
+  <div id="testing-q36" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Keyboard accessibility testing verifies the component is usable without a mouse. <code>userEvent.keyboard</code> simulates keyboard input: <code>{Tab}</code> moves focus, <code>{Enter}</code> activates buttons and links, <code>{Space}</code> toggles checkboxes, <code>{Escape}</code> closes dialogs, <code>{ArrowDown}</code>/<code>{ArrowUp}</code> navigate menus.
+      <pre class="code-block">test('dropdown menu is keyboard accessible', async () =&gt; {
+  const user = userEvent.setup();
+  render(&lt;DropdownMenu items={['Edit', 'Delete', 'Share']} /&gt;);
+
+  const trigger = screen.getByRole('button', { name: 'Actions' });
+  trigger.focus();
+
+  // Open with Enter
+  await user.keyboard('{Enter}');
+  expect(screen.getByRole('menu')).toBeInTheDocument();
+
+  // Navigate with arrow keys
+  await user.keyboard('{ArrowDown}');
+  expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus();
+
+  await user.keyboard('{ArrowDown}');
+  expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveFocus();
+
+  // Close with Escape — focus should return to trigger
+  await user.keyboard('{Escape}');
+  expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  expect(trigger).toHaveFocus();
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q37">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What are the anti-patterns to avoid in React testing?
+    </button>
+  </h2>
+  <div id="testing-q37" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      The most damaging testing anti-patterns: (1) Testing implementation details — asserting on component state, internal methods, or CSS classes not visible to users; (2) Over-mocking — mocking so heavily that tests no longer run real code paths; (3) Using <code>getByTestId</code> as the first choice rather than last resort; (4) Testing third-party library behavior instead of your own code; (5) Massive snapshot tests that get auto-updated without review; (6) Not cleaning up async operations — leaving pending timers or promises causes test pollution and "state update not wrapped in act" warnings; (7) Using <code>fireEvent</code> instead of <code>userEvent</code> for user interactions; (8) Writing tests that depend on execution order — each test must be fully independent and self-contained.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q38">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;A test is flaky — it sometimes passes and sometimes fails without code changes. How do you fix it?
+    </button>
+  </h2>
+  <div id="testing-q38" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Flaky tests typically stem from five causes. (1) Race conditions: async operations resolving in different orders — fix by using <code>waitFor</code> and <code>findBy</code> queries correctly rather than arbitrary delays. (2) Shared state pollution: one test's state bleeds into the next via a global variable, module-level mock, or MSW handler — fix with <code>beforeEach</code> resets and <code>server.resetHandlers()</code>. (3) Timer dependency: tests relying on real wall-clock timers — fix with <code>jest.useFakeTimers()</code>. (4) Test order dependency: a test passes only when run after another test that sets up some global state — each test must be self-contained. (5) Uncontrolled async side effects: effects running after test teardown causing "state update outside act" warnings — use <code>waitFor</code> to fully drain async queues. To reproduce: run the flaky test in a tight loop (<code>vitest --repeat 50 the.test.file</code>) until it fails consistently, then debug from there.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q39">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How would you add testing to a legacy React codebase with no tests?
+    </button>
+  </h2>
+  <div id="testing-q39" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Introducing tests to an untested codebase requires pragmatic prioritisation rather than trying to achieve full coverage immediately. Step 1: set up the testing infrastructure first (Vitest/Jest, RTL, MSW, coverage reporting) so the tooling is in place. Step 2: establish a "no new code without tests" policy going forward. Step 3: add a failing test before each bug fix — this prevents regressions and builds the test suite organically. Step 4: prioritise pure utility functions and business logic first — they are easiest to test and highest value. Step 5: write integration tests for the most critical user flows (login, checkout, primary data table) before achieving unit coverage across all files. Step 6: track coverage trend (increasing over time) not absolute number. Avoid the "test debt sprint" trap — continuous incremental improvement beats a one-time effort that gets abandoned.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#testing-q40">
+      <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How do you test a data table component like AG Grid with sorting and filtering?
+    </button>
+  </h2>
+  <div id="testing-q40" class="accordion-collapse collapse" data-bs-parent="#acc-testing">
+    <div class="accordion-body">
+      Data table testing strategy: mock the heavy library for fast unit tests, use the real library only in integration and E2E tests. For the component's own logic (row click handlers, toolbar actions), replace AG Grid with a simple <code>&lt;table&gt;</code> mock so tests run instantly without the AG Grid rendering overhead.
+      <pre class="code-block">vi.mock('ag-grid-react', () =&gt; ({
+  AgGridReact: ({ rowData, columnDefs, onRowClicked }) =&gt; (
+    &lt;table data-testid="data-grid"&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;{columnDefs.map(col =&gt;
+          &lt;th key={col.field}&gt;{col.headerName}&lt;/th&gt;
+        )}&lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        {rowData?.map((row, i) =&gt; (
+          &lt;tr key={i} onClick={() =&gt; onRowClicked?.({ data: row })}&gt;
+            {columnDefs.map(col =&gt;
+              &lt;td key={col.field}&gt;{row[col.field]}&lt;/td&gt;
+            )}
+          &lt;/tr&gt;
+        ))}
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  ),
+}));
+
+test('data table displays rows and handles row click', async () =&gt; {
+  const user = userEvent.setup();
+  const onSelect = jest.fn();
+  render(&lt;TrailerTable trailers={mockTrailers} onSelect={onSelect} /&gt;);
+
+  // Verify rows rendered
+  expect(screen.getAllByRole('row')).toHaveLength(mockTrailers.length + 1);
+
+  // Click a row
+  await user.click(screen.getByText(mockTrailers[0].trailerNumber));
+  expect(onSelect).toHaveBeenCalledWith(mockTrailers[0]);
+});</pre>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>

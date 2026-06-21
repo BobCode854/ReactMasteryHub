@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JSX — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <style>
+    :root{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--text:#1e293b;--text2:#475569;--border:#e2e8f0;}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#0f172a;--surface2:#1e293b;--text:#f1f5f9;--text2:#94a3b8;--border:#334155;}
+    *{box-sizing:border-box;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;margin:0;}
+    .concept-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0;margin-bottom:2rem;}
+    .concept-box{border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;color:#1e3a5f;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;color:#14532d;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;color:#78350f;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;color:#7f1d1d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;color:#3b0764;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.amber{background:#78350f;border-color:#f59e0b;color:#fef3c7;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.red{background:#450a0a;border-color:#ef4444;color:#fecaca;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.83rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;} .code-block .fn{color:#60a5fa;} .code-block .st{color:#86efac;}
+    .code-block .cm{color:#64748b;} .code-block .cl{color:#f9a8d4;} .code-block .num{color:#fb923c;}
+    .step-flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:1.5rem 0;}
+    .step-box{flex:1;min-width:140px;background:var(--surface2);border:2px solid #e2e8f0;border-radius:10px;padding:.9rem;text-align:center;position:relative;margin:.2rem;}
+    .step-box::after{content:"→";position:absolute;right:-18px;top:50%;transform:translateY(-50%);font-size:1.2rem;color:#61dafb;font-weight:900;z-index:1;}
+    .step-box:last-child::after{display:none;}
+    [data-theme="dark"] .step-box{background:#1e293b;border-color:#334155;color:#e2e8f0;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-badge{background:linear-gradient(135deg,#61dafb,#7c3aed);color:#fff;padding:.25rem .8rem;border-radius:20px;font-size:.75rem;font-weight:800;}
+    .toc-pill{display:inline-flex;align-items:center;gap:.3rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:.3rem .8rem;font-size:.82rem;font-weight:600;text-decoration:none;color:#e2e8f0;margin:.2rem;}
+    .toc-pill:hover{background:rgba(97,218,251,.2);border-color:#61dafb;color:#61dafb;}
+    .comparison-table th{background:#0f172a;color:#61dafb;}
+    .comparison-table td{background:var(--surface);}
+    [data-theme="dark"] .comparison-table td{background:#1e293b;color:#e2e8f0;}
+    .sidebar-link{display:block;padding:.5rem 1rem;color:#94a3b8;text-decoration:none;font-size:.85rem;border-left:3px solid transparent;transition:all .2s;}
+    .sidebar-link:hover,.sidebar-link.active{color:#61dafb;background:rgba(97,218,251,.07);border-left-color:#61dafb;}
+    .topic-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;transition:box-shadow .3s;}
+    .topic-card:hover{box-shadow:0 4px 20px rgba(97,218,251,.1);}
+    [data-theme="dark"] .topic-card{background:#0f172a;border-color:#1e293b;}
+    .accordion-button{background:var(--surface2)!important;color:var(--text)!important;font-weight:600;}
+    .accordion-button:not(.collapsed){background:rgba(97,218,251,.1)!important;color:#0ea5e9!important;}
+    .accordion-body{background:var(--surface)!important;color:var(--text)!important;}
+    [data-theme="dark"] .accordion-button{background:#1e293b!important;}
+    [data-theme="dark"] .accordion-body{background:#0f172a!important;}
+    .section-divider{height:3px;background:linear-gradient(90deg,#61dafb,#7c3aed,transparent);border-radius:2px;margin:2rem 0;}
+    .pattern-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1rem;}
+    [data-theme="dark"] .pattern-card{background:#1e293b;border-color:#334155;}
+    .when-badge{background:#eff6ff;color:#1d4ed8;border:1px solid #93c5fd;border-radius:6px;padding:.2rem .6rem;font-size:.72rem;font-weight:700;}
+    [data-theme="dark"] .when-badge{background:#1e3a5f;color:#93c5fd;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+      <svg width="28" height="28" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Learn</a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="react-intro.html">1. Introduction</a></li>
+            <li><a class="dropdown-item" href="js-for-react.html">2. JS for React</a></li>
+            <li><a class="dropdown-item" href="react-setup.html">3. Setup</a></li>
+            <li><a class="dropdown-item active" href="react-jsx.html">4. JSX</a></li>
+            <li><a class="dropdown-item" href="react-components.html">5. Components</a></li>
+            <li><a class="dropdown-item" href="react-hooks.html">8. Hooks</a></li>
+            <li><a class="dropdown-item" href="react-redux.html">15. Redux</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item">
+          <button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;">
+            <i class="bi bi-moon-stars-fill"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="d-flex" style="padding-top:64px;">
+  <nav class="d-none d-lg-flex flex-column" style="width:260px;min-height:100vh;background:#0f172a;position:fixed;top:64px;left:0;overflow-y:auto;padding:1rem 0;border-right:1px solid rgba(97,218,251,.15);">
+    <div class="px-3 mb-2"><small style="color:#475569;text-transform:uppercase;font-weight:700;font-size:.7rem;letter-spacing:.1em;">Section 04 — JSX</small></div>
+    <a href="#what-is-jsx" class="sidebar-link active"><i class="bi bi-info-circle me-2"></i>What is JSX?</a>
+    <a href="#jsx-rules" class="sidebar-link"><i class="bi bi-list-check me-2"></i>JSX Rules</a>
+    <a href="#jsx-compilation" class="sidebar-link"><i class="bi bi-arrow-right-circle me-2"></i>Compilation</a>
+    <a href="#jsx-vs-html" class="sidebar-link"><i class="bi bi-table me-2"></i>JSX vs HTML</a>
+    <a href="#expressions" class="sidebar-link"><i class="bi bi-braces me-2"></i>Expressions</a>
+    <a href="#fragments" class="sidebar-link"><i class="bi bi-layout-split me-2"></i>Fragments</a>
+    <a href="#conditional" class="sidebar-link"><i class="bi bi-question-circle me-2"></i>Conditional Rendering</a>
+    <a href="#lists-keys" class="sidebar-link"><i class="bi bi-list-ul me-2"></i>Lists &amp; Keys</a>
+    <a href="#interview" class="sidebar-link"><i class="bi bi-patch-question me-2"></i>Interview Q&amp;A</a>
+    <div class="px-3 mt-4 mb-2"><small style="color:#475569;text-transform:uppercase;font-weight:700;font-size:.7rem;letter-spacing:.1em;">Other Sections</small></div>
+    <a href="react-intro.html" class="sidebar-link"><i class="bi bi-info-circle me-2"></i>Introduction</a>
+    <a href="js-for-react.html" class="sidebar-link"><i class="bi bi-filetype-js me-2"></i>JS for React</a>
+    <a href="react-setup.html" class="sidebar-link"><i class="bi bi-gear me-2"></i>Setup</a>
+    <a href="react-hooks.html" class="sidebar-link"><i class="bi bi-arrow-repeat me-2"></i>Hooks</a>
+  </nav>
+
+  <main style="margin-left:260px;width:calc(100% - 260px);min-height:100vh;">
+    <div class="concept-hero">
+      <div class="container-xl px-4">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <span class="section-badge">Section 04</span>
+          <span style="font-size:2rem;">🔷</span>
+        </div>
+        <h1 style="font-family:'Poppins',sans-serif;font-size:2.6rem;font-weight:900;margin-bottom:.5rem;">JSX</h1>
+        <p class="lead mb-4" style="color:#94a3b8;max-width:640px;">JavaScript XML — the syntax extension that lets you write HTML-like code inside JavaScript. The heart of every React component.</p>
+        <div class="d-flex flex-wrap gap-1">
+          <a href="#what-is-jsx" class="toc-pill">What is JSX</a>
+          <a href="#jsx-rules" class="toc-pill">JSX Rules</a>
+          <a href="#jsx-compilation" class="toc-pill">Compilation</a>
+          <a href="#jsx-vs-html" class="toc-pill">JSX vs HTML</a>
+          <a href="#expressions" class="toc-pill">Expressions {}</a>
+          <a href="#fragments" class="toc-pill">Fragments</a>
+          <a href="#conditional" class="toc-pill">Conditional</a>
+          <a href="#lists-keys" class="toc-pill">Lists &amp; Keys</a>
+          <a href="#interview" class="toc-pill">Interview Q&amp;A</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-xl px-4 pb-5">
+
+      <!-- 1. WHAT IS JSX -->
+      <section id="what-is-jsx" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">01</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">What is JSX?</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="concept-box blue">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            <strong>Definition:</strong> JSX (JavaScript XML) is a syntax extension for JavaScript that looks like HTML but is actually JavaScript. JSX is <strong>not</strong> valid JavaScript on its own — Babel transpiles it into <code>React.createElement()</code> calls at build time. It makes React components easier to read and write.
+          </div>
+          <div class="row g-3 mt-2">
+            <div class="col-lg-6">
+              <h6 class="fw-700 mb-2">Without JSX (what you'd have to write)</h6>
+              <div class="code-block">
+<span class="cm">// Without JSX — verbose and unreadable:</span>
+<span class="kw">function</span> <span class="cl">App</span>() {
+  <span class="kw">return</span> React.<span class="fn">createElement</span>(
+    <span class="st">'div'</span>,
+    { className: <span class="st">'container'</span> },
+    React.<span class="fn">createElement</span>(<span class="st">'h1'</span>, <span class="num">null</span>, <span class="st">'Hello'</span>),
+    React.<span class="fn">createElement</span>(
+      <span class="st">'p'</span>,
+      { className: <span class="st">'text'</span> },
+      <span class="st">'Welcome to React'</span>
+    )
+  );
+}
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <h6 class="fw-700 mb-2">With JSX (what you actually write)</h6>
+              <div class="code-block">
+<span class="cm">// With JSX — clean and intuitive:</span>
+<span class="kw">function</span> <span class="cl">App</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span> className=<span class="st">"container"</span>&gt;
+      &lt;<span class="cl">h1</span>&gt;Hello&lt;/<span class="cl">h1</span>&gt;
+      &lt;<span class="cl">p</span> className=<span class="st">"text"</span>&gt;
+        Welcome to React
+      &lt;/<span class="cl">p</span>&gt;
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}
+              </div>
+            </div>
+          </div>
+          <div class="tip-box mt-3">
+            <i class="bi bi-lightbulb-fill me-2"></i>
+            <strong>JSX is optional but universal:</strong> Technically you can write React without JSX (using <code>React.createElement</code> directly), but virtually every React developer uses JSX. It's the standard.
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. JSX RULES -->
+      <section id="jsx-rules" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">02</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">JSX Rules — Must Know</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <div class="p-3 rounded-3 h-100" style="background:var(--surface2);border:1px solid var(--border);">
+                <h6 class="fw-800 mb-3" style="color:#0ea5e9;"><i class="bi bi-1-circle-fill me-2"></i>Must return a single root element</h6>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// ❌ Two root elements — invalid JSX</span>
+<span class="kw">return</span> (
+  &lt;<span class="cl">h1</span>&gt;Title&lt;/<span class="cl">h1</span>&gt;
+  &lt;<span class="cl">p</span>&gt;Paragraph&lt;/<span class="cl">p</span>&gt;
+);
+
+<span class="cm">// ✅ Wrap in a div:</span>
+<span class="kw">return</span> (
+  &lt;<span class="cl">div</span>&gt;
+    &lt;<span class="cl">h1</span>&gt;Title&lt;/<span class="cl">h1</span>&gt;
+    &lt;<span class="cl">p</span>&gt;Paragraph&lt;/<span class="cl">p</span>&gt;
+  &lt;/<span class="cl">div</span>&gt;
+);
+
+<span class="cm">// ✅ Or use a Fragment:</span>
+<span class="kw">return</span> (
+  &lt;&gt;
+    &lt;<span class="cl">h1</span>&gt;Title&lt;/<span class="cl">h1</span>&gt;
+    &lt;<span class="cl">p</span>&gt;Paragraph&lt;/<span class="cl">p</span>&gt;
+  &lt;/&gt;
+);
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="p-3 rounded-3 h-100" style="background:var(--surface2);border:1px solid var(--border);">
+                <h6 class="fw-800 mb-3" style="color:#16a34a;"><i class="bi bi-2-circle-fill me-2"></i>Use className instead of class</h6>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// ❌ 'class' is a JS reserved word</span>
+&lt;<span class="cl">div</span> class=<span class="st">"container"</span>&gt;...&lt;/<span class="cl">div</span>&gt;
+
+<span class="cm">// ✅ Use 'className' in JSX</span>
+&lt;<span class="cl">div</span> className=<span class="st">"container"</span>&gt;...&lt;/<span class="cl">div</span>&gt;
+
+<span class="cm">// Dynamic className with template literal:</span>
+&lt;<span class="cl">div</span> className={<span class="st">`card ${isActive ? 'active' : ''}`</span>}&gt;
+  ...
+&lt;/<span class="cl">div</span>&gt;
+
+<span class="cm">// ❌ 'for' is also reserved — use 'htmlFor'</span>
+&lt;<span class="cl">label</span> for=<span class="st">"email"</span>&gt;Email&lt;/<span class="cl">label</span>&gt;
+<span class="cm">// ✅ Correct:</span>
+&lt;<span class="cl">label</span> htmlFor=<span class="st">"email"</span>&gt;Email&lt;/<span class="cl">label</span>&gt;
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="p-3 rounded-3 h-100" style="background:var(--surface2);border:1px solid var(--border);">
+                <h6 class="fw-800 mb-3" style="color:#7c3aed;"><i class="bi bi-3-circle-fill me-2"></i>Self-close empty tags</h6>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// ❌ HTML allows unclosed tags — JSX doesn't</span>
+&lt;<span class="cl">img</span> src=<span class="st">"photo.jpg"</span>&gt;
+&lt;<span class="cl">input</span> type=<span class="st">"text"</span>&gt;
+&lt;<span class="cl">br</span>&gt;
+&lt;<span class="cl">hr</span>&gt;
+
+<span class="cm">// ✅ All tags must be closed in JSX</span>
+&lt;<span class="cl">img</span> src=<span class="st">"photo.jpg"</span> /&gt;
+&lt;<span class="cl">input</span> type=<span class="st">"text"</span> /&gt;
+&lt;<span class="cl">br</span> /&gt;
+&lt;<span class="cl">hr</span> /&gt;
+
+<span class="cm">// Components must also be closed:</span>
+&lt;<span class="cl">MyComponent</span> /&gt;  <span class="cm">// or &lt;MyComponent&gt;&lt;/MyComponent&gt;</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="p-3 rounded-3 h-100" style="background:var(--surface2);border:1px solid var(--border);">
+                <h6 class="fw-800 mb-3" style="color:#d97706;"><i class="bi bi-4-circle-fill me-2"></i>Inline styles use objects</h6>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// ❌ HTML string style — invalid in JSX</span>
+&lt;<span class="cl">div</span> style=<span class="st">"color: red; font-size: 16px"</span>&gt;
+
+<span class="cm">// ✅ JSX style — JavaScript object</span>
+&lt;<span class="cl">div</span> style={{ color: <span class="st">'red'</span>, fontSize: <span class="st">'16px'</span> }}&gt;
+
+<span class="cm">// Note: camelCase CSS properties:</span>
+<span class="cm">// font-size → fontSize</span>
+<span class="cm">// background-color → backgroundColor</span>
+<span class="cm">// border-radius → borderRadius</span>
+
+<span class="cm">// Dynamic styles:</span>
+<span class="kw">const</span> style = { color: isError ? <span class="st">'red'</span> : <span class="st">'green'</span> };
+&lt;<span class="cl">p</span> style={style}&gt;Message&lt;/<span class="cl">p</span>&gt;
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="p-3 rounded-3 h-100" style="background:var(--surface2);border:1px solid var(--border);">
+                <h6 class="fw-800 mb-3" style="color:#dc2626;"><i class="bi bi-5-circle-fill me-2"></i>JS expressions inside {}</h6>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// Any JS expression goes in {}</span>
+<span class="kw">const</span> name = <span class="st">'Alice'</span>;
+<span class="kw">return</span> &lt;<span class="cl">h1</span>&gt;Hello, {name}!&lt;/<span class="cl">h1</span>&gt;;
+
+<span class="cm">// ✅ Valid in {}: variables, math,</span>
+<span class="cm">// function calls, ternary, array.map</span>
+&lt;<span class="cl">p</span>&gt;{<span class="num">2</span> + <span class="num">2</span>}&lt;/<span class="cl">p</span>&gt;       <span class="cm">// renders "4"</span>
+&lt;<span class="cl">p</span>&gt;{name.<span class="fn">toUpperCase</span>()}&lt;/<span class="cl">p</span>&gt;
+
+<span class="cm">// ❌ Statements don't work in {}:</span>
+<span class="cm">// { if (x) ... }  — use ternary instead</span>
+<span class="cm">// { for (...) }   — use .map() instead</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="p-3 rounded-3 h-100" style="background:var(--surface2);border:1px solid var(--border);">
+                <h6 class="fw-800 mb-3" style="color:#64748b;"><i class="bi bi-6-circle-fill me-2"></i>Comments in JSX</h6>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// ❌ HTML comments don't work in JSX</span>
+&lt;!-- This won't work in JSX --&gt;
+
+<span class="cm">// ✅ Use JS comment inside {}</span>
+<span class="kw">return</span> (
+  &lt;<span class="cl">div</span>&gt;
+    {<span class="cm">/* This is a JSX comment */</span>}
+    {<span class="cm">/* Multi-line
+         comment here */</span>}
+    &lt;<span class="cl">p</span>&gt;Content&lt;/<span class="cl">p</span>&gt;
+  &lt;/<span class="cl">div</span>&gt;
+);
+
+<span class="cm">// Outside JSX return — normal JS comments:</span>
+<span class="cm">// This works fine outside return()</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. JSX COMPILATION -->
+      <section id="jsx-compilation" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">03</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">JSX Compilation — What Babel Does</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <p style="color:var(--text2);">JSX is not valid JavaScript. Babel transforms it before your code runs in the browser.</p>
+
+          <div class="step-flow mb-4">
+            <div class="step-box">
+              <div style="font-size:1.3rem;">✍️</div>
+              <div class="fw-700" style="font-size:.82rem;">You write JSX</div>
+            </div>
+            <div class="step-box">
+              <div style="font-size:1.3rem;">🔡</div>
+              <div class="fw-700" style="font-size:.82rem;">Babel transforms</div>
+            </div>
+            <div class="step-box">
+              <div style="font-size:1.3rem;">📦</div>
+              <div class="fw-700" style="font-size:.82rem;">React.createElement() calls</div>
+            </div>
+            <div class="step-box">
+              <div style="font-size:1.3rem;">🌲</div>
+              <div class="fw-700" style="font-size:.82rem;">Plain JS objects (vDOM)</div>
+            </div>
+            <div class="step-box">
+              <div style="font-size:1.3rem;">🖥️</div>
+              <div class="fw-700" style="font-size:.82rem;">Browser renders</div>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <h6 class="fw-700 mb-2">What you write</h6>
+              <div class="code-block">
+<span class="cm">// JSX you write in your component:</span>
+<span class="kw">const</span> element = (
+  &lt;<span class="cl">div</span> className=<span class="st">"card"</span> onClick={handleClick}&gt;
+    &lt;<span class="cl">h2</span>&gt;{title}&lt;/<span class="cl">h2</span>&gt;
+    &lt;<span class="cl">p</span> className=<span class="st">"text-muted"</span>&gt;{description}&lt;/<span class="cl">p</span>&gt;
+    &lt;<span class="cl">Button</span> variant=<span class="st">"primary"</span>&gt;Read More&lt;/<span class="cl">Button</span>&gt;
+  &lt;/<span class="cl">div</span>&gt;
+);
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <h6 class="fw-700 mb-2">What Babel compiles it to (React 17+ new JSX transform)</h6>
+              <div class="code-block">
+<span class="kw">import</span> { <span class="fn">jsx</span> <span class="kw">as</span> _jsx, jsxs <span class="kw">as</span> _jsxs } <span class="kw">from</span> <span class="st">'react/jsx-runtime'</span>;
+
+<span class="kw">const</span> element = <span class="fn">_jsxs</span>(<span class="st">'div'</span>, {
+  className: <span class="st">'card'</span>,
+  onClick: handleClick,
+  children: [
+    <span class="fn">_jsx</span>(<span class="st">'h2'</span>, { children: title }),
+    <span class="fn">_jsx</span>(<span class="st">'p'</span>, {
+      className: <span class="st">'text-muted'</span>,
+      children: description
+    }),
+    <span class="fn">_jsx</span>(<span class="cl">Button</span>, {
+      variant: <span class="st">'primary'</span>,
+      children: <span class="st">'Read More'</span>
+    })
+  ]
+});
+              </div>
+            </div>
+          </div>
+
+          <h6 class="fw-700 mt-4 mb-2">The resulting React Element (plain JS object)</h6>
+          <div class="code-block">
+<span class="cm">// React.createElement / _jsx ultimately returns a plain object:</span>
+{
+  <span class="st">$$typeof</span>: Symbol.<span class="fn">for</span>(<span class="st">'react.element'</span>),
+  type: <span class="st">'div'</span>,                    <span class="cm">// tag name OR component function</span>
+  props: {
+    className: <span class="st">'card'</span>,
+    onClick: handleClick,
+    children: [
+      { type: <span class="st">'h2'</span>, props: { children: title } },
+      { type: <span class="st">'p'</span>, props: { className: <span class="st">'text-muted'</span>, children: description } },
+      { type: <span class="cl">Button</span>, props: { variant: <span class="st">'primary'</span>, children: <span class="st">'Read More'</span> } }
+    ]
+  },
+  key: <span class="num">null</span>,
+  ref: <span class="num">null</span>
+}
+          </div>
+
+          <div class="concept-box amber mt-3">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>React 17+ New JSX Transform:</strong> Before React 17, every file using JSX needed <code>import React from 'react'</code> at the top (because JSX compiled to <code>React.createElement</code>). React 17 introduced a new transform that imports from <code>react/jsx-runtime</code> automatically — so you no longer need to import React just for JSX.
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. JSX vs HTML DIFFERENCES -->
+      <section id="jsx-vs-html" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">04</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">JSX vs HTML — Key Differences</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered comparison-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>HTML</th>
+                  <th>JSX</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>CSS class</strong></td>
+                  <td><code>class="btn"</code></td>
+                  <td><code>className="btn"</code></td>
+                  <td><code>class</code> is a reserved keyword in JavaScript</td>
+                </tr>
+                <tr>
+                  <td><strong>Label for</strong></td>
+                  <td><code>for="email"</code></td>
+                  <td><code>htmlFor="email"</code></td>
+                  <td><code>for</code> is a reserved keyword (for loop)</td>
+                </tr>
+                <tr>
+                  <td><strong>Self-closing tags</strong></td>
+                  <td><code>&lt;img&gt;</code> (optional close)</td>
+                  <td><code>&lt;img /&gt;</code> (required)</td>
+                  <td>JSX requires all tags to be explicitly closed</td>
+                </tr>
+                <tr>
+                  <td><strong>Inline styles</strong></td>
+                  <td><code>style="color:red"</code></td>
+                  <td><code>style={{'{'}}{'{'}color:'red'{'}'}{'}'}</code></td>
+                  <td>Styles in JSX are JS objects, not strings</td>
+                </tr>
+                <tr>
+                  <td><strong>CSS property names</strong></td>
+                  <td><code>font-size</code></td>
+                  <td><code>fontSize</code></td>
+                  <td>camelCase in JS objects (hyphens are subtraction)</td>
+                </tr>
+                <tr>
+                  <td><strong>Comments</strong></td>
+                  <td><code>&lt;!-- comment --&gt;</code></td>
+                  <td><code>{'{'}/* comment */{'}'}  </code></td>
+                  <td>JSX uses JS comment syntax wrapped in {'{}'}</td>
+                </tr>
+                <tr>
+                  <td><strong>Event handlers</strong></td>
+                  <td><code>onclick="fn()"</code></td>
+                  <td><code>onClick={'{'}fn{'}'}</code></td>
+                  <td>camelCase; pass function reference, not string</td>
+                </tr>
+                <tr>
+                  <td><strong>Boolean attributes</strong></td>
+                  <td><code>disabled</code></td>
+                  <td><code>disabled={'{'}true{'}'}</code> or just <code>disabled</code></td>
+                  <td>Both work in JSX; explicit JS boolean preferred</td>
+                </tr>
+                <tr>
+                  <td><strong>Tab index</strong></td>
+                  <td><code>tabindex="0"</code></td>
+                  <td><code>tabIndex={'{'}0{'}'}</code></td>
+                  <td>camelCase for multi-word attributes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tip-box mt-3">
+            <i class="bi bi-lightbulb-fill me-2"></i>
+            <strong>Quick rule:</strong> If an HTML attribute name is a reserved JS keyword (<code>class</code>, <code>for</code>) or is multi-word with hyphens (<code>font-size</code>), JSX renames it to camelCase. For event handlers, HTML uses lowercase (<code>onclick</code>), JSX uses camelCase (<code>onClick</code>).
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. EXPRESSIONS IN JSX -->
+      <section id="expressions" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">05</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">Expressions in JSX — Using {'{}'}</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="concept-box green">
+            <i class="bi bi-braces me-2"></i>
+            The <code>{'{}'}</code> syntax lets you embed any JavaScript <strong>expression</strong> inside JSX. Anything that evaluates to a value: variables, math, function calls, ternary operators, <code>.map()</code>. Statements (<code>if</code>, <code>for</code>, <code>while</code>) do NOT work directly inside <code>{'{}'}</code>.
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-lg-6">
+              <div class="pattern-card">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="when-badge">Variables</span>
+                  <span style="font-size:.82rem;color:var(--text2);">Most basic use</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="kw">const</span> name = <span class="st">'Alice'</span>;
+<span class="kw">const</span> age = <span class="num">25</span>;
+<span class="kw">const</span> isAdmin = <span class="num">true</span>;
+
+<span class="kw">return</span> (
+  &lt;<span class="cl">div</span>&gt;
+    &lt;<span class="cl">h1</span>&gt;Hello, {name}!&lt;/<span class="cl">h1</span>&gt;
+    &lt;<span class="cl">p</span>&gt;Age: {age}&lt;/<span class="cl">p</span>&gt;
+    &lt;<span class="cl">p</span>&gt;Role: {isAdmin ? <span class="st">'Admin'</span> : <span class="st">'User'</span>}&lt;/<span class="cl">p</span>&gt;
+  &lt;/<span class="cl">div</span>&gt;
+);
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="pattern-card">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="when-badge">Ternary Operator</span>
+                  <span style="font-size:.82rem;color:var(--text2);">If/else in JSX</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// Conditional rendering with ternary:</span>
+<span class="kw">return</span> (
+  &lt;<span class="cl">div</span>&gt;
+    {isLoggedIn
+      ? &lt;<span class="cl">Dashboard</span> user={user} /&gt;
+      : &lt;<span class="cl">Login</span> onLogin={handleLogin} /&gt;
+    }
+    {isLoading
+      ? &lt;<span class="cl">Spinner</span> /&gt;
+      : &lt;<span class="cl">Content</span> data={data} /&gt;
+    }
+  &lt;/<span class="cl">div</span>&gt;
+);
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="pattern-card">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="when-badge">Short-circuit &&</span>
+                  <span style="font-size:.82rem;color:var(--text2);">Show or hide</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// Render only when true — short-circuit:</span>
+<span class="kw">return</span> (
+  &lt;<span class="cl">div</span>&gt;
+    {error && &lt;<span class="cl">ErrorMessage</span> msg={error} /&gt;}
+    {isAdmin && &lt;<span class="cl">AdminPanel</span> /&gt;}
+    {notifications.length &gt; <span class="num">0</span> && (
+      &lt;<span class="cl">NotificationBell</span> count={notifications.length} /&gt;
+    )}
+  &lt;/<span class="cl">div</span>&gt;
+);
+
+<span class="cm">// ⚠️ Gotcha: don't use 0 as condition!</span>
+{count && &lt;<span class="cl">Items</span> /&gt;}  <span class="cm">// renders "0" when count=0!</span>
+{count &gt; <span class="num">0</span> && &lt;<span class="cl">Items</span> /&gt;} <span class="cm">// ✅ correct</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="pattern-card">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="when-badge">Function Calls</span>
+                  <span style="font-size:.82rem;color:var(--text2);">Transform data</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// Call functions to format data:</span>
+<span class="kw">function</span> <span class="fn">formatPrice</span>(n) {
+  <span class="kw">return</span> <span class="st">`$${n.<span class="fn">toFixed</span>(2)}`</span>;
+}
+<span class="kw">function</span> <span class="fn">formatDate</span>(d) {
+  <span class="kw">return</span> <span class="kw">new</span> <span class="cl">Date</span>(d).<span class="fn">toLocaleDateString</span>();
+}
+
+<span class="kw">return</span> (
+  &lt;<span class="cl">div</span>&gt;
+    &lt;<span class="cl">p</span>&gt;Price: {<span class="fn">formatPrice</span>(product.price)}&lt;/<span class="cl">p</span>&gt;
+    &lt;<span class="cl">p</span>&gt;Date: {<span class="fn">formatDate</span>(order.date)}&lt;/<span class="cl">p</span>&gt;
+    &lt;<span class="cl">p</span>&gt;Name: {user.name.<span class="fn">toUpperCase</span>()}&lt;/<span class="cl">p</span>&gt;
+  &lt;/<span class="cl">div</span>&gt;
+);
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="pattern-card">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="when-badge">Template Literals</span>
+                  <span style="font-size:.82rem;color:var(--text2);">Dynamic strings</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// Template literals in JSX:</span>
+<span class="kw">return</span> (
+  &lt;<span class="cl">div</span>&gt;
+    &lt;<span class="cl">h2</span>&gt;{<span class="st">`Welcome back, ${user.firstName}!`</span>}&lt;/<span class="cl">h2</span>&gt;
+    &lt;<span class="cl">img</span>
+      src={<span class="st">`/avatars/${user.id}.jpg`</span>}
+      alt={<span class="st">`${user.name}'s avatar`</span>}
+    /&gt;
+    &lt;<span class="cl">div</span> className={<span class="st">`card ${theme} ${size}`</span>}&gt;
+      Content
+    &lt;/<span class="cl">div</span>&gt;
+  &lt;/<span class="cl">div</span>&gt;
+);
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="pattern-card">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="when-badge">Array.map()</span>
+                  <span style="font-size:.82rem;color:var(--text2);">Render lists</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// Render a list with .map():</span>
+<span class="kw">const</span> products = [
+  { id: <span class="num">1</span>, name: <span class="st">'Laptop'</span>, price: <span class="num">999</span> },
+  { id: <span class="num">2</span>, name: <span class="st">'Phone'</span>, price: <span class="num">699</span> },
+];
+
+<span class="kw">return</span> (
+  &lt;<span class="cl">ul</span>&gt;
+    {products.<span class="fn">map</span>(p => (
+      &lt;<span class="cl">li</span> key={p.id}&gt;
+        {p.name} — ${p.price}
+      &lt;/<span class="cl">li</span>&gt;
+    ))}
+  &lt;/<span class="cl">ul</span>&gt;
+);
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. FRAGMENTS -->
+      <section id="fragments" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">06</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">React Fragments</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="concept-box purple">
+            <i class="bi bi-layout-split me-2"></i>
+            <strong>Problem:</strong> JSX requires a single root element, but wrapping everything in a <code>&lt;div&gt;</code> adds unnecessary DOM nodes. <strong>Solution:</strong> React Fragments — a wrapper that leaves no trace in the DOM.
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-lg-4">
+              <h6 class="fw-700 mb-2">Form 1: <code>React.Fragment</code> (long form)</h6>
+              <div class="code-block" style="font-size:.78rem;">
+<span class="kw">import</span> React <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="cl">Table</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="cl">React.Fragment</span>&gt;
+      &lt;<span class="cl">tr</span>&gt;
+        &lt;<span class="cl">td</span>&gt;Alice&lt;/<span class="cl">td</span>&gt;
+        &lt;<span class="cl">td</span>&gt;25&lt;/<span class="cl">td</span>&gt;
+      &lt;/<span class="cl">tr</span>&gt;
+    &lt;/<span class="cl">React.Fragment</span>&gt;
+  );
+}
+<span class="cm">// No extra DOM wrapper!</span>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <h6 class="fw-700 mb-2">Form 2: Short syntax <code>&lt;&gt;</code> (most common)</h6>
+              <div class="code-block" style="font-size:.78rem;">
+<span class="kw">function</span> <span class="cl">UserInfo</span>() {
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="cl">h1</span>&gt;Alice&lt;/<span class="cl">h1</span>&gt;
+      &lt;<span class="cl">p</span>&gt;Developer&lt;/<span class="cl">p</span>&gt;
+      &lt;<span class="cl">p</span>&gt;San Francisco&lt;/<span class="cl">p</span>&gt;
+    &lt;/&gt;
+  );
+}
+<span class="cm">// &lt;&gt;&lt;/&gt; is shorthand for Fragment</span>
+<span class="cm">// Most commonly used form</span>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <h6 class="fw-700 mb-2">Form 3: With <code>key</code> prop (lists)</h6>
+              <div class="code-block" style="font-size:.78rem;">
+<span class="cm">// Short syntax &lt;&gt; can't have key prop!</span>
+<span class="cm">// Use React.Fragment for keyed lists:</span>
+{items.<span class="fn">map</span>(item => (
+  &lt;<span class="cl">React.Fragment</span> key={item.id}&gt;
+    &lt;<span class="cl">dt</span>&gt;{item.term}&lt;/<span class="cl">dt</span>&gt;
+    &lt;<span class="cl">dd</span>&gt;{item.definition}&lt;/<span class="cl">dd</span>&gt;
+  &lt;/<span class="cl">React.Fragment</span>&gt;
+))}
+<span class="cm">// or: import {Fragment} from 'react'</span>
+<span class="cm">// &lt;Fragment key={item.id}&gt;...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tip-box mt-3">
+            <i class="bi bi-lightbulb-fill me-2"></i>
+            <strong>When to use Fragments:</strong> Always when you need to return multiple elements but don't want an extra <code>&lt;div&gt;</code> in the DOM. Common in table rows (<code>&lt;tr&gt;</code>/<code>&lt;td&gt;</code> can't be wrapped in a div), list items, and anywhere extra divs would break CSS flex/grid layout.
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. CONDITIONAL RENDERING -->
+      <section id="conditional" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">07</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">Conditional Rendering — 4 Patterns</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="row g-3">
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="0">
+              <div class="pattern-card h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="fw-800 mb-0">Pattern 1: if/else outside return</h6>
+                  <span class="when-badge">Complex conditions</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="kw">function</span> <span class="cl">Page</span>({ status }) {
+  <span class="cm">// Decide BEFORE the return:</span>
+  <span class="kw">if</span> (status === <span class="st">'loading'</span>) {
+    <span class="kw">return</span> &lt;<span class="cl">Spinner</span> /&gt;;
+  }
+  <span class="kw">if</span> (status === <span class="st">'error'</span>) {
+    <span class="kw">return</span> &lt;<span class="cl">ErrorPage</span> /&gt;;
+  }
+  <span class="cm">// Only reach here on success:</span>
+  <span class="kw">return</span> &lt;<span class="cl">Content</span> /&gt;;
+}
+                </div>
+                <p style="font-size:.82rem;color:var(--text2);">Use when you have multiple conditions that return completely different UIs. Cleanest for early returns (guard clauses).</p>
+              </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="50">
+              <div class="pattern-card h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="fw-800 mb-0">Pattern 2: Ternary operator</h6>
+                  <span class="when-badge">Simple if/else in JSX</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="kw">function</span> <span class="cl">AuthButton</span>({ isLoggedIn }) {
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      &lt;<span class="cl">h1</span>&gt;Welcome{isLoggedIn ? <span class="st">', Alice'</span> : <span class="st">''</span>}!&lt;/<span class="cl">h1</span>&gt;
+      {isLoggedIn
+        ? &lt;<span class="cl">button</span> onClick={logout}&gt;Log Out&lt;/<span class="cl">button</span>&gt;
+        : &lt;<span class="cl">button</span> onClick={login}&gt;Log In&lt;/<span class="cl">button</span>&gt;
+      }
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}
+                </div>
+                <p style="font-size:.82rem;color:var(--text2);">Best for choosing between two components/values inline. Avoid nesting ternaries (unreadable).</p>
+              </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+              <div class="pattern-card h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="fw-800 mb-0">Pattern 3: Short-circuit <code>&amp;&amp;</code></h6>
+                  <span class="when-badge">Show or hide</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="kw">function</span> <span class="cl">Notifications</span>({ count, error }) {
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      {error && (
+        &lt;<span class="cl">div</span> className=<span class="st">"alert alert-danger"</span>&gt;
+          {error.message}
+        &lt;/<span class="cl">div</span>&gt;
+      )}
+      {count &gt; <span class="num">0</span> && (
+        &lt;<span class="cl">span</span> className=<span class="st">"badge"</span>&gt;{count}&lt;/<span class="cl">span</span>&gt;
+      )}
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}
+                </div>
+                <p style="font-size:.82rem;color:var(--text2);">Best for "show if true, show nothing if false." Always use <code>count &gt; 0 &amp;&amp;</code> not <code>count &amp;&amp;</code> for numbers to avoid rendering <code>0</code>.</p>
+              </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
+              <div class="pattern-card h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="fw-800 mb-0">Pattern 4: Optional chaining + <code>??</code></h6>
+                  <span class="when-badge">Safe data access</span>
+                </div>
+                <div class="code-block" style="font-size:.78rem;">
+<span class="kw">function</span> <span class="cl">UserCard</span>({ user }) {
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      &lt;<span class="cl">h2</span>&gt;{user?.name ?? <span class="st">'Anonymous'</span>}&lt;/<span class="cl">h2</span>&gt;
+      &lt;<span class="cl">img</span>
+        src={user?.avatar?.url ?? <span class="st">'/default-avatar.png'</span>}
+        alt={user?.name ?? <span class="st">'User'</span>}
+      /&gt;
+      &lt;<span class="cl">p</span>&gt;{user?.bio ?? <span class="st">'No bio provided'</span>}&lt;/<span class="cl">p</span>&gt;
+      &lt;<span class="cl">span</span>&gt;{user?.followers ?? <span class="num">0</span>} followers&lt;/<span class="cl">span</span>&gt;
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}
+                </div>
+                <p style="font-size:.82rem;color:var(--text2);">Best for safely rendering async data that might be <code>null</code>/undefined while loading.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. LISTS AND KEYS -->
+      <section id="lists-keys" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">08</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">Lists &amp; Keys</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="row g-3">
+            <div class="col-lg-7">
+              <h6 class="fw-700 mb-2">Complete Product List Example</h6>
+              <div class="code-block">
+<span class="kw">function</span> <span class="cl">ProductList</span>({ products }) {
+  <span class="kw">if</span> (!products || products.length === <span class="num">0</span>) {
+    <span class="kw">return</span> &lt;<span class="cl">p</span>&gt;No products found.&lt;/<span class="cl">p</span>&gt;;
+  }
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span> className=<span class="st">"product-grid"</span>&gt;
+      {products.<span class="fn">map</span>(product => (
+        &lt;<span class="cl">div</span>
+          key={product.id}  <span class="cm">// ✅ Stable unique ID</span>
+          className=<span class="st">"product-card"</span>
+        &gt;
+          &lt;<span class="cl">img</span>
+            src={product.image}
+            alt={product.name}
+          /&gt;
+          &lt;<span class="cl">h3</span>&gt;{product.name}&lt;/<span class="cl">h3</span>&gt;
+          &lt;<span class="cl">p</span>&gt;${product.price.<span class="fn">toFixed</span>(<span class="num">2</span>)}&lt;/<span class="cl">p</span>&gt;
+          &lt;<span class="cl">span</span>&gt;
+            {product.inStock
+              ? <span class="st">'In Stock'</span>
+              : <span class="st">'Out of Stock'</span>
+            }
+          &lt;/<span class="cl">span</span>&gt;
+          &lt;<span class="cl">button</span>
+            disabled={!product.inStock}
+            onClick={() => <span class="fn">addToCart</span>(product.id)}
+          &gt;
+            Add to Cart
+          &lt;/<span class="cl">button</span>&gt;
+        &lt;/<span class="cl">div</span>&gt;
+      ))}
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <h6 class="fw-700 mb-2">Why Keys Matter</h6>
+              <div class="concept-box blue mb-3">
+                <strong>Purpose:</strong> Keys help React identify which items changed, were added, or removed. Without keys, React re-renders the entire list on any change. With proper keys, React only updates what changed.
+              </div>
+              <div class="tip-box mb-3">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong>Good keys:</strong> Stable, unique IDs from your data — <code>user.id</code>, <code>product.sku</code>, <code>post.slug</code>.
+              </div>
+              <div class="mistake-box mb-3">
+                <strong><i class="bi bi-x-circle-fill text-danger me-2"></i>Don't use array index as key</strong>
+                <div class="code-block" style="font-size:.75rem;margin-top:.5rem;">
+<span class="cm">// ❌ Index key — causes bugs when:</span>
+<span class="cm">// — List is reordered</span>
+<span class="cm">// — Items are deleted</span>
+<span class="cm">// — Items are inserted in the middle</span>
+{items.<span class="fn">map</span>((item, i) =>
+  &lt;<span class="cl">Item</span> key={i} /&gt;  <span class="cm">// ❌</span>
+)}
+
+<span class="cm">// ✅ Stable ID from data:</span>
+{items.<span class="fn">map</span>(item =>
+  &lt;<span class="cl">Item</span> key={item.id} /&gt;  <span class="cm">// ✅</span>
+)}
+                </div>
+              </div>
+              <div class="concept-box amber">
+                <strong>The index bug explained:</strong> If you have 3 items [A, B, C] with keys [0, 1, 2] and delete B, you get [A, C] with keys [0, 1]. React sees key 1 still exists and reuses the B component with C's data — but the component's internal state (like an input value) stays as B's state. This causes subtle, hard-to-debug state corruption.
+              </div>
+            </div>
+          </div>
+
+          <h6 class="fw-700 mt-4 mb-2">Nested Lists</h6>
+          <div class="code-block">
+<span class="cm">// Nested lists — each level needs its own unique key:</span>
+<span class="kw">function</span> <span class="cl">CategoryList</span>({ categories }) {
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      {categories.<span class="fn">map</span>(category => (
+        &lt;<span class="cl">section</span> key={category.id}&gt;  <span class="cm">// key on outer element</span>
+          &lt;<span class="cl">h2</span>&gt;{category.name}&lt;/<span class="cl">h2</span>&gt;
+          &lt;<span class="cl">ul</span>&gt;
+            {category.items.<span class="fn">map</span>(item => (
+              &lt;<span class="cl">li</span> key={item.id}&gt;  <span class="cm">// key on inner element</span>
+                {item.name}
+              &lt;/<span class="cl">li</span>&gt;
+            ))}
+          &lt;/<span class="cl">ul</span>&gt;
+        &lt;/<span class="cl">section</span>&gt;
+      ))}
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. INTERVIEW QUESTIONS -->
+      <section id="interview" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">09</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">JSX Interview Questions</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="accordion" id="jsxInterview">
+
+            <div class="accordion-item mb-2" style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#iq1">
+                  <span class="badge me-2" style="background:#61dafb;color:#000;">Q1</span> What is JSX?
+                </button>
+              </h2>
+              <div id="iq1" class="accordion-collapse collapse show" data-bs-parent="#jsxInterview">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> JSX (JavaScript XML) is a syntax extension for JavaScript that allows you to write HTML-like code within JavaScript. It's not valid JavaScript — Babel transforms it into <code>React.createElement()</code> (or <code>_jsx()</code> with the new transform) at build time.</p>
+                  <p>JSX makes React code more readable by letting you describe the UI structure visually rather than writing nested <code>React.createElement()</code> calls. It's not required but is used by virtually all React developers.</p>
+                  <div class="code-block" style="font-size:.8rem;"><span class="cm">// JSX</span>
+<span class="kw">const</span> el = &lt;<span class="cl">h1</span> className=<span class="st">"title"</span>&gt;Hello&lt;/<span class="cl">h1</span>&gt;;
+<span class="cm">// Compiled to:</span>
+<span class="kw">const</span> el = <span class="fn">_jsx</span>(<span class="st">'h1'</span>, { className: <span class="st">'title'</span>, children: <span class="st">'Hello'</span> });</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-2" style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq2">
+                  <span class="badge me-2" style="background:#7c3aed;color:#fff;">Q2</span> Is JSX mandatory in React?
+                </button>
+              </h2>
+              <div id="iq2" class="accordion-collapse collapse" data-bs-parent="#jsxInterview">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> No, JSX is not mandatory. You can write React using pure <code>React.createElement()</code> calls:</p>
+                  <div class="code-block" style="font-size:.8rem;"><span class="cm">// Without JSX (valid but impractical):</span>
+<span class="kw">const</span> element = React.<span class="fn">createElement</span>(
+  <span class="st">'div'</span>, { className: <span class="st">'container'</span> },
+  React.<span class="fn">createElement</span>(<span class="st">'h1'</span>, <span class="num">null</span>, <span class="st">'Hello'</span>)
+);</div>
+                  <p>However, writing complex UIs this way is extremely verbose and unreadable. JSX is universally used in practice because it's much more intuitive and maintainable.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-2" style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq3">
+                  <span class="badge me-2" style="background:#16a34a;color:#fff;">Q3</span> What does Babel do to JSX?
+                </button>
+              </h2>
+              <div id="iq3" class="accordion-collapse collapse" data-bs-parent="#jsxInterview">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> Babel transforms JSX into JavaScript function calls that browsers can understand. There are two transforms:</p>
+                  <ul>
+                    <li><strong>Classic transform (pre-React 17):</strong> Compiles to <code>React.createElement(type, props, ...children)</code>. Required <code>import React from 'react'</code> in every file.</li>
+                    <li><strong>Automatic/new transform (React 17+):</strong> Compiles to <code>_jsx()</code> from <code>react/jsx-runtime</code>, imported automatically. No manual React import needed.</li>
+                  </ul>
+                  <p>Both transforms ultimately produce plain JavaScript objects (React Elements) that React uses to build the Virtual DOM.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-2" style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq4">
+                  <span class="badge me-2" style="background:#d97706;color:#fff;">Q4</span> Can you use JSX without importing React? (React 17+)
+                </button>
+              </h2>
+              <div id="iq4" class="accordion-collapse collapse" data-bs-parent="#jsxInterview">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> Yes, since React 17. The new JSX transform automatically imports what's needed from <code>react/jsx-runtime</code> — you no longer need <code>import React from 'react'</code> at the top of files that only use JSX.</p>
+                  <p>You still need to import React when using React-specific APIs: <code>React.useState</code> (but you'd use the named import <code>import { useState } from 'react'</code>), <code>React.memo</code>, <code>React.forwardRef</code>, etc.</p>
+                  <div class="code-block" style="font-size:.8rem;"><span class="cm">// React 17+ — no React import needed for JSX:</span>
+<span class="kw">function</span> <span class="cl">Button</span>({ onClick, children }) {
+  <span class="kw">return</span> &lt;<span class="cl">button</span> onClick={onClick}&gt;{children}&lt;/<span class="cl">button</span>&gt;;
+}
+<span class="kw">export default</span> <span class="cl">Button</span>;</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-2" style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq5">
+                  <span class="badge me-2" style="background:#0ea5e9;color:#fff;">Q5</span> What is the difference between JSX and HTML?
+                </button>
+              </h2>
+              <div id="iq5" class="accordion-collapse collapse" data-bs-parent="#jsxInterview">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> Key differences:</p>
+                  <ul>
+                    <li><strong>Attribute names:</strong> JSX uses camelCase (<code>className</code>, <code>htmlFor</code>, <code>onClick</code>, <code>tabIndex</code>) instead of HTML's lowercase/hyphen style (<code>class</code>, <code>for</code>, <code>onclick</code>, <code>tabindex</code>)</li>
+                    <li><strong>Self-closing:</strong> All JSX tags must be explicitly closed (<code>&lt;br /&gt;</code>, <code>&lt;img /&gt;</code>)</li>
+                    <li><strong>Inline styles:</strong> JSX takes a JavaScript object with camelCase properties; HTML takes a string</li>
+                    <li><strong>Comments:</strong> JSX uses <code>{'{'}/* ... */{'}'}</code> inside the markup</li>
+                    <li><strong>Dynamic content:</strong> JSX uses <code>{'{'}expression{'}'}</code> for dynamic values; HTML has no native equivalent</li>
+                    <li><strong>Boolean attributes:</strong> JSX uses explicit <code>disabled={'{'}true{'}'}</code></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-2" style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq6">
+                  <span class="badge me-2" style="background:#dc2626;color:#fff;">Q6</span> Why can't we use <code>class</code> in JSX?
+                </button>
+              </h2>
+              <div id="iq6" class="accordion-collapse collapse" data-bs-parent="#jsxInterview">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> <code>class</code> is a reserved keyword in JavaScript (used to define ES6 classes). Since JSX is written inside JavaScript files and gets compiled to JavaScript, using <code>class</code> as an attribute name would create a syntax conflict with the JavaScript parser.</p>
+                  <p>React uses <code>className</code> instead, which maps to the DOM property <code>element.className</code>. The same logic applies to <code>for</code> (reserved for loops) → <code>htmlFor</code>.</p>
+                  <div class="code-block" style="font-size:.8rem;"><span class="cm">// ❌ Syntax error — 'class' is reserved:</span>
+&lt;<span class="cl">div</span> class=<span class="st">"container"</span>&gt;  <span class="cm">// ❌</span>
+<span class="cm">// ✅ Use className:</span>
+&lt;<span class="cl">div</span> className=<span class="st">"container"</span>&gt;  <span class="cm">// ✅</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-2" style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq7">
+                  <span class="badge me-2" style="background:#475569;color:#fff;">Q7</span> What are React Fragments and why use them?
+                </button>
+              </h2>
+              <div id="iq7" class="accordion-collapse collapse" data-bs-parent="#jsxInterview">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> React Fragments (<code>&lt;React.Fragment&gt;</code> or <code>&lt;&gt;&lt;/&gt;</code>) let you group multiple JSX elements without adding an extra DOM node.</p>
+                  <p><strong>Why use them:</strong></p>
+                  <ul>
+                    <li><strong>Avoid unnecessary divs:</strong> Extra wrapper divs can break CSS (especially flex/grid layouts) and add meaningless markup</li>
+                    <li><strong>Required in tables:</strong> <code>&lt;tr&gt;</code> children must be <code>&lt;td&gt;</code> — a wrapper <code>&lt;div&gt;</code> would create invalid HTML</li>
+                    <li><strong>Cleaner DOM:</strong> Fewer DOM nodes = slightly better performance</li>
+                  </ul>
+                  <p>Use <code>&lt;&gt;&lt;/&gt;</code> (short syntax) when no key is needed. Use <code>&lt;React.Fragment key={'{'}id{'}'}&gt;</code> when mapping lists and need a key.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item mb-2" style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq8">
+                  <span class="badge me-2" style="background:#7c3aed;color:#fff;">Q8</span> How does React render lists? What is the key prop?
+                </button>
+              </h2>
+              <div id="iq8" class="accordion-collapse collapse" data-bs-parent="#jsxInterview">
+                <div class="accordion-body">
+                  <p><strong>Answer:</strong> React renders lists using <code>Array.map()</code> to transform a data array into an array of JSX elements. Each element in the array must have a unique <code>key</code> prop.</p>
+                  <p><strong>The key prop:</strong> A special React prop (not passed to the component) that helps React's reconciliation algorithm identify which items changed, were added, or removed when the list updates.</p>
+                  <p><strong>Rules for keys:</strong></p>
+                  <ul>
+                    <li>Must be <strong>unique among siblings</strong> (not globally unique)</li>
+                    <li>Must be <strong>stable</strong> across re-renders — don't generate keys with <code>Math.random()</code></li>
+                    <li>Use <strong>IDs from your data</strong> — <code>user.id</code>, <code>post.slug</code></li>
+                    <li><strong>Avoid array index</strong> unless the list never changes order/length</li>
+                  </ul>
+                  <div class="code-block" style="font-size:.8rem;">{users.<span class="fn">map</span>(user => (
+  &lt;<span class="cl">UserCard</span> key={user.id} user={user} /&gt;
+))}</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="d-flex justify-content-between align-items-center mt-4 pt-4" style="border-top:1px solid var(--border);">
+        <a href="react-setup.html" class="btn" style="background:var(--surface2);color:var(--text);font-weight:700;border-radius:12px;padding:.6rem 1.5rem;border:1px solid var(--border);">
+          <i class="bi bi-arrow-left me-2"></i> Prev: Setup
+        </a>
+        <a href="react-components.html" class="btn" style="background:linear-gradient(135deg,#61dafb,#7c3aed);color:#fff;font-weight:700;border-radius:12px;padding:.6rem 1.5rem;">
+          Next: Components <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;text-align:center;margin-left:260px;">
+  <div class="container-xl">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+    <div class="mt-2 d-flex justify-content-center gap-3 flex-wrap">
+      <a href="index.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Home</a>
+      <a href="react-intro.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Introduction</a>
+      <a href="react-hooks.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Hooks</a>
+      <a href="react-interview.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Interview Prep</a>
+      <a href="react-projects.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Projects</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({duration:700,once:true,offset:80});
+const t=document.getElementById('themeToggle');
+const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+
+const sections = document.querySelectorAll('section[id]');
+const sidebarLinks = document.querySelectorAll('.sidebar-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 150) current = sec.getAttribute('id');
+  });
+  sidebarLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>React Native — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0;}
+    .compare-card{border-radius:12px;padding:1.2rem;border:2px solid transparent;}
+    .compare-card.left{background:#eff6ff;border-color:#93c5fd;}
+    .compare-card.right{background:#f0fdf4;border-color:#6ee7b7;}
+    [data-theme="dark"] .compare-card.left{background:#1e3a5f;border-color:#3b82f6;}
+    [data-theme="dark"] .compare-card.right{background:#14532d;border-color:#22c55e;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge rounded-pill px-3 py-2" style="background:rgba(97,218,251,.15);color:#61dafb;font-size:.85rem;border:1px solid rgba(97,218,251,.3);">Section 21</span>
+      <span class="badge rounded-pill px-3 py-2 bg-success">Mobile Development</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.4rem;">React Native</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;max-width:640px;">Build native iOS &amp; Android apps using React concepts you already know — same mental model, different render target.</p>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- What is React Native -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-phone me-2" style="color:#61dafb;"></i>What is React Native?</h2>
+    <p class="mb-3">React Native lets you build <strong>truly native mobile apps</strong> using React. Instead of rendering HTML elements in a browser, it renders native platform UI components — <strong>UIKit on iOS</strong> and <strong>Android Views on Android</strong>.</p>
+
+    <div class="concept-box blue mb-3">
+      <div class="fw-700 mb-2"><i class="bi bi-info-circle me-2"></i>Same React, Different Output</div>
+      <ul class="mb-0">
+        <li><strong>React Web</strong> → renders HTML/CSS/JS → painted by browser engine</li>
+        <li><strong>React Native</strong> → renders native iOS / Android components → painted by OS directly</li>
+        <li>Same component model, hooks, props, state, context, Redux — all carry over</li>
+        <li>JavaScript runs on a separate thread (JS Bridge or JSI in new architecture)</li>
+      </ul>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card left">
+        <div class="fw-700 mb-2" style="color:#3b82f6;"><i class="bi bi-globe me-2"></i>React Web</div>
+        <ul class="mb-0 small">
+          <li>Renders HTML elements</li>
+          <li>Styled with CSS files</li>
+          <li>Runs in browser</li>
+          <li>React Router for navigation</li>
+          <li>onClick events</li>
+          <li>Any layout system (Grid, Flexbox)</li>
+        </ul>
+      </div>
+      <div class="compare-card right">
+        <div class="fw-700 mb-2" style="color:#22c55e;"><i class="bi bi-phone me-2"></i>React Native</div>
+        <ul class="mb-0 small">
+          <li>Renders native components</li>
+          <li>Styled with StyleSheet API</li>
+          <li>Runs on iOS &amp; Android</li>
+          <li>React Navigation library</li>
+          <li>onPress events</li>
+          <li>Flexbox only (no Grid)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Differences Table -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-table me-2" style="color:#8b5cf6;"></i>Key Differences: React vs React Native</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Concept</th>
+            <th><i class="bi bi-globe me-1"></i>React (Web)</th>
+            <th><i class="bi bi-phone me-1"></i>React Native</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fw-600">Layout</td>
+            <td>CSS Flexbox / Grid</td>
+            <td><code>StyleSheet</code> (Flexbox only, no Grid)</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Text</td>
+            <td><code>&lt;p&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;h1&gt;</code></td>
+            <td><code>&lt;Text&gt;</code> — all text MUST use Text component</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Input</td>
+            <td><code>&lt;input&gt;</code></td>
+            <td><code>&lt;TextInput&gt;</code></td>
+          </tr>
+          <tr>
+            <td class="fw-600">Scroll</td>
+            <td><code>overflow: scroll</code> CSS</td>
+            <td><code>&lt;ScrollView&gt;</code> or <code>&lt;FlatList&gt;</code></td>
+          </tr>
+          <tr>
+            <td class="fw-600">Images</td>
+            <td><code>&lt;img src="..."&gt;</code></td>
+            <td><code>&lt;Image source={require('./img.png')}/&gt;</code></td>
+          </tr>
+          <tr>
+            <td class="fw-600">Touch</td>
+            <td><code>onClick</code></td>
+            <td><code>onPress</code> (<code>TouchableOpacity</code>)</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Navigation</td>
+            <td>React Router</td>
+            <td>React Navigation</td>
+          </tr>
+          <tr>
+            <td class="fw-600">State Mgmt</td>
+            <td>Any — Redux, Zustand, Context</td>
+            <td>Same — any state library works</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Styling</td>
+            <td>CSS files / CSS-in-JS</td>
+            <td><code>StyleSheet.create({})</code></td>
+          </tr>
+          <tr>
+            <td class="fw-600">Animations</td>
+            <td>CSS / Framer Motion</td>
+            <td>Animated API / Reanimated</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Div equivalent</td>
+            <td><code>&lt;div&gt;</code></td>
+            <td><code>&lt;View&gt;</code></td>
+          </tr>
+          <tr>
+            <td class="fw-600">Button</td>
+            <td><code>&lt;button&gt;</code></td>
+            <td><code>&lt;Button&gt;</code> or <code>&lt;TouchableOpacity&gt;</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Core Components -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-puzzle me-2" style="color:#f59e0b;"></i>Core Components</h2>
+    <p class="mb-3">React Native provides a set of built-in components that map directly to native platform widgets. Here's a practical example using <code>FlatList</code>, <code>TouchableOpacity</code>, <code>StyleSheet</code>, and <code>Text</code>:</p>
+
+    <div class="code-block"><span class="kw">import</span> { View, Text, StyleSheet, TouchableOpacity, FlatList } <span class="kw">from</span> <span class="st">'react-native'</span>;
+
+<span class="kw">function</span> <span class="fn">ItemList</span>({ items, onPress }) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">FlatList</span>
+      data={items}
+      keyExtractor={item =&gt; item.id.toString()}
+      renderItem={({ item }) =&gt; (
+        &lt;<span class="fn">TouchableOpacity</span> style={styles.item} onPress={() =&gt; onPress(item)}&gt;
+          &lt;<span class="fn">Text</span> style={styles.title}&gt;{item.title}&lt;/<span class="fn">Text</span>&gt;
+          &lt;<span class="fn">Text</span> style={styles.subtitle}&gt;{item.subtitle}&lt;/<span class="fn">Text</span>&gt;
+        &lt;/<span class="fn">TouchableOpacity</span>&gt;
+      )}
+    /&gt;
+  );
+}
+
+<span class="kw">const</span> styles = StyleSheet.<span class="fn">create</span>({
+  item: {
+    padding: <span class="st">16</span>,
+    marginHorizontal: <span class="st">16</span>,
+    marginVertical: <span class="st">8</span>,
+    backgroundColor: <span class="st">'#fff'</span>,
+    borderRadius: <span class="st">12</span>,
+    shadowColor: <span class="st">'#000'</span>,
+    shadowOffset: { width: <span class="st">0</span>, height: <span class="st">2</span> },
+    shadowOpacity: <span class="st">0.1</span>,
+    shadowRadius: <span class="st">4</span>,
+    elevation: <span class="st">3</span>, <span class="cm">// Android shadow</span>
+  },
+  title: { fontSize: <span class="st">16</span>, fontWeight: <span class="st">'700'</span>, color: <span class="st">'#1e293b'</span> },
+  subtitle: { fontSize: <span class="st">14</span>, color: <span class="st">'#64748b'</span>, marginTop: <span class="st">4</span> },
+});</div>
+
+    <div class="row g-3 mt-2">
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <div class="fw-700 mb-2">Essential Native Components</div>
+          <ul class="mb-0 small">
+            <li><code>View</code> — container (like &lt;div&gt;)</li>
+            <li><code>Text</code> — all text must be inside Text</li>
+            <li><code>TextInput</code> — controlled text input</li>
+            <li><code>Image</code> — local and remote images</li>
+            <li><code>ScrollView</code> — scrollable container</li>
+            <li><code>FlatList</code> — virtualized performant lists</li>
+            <li><code>SectionList</code> — grouped lists with headers</li>
+            <li><code>TouchableOpacity</code> — pressable with fade</li>
+            <li><code>Pressable</code> — modern press handler</li>
+            <li><code>Modal</code> — overlay modal</li>
+            <li><code>ActivityIndicator</code> — loading spinner</li>
+            <li><code>Switch</code> — toggle switch</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box purple">
+          <div class="fw-700 mb-2">StyleSheet Notes</div>
+          <ul class="mb-0 small">
+            <li>No units — numbers are density-independent pixels</li>
+            <li>No CSS cascade — each component styles itself</li>
+            <li>Flexbox is default layout (column direction by default!)</li>
+            <li><code>elevation</code> for Android shadow</li>
+            <li><code>shadowColor/Offset/Opacity/Radius</code> for iOS</li>
+            <li>Use <code>Platform.OS</code> for platform-specific values</li>
+            <li><code>StyleSheet.create()</code> validates styles at dev time</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box mt-3">
+      <i class="bi bi-lightbulb me-2"></i><strong>Flexbox default direction is column in React Native</strong>, unlike CSS where it's row. Plan your layouts accordingly.
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-signpost-split me-2" style="color:#22c55e;"></i>Navigation with React Navigation</h2>
+    <p class="mb-3">React Native doesn't have a built-in router. <strong>React Navigation</strong> is the community standard. It supports Stack, Tab, Drawer, and nested navigators.</p>
+
+    <div class="code-block"><span class="kw">import</span> { NavigationContainer } <span class="kw">from</span> <span class="st">'@react-navigation/native'</span>;
+<span class="kw">import</span> { createNativeStackNavigator } <span class="kw">from</span> <span class="st">'@react-navigation/native-stack'</span>;
+<span class="kw">import</span> { createBottomTabNavigator } <span class="kw">from</span> <span class="st">'@react-navigation/bottom-tabs'</span>;
+
+<span class="kw">const</span> Stack = createNativeStackNavigator();
+<span class="kw">const</span> Tab = createBottomTabNavigator();
+
+<span class="kw">function</span> <span class="fn">MainTabs</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">Tab.Navigator</span>&gt;
+      &lt;<span class="fn">Tab.Screen</span> name=<span class="st">"Home"</span> component={HomeScreen} /&gt;
+      &lt;<span class="fn">Tab.Screen</span> name=<span class="st">"Profile"</span> component={ProfileScreen} /&gt;
+      &lt;<span class="fn">Tab.Screen</span> name=<span class="st">"Settings"</span> component={SettingsScreen} /&gt;
+    &lt;/<span class="fn">Tab.Navigator</span>&gt;
+  );
+}
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">NavigationContainer</span>&gt;
+      &lt;<span class="fn">Stack.Navigator</span>&gt;
+        &lt;<span class="fn">Stack.Screen</span>
+          name=<span class="st">"Main"</span>
+          component={MainTabs}
+          options={{ headerShown: <span class="kw">false</span> }}
+        /&gt;
+        &lt;<span class="fn">Stack.Screen</span> name=<span class="st">"Detail"</span> component={DetailScreen} /&gt;
+      &lt;/<span class="fn">Stack.Navigator</span>&gt;
+    &lt;/<span class="fn">NavigationContainer</span>&gt;
+  );
+}</div>
+
+    <div class="concept-box amber mt-3">
+      <div class="fw-700 mb-2"><i class="bi bi-map me-2"></i>Navigation Types</div>
+      <div class="row g-2">
+        <div class="col-sm-6 col-md-3">
+          <div class="fw-600 small">Stack Navigator</div>
+          <div class="small">Push/pop screens, like browser history. Back button / swipe gesture.</div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="fw-600 small">Tab Navigator</div>
+          <div class="small">Bottom tabs (iOS) or top tabs (Android). Switch between top-level screens.</div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="fw-600 small">Drawer Navigator</div>
+          <div class="small">Hamburger menu that slides in from the side.</div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="fw-600 small">Nested Navigators</div>
+          <div class="small">Combine: Stack inside Tab, Drawer wrapping Stack, etc.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- State Management -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-database me-2" style="color:#3b82f6;"></i>State Management in React Native</h2>
+    <p class="mb-3">The good news: <strong>state management is identical to React web</strong>. Redux Toolkit, Zustand, Jotai, React Query — all work in React Native without any changes.</p>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="concept-box blue">
+          <div class="fw-700 mb-2">Redux Toolkit (same as web)</div>
+          <div class="code-block" style="font-size:.75rem;"><span class="kw">import</span> { useSelector, useDispatch } <span class="kw">from</span> <span class="st">'react-redux'</span>;
+<span class="kw">import</span> { increment } <span class="kw">from</span> <span class="st">'./counterSlice'</span>;
+
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> count = <span class="fn">useSelector</span>(s =&gt; s.counter.value);
+  <span class="kw">const</span> dispatch = <span class="fn">useDispatch</span>();
+  <span class="kw">return</span> (
+    &lt;<span class="fn">TouchableOpacity</span> onPress={() =&gt; <span class="fn">dispatch</span>(<span class="fn">increment</span>())}&gt;
+      &lt;<span class="fn">Text</span>&gt;Count: {count}&lt;/<span class="fn">Text</span>&gt;
+    &lt;/<span class="fn">TouchableOpacity</span>&gt;
+  );
+}</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <div class="fw-700 mb-2">Persistent Storage (AsyncStorage)</div>
+          <div class="code-block" style="font-size:.75rem;"><span class="kw">import</span> AsyncStorage <span class="kw">from</span> <span class="st">'@react-native-async-storage/async-storage'</span>;
+
+<span class="cm">// Store data</span>
+<span class="kw">await</span> AsyncStorage.<span class="fn">setItem</span>(<span class="st">'userToken'</span>, token);
+
+<span class="cm">// Retrieve data</span>
+<span class="kw">const</span> token = <span class="kw">await</span> AsyncStorage.<span class="fn">getItem</span>(<span class="st">'userToken'</span>);
+
+<span class="cm">// Remove data</span>
+<span class="kw">await</span> AsyncStorage.<span class="fn">removeItem</span>(<span class="st">'userToken'</span>);</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box mt-2">
+      <i class="bi bi-lightbulb me-2"></i><strong>AsyncStorage</strong> is the React Native equivalent of <code>localStorage</code> — but it's async (returns Promises). Use <code>redux-persist</code> with AsyncStorage adapter for persisted Redux state.
+    </div>
+  </div>
+
+  <!-- Expo vs Bare -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-boxes me-2" style="color:#f59e0b;"></i>Expo vs Bare React Native</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Feature</th>
+            <th>Expo (Managed)</th>
+            <th>Bare React Native</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fw-600">Setup</td>
+            <td>Zero native config needed</td>
+            <td>Full Xcode + Android Studio setup</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Native Modules</td>
+            <td>Limited to Expo SDK modules</td>
+            <td>Any native module (full flexibility)</td>
+          </tr>
+          <tr>
+            <td class="fw-600">OTA Updates</td>
+            <td>Built-in via Expo Updates</td>
+            <td>Manual setup with CodePush etc.</td>
+          </tr>
+          <tr>
+            <td class="fw-600">App Size</td>
+            <td>Larger (includes full SDK)</td>
+            <td>Smaller (only what you need)</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Best For</td>
+            <td>Rapid prototyping, most apps</td>
+            <td>Custom native code, advanced features</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Build</td>
+            <td>EAS Build (cloud builds)</td>
+            <td>Local Xcode / Gradle builds</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Eject</td>
+            <td>Can "eject" to bare when needed</td>
+            <td>N/A — already bare</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tip-box">
+      <i class="bi bi-lightbulb me-2"></i><strong>Start with Expo</strong> for new projects. The Expo SDK covers 90%+ of use cases. Only go bare when you need custom native modules that Expo doesn't support.
+    </div>
+  </div>
+
+  <!-- Platform Specific Code -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-code-slash me-2" style="color:#8b5cf6;"></i>Platform-Specific Code</h2>
+    <p class="mb-3">Sometimes iOS and Android need different styles or behavior. React Native provides two approaches:</p>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <h6 class="fw-700">Platform API (inline)</h6>
+        <div class="code-block"><span class="kw">import</span> { Platform } <span class="kw">from</span> <span class="st">'react-native'</span>;
+
+<span class="kw">const</span> styles = StyleSheet.<span class="fn">create</span>({
+  container: {
+    paddingTop: Platform.OS === <span class="st">'ios'</span> ? <span class="st">50</span> : <span class="st">20</span>,
+    ...Platform.<span class="fn">select</span>({
+      ios: {
+        shadowColor: <span class="st">'#000'</span>,
+        shadowOffset: { width: <span class="st">0</span>, height: <span class="st">2</span> },
+      },
+      android: { elevation: <span class="st">5</span> },
+      default: { <span class="cm">/* other platforms */</span> }
+    }),
+  },
+});</div>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-700">Platform-specific files</h6>
+        <div class="code-block"><span class="cm">// Button.ios.tsx — used on iOS</span>
+<span class="cm">// Button.android.tsx — used on Android</span>
+<span class="cm">// Button.tsx — fallback</span>
+
+<span class="cm">// React Native auto-picks the right file</span>
+<span class="kw">import</span> Button <span class="kw">from</span> <span class="st">'./Button'</span>;
+<span class="cm">// ↑ loads Button.ios.tsx on iOS</span>
+<span class="cm">//   loads Button.android.tsx on Android</span></div>
+
+        <div class="concept-box purple mt-2">
+          <div class="fw-700 mb-1 small">Common Platform Checks</div>
+          <ul class="mb-0 small">
+            <li><code>Platform.OS === 'ios'</code></li>
+            <li><code>Platform.OS === 'android'</code></li>
+            <li><code>Platform.Version</code> — OS version number</li>
+            <li><code>Platform.isPad</code> — iPad detection</li>
+            <li><code>Platform.isTV</code> — Apple TV / Android TV</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- React Native New Architecture -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-cpu me-2" style="color:#22c55e;"></i>New Architecture (JSI &amp; Fabric)</h2>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <div class="fw-700 mb-2">Old Architecture (Bridge)</div>
+          <ul class="mb-0 small">
+            <li>Async JSON serialization bridge</li>
+            <li>JS thread &amp; UI thread communicate via messages</li>
+            <li>Can cause dropped frames on heavy operations</li>
+            <li>Three threads: JS, Native, Shadow</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box blue">
+          <div class="fw-700 mb-2">New Architecture (JSI)</div>
+          <ul class="mb-0 small">
+            <li><strong>JSI</strong> — direct C++ interface to JS engine</li>
+            <li>Synchronous calls between JS and native</li>
+            <li><strong>Fabric</strong> — new concurrent rendering system</li>
+            <li><strong>TurboModules</strong> — lazy-loaded native modules</li>
+            <li>Better performance, smaller memory footprint</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="tip-box mt-2">
+      <i class="bi bi-lightbulb me-2"></i>New Architecture is enabled by default in React Native 0.74+ and Expo SDK 51+.
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-chat-left-quote me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+
+    <div class="interview-q">1. What is the difference between React and React Native? How do they share the same mental model?</div>
+    <div class="mb-3 ps-3 small">React Native uses the same component model, hooks, and JSX as React. The difference is the render target — React outputs HTML DOM elements; React Native outputs native iOS/Android views. The bridge (or JSI in new arch) translates JS calls to native APIs.</div>
+
+    <div class="interview-q">2. Why must all text in React Native be inside a &lt;Text&gt; component?</div>
+    <div class="mb-3 ps-3 small">Native platforms don't have a concept of "raw text nodes" like browsers do. Android and iOS require text to be in a specific native text widget. React Native enforces this by requiring the Text component, which maps to UILabel (iOS) and TextView (Android).</div>
+
+    <div class="interview-q">3. What is the difference between ScrollView and FlatList?</div>
+    <div class="mb-3 ps-3 small">ScrollView renders all children at once — good for small lists or mixed content. FlatList is virtualized — it only renders items visible on screen plus a buffer, making it efficient for large datasets. Always use FlatList for lists with unknown or large lengths.</div>
+
+    <div class="interview-q">4. What is the difference between Expo Managed Workflow and bare React Native?</div>
+    <div class="mb-3 ps-3 small">Expo Managed gives you a pre-configured environment with no native code to manage — ideal for most apps. Bare React Native gives full access to native code (Java/Kotlin, Obj-C/Swift) for custom native modules. You can "eject" from Expo to bare when needed.</div>
+
+    <div class="interview-q">5. How does navigation work in React Native? Compare with React Router.</div>
+    <div class="mb-3 ps-3 small">React Native doesn't have a URL-based router. React Navigation manages a navigation stack in memory. It supports Stack (push/pop), Tab (bottom/top tabs), and Drawer navigators, which can be nested. Unlike React Router, navigation state is kept in JS memory, not the browser URL.</div>
+
+    <div class="interview-q">6. What is the React Native New Architecture and how does JSI improve performance?</div>
+    <div class="mb-3 ps-3 small">The old bridge used async JSON serialization between JS and native threads, causing potential jank. JSI (JavaScript Interface) allows direct synchronous C++ function calls from JS to native, eliminating serialization overhead. Fabric is the new renderer built on JSI, enabling concurrent features and synchronous layout reads.</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

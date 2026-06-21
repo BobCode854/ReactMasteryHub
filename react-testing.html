@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Testing in React — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card,.card{border-radius:14px;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+    .badge-section{display:inline-block;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;font-size:.75rem;font-weight:700;padding:.3rem .8rem;border-radius:20px;letter-spacing:.05em;margin-bottom:.5rem;}
+    .sub-heading{font-size:1.1rem;font-weight:700;color:#7c3aed;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+    [data-theme="dark"] .sub-heading{color:#a78bfa;}
+    .checklist-item{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem 0;border-bottom:1px solid #f1f5f9;}
+    [data-theme="dark"] .checklist-item{border-bottom-color:#1e293b;}
+    .checklist-item:last-child{border-bottom:none;}
+    .check-icon{color:#22c55e;font-size:1rem;margin-top:.1rem;flex-shrink:0;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <span class="badge-section">Section 16</span>
+        <h1 class="fw-900 mt-2 mb-3" style="font-size:2.6rem;">Testing in React</h1>
+        <p class="lead mb-0" style="color:#94a3b8;">Master Jest, React Testing Library, custom hook testing, mocking strategies, and Cypress E2E testing to build bulletproof React applications.</p>
+      </div>
+      <div class="col-lg-4 text-end d-none d-lg-block">
+        <i class="bi bi-shield-check" style="font-size:6rem;color:rgba(97,218,251,.15);"></i>
+      </div>
+    </div>
+    <div class="row mt-4 g-3">
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;"><i class="bi bi-check2-circle me-1"></i>Jest Basics</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;"><i class="bi bi-check2-circle me-1"></i>React Testing Library</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;"><i class="bi bi-check2-circle me-1"></i>renderHook</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;"><i class="bi bi-check2-circle me-1"></i>Mocking</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;"><i class="bi bi-check2-circle me-1"></i>Cypress E2E</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- Intro -->
+  <div class="content-card">
+    <div class="concept-box blue">
+      <strong><i class="bi bi-info-circle me-2"></i>Why Testing Matters</strong>
+      <p class="mb-0 mt-2">Testing ensures your React components behave as expected, prevents regressions when you refactor, and documents intended behavior. The testing pyramid: many unit tests, some integration tests, few E2E tests.</p>
+    </div>
+    <div class="row g-3 mt-1">
+      <div class="col-md-4">
+        <div class="concept-box green h-100 mb-0">
+          <div class="fw-700 mb-1"><i class="bi bi-triangle me-2"></i>Unit Tests</div>
+          <small>Test isolated functions and components in isolation. Fast, cheap, abundant.</small>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="concept-box amber h-100 mb-0">
+          <div class="fw-700 mb-1"><i class="bi bi-diagram-2 me-2"></i>Integration Tests</div>
+          <small>Test how multiple units work together. Balance of coverage and speed.</small>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="concept-box purple h-100 mb-0">
+          <div class="fw-700 mb-1"><i class="bi bi-globe me-2"></i>E2E Tests</div>
+          <small>Test full user flows in a real browser. Slowest but highest confidence.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jest Basics -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-braces"></i> Jest Basics</div>
+    <p class="text-secondary mb-3">Jest is the most popular JavaScript testing framework. It provides test runners, assertion libraries, spies, mocks, and code coverage out of the box.</p>
+
+    <div class="concept-box blue mb-3">
+      <strong>Core Jest Structure:</strong> <code>describe()</code> groups related tests, <code>it()</code> / <code>test()</code> defines individual test cases, <code>expect()</code> creates assertions with matchers.
+    </div>
+
+    <div class="sub-heading" style="font-size:.95rem;"><i class="bi bi-code-slash"></i> Simple Unit Test</div>
+    <div class="code-block"><span class="cm">// Simple unit test</span>
+<span class="fn">describe</span>(<span class="st">'calculateTotal'</span>, () =&gt; {
+  <span class="fn">it</span>(<span class="st">'returns correct sum of items'</span>, () =&gt; {
+    <span class="kw">const</span> items = [{ price: <span class="st">10</span> }, { price: <span class="st">20</span> }, { price: <span class="st">5</span> }];
+    <span class="fn">expect</span>(<span class="fn">calculateTotal</span>(items)).<span class="fn">toBe</span>(<span class="st">35</span>);
+  });
+
+  <span class="fn">it</span>(<span class="st">'returns 0 for empty array'</span>, () =&gt; {
+    <span class="fn">expect</span>(<span class="fn">calculateTotal</span>([])).<span class="fn">toBe</span>(<span class="st">0</span>);
+  });
+});</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-list-check"></i> Common Jest Matchers</div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="concept-box green mb-0">
+          <div class="fw-700 mb-2">Equality &amp; Truthiness</div>
+          <div class="code-block" style="margin:0;font-size:.78rem;"><span class="fn">expect</span>(x).<span class="fn">toBe</span>(<span class="st">42</span>);           <span class="cm">// strict ===</span>
+<span class="fn">expect</span>(obj).<span class="fn">toEqual</span>({ a: <span class="st">1</span> }); <span class="cm">// deep equality</span>
+<span class="fn">expect</span>(x).<span class="fn">toBeTruthy</span>();
+<span class="fn">expect</span>(x).<span class="fn">toBeFalsy</span>();
+<span class="fn">expect</span>(x).<span class="fn">toBeNull</span>();
+<span class="fn">expect</span>(x).<span class="fn">toBeUndefined</span>();</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box purple mb-0">
+          <div class="fw-700 mb-2">Arrays &amp; Strings</div>
+          <div class="code-block" style="margin:0;font-size:.78rem;"><span class="fn">expect</span>(arr).<span class="fn">toContain</span>(<span class="st">'item'</span>);
+<span class="fn">expect</span>(arr).<span class="fn">toHaveLength</span>(<span class="st">3</span>);
+<span class="fn">expect</span>(str).<span class="fn">toMatch</span>(<span class="st">/pattern/</span>);
+<span class="fn">expect</span>(fn).<span class="fn">toThrow</span>(<span class="st">'error msg'</span>);
+<span class="fn">expect</span>(mock).<span class="fn">toHaveBeenCalled</span>();
+<span class="fn">expect</span>(mock).<span class="fn">toHaveBeenCalledWith</span>(arg);</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-arrow-clockwise"></i> Lifecycle Hooks</div>
+    <div class="code-block"><span class="fn">beforeAll</span>(() =&gt; { <span class="cm">/* runs once before all tests in block */</span> });
+<span class="fn">afterAll</span>(() =&gt; { <span class="cm">/* runs once after all tests in block */</span> });
+<span class="fn">beforeEach</span>(() =&gt; { <span class="cm">/* runs before each test */</span> });
+<span class="fn">afterEach</span>(() =&gt; { <span class="cm">/* runs after each test — great for cleanup */</span> });
+
+<span class="fn">describe</span>(<span class="st">'UserService'</span>, () =&gt; {
+  <span class="kw">let</span> db;
+
+  <span class="fn">beforeAll</span>(<span class="kw">async</span> () =&gt; {
+    db = <span class="kw">await</span> <span class="fn">connectDB</span>();
+  });
+
+  <span class="fn">afterAll</span>(<span class="kw">async</span> () =&gt; {
+    <span class="kw">await</span> db.<span class="fn">close</span>();
+  });
+
+  <span class="fn">afterEach</span>(<span class="kw">async</span> () =&gt; {
+    <span class="kw">await</span> db.<span class="fn">clearUsers</span>(); <span class="cm">// reset state between tests</span>
+  });
+});</div>
+  </div>
+
+  <!-- React Testing Library -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-window"></i> React Testing Library</div>
+    <p class="text-secondary mb-3">React Testing Library (RTL) encourages testing your components the way users interact with them — by querying for accessible elements, not implementation details.</p>
+
+    <div class="concept-box amber">
+      <strong><i class="bi bi-lightbulb me-1"></i> Core Philosophy:</strong> "The more your tests resemble the way your software is used, the more confidence they can give you." — Kent C. Dodds. Query by role, label, text — not by class names or test IDs.
+    </div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-sort-alpha-down"></i> Query Priority (Best to Worst)</div>
+    <div class="row g-2 mb-3">
+      <div class="col-md-4"><div class="concept-box green mb-0 p-2"><span class="badge bg-success me-2">Best</span><code>getByRole</code><br><small>Accessible roles: button, heading, textbox…</small></div></div>
+      <div class="col-md-4"><div class="concept-box blue mb-0 p-2"><span class="badge bg-primary me-2">Good</span><code>getByLabelText</code><br><small>Form elements associated with labels</small></div></div>
+      <div class="col-md-4"><div class="concept-box purple mb-0 p-2"><span class="badge bg-secondary me-2">OK</span><code>getByTestId</code><br><small>Last resort: data-testid attribute</small></div></div>
+    </div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-code-slash"></i> Testing a Counter Component</div>
+    <div class="code-block"><span class="kw">import</span> { render, screen, fireEvent, waitFor } <span class="kw">from</span> <span class="st">'@testing-library/react'</span>;
+<span class="kw">import</span> userEvent <span class="kw">from</span> <span class="st">'@testing-library/user-event'</span>;
+
+<span class="cm">// Test a Counter component</span>
+<span class="fn">describe</span>(<span class="st">'Counter'</span>, () =&gt; {
+  <span class="fn">it</span>(<span class="st">'renders initial count of 0'</span>, () =&gt; {
+    <span class="fn">render</span>(&lt;<span class="fn">Counter</span> /&gt;);
+    <span class="fn">expect</span>(screen.<span class="fn">getByText</span>(<span class="st">'Count: 0'</span>)).<span class="fn">toBeInTheDocument</span>();
+  });
+
+  <span class="fn">it</span>(<span class="st">'increments count on button click'</span>, <span class="kw">async</span> () =&gt; {
+    <span class="kw">const</span> user = userEvent.<span class="fn">setup</span>();
+    <span class="fn">render</span>(&lt;<span class="fn">Counter</span> /&gt;);
+    <span class="kw">await</span> user.<span class="fn">click</span>(screen.<span class="fn">getByRole</span>(<span class="st">'button'</span>, { name: <span class="st">/increment/i</span> }));
+    <span class="fn">expect</span>(screen.<span class="fn">getByText</span>(<span class="st">'Count: 1'</span>)).<span class="fn">toBeInTheDocument</span>();
+  });
+});</div>
+
+    <div class="tip-box mt-3">
+      <strong><i class="bi bi-lightbulb-fill me-1"></i> Tip:</strong> Prefer <code>userEvent</code> over <code>fireEvent</code>. <code>userEvent</code> simulates real browser interactions (dispatches multiple events like a real user), while <code>fireEvent</code> only dispatches a single DOM event.
+    </div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-cloud-download"></i> Testing Async Components with API Calls</div>
+    <div class="code-block"><span class="cm">// Test async component with API call</span>
+<span class="fn">describe</span>(<span class="st">'UserList'</span>, () =&gt; {
+  <span class="fn">it</span>(<span class="st">'displays users after loading'</span>, <span class="kw">async</span> () =&gt; {
+    <span class="kw">const</span> mockUsers = [{ id: <span class="st">1</span>, name: <span class="st">'John'</span> }, { id: <span class="st">2</span>, name: <span class="st">'Jane'</span> }];
+    global.fetch = jest.<span class="fn">fn</span>().<span class="fn">mockResolvedValueOnce</span>({
+      ok: <span class="kw">true</span>,
+      json: <span class="kw">async</span> () =&gt; mockUsers,
+    });
+
+    <span class="fn">render</span>(&lt;<span class="fn">UserList</span> /&gt;);
+    <span class="fn">expect</span>(screen.<span class="fn">getByText</span>(<span class="st">/loading/i</span>)).<span class="fn">toBeInTheDocument</span>();
+
+    <span class="kw">await</span> <span class="fn">waitFor</span>(() =&gt; {
+      <span class="fn">expect</span>(screen.<span class="fn">getByText</span>(<span class="st">'John'</span>)).<span class="fn">toBeInTheDocument</span>();
+      <span class="fn">expect</span>(screen.<span class="fn">getByText</span>(<span class="st">'Jane'</span>)).<span class="fn">toBeInTheDocument</span>();
+    });
+  });
+
+  <span class="fn">it</span>(<span class="st">'shows error state when fetch fails'</span>, <span class="kw">async</span> () =&gt; {
+    global.fetch = jest.<span class="fn">fn</span>().<span class="fn">mockRejectedValueOnce</span>(<span class="kw">new</span> <span class="fn">Error</span>(<span class="st">'Network error'</span>));
+
+    <span class="fn">render</span>(&lt;<span class="fn">UserList</span> /&gt;);
+
+    <span class="kw">await</span> <span class="fn">waitFor</span>(() =&gt; {
+      <span class="fn">expect</span>(screen.<span class="fn">getByText</span>(<span class="st">/something went wrong/i</span>)).<span class="fn">toBeInTheDocument</span>();
+    });
+  });
+});</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-arrow-left-right"></i> getBy vs queryBy vs findBy</div>
+    <div class="table-responsive">
+      <table class="table table-bordered" style="font-size:.88rem;">
+        <thead class="table-dark">
+          <tr><th>Query</th><th>0 matches</th><th>1 match</th><th>2+ matches</th><th>When to use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>getBy*</code></td><td>Throws error</td><td>Returns element</td><td>Throws error</td><td>Element must exist right now</td></tr>
+          <tr><td><code>queryBy*</code></td><td>Returns null</td><td>Returns element</td><td>Throws error</td><td>Assert element does NOT exist</td></tr>
+          <tr><td><code>findBy*</code></td><td>Rejects (async)</td><td>Resolves element</td><td>Rejects</td><td>Element appears asynchronously</td></tr>
+          <tr><td><code>getAllBy*</code></td><td>Throws error</td><td>Returns array</td><td>Returns array</td><td>Multiple elements required</td></tr>
+          <tr><td><code>queryAllBy*</code></td><td>Returns []</td><td>Returns array</td><td>Returns array</td><td>Multiple elements may not exist</td></tr>
+          <tr><td><code>findAllBy*</code></td><td>Rejects (async)</td><td>Resolves array</td><td>Resolves array</td><td>Multiple async elements</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- renderHook -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-hook"></i> Testing Custom Hooks with renderHook</div>
+    <p class="text-secondary mb-3">Custom hooks can't be tested directly (they can only be called inside React components). <code>renderHook</code> creates a minimal test component that calls your hook, letting you test it in isolation.</p>
+
+    <div class="code-block"><span class="kw">import</span> { renderHook, act } <span class="kw">from</span> <span class="st">'@testing-library/react'</span>;
+
+<span class="fn">test</span>(<span class="st">'useCounter increments correctly'</span>, () =&gt; {
+  <span class="kw">const</span> { result } = <span class="fn">renderHook</span>(() =&gt; <span class="fn">useCounter</span>(<span class="st">0</span>));
+
+  <span class="fn">expect</span>(result.current.count).<span class="fn">toBe</span>(<span class="st">0</span>);
+
+  <span class="fn">act</span>(() =&gt; {
+    result.current.<span class="fn">increment</span>();
+  });
+
+  <span class="fn">expect</span>(result.current.count).<span class="fn">toBe</span>(<span class="st">1</span>);
+});
+
+<span class="fn">test</span>(<span class="st">'useCounter decrements and resets'</span>, () =&gt; {
+  <span class="kw">const</span> { result } = <span class="fn">renderHook</span>(() =&gt; <span class="fn">useCounter</span>(<span class="st">10</span>));
+
+  <span class="fn">act</span>(() =&gt; {
+    result.current.<span class="fn">decrement</span>();
+    result.current.<span class="fn">decrement</span>();
+  });
+
+  <span class="fn">expect</span>(result.current.count).<span class="fn">toBe</span>(<span class="st">8</span>);
+
+  <span class="fn">act</span>(() =&gt; {
+    result.current.<span class="fn">reset</span>();
+  });
+
+  <span class="fn">expect</span>(result.current.count).<span class="fn">toBe</span>(<span class="st">10</span>); <span class="cm">// resets to initial value</span>
+});</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-box-arrow-in-right"></i> renderHook with Providers</div>
+    <div class="code-block"><span class="cm">// When your hook uses context (like useAuth, useTheme), wrap it in the provider</span>
+<span class="fn">test</span>(<span class="st">'useAuth returns current user'</span>, () =&gt; {
+  <span class="kw">const</span> wrapper = ({ children }) =&gt; (
+    &lt;<span class="fn">AuthProvider</span> initialUser={{ name: <span class="st">'John'</span>, role: <span class="st">'admin'</span> }}&gt;
+      {children}
+    &lt;/<span class="fn">AuthProvider</span>&gt;
+  );
+
+  <span class="kw">const</span> { result } = <span class="fn">renderHook</span>(() =&gt; <span class="fn">useAuth</span>(), { wrapper });
+
+  <span class="fn">expect</span>(result.current.user.name).<span class="fn">toBe</span>(<span class="st">'John'</span>);
+  <span class="fn">expect</span>(result.current.user.role).<span class="fn">toBe</span>(<span class="st">'admin'</span>);
+  <span class="fn">expect</span>(result.current.isAuthenticated).<span class="fn">toBe</span>(<span class="kw">true</span>);
+});</div>
+
+    <div class="concept-box green">
+      <strong><i class="bi bi-info-circle me-1"></i> When to use act():</strong> Wrap any code that causes React state updates in <code>act()</code>. This ensures React has processed all state updates and re-renders before your assertions run. RTL's <code>userEvent</code> and <code>waitFor</code> wrap things in <code>act()</code> automatically.
+    </div>
+  </div>
+
+  <!-- Mocking -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-mask"></i> Mocking Modules</div>
+    <p class="text-secondary mb-3">Mocking replaces real dependencies with controlled fakes, letting you isolate the component under test and control what dependencies return.</p>
+
+    <div class="sub-heading" style="font-size:.95rem;"><i class="bi bi-diagram-3"></i> Mock react-router-dom</div>
+    <div class="code-block"><span class="cm">// Mock react-router-dom</span>
+<span class="kw">const</span> mockNavigate = jest.<span class="fn">fn</span>();
+jest.<span class="fn">mock</span>(<span class="st">'react-router-dom'</span>, () =&gt; ({
+  ...jest.<span class="fn">requireActual</span>(<span class="st">'react-router-dom'</span>),
+  <span class="fn">useNavigate</span>: () =&gt; mockNavigate,
+  <span class="fn">useParams</span>: () =&gt; ({ id: <span class="st">'123'</span> }),
+}));
+
+<span class="fn">test</span>(<span class="st">'navigates to profile on button click'</span>, <span class="kw">async</span> () =&gt; {
+  <span class="kw">const</span> user = userEvent.<span class="fn">setup</span>();
+  <span class="fn">render</span>(&lt;<span class="fn">ProfileButton</span> /&gt;);
+
+  <span class="kw">await</span> user.<span class="fn">click</span>(screen.<span class="fn">getByRole</span>(<span class="st">'button'</span>, { name: <span class="st">/view profile/i</span> }));
+
+  <span class="fn">expect</span>(mockNavigate).<span class="fn">toHaveBeenCalledWith</span>(<span class="st">'/profile/123'</span>);
+});</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-cloud"></i> Mock API Module</div>
+    <div class="code-block"><span class="cm">// Mock API module</span>
+jest.<span class="fn">mock</span>(<span class="st">'../api/users'</span>, () =&gt; ({
+  <span class="fn">getUsers</span>: jest.<span class="fn">fn</span>().<span class="fn">mockResolvedValue</span>([{ id: <span class="st">1</span>, name: <span class="st">'John'</span> }]),
+  <span class="fn">createUser</span>: jest.<span class="fn">fn</span>().<span class="fn">mockResolvedValue</span>({ id: <span class="st">2</span>, name: <span class="st">'Jane'</span> }),
+}));
+
+<span class="cm">// Override mock for specific test</span>
+<span class="fn">it</span>(<span class="st">'handles API error gracefully'</span>, <span class="kw">async</span> () =&gt; {
+  getUsers.<span class="fn">mockRejectedValueOnce</span>(<span class="kw">new</span> <span class="fn">Error</span>(<span class="st">'Server error'</span>));
+  <span class="fn">render</span>(&lt;<span class="fn">UserList</span> /&gt;);
+  <span class="kw">await</span> <span class="fn">waitFor</span>(() =&gt; {
+    <span class="fn">expect</span>(screen.<span class="fn">getByText</span>(<span class="st">/failed to load/i</span>)).<span class="fn">toBeInTheDocument</span>();
+  });
+});</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-clock-history"></i> Mocking Timers</div>
+    <div class="code-block"><span class="cm">// Control time in tests</span>
+<span class="fn">describe</span>(<span class="st">'Debounced Search'</span>, () =&gt; {
+  <span class="fn">beforeEach</span>(() =&gt; {
+    jest.<span class="fn">useFakeTimers</span>();
+  });
+
+  <span class="fn">afterEach</span>(() =&gt; {
+    jest.<span class="fn">useRealTimers</span>();
+  });
+
+  <span class="fn">it</span>(<span class="st">'only searches after debounce delay'</span>, <span class="kw">async</span> () =&gt; {
+    <span class="kw">const</span> user = userEvent.<span class="fn">setup</span>({ delay: <span class="kw">null</span> }); <span class="cm">// disable user-event delays</span>
+    <span class="kw">const</span> mockSearch = jest.<span class="fn">fn</span>();
+
+    <span class="fn">render</span>(&lt;<span class="fn">SearchInput</span> onSearch={mockSearch} /&gt;);
+    <span class="kw">await</span> user.<span class="fn">type</span>(screen.<span class="fn">getByRole</span>(<span class="st">'searchbox'</span>), <span class="st">'hello'</span>);
+
+    <span class="fn">expect</span>(mockSearch).<span class="fn">not</span>.<span class="fn">toHaveBeenCalled</span>(); <span class="cm">// not called yet</span>
+
+    jest.<span class="fn">advanceTimersByTime</span>(<span class="st">300</span>);
+    <span class="fn">expect</span>(mockSearch).<span class="fn">toHaveBeenCalledWith</span>(<span class="st">'hello'</span>);
+  });
+});</div>
+  </div>
+
+  <!-- Cypress -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-browser-chrome"></i> Cypress E2E Testing</div>
+    <p class="text-secondary mb-3">Cypress runs tests directly in the browser, giving you full control over the application. It auto-waits for elements, handles asynchronous behavior automatically, and provides powerful debugging tools.</p>
+
+    <div class="concept-box purple mb-3">
+      <strong><i class="bi bi-lightning me-1"></i> Cypress vs Selenium:</strong> Cypress runs in the same browser process as your app — no WebDriver. This means faster, more reliable tests with automatic retries, real-time reloading, and time-travel debugging.
+    </div>
+
+    <div class="sub-heading" style="font-size:.95rem;"><i class="bi bi-door-open"></i> Login Flow E2E Test</div>
+    <div class="code-block"><span class="fn">describe</span>(<span class="st">'Login Flow'</span>, () =&gt; {
+  <span class="fn">beforeEach</span>(() =&gt; {
+    cy.<span class="fn">visit</span>(<span class="st">'/login'</span>);
+  });
+
+  <span class="fn">it</span>(<span class="st">'logs in successfully with valid credentials'</span>, () =&gt; {
+    cy.<span class="fn">get</span>(<span class="st">'[data-testid="email-input"]'</span>).<span class="fn">type</span>(<span class="st">'user@example.com'</span>);
+    cy.<span class="fn">get</span>(<span class="st">'[data-testid="password-input"]'</span>).<span class="fn">type</span>(<span class="st">'password123'</span>);
+    cy.<span class="fn">get</span>(<span class="st">'[data-testid="login-button"]'</span>).<span class="fn">click</span>();
+    cy.url().<span class="fn">should</span>(<span class="st">'include'</span>, <span class="st">'/dashboard'</span>);
+    cy.<span class="fn">get</span>(<span class="st">'[data-testid="welcome-message"]'</span>).<span class="fn">should</span>(<span class="st">'contain'</span>, <span class="st">'Welcome back'</span>);
+  });
+
+  <span class="fn">it</span>(<span class="st">'shows error with invalid credentials'</span>, () =&gt; {
+    cy.<span class="fn">get</span>(<span class="st">'[data-testid="email-input"]'</span>).<span class="fn">type</span>(<span class="st">'wrong@email.com'</span>);
+    cy.<span class="fn">get</span>(<span class="st">'[data-testid="password-input"]'</span>).<span class="fn">type</span>(<span class="st">'wrongpass'</span>);
+    cy.<span class="fn">get</span>(<span class="st">'[data-testid="login-button"]'</span>).<span class="fn">click</span>();
+    cy.<span class="fn">get</span>(<span class="st">'[data-testid="error-message"]'</span>).<span class="fn">should</span>(<span class="st">'be.visible'</span>);
+  });
+});</div>
+
+    <div class="sub-heading mt-3" style="font-size:.95rem;"><i class="bi bi-plug"></i> Cypress Custom Commands &amp; API Intercepts</div>
+    <div class="code-block"><span class="cm">// cypress/support/commands.ts — reusable login command</span>
+Cypress.Commands.<span class="fn">add</span>(<span class="st">'login'</span>, (email, password) =&gt; {
+  cy.<span class="fn">request</span>(<span class="st">'POST'</span>, <span class="st">'/api/auth/login'</span>, { email, password })
+    .<span class="fn">then</span>(({ body }) =&gt; {
+      localStorage.<span class="fn">setItem</span>(<span class="st">'token'</span>, body.token);
+    });
+});
+
+<span class="cm">// Intercept API calls in tests</span>
+<span class="fn">it</span>(<span class="st">'displays products from API'</span>, () =&gt; {
+  cy.<span class="fn">intercept</span>(<span class="st">'GET'</span>, <span class="st">'/api/products'</span>, { fixture: <span class="st">'products.json'</span> }).<span class="fn">as</span>(<span class="st">'getProducts'</span>);
+
+  cy.<span class="fn">login</span>(<span class="st">'admin@example.com'</span>, <span class="st">'password'</span>);
+  cy.<span class="fn">visit</span>(<span class="st">'/products'</span>);
+  cy.<span class="fn">wait</span>(<span class="st">'@getProducts'</span>);
+
+  cy.<span class="fn">get</span>(<span class="st">'[data-testid="product-card"]'</span>).<span class="fn">should</span>(<span class="st">'have.length'</span>, <span class="st">5</span>);
+});</div>
+  </div>
+
+  <!-- Best Practices Checklist -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-clipboard2-check"></i> Testing Best Practices Checklist</div>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-3" style="color:#22c55e;"><i class="bi bi-check2-all me-2"></i>What to Do</h6>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Query by role, label, or text — not class names</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Use <code>userEvent</code> instead of <code>fireEvent</code> for interactions</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Test behavior, not implementation details</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Use <code>data-testid</code> only as last resort for E2E</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Mock external dependencies (APIs, routers, timers)</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Clean up mocks and state between tests with <code>afterEach</code></span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Write tests before fixing bugs (TDD for bugs)</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Aim for 70-80% coverage — cover critical paths 100%</span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-700 mb-3" style="color:#ef4444;"><i class="bi bi-x-circle me-2"></i>What to Avoid</h6>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-x-circle-fill text-danger mt-1"></i>
+            <span>Don't test internal state directly (<code>component.state</code>)</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-x-circle-fill text-danger mt-1"></i>
+            <span>Don't snapshot test large components (brittle)</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-x-circle-fill text-danger mt-1"></i>
+            <span>Don't mock things you don't own (like React internals)</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-x-circle-fill text-danger mt-1"></i>
+            <span>Avoid <code>act()</code> warnings — they signal real issues</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-x-circle-fill text-danger mt-1"></i>
+            <span>Don't write tests just to hit coverage numbers</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-x-circle-fill text-danger mt-1"></i>
+            <span>Avoid coupling tests to component structure/markup</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-x-circle-fill text-danger mt-1"></i>
+            <span>Don't use <code>setTimeout</code> in tests — use fake timers</span>
+          </li>
+          <li class="list-group-item d-flex align-items-start gap-2 px-0">
+            <i class="bi bi-x-circle-fill text-danger mt-1"></i>
+            <span>Avoid testing 3rd-party library behavior</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-chat-left-quote"></i> Interview Questions</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the difference between <code>getBy</code>, <code>queryBy</code>, and <code>findBy</code> in React Testing Library?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Why is testing by role preferred over testing by class name or test ID?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>When would you use <code>userEvent</code> vs <code>fireEvent</code>? What's the difference?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you test a component that makes an API call? How do you handle the loading and error states?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is <code>renderHook</code> and when do you use it? Why can't you just call a hook directly in a test?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How do you mock a module in Jest? What's the difference between <code>jest.mock()</code> and <code>jest.spyOn()</code>?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the testing pyramid? How do you decide how many unit vs integration vs E2E tests to write?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does Cypress differ from Jest + React Testing Library? When would you use each?</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+    <div class="mt-2 d-flex justify-content-center gap-3 flex-wrap">
+      <a href="index.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Home</a>
+      <a href="react-hooks.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Hooks</a>
+      <a href="react-redux.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Redux</a>
+      <a href="react-interview.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Interview</a>
+      <a href="react-projects.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

@@ -1,0 +1,1845 @@
+<!-- ==================== Q1 ==================== -->
+<div class="accordion-item" id="advanced-q1">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q1-collapse" aria-expanded="false" aria-controls="advanced-q1-collapse">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;1. What is Suspense in React?
+    </button>
+  </h2>
+  <div id="advanced-q1-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong>React Suspense</strong> is a built-in mechanism that lets you declaratively specify a loading state for a part of your component tree while that part is waiting for something asynchronous to complete — most commonly lazy-loaded code, but increasingly also data. Without Suspense you would manage loading flags manually in every component; Suspense moves that concern to a single, strategically placed boundary in the tree.
+      </p>
+      <p>
+        Suspense works by catching a special <em>thrown Promise</em>. When a child component needs to wait (e.g., it is lazy-loading a chunk, or — with a Suspense-compatible data source — waiting for data), it throws a Promise. React walks up the tree looking for the nearest <code>&lt;Suspense&gt;</code> boundary and renders its <code>fallback</code> prop instead of the suspended subtree. When the Promise resolves, React re-renders the subtree with the ready content.
+      </p>
+      <p>
+        The <code>fallback</code> prop accepts any renderable React node — a spinner, a skeleton screen, or null. Multiple Suspense boundaries can be nested; the closest ancestor catches the suspension, so you can create fine-grained loading experiences without an explosion of local state variables.
+      </p>
+      <p>
+        React 18 greatly expanded Suspense: it now integrates with concurrent rendering, startTransition, and streaming SSR. In streaming SSR, a suspended boundary causes React to flush the rest of the HTML immediately and stream the suspended section's HTML as a separate chunk once it resolves, dramatically improving Time to First Byte.
+      </p>
+      <p>
+        One important mental model: Suspense is <em>not</em> a data-fetching library. It is a coordination mechanism. The actual fetching is handled by a library (Relay, SWR, React Query with its <code>suspense</code> option, or the new <code>use()</code> hook) that knows how to throw a Promise at the right moment. Suspense simply provides the boundary where that thrown Promise is caught.
+      </p>
+      <pre class="code-block">
+import React, { Suspense, lazy } from 'react';
+
+// React.lazy creates a lazy component that suspends until the chunk loads
+const HeavyChart = lazy(() => import('./HeavyChart'));
+
+function Dashboard() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Dashboard&lt;/h1&gt;
+
+      {/* Closest Suspense catches the suspension from HeavyChart */}
+      &lt;Suspense fallback={&lt;div className="skeleton-chart" /&gt;}&gt;
+        &lt;HeavyChart /&gt;
+      &lt;/Suspense&gt;
+
+      {/* Nested boundaries give independent loading states */}
+      &lt;Suspense fallback={&lt;p&gt;Loading sidebar…&lt;/p&gt;}&gt;
+        &lt;Suspense fallback={&lt;p&gt;Loading widget…&lt;/p&gt;}&gt;
+          &lt;SidebarWidget /&gt;
+        &lt;/Suspense&gt;
+        &lt;SidebarStats /&gt;
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q2 ==================== -->
+<div class="accordion-item" id="advanced-q2">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q2-collapse" aria-expanded="false" aria-controls="advanced-q2-collapse">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;2. What is an error boundary?
+    </button>
+  </h2>
+  <div id="advanced-q2-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        An <strong>error boundary</strong> is a React class component that catches JavaScript errors anywhere in its child component tree, logs those errors, and displays a fallback UI instead of letting the whole application crash with a blank white screen. Error boundaries were introduced in React 16 as the recommended way to handle rendering errors gracefully in production applications.
+      </p>
+      <p>
+        Error boundaries rely on two lifecycle methods available only on class components: <code>static getDerivedStateFromError(error)</code> and <code>componentDidCatch(error, info)</code>. <code>getDerivedStateFromError</code> is called during the render phase and should return a state object that triggers the fallback UI (e.g., <code>{ hasError: true }</code>). <code>componentDidCatch</code> is called during the commit phase and is the right place to log the error to an error-reporting service like Sentry, Datadog, or a custom endpoint.
+      </p>
+      <p>
+        Error boundaries do <em>not</em> catch errors inside event handlers (because those do not happen during render), asynchronous code (setTimeout, fetch callbacks), server-side rendering, or errors thrown inside the error boundary itself. For async errors you still need try/catch or a global <code>window.onerror</code> handler.
+      </p>
+      <p>
+        You can — and typically should — use multiple error boundaries at different granularities. Wrapping individual widgets means that one broken component will not take down an entire page. Placing one at the application root provides a last-resort safety net with a friendly "Something went wrong" message.
+      </p>
+      <p>
+        As of React 19 (experimental), work is in progress to support error boundaries as function components via a new <code>use client</code> / <code>useErrorBoundary</code>-style API. Until then, the community library <code>react-error-boundary</code> provides a functional-friendly wrapper over the class-based API.
+      </p>
+      <pre class="code-block">
+import React from 'react';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Called during render; return new state to show fallback UI
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, info) {
+    // Called after commit; good place for logging
+    console.error('Caught by ErrorBoundary:', error);
+    console.error('Component stack:', info.componentStack);
+    // reportToSentry(error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        &lt;div role="alert"&gt;
+          &lt;h2&gt;Something went wrong.&lt;/h2&gt;
+          &lt;details&gt;{this.state.error?.message}&lt;/details&gt;
+          &lt;button onClick={() =&gt; this.setState({ hasError: false, error: null })}&gt;
+            Try again
+          &lt;/button&gt;
+        &lt;/div&gt;
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// Usage
+function App() {
+  return (
+    &lt;ErrorBoundary&gt;
+      &lt;UserProfile /&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+}
+
+// Using react-error-boundary (functional API)
+import { ErrorBoundary } from 'react-error-boundary';
+
+function FallbackComponent({ error, resetErrorBoundary }) {
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Error: {error.message}&lt;/p&gt;
+      &lt;button onClick={resetErrorBoundary}&gt;Retry&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+function App() {
+  return (
+    &lt;ErrorBoundary FallbackComponent={FallbackComponent} onReset={() =&gt; { /* clear cache */ }}&gt;
+      &lt;UserProfile /&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q3 ==================== -->
+<div class="accordion-item" id="advanced-q3">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q3-collapse" aria-expanded="false" aria-controls="advanced-q3-collapse">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;3. What is a React Portal?
+    </button>
+  </h2>
+  <div id="advanced-q3-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        A <strong>React Portal</strong> lets you render a child component into a different DOM node than its parent component occupies in the React tree, while still maintaining the component's position in the React logical tree. In other words, a Portal "teleports" DOM output to any node you choose, but React event bubbling and context still behave exactly as if the portal's content were rendered at its logical position.
+      </p>
+      <p>
+        Portals are created with <code>ReactDOM.createPortal(children, domNode)</code>. The first argument is any renderable React content; the second is the real DOM node to mount into. You typically target a node like <code>document.getElementById('modal-root')</code> that lives outside the main <code>#root</code> div.
+      </p>
+      <p>
+        The canonical use case is <strong>modals, tooltips, and dropdown menus</strong>. These elements need to visually break out of any <code>overflow: hidden</code> or <code>z-index</code> stacking context imposed by ancestor DOM nodes, but they should still receive props and context from their logical React parents. Without portals, you would have to hoist the modal to the root of the DOM tree and pass state through props or global state, causing tight coupling.
+      </p>
+      <p>
+        Because events bubble through the React tree (not the DOM tree), a click inside a portal will still trigger <code>onClick</code> handlers on React ancestors of the portal component. This can occasionally cause surprises and requires careful thinking about event propagation when building dismissal logic (e.g., "click outside to close" detection).
+      </p>
+      <p>
+        React 18 introduced a new <code>createRoot</code>-compatible portal API, but the semantics remain the same. Always ensure the target DOM node exists before calling <code>createPortal</code> — a common pattern is to create and append the node in a <code>useEffect</code> or simply add a static div to your <code>index.html</code>.
+      </p>
+      <pre class="code-block">
+// index.html — add a portal target outside #root
+// &lt;div id="modal-root"&gt;&lt;/div&gt;
+
+import { createPortal } from 'react-dom';
+import { useEffect, useRef } from 'react';
+
+function Modal({ children, onClose }) {
+  const el = useRef(document.getElementById('modal-root'));
+
+  return createPortal(
+    &lt;div className="modal-overlay" onClick={onClose}&gt;
+      &lt;div className="modal-content" onClick={e =&gt; e.stopPropagation()}&gt;
+        {children}
+      &lt;/div&gt;
+    &lt;/div&gt;,
+    el.current
+  );
+}
+
+function Page() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    &lt;&gt;
+      &lt;button onClick={() =&gt; setOpen(true)}&gt;Open Modal&lt;/button&gt;
+      {open &amp;&amp; (
+        &lt;Modal onClose={() =&gt; setOpen(false)}&gt;
+          &lt;h2&gt;Hello from a portal!&lt;/h2&gt;
+        &lt;/Modal&gt;
+      )}
+    &lt;/&gt;
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q4 ==================== -->
+<div class="accordion-item" id="advanced-q4">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q4-collapse" aria-expanded="false" aria-controls="advanced-q4-collapse">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;4. What is forwardRef?
+    </button>
+  </h2>
+  <div id="advanced-q4-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong><code>React.forwardRef</code></strong> is an API that allows a component to accept a <code>ref</code> passed by its parent and forward it down to a DOM element or to another component inside it. By default, the <code>ref</code> prop is reserved by React and does not flow into function components the way regular props do — <code>forwardRef</code> is the escape hatch that enables this pattern.
+      </p>
+      <p>
+        The API wraps your component in a higher-order function: <code>React.forwardRef((props, ref) =&gt; JSX)</code>. The second argument <code>ref</code> can then be attached to any JSX element via <code>ref={ref}</code>. The caller can now pass a ref created with <code>useRef</code> or <code>createRef</code> and directly access the underlying DOM node or child component's imperative handle.
+      </p>
+      <p>
+        Common use cases include design system components (e.g., a custom <code>&lt;Input&gt;</code> that wraps an <code>&lt;input&gt;</code>) where the consumer needs to call <code>inputRef.current.focus()</code>, animation libraries that need direct DOM manipulation, and third-party integration (e.g., passing a ref to a chart's canvas element). Without <code>forwardRef</code>, every consumer would have to reach inside a component unsafely or use a workaround like passing a separate <code>innerRef</code> prop.
+      </p>
+      <p>
+        <strong>React 19 note:</strong> In React 19, <code>ref</code> is passed as a regular prop to function components, making <code>forwardRef</code> unnecessary for new code. However, <code>forwardRef</code> remains supported for backward compatibility. For React 16–18 you still need it.
+      </p>
+      <p>
+        When combined with <code>useImperativeHandle</code>, <code>forwardRef</code> becomes even more powerful: instead of exposing the raw DOM node, you expose a custom object of imperative methods, giving consumers a controlled API surface without leaking DOM internals.
+      </p>
+      <pre class="code-block">
+import React, { forwardRef, useRef } from 'react';
+
+// A reusable Input that forwards the ref to the underlying &lt;input&gt;
+const FancyInput = forwardRef(function FancyInput({ label, ...props }, ref) {
+  return (
+    &lt;label&gt;
+      {label}
+      &lt;input ref={ref} className="fancy-input" {...props} /&gt;
+    &lt;/label&gt;
+  );
+});
+
+// Consumer
+function Form() {
+  const inputRef = useRef(null);
+
+  function handleFocus() {
+    inputRef.current?.focus();
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;FancyInput ref={inputRef} label="Username" placeholder="Enter username" /&gt;
+      &lt;button onClick={handleFocus}&gt;Focus Input&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// React 19 style (ref as a plain prop — no forwardRef needed)
+function FancyInputV2({ label, ref, ...props }) {
+  return (
+    &lt;label&gt;
+      {label}
+      &lt;input ref={ref} className="fancy-input" {...props} /&gt;
+    &lt;/label&gt;
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q5 ==================== -->
+<div class="accordion-item" id="advanced-q5">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q5-collapse" aria-expanded="false" aria-controls="advanced-q5-collapse">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;5. What is React.lazy?
+    </button>
+  </h2>
+  <div id="advanced-q5-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong><code>React.lazy</code></strong> is a built-in function that enables code splitting by letting you defer loading a component's JavaScript bundle until it is actually rendered for the first time. It integrates directly with Suspense: while the chunk is being downloaded, the nearest Suspense boundary shows its fallback, and once the import resolves the component renders normally.
+      </p>
+      <p>
+        The syntax is <code>const MyComponent = lazy(() =&gt; import('./MyComponent'))</code>. The argument must be a function that returns a Promise which resolves to a module whose <strong>default export</strong> is a React component. Under the hood, React.lazy stores the Promise, and when the component is first rendered it checks whether the Promise has resolved; if not, it throws the Promise for the Suspense boundary to catch.
+      </p>
+      <p>
+        Code splitting with <code>React.lazy</code> is one of the most impactful performance optimizations for large SPAs. Rather than shipping a monolithic bundle, the bundler (webpack, Vite, Rollup) creates separate chunks for lazily imported modules. Users only download the code they actually visit, reducing initial bundle size and improving Time to Interactive significantly.
+      </p>
+      <p>
+        A common strategy is <strong>route-based code splitting</strong>: each route's top-level component is wrapped in <code>lazy()</code> so the code for each page is loaded on demand. Another common pattern is <strong>component-level splitting</strong> for heavy components like rich text editors, chart libraries, or PDF viewers that are not needed on initial load.
+      </p>
+      <p>
+        For named exports (non-default exports), you need a thin re-export shim: create a file that re-exports the named export as the default, or use <code>lazy(() =&gt; import('./module').then(m =&gt; ({ default: m.NamedExport })))</code>. The React team may relax this requirement in a future version.
+      </p>
+      <pre class="code-block">
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+// Route-based code splitting
+const Home      = lazy(() =&gt; import('./pages/Home'));
+const Dashboard = lazy(() =&gt; import('./pages/Dashboard'));
+const Settings  = lazy(() =&gt; import('./pages/Settings'));
+
+// Named export workaround
+const PdfViewer = lazy(() =&gt;
+  import('./components/PdfViewer').then(m =&gt; ({ default: m.PdfViewer }))
+);
+
+function App() {
+  return (
+    &lt;Suspense fallback={&lt;div className="page-loader"&gt;Loading…&lt;/div&gt;}&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/"          element={&lt;Home /&gt;}      /&gt;
+        &lt;Route path="/dashboard" element={&lt;Dashboard /&gt;} /&gt;
+        &lt;Route path="/settings"  element={&lt;Settings /&gt;}  /&gt;
+      &lt;/Routes&gt;
+    &lt;/Suspense&gt;
+  );
+}
+
+// Preloading a lazy component before user navigates (performance trick)
+const AdminPanel = lazy(() =&gt; import('./AdminPanel'));
+
+function NavBar() {
+  // Trigger the import on hover so the chunk is ready before click
+  function preload() {
+    import('./AdminPanel');
+  }
+  return &lt;a href="/admin" onMouseEnter={preload}&gt;Admin&lt;/a&gt;;
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q6 ==================== -->
+<div class="accordion-item" id="advanced-q6">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q6-collapse" aria-expanded="false" aria-controls="advanced-q6-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;6. What is useImperativeHandle?
+    </button>
+  </h2>
+  <div id="advanced-q6-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong><code>useImperativeHandle</code></strong> is a React hook used inside a <code>forwardRef</code> component to customise the value exposed on the ref that the parent component holds. Instead of exposing the raw underlying DOM node or child component instance, you define a plain object with exactly the imperative methods and properties you want consumers to be able to call. This creates a clean, stable public API surface for imperative interactions.
+      </p>
+      <p>
+        The signature is <code>useImperativeHandle(ref, () =&gt; ({ method1, method2, ... }), [deps])</code>. The second argument is a factory function that returns the object to assign to <code>ref.current</code>. The optional dependencies array works just like <code>useMemo</code>: the factory re-runs when any dependency changes, keeping the ref current object up to date.
+      </p>
+      <p>
+        This pattern is particularly valuable for design system components. Consider a custom <code>&lt;Dialog&gt;</code> component: rather than exposing the underlying <code>&lt;div&gt;</code> and letting callers manipulate it freely, you expose only <code>{ open, close, focus }</code> methods. This enforces encapsulation and makes refactoring much safer because the internal implementation can change without breaking consumers.
+      </p>
+      <p>
+        A real-world subtlety: the deps array is often omitted, which means the factory runs on every render. This is safe because the factory is cheap and React only replaces <code>ref.current</code> if the factory returns a new object by reference. Providing an empty array <code>[]</code> memoises the object permanently — useful when the methods close over refs (like internal DOM refs) rather than reactive state, ensuring the methods always see the latest ref values.
+      </p>
+      <p>
+        <strong>Anti-pattern warning:</strong> Overusing imperative handles is a red flag. In React's declarative model, most interactions should flow through props and state. Reach for <code>useImperativeHandle</code> only when you genuinely need an imperative integration — focus management, scroll control, media playback, or integration with non-React code — not as a shortcut to avoid prop drilling.
+      </p>
+      <pre class="code-block">
+import { forwardRef, useRef, useImperativeHandle } from 'react';
+
+// Expose a controlled imperative API on a custom input
+const SmartInput = forwardRef(function SmartInput({ label }, ref) {
+  const inputRef = useRef(null);
+
+  useImperativeHandle(ref, () =&gt; ({
+    focus() {
+      inputRef.current?.focus();
+    },
+    clear() {
+      if (inputRef.current) inputRef.current.value = '';
+    },
+    getValue() {
+      return inputRef.current?.value ?? '';
+    },
+  }), []); // stable — factory uses refs, not reactive state
+
+  return &lt;input ref={inputRef} placeholder={label} /&gt;;
+});
+
+// Parent usage
+function Form() {
+  const inputRef = useRef(null);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const val = inputRef.current.getValue();
+    console.log('Submitted:', val);
+    inputRef.current.clear();
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;SmartInput ref={inputRef} label="Search…" /&gt;
+      &lt;button type="submit"&gt;Go&lt;/button&gt;
+      &lt;button type="button" onClick={() =&gt; inputRef.current.focus()}&gt;
+        Focus
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q7 ==================== -->
+<div class="accordion-item" id="advanced-q7">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q7-collapse" aria-expanded="false" aria-controls="advanced-q7-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;7. What is the Profiler API?
+    </button>
+  </h2>
+  <div id="advanced-q7-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        The <strong>React Profiler API</strong> is a built-in component (<code>&lt;Profiler&gt;</code>) that measures how often a part of the component tree renders and what the rendering cost is in terms of time. It provides programmatic access to the same data the React DevTools Profiler tab visualises, letting you collect real-user performance data in production or custom tooling in development.
+      </p>
+      <p>
+        <code>&lt;Profiler&gt;</code> accepts two required props: an <code>id</code> string that names the subtree being measured, and an <code>onRender</code> callback that fires every time any component inside the profiled tree commits an update. The callback receives eight arguments: <code>(id, phase, actualDuration, baseDuration, startTime, commitTime, interactions)</code>.
+      </p>
+      <p>
+        Key callback arguments: <strong><code>actualDuration</code></strong> is the time in milliseconds spent rendering the committed update (including all descendants); <strong><code>baseDuration</code></strong> is an estimate of how long a full re-render of the subtree would take without memoisation; <strong><code>phase</code></strong> is either <code>"mount"</code> (first render) or <code>"update"</code> (re-render); <strong><code>startTime</code></strong> and <strong><code>commitTime</code></strong> are timestamps relative to page load.
+      </p>
+      <p>
+        In <strong>production builds</strong>, the Profiler component is present but its <code>onRender</code> callback is only invoked when you opt in to the profiling build of React (<code>react-dom/profiling</code>). This opt-in is deliberate: profiling adds a small overhead and most apps don't need it in prod. For real-user performance data, many teams ship the profiling build for a small percentage of users via feature flags.
+      </p>
+      <p>
+        A common production pattern is to accumulate measurements in a buffer and send them to an analytics endpoint in batches, flagging regressions automatically when <code>actualDuration</code> exceeds a threshold. Nested <code>&lt;Profiler&gt;</code> components are fully supported and each fires its own <code>onRender</code>, enabling fine-grained attribution.
+      </p>
+      <pre class="code-block">
+import { Profiler } from 'react';
+
+function onRenderCallback(
+  id,            // "main-feed"
+  phase,         // "mount" | "update"
+  actualDuration, // ms spent rendering this update
+  baseDuration,   // estimated ms for full re-render
+  startTime,      // when React started rendering
+  commitTime      // when React committed changes
+) {
+  if (actualDuration &gt; 16) {
+    // Over a frame budget — investigate
+    console.warn(`[Profiler] ${id} took ${actualDuration.toFixed(2)}ms (${phase})`);
+    // Could also send to analytics:
+    // analytics.track('slow_render', { id, phase, actualDuration });
+  }
+}
+
+function App() {
+  return (
+    &lt;Profiler id="main-feed" onRender={onRenderCallback}&gt;
+      &lt;Feed /&gt;
+      &lt;Profiler id="sidebar" onRender={onRenderCallback}&gt;
+        &lt;Sidebar /&gt;
+      &lt;/Profiler&gt;
+    &lt;/Profiler&gt;
+  );
+}
+
+// Using profiling build in Vite (vite.config.ts)
+// resolve: { alias: { 'react-dom': 'react-dom/profiling', 'scheduler/tracing': 'scheduler/tracing-profiling' } }
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q8 ==================== -->
+<div class="accordion-item" id="advanced-q8">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q8-collapse" aria-expanded="false" aria-controls="advanced-q8-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;8. What is React.Children and its utilities?
+    </button>
+  </h2>
+  <div id="advanced-q8-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong><code>React.Children</code></strong> is a utility object that provides a safe API for working with the <code>children</code> prop, whose structure can be a single element, an array, a string, null, or undefined. Using <code>React.Children</code> normalises these variations, preventing the bugs that arise from treating <code>props.children</code> as always being an array.
+      </p>
+      <p>
+        The main utilities are: <code>React.Children.map(children, fn)</code> — iterates over children and returns a new array; <code>React.Children.forEach(children, fn)</code> — like map but returns nothing; <code>React.Children.count(children)</code> — returns the total number of components; <code>React.Children.only(children)</code> — asserts there is exactly one child and returns it (throws otherwise); and <code>React.Children.toArray(children)</code> — returns a flat array with stable keys assigned.
+      </p>
+      <p>
+        A key implementation detail: <code>React.Children.map</code> automatically skips <code>null</code> and <code>undefined</code> children and reassigns keys to the returned elements so they are unique (prefixed with the current map context). This prevents key conflicts when you return modified elements. <code>toArray</code> does the same key reassignment, which is critical when you need to sort or filter children.
+      </p>
+      <p>
+        <strong>Modern alternatives:</strong> The React team generally discourages heavy use of <code>React.Children</code> because it is opaque — it cannot see through fragments, custom components, or render props. Composition patterns using render props, compound components with Context, or explicit prop arrays are often cleaner and more flexible. <code>React.Children</code> is best reserved for low-level utility components like layout containers that need to count or augment direct children.
+      </p>
+      <p>
+        A concrete use case: a <code>&lt;Tabs&gt;</code> component that needs to add <code>role="tab"</code> and <code>aria-selected</code> to each child <code>&lt;Tab&gt;</code> element, or a <code>&lt;RadioGroup&gt;</code> that injects the same <code>name</code> attribute into every child <code>&lt;input type="radio"&gt;</code>.
+      </p>
+      <pre class="code-block">
+import React from 'react';
+
+// A layout grid that injects a CSS class into each child
+function Grid({ children, columns = 3 }) {
+  const count = React.Children.count(children);
+  console.log(`Grid has ${count} children`);
+
+  return (
+    &lt;div className={`grid grid-cols-${columns}`}&gt;
+      {React.Children.map(children, (child, index) =&gt; {
+        if (!React.isValidElement(child)) return null;
+        return React.cloneElement(child, {
+          className: `grid-item ${child.props.className ?? ''}`.trim(),
+          'data-index': index,
+        });
+      })}
+    &lt;/div&gt;
+  );
+}
+
+// Requiring exactly one child
+function Tooltip({ children, text }) {
+  const child = React.Children.only(children); // throws if not exactly 1
+  return (
+    &lt;span className="tooltip-wrapper" title={text}&gt;
+      {child}
+    &lt;/span&gt;
+  );
+}
+
+// Safe flat array (stable keys, handles fragments)
+function SortableList({ children }) {
+  const items = React.Children.toArray(children);
+  const sorted = [...items].sort((a, b) =&gt;
+    a.props.value.localeCompare(b.props.value)
+  );
+  return &lt;ul&gt;{sorted}&lt;/ul&gt;;
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q9 ==================== -->
+<div class="accordion-item" id="advanced-q9">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q9-collapse" aria-expanded="false" aria-controls="advanced-q9-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;9. What is React.cloneElement and when do you use it?
+    </button>
+  </h2>
+  <div id="advanced-q9-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong><code>React.cloneElement(element, props, ...children)</code></strong> creates a new React element by cloning an existing one and merging additional props (and optionally new children) into it. The original element's type, key, and ref are preserved unless you explicitly override them in the new props. It is one of the primary tools for implementing the <strong>compound component pattern</strong> where a parent injects behaviour into its children without them needing to be aware of it.
+      </p>
+      <p>
+        The function shallow-merges props: new props in the second argument win over the original element's props, except for <code>className</code> and <code>style</code> which are NOT merged automatically — you need to do that manually (e.g., <code>className: \`${child.props.className} extra\`</code>). The third and subsequent arguments replace children entirely if provided.
+      </p>
+      <p>
+        Typical use cases: a <code>&lt;Form&gt;</code> that injects an <code>onChange</code> handler and <code>disabled</code> state into every child input; a <code>&lt;Tabs&gt;</code> container that passes <code>isActive</code> and <code>onSelect</code> to each <code>&lt;Tab&gt;</code>; or an animation library that wraps children with motion props. The pattern lets child components remain "dumb" — they declare props they accept and the parent fills them in.
+      </p>
+      <p>
+        <strong>Modern alternatives:</strong> The React team increasingly recommends passing <strong>render props</strong> or using <strong>Context</strong> instead of <code>cloneElement</code>. The reason: <code>cloneElement</code> requires the parent to understand the exact prop interface of its children, creating tight implicit coupling. Context-based compound components are more flexible because children opt in to the shared state themselves via <code>useContext</code>.
+      </p>
+      <p>
+        One important gotcha: <code>cloneElement</code> only works on React elements, not on plain DOM strings or null. Always guard with <code>React.isValidElement(child)</code> before calling it inside a <code>React.Children.map</code> loop.
+      </p>
+      <pre class="code-block">
+import React from 'react';
+
+// RadioGroup injects 'name' and 'onChange' into every &lt;input type="radio"&gt; child
+function RadioGroup({ name, value, onChange, children }) {
+  return (
+    &lt;fieldset&gt;
+      {React.Children.map(children, child =&gt; {
+        if (!React.isValidElement(child)) return child;
+        return React.cloneElement(child, {
+          name,
+          checked: child.props.value === value,
+          onChange,
+        });
+      })}
+    &lt;/fieldset&gt;
+  );
+}
+
+function App() {
+  const [color, setColor] = React.useState('red');
+  return (
+    &lt;RadioGroup name="color" value={color} onChange={e =&gt; setColor(e.target.value)}&gt;
+      &lt;input type="radio" value="red"   label="Red"   /&gt;
+      &lt;input type="radio" value="green" label="Green" /&gt;
+      &lt;input type="radio" value="blue"  label="Blue"  /&gt;
+    &lt;/RadioGroup&gt;
+  );
+}
+
+// Context-based alternative (preferred for new code)
+const TabsContext = React.createContext(null);
+
+function Tabs({ children, defaultTab }) {
+  const [active, setActive] = React.useState(defaultTab);
+  return (
+    &lt;TabsContext.Provider value={{ active, setActive }}&gt;
+      &lt;div className="tabs"&gt;{children}&lt;/div&gt;
+    &lt;/TabsContext.Provider&gt;
+  );
+}
+
+function Tab({ id, children }) {
+  const { active, setActive } = React.useContext(TabsContext);
+  return (
+    &lt;button
+      role="tab"
+      aria-selected={active === id}
+      onClick={() =&gt; setActive(id)}
+    &gt;
+      {children}
+    &lt;/button&gt;
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q10 ==================== -->
+<div class="accordion-item" id="advanced-q10">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q10-collapse" aria-expanded="false" aria-controls="advanced-q10-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;10. What is the createPortal function?
+    </button>
+  </h2>
+  <div id="advanced-q10-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong><code>ReactDOM.createPortal(children, domNode, key?)</code></strong> is the underlying function that backs React's portal feature. It returns a special React element descriptor that instructs the renderer to mount the given children into <code>domNode</code> (any real DOM node) rather than the normal parent DOM location, while keeping the component logically in its original position in the React component tree.
+      </p>
+      <p>
+        The function takes a required <code>domNode</code> argument that must already exist in the document at the time of the portal creation. A common pattern is to add a <code>&lt;div id="portal-root"&gt;&lt;/div&gt;</code> directly inside <code>&lt;body&gt;</code> in your HTML template, then reference it as <code>document.getElementById('portal-root')</code>. Alternatively you can create and insert the node programmatically in <code>useLayoutEffect</code> and clean it up on unmount.
+      </p>
+      <p>
+        The optional third <code>key</code> parameter (added in React 18) enables multiple independent portals to target the same DOM node. Each portal with a unique key is treated as a separate mount root with stable identity, preventing unnecessary remounts when the key doesn't change. This is useful for toast notification systems that need to maintain multiple independent portal instances.
+      </p>
+      <p>
+        <strong>Event bubbling behaviour:</strong> React synthetic events from inside a portal bubble through the React tree (not the DOM tree) as if the portal content were rendered at its logical parent location. This means a click inside a modal portal will trigger <code>onClick</code> on the React component that renders the portal, even though the modal DOM node is a sibling of <code>#root</code>. Be mindful of this when implementing "click outside to close" logic.
+      </p>
+      <p>
+        React 18 introduced <code>createRoot</code>-style portals where you can create a fully independent React root using <code>ReactDOM.createRoot(domNode).render(element)</code>. The key difference: a true second root does not share React tree context or event bubbling with the main app. <code>createPortal</code> is appropriate when you want shared context; a second root is appropriate for fully independent micro-frontends.
+      </p>
+      <pre class="code-block">
+import { createPortal } from 'react-dom';
+import { useState, useEffect, useRef } from 'react';
+
+// Dynamic portal target — created and destroyed on mount/unmount
+function TooltipPortal({ children, anchorEl }) {
+  const containerRef = useRef(null);
+
+  if (!containerRef.current) {
+    containerRef.current = document.createElement('div');
+    containerRef.current.className = 'tooltip-portal';
+  }
+
+  useEffect(() =&gt; {
+    document.body.appendChild(containerRef.current);
+    return () =&gt; document.body.removeChild(containerRef.current);
+  }, []);
+
+  // Position near anchor
+  const rect = anchorEl?.getBoundingClientRect();
+  const style = rect ? { top: rect.bottom + 8, left: rect.left } : {};
+
+  return createPortal(
+    &lt;div className="tooltip" style={style}&gt;{children}&lt;/div&gt;,
+    containerRef.current
+  );
+}
+
+// Multiple portals to same target using key (React 18+)
+function NotificationSystem({ notifications }) {
+  const root = document.getElementById('notifications-root');
+  return notifications.map(n =&gt;
+    createPortal(
+      &lt;Toast key={n.id} message={n.message} /&gt;,
+      root,
+      n.id  // key ensures stable identity per notification
+    )
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q11 ==================== -->
+<div class="accordion-item" id="advanced-q11">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q11-collapse" aria-expanded="false" aria-controls="advanced-q11-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;11. What is concurrent rendering in React 18?
+    </button>
+  </h2>
+  <div id="advanced-q11-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong>Concurrent rendering</strong> is React 18's foundational capability that allows the React engine to prepare multiple versions of the UI simultaneously, pause and resume rendering work, and abandon an in-progress render if a more urgent update arrives. Before React 18, rendering was <em>synchronous</em> and <em>blocking</em>: once React started rendering an update it could not be interrupted, which meant large renders would lock the browser's main thread and cause jank.
+      </p>
+      <p>
+        The key insight is that React now distinguishes between <strong>urgent updates</strong> (typing, clicking, direct user interactions that must feel instantaneous) and <strong>non-urgent transitions</strong> (navigating to a new screen, filtering a large list). Urgent updates are rendered synchronously and immediately. Transitions are rendered concurrently: React starts the new render in the background while keeping the old UI visible and interactive.
+      </p>
+      <p>
+        Concurrent rendering is built on top of the Fiber architecture's ability to perform rendering work incrementally in small units. The Scheduler package assigns priorities (lanes) to work items. The work loop processes high-priority lanes first, yielding back to the browser between frames so input events are not blocked. Lower-priority renders are resumed in subsequent frames.
+      </p>
+      <p>
+        Concurrent rendering is opt-in per tree: you activate it by using <code>ReactDOM.createRoot</code> instead of the legacy <code>ReactDOM.render</code>. This allows incremental adoption — apps can migrate to React 18 without immediately getting concurrent behaviour until they start using concurrent features like <code>startTransition</code>, <code>useDeferredValue</code>, Suspense with data fetching, or streaming SSR.
+      </p>
+      <p>
+        A critical implication: because renders can be interrupted and restarted, <strong>render functions must be pure and side-effect free</strong> (which was always the expectation but is now strictly enforced). React 18's Strict Mode in development intentionally double-invokes render functions to help catch impure renders. Side effects belong exclusively in <code>useEffect</code>, <code>useLayoutEffect</code>, or event handlers.
+      </p>
+      <pre class="code-block">
+// Legacy mode (React 17 and below) — synchronous, blocking
+import ReactDOM from 'react-dom';
+ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
+
+// Concurrent mode (React 18) — opt in with createRoot
+import { createRoot } from 'react-dom/client';
+const root = createRoot(document.getElementById('root'));
+root.render(&lt;App /&gt;);
+
+// Concurrent features become available after createRoot:
+import { startTransition, useDeferredValue, useState } from 'react';
+
+function SearchPage() {
+  const [input, setInput]       = useState('');
+  const [query, setQuery]       = useState('');
+  const deferredQuery           = useDeferredValue(query); // low priority
+
+  function handleChange(e) {
+    setInput(e.target.value); // urgent — keeps input responsive
+
+    startTransition(() =&gt; {
+      setQuery(e.target.value); // non-urgent — can be interrupted
+    });
+  }
+
+  return (
+    &lt;&gt;
+      &lt;input value={input} onChange={handleChange} /&gt;
+      {/* Results rendered with low priority — won't block typing */}
+      &lt;ResultsList query={deferredQuery} /&gt;
+    &lt;/&gt;
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q12 ==================== -->
+<div class="accordion-item" id="advanced-q12">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q12-collapse" aria-expanded="false" aria-controls="advanced-q12-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;12. What is the transition priority in React 18?
+    </button>
+  </h2>
+  <div id="advanced-q12-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        In React 18, <strong>transitions</strong> are a first-class priority tier that sits below synchronous (user-blocking) updates but above deferred background work. When you wrap a state update in <code>startTransition</code>, React marks it as non-urgent. If a more urgent update (like a keystroke) comes in while a transition is being rendered, React will pause the transition, process the urgent update immediately, and then resume (or restart) the transition render.
+      </p>
+      <p>
+        The <code>startTransition(fn)</code> API accepts a callback that may contain one or more <code>setState</code> calls. All state updates inside <code>fn</code> are batched and marked as transition-priority. The <code>useTransition()</code> hook additionally returns a boolean <code>isPending</code> flag that is <code>true</code> while a transition render is in progress, letting you show a subtle loading indicator without needing to maintain explicit loading state.
+      </p>
+      <p>
+        The complementary hook <code>useDeferredValue(value)</code> applies the same priority treatment to a derived value rather than a state setter. It is useful when you receive a value from a parent (e.g., a prop) and want to pass a deferred version of it to a slow child component. React will render the child with the old value first (keeping it responsive) and update it with the new value at transition priority.
+      </p>
+      <p>
+        Under the hood, transitions use the <strong>lanes model</strong> in React Fiber. Transition updates are assigned to the <code>TransitionLane</code> lane group (lanes 4–20), while user-blocking interactions occupy <code>SyncLane</code> (lane 1) or <code>InputContinuousLane</code> (lane 4). The scheduler ensures sync lanes are always processed before transition lanes, guaranteeing the responsiveness contract.
+      </p>
+      <p>
+        Transitions do <em>not</em> throttle or debounce — they simply deprioritise. The transition render starts immediately but yields control to the browser between chunks of work. This is fundamentally different from debouncing, which delays the start of the render. The result is better responsiveness without the latency cost of debouncing under light load.
+      </p>
+      <pre class="code-block">
+import { useState, useTransition, useDeferredValue, memo } from 'react';
+
+// useTransition — gives you isPending feedback
+function FilterableList({ items }) {
+  const [filter, setFilter]       = useState('');
+  const [isPending, startTransition] = useTransition();
+
+  function handleChange(e) {
+    startTransition(() =&gt; {
+      setFilter(e.target.value); // low priority
+    });
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;input onChange={handleChange} placeholder="Filter…" /&gt;
+      {isPending &amp;&amp; &lt;span className="spinner" /&gt;}
+      &lt;List filter={filter} items={items} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// useDeferredValue — defer a prop to a slow child
+const SlowList = memo(function SlowList({ query }) {
+  // Artificially slow computation
+  const results = expensiveFilter(query);
+  return &lt;ul&gt;{results.map(r =&gt; &lt;li key={r.id}&gt;{r.name}&lt;/li&gt;)}&lt;/ul&gt;;
+});
+
+function Search() {
+  const [query, setQuery]   = useState('');
+  const deferredQuery       = useDeferredValue(query);
+  const isStale             = deferredQuery !== query;
+
+  return (
+    &lt;div&gt;
+      &lt;input value={query} onChange={e =&gt; setQuery(e.target.value)} /&gt;
+      &lt;div style={{ opacity: isStale ? 0.5 : 1 }}&gt;
+        &lt;SlowList query={deferredQuery} /&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q13 ==================== -->
+<div class="accordion-item" id="advanced-q13">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q13-collapse" aria-expanded="false" aria-controls="advanced-q13-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;13. What is Suspense for data fetching?
+    </button>
+  </h2>
+  <div id="advanced-q13-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong>Suspense for data fetching</strong> is the extension of the Suspense mechanism from lazy-loaded code to asynchronously fetched data. The contract is the same: a component that is not yet ready to render throws a Promise; React catches it at the nearest Suspense boundary and shows the fallback until the Promise resolves, then retries the render. This enables components to read data in a synchronous-looking style without explicit loading state.
+      </p>
+      <p>
+        For Suspense for data fetching to work, the data layer must be "Suspense-aware" — it must throw a Promise (or a thenable) when data is not yet available. React itself does not dictate how fetching works; it provides the coordination layer. Libraries like <strong>Relay</strong>, <strong>SWR</strong> (with <code>suspense: true</code>), <strong>React Query / TanStack Query</strong> (with <code>suspense: true</code>), and <strong>Jotai</strong> all implement this contract.
+      </p>
+      <p>
+        A major benefit is the elimination of the "waterfall of loading spinners" pattern. With imperative <code>isLoading</code> state, each nested component manages its own loader. With Suspense, you hoist the loading state to a single boundary, and multiple asynchronous children can be coordinated by a single fallback. When combined with <code>Promise.all</code>-style parallel fetching at the data layer, all parallel requests can resolve before the UI is revealed.
+      </p>
+      <p>
+        The new <code>use(promise)</code> hook in React 19 / experimental React provides a first-party way to suspend on a Promise directly inside render without an external library. It integrates natively with Suspense and error boundaries.
+      </p>
+      <p>
+        An important nuance is the distinction between <strong>fetch-on-render</strong> (the old pattern: component mounts, then fires the fetch) and <strong>fetch-then-render / render-as-you-fetch</strong>. Suspense encourages the latter: initiate the fetch <em>before</em> rendering the component (e.g., when the user starts a navigation), and the component simply reads the already-in-flight request. This eliminates the request waterfall caused by each component waiting to mount before triggering its own fetch.
+      </p>
+      <pre class="code-block">
+// Using TanStack Query with Suspense (React Query v5)
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { Suspense } from 'react';
+
+function UserCard({ userId }) {
+  // useSuspenseQuery throws a Promise if data is not cached
+  const { data: user } = useSuspenseQuery({
+    queryKey: ['user', userId],
+    queryFn: () =&gt; fetch(`/api/users/${userId}`).then(r =&gt; r.json()),
+  });
+
+  // If we reach here, user is guaranteed to be defined
+  return &lt;div&gt;{user.name}&lt;/div&gt;;
+}
+
+function App() {
+  return (
+    &lt;Suspense fallback={&lt;Skeleton /&gt;}&gt;
+      &lt;UserCard userId={42} /&gt;
+    &lt;/Suspense&gt;
+  );
+}
+
+// Manual Suspense-compatible resource (illustrative only — use a library in production)
+function createResource(promise) {
+  let status = 'pending', result;
+  const suspender = promise.then(
+    data  =&gt; { status = 'success'; result = data; },
+    error =&gt; { status = 'error';   result = error; }
+  );
+
+  return {
+    read() {
+      if (status === 'pending')  throw suspender; // suspend!
+      if (status === 'error')    throw result;    // propagate to error boundary
+      return result;                              // resolved — return data
+    }
+  };
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q14 ==================== -->
+<div class="accordion-item" id="advanced-q14">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q14-collapse" aria-expanded="false" aria-controls="advanced-q14-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;14. What is the use() hook and how does it work with Suspense?
+    </button>
+  </h2>
+  <div id="advanced-q14-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong><code>use(resource)</code></strong> is a new React hook (stable in React 19) that reads the value of a <em>resource</em> — either a Promise or a React Context — during render. When given a Promise that has not yet resolved, <code>use()</code> automatically suspends the component by throwing the Promise, causing the nearest Suspense boundary to show its fallback. When the Promise resolves, React resumes the component with the resolved value.
+      </p>
+      <p>
+        Unlike all other hooks, <code>use()</code> can be called <strong>conditionally and inside loops</strong>. This is a deliberate design choice: because <code>use()</code> works by rethrowing, React doesn't need to track it in the hooks order the same way as stateful hooks like <code>useState</code> or <code>useEffect</code>. This makes it far more ergonomic than the manual resource pattern or the library-level <code>useSuspenseQuery</code> for straightforward use cases.
+      </p>
+      <p>
+        When <code>use()</code> receives a Context value, it behaves identically to <code>useContext</code> but with the conditional call advantage, useful in complex render logic where context consumption depends on a flag or a loop iteration.
+      </p>
+      <p>
+        A key integration point: <code>use(promise)</code> integrates with <strong>React Server Components</strong>. A server component can <code>await</code> a Promise directly (server components are async functions), but a client component that receives a Promise as a prop can read it with <code>use()</code> without converting it to awaitable state manually.
+      </p>
+      <p>
+        Error handling works naturally: if the Promise rejects, <code>use()</code> re-throws the rejection, which propagates to the nearest error boundary. This means you get both loading state (Suspense) and error state (ErrorBoundary) from a single <code>use(promise)</code> call with no manual state management.
+      </p>
+      <pre class="code-block">
+// React 19 — use() with Suspense and ErrorBoundary
+import { use, Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+
+// Promise created outside the component (before render) — important!
+// Never create a new Promise inside render; create it in event handlers or module scope.
+const userPromise = fetch('/api/user/42').then(r =&gt; r.json());
+
+function UserProfile() {
+  // Throws Promise if pending, throws Error if rejected, returns value if resolved
+  const user = use(userPromise);
+  return &lt;h1&gt;{user.name}&lt;/h1&gt;;
+}
+
+function App() {
+  return (
+    &lt;ErrorBoundary fallback={&lt;p&gt;Failed to load user.&lt;/p&gt;}&gt;
+      &lt;Suspense fallback={&lt;p&gt;Loading user…&lt;/p&gt;}&gt;
+        &lt;UserProfile /&gt;
+      &lt;/Suspense&gt;
+    &lt;/ErrorBoundary&gt;
+  );
+}
+
+// use() with Context — can be conditional
+function ThemeIcon({ showIcon }) {
+  if (!showIcon) return null;
+  // Legal: hooks cannot be conditional, but use() can
+  const theme = use(ThemeContext);
+  return &lt;Icon color={theme.primary} /&gt;;
+}
+
+// Passing a server-initiated promise to a client component (RSC pattern)
+// Server component:
+async function ServerPage() {
+  const postPromise = fetchPost(1); // starts fetching, does NOT await
+  return &lt;ClientPost postPromise={postPromise} /&gt;;
+}
+
+// Client component:
+'use client';
+function ClientPost({ postPromise }) {
+  const post = use(postPromise); // suspends until resolved
+  return &lt;article&gt;{post.body}&lt;/article&gt;;
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q15 ==================== -->
+<div class="accordion-item" id="advanced-q15">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q15-collapse" aria-expanded="false" aria-controls="advanced-q15-collapse">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;15. What are React Server Components (RSC)?
+    </button>
+  </h2>
+  <div id="advanced-q15-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong>React Server Components (RSC)</strong> are a new type of React component that execute exclusively on the server and never ship their JavaScript to the client. They can directly access server-side resources (databases, file systems, secrets, internal APIs) without client-server round-trips, and they send only their rendered output (a serialised React element tree, not HTML) to the client. This is fundamentally different from traditional SSR, which runs the same component code on both server and client.
+      </p>
+      <p>
+        The RSC architecture creates a clear boundary between server and client code. Components are classified by file convention: <code>"use client"</code> at the top of a file marks it as a client component (runs on both server and client, can use hooks and event handlers). Components without the directive are server components by default. Server components can import client components and pass serialisable data as props; client components cannot import server components directly (but can render them as <code>children</code> passed from a server component).
+      </p>
+      <p>
+        RSC delivers significant performance benefits: the server component's module graph (including heavy dependencies like markdown parsers, date libraries, icon sets) is <strong>never included in the client bundle</strong>. This directly reduces JavaScript parse and execution time on the browser. Data fetching happens on the server, co-located with the rendering logic, eliminating client-side fetch waterfalls for the initial load.
+      </p>
+      <p>
+        RSC are async functions: you can <code>await</code> directly inside a server component without hooks. <code>const data = await db.query(...)</code> is idiomatic server component code. The React Server runtime handles streaming the output incrementally as async operations complete, integrating with Suspense boundaries for progressive loading.
+      </p>
+      <p>
+        RSC require framework support — they cannot run in a vanilla React client app. Next.js App Router is the primary production implementation. The serialised format sent from server to client is the <strong>React Server Component Payload (RSC Payload)</strong>: a custom JSON-like encoding that represents component trees, allows passing client component references, and enables granular refetching of sub-trees without full page reloads.
+      </p>
+      <pre class="code-block">
+// app/page.tsx — Server Component (Next.js App Router)
+// No "use client" = runs only on server
+import { db } from '@/lib/db';
+import ProductCard from '@/components/ProductCard'; // client component
+
+export default async function ProductsPage() {
+  // Direct DB access — no fetch, no API route needed
+  const products = await db.products.findMany({ where: { published: true } });
+
+  return (
+    &lt;main&gt;
+      &lt;h1&gt;Products&lt;/h1&gt;
+      {products.map(p =&gt; (
+        &lt;ProductCard key={p.id} product={p} /&gt;
+      ))}
+    &lt;/main&gt;
+  );
+}
+
+// app/components/ProductCard.tsx — Client Component
+'use client';
+import { useState } from 'react';
+
+// Props must be serialisable (no functions, no class instances)
+export default function ProductCard({ product }) {
+  const [inCart, setInCart] = useState(false);
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{product.name}&lt;/h2&gt;
+      &lt;p&gt;£{product.price}&lt;/p&gt;
+      &lt;button onClick={() =&gt; setInCart(true)}&gt;
+        {inCart ? 'In cart ✓' : 'Add to cart'}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Passing server-fetched data to client via "children" pattern
+// Server:
+async function ServerLayout({ children }) {
+  const user = await getAuthenticatedUser();
+  return &lt;ClientShell user={user}&gt;{children}&lt;/ClientShell&gt;;
+}
+// ClientShell is "use client" but children are server-rendered — valid!
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q16 ==================== -->
+<div class="accordion-item" id="advanced-q16">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q16-collapse" aria-expanded="false" aria-controls="advanced-q16-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;16. Explain the React Fiber architecture.
+    </button>
+  </h2>
+  <div id="advanced-q16-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong>React Fiber</strong> is the complete rewrite of React's internal reconciliation engine, shipped in React 16 (2017). The motivation was a fundamental limitation of the original "Stack Reconciler": it performed all reconciliation work synchronously, in a single, uninterruptible call-stack frame. For large trees, this could block the main thread for tens of milliseconds, causing dropped frames and poor interactivity. Fiber was designed from the ground up to support incremental, interruptible, and prioritised rendering.
+      </p>
+      <p>
+        The core idea of Fiber is to replace the implicit JavaScript call stack used by the old reconciler with an <strong>explicit, heap-allocated linked list of work units</strong> called "fibers". Because the work is explicit data (objects on the heap) rather than stack frames, React can walk the tree incrementally, pause at any point, store the current position, yield control to the browser, and resume later. This is the same concept as cooperative multitasking or green threads, but implemented in plain JavaScript.
+      </p>
+      <p>
+        Each React component instance in the tree corresponds to exactly one Fiber node. The Fiber node is a plain JavaScript object with fields including: <code>type</code> (the component function or DOM tag), <code>key</code>, <code>stateNode</code> (the actual DOM node or class instance), <code>pendingProps</code>, <code>memoizedProps</code>, <code>memoizedState</code>, <code>updateQueue</code>, <code>flags</code> (side effect bitmap), <code>lanes</code> (priority bitmask), and three pointers: <code>child</code>, <code>sibling</code>, and <code>return</code> (parent).
+      </p>
+      <p>
+        Fiber uses a <strong>depth-first traversal</strong> algorithm during the render phase, walking via <code>child</code> then <code>sibling</code> pointers, with <code>return</code> pointers used to backtrack upward. This traversal is the "work loop". Crucially, between processing each fiber the work loop checks whether there is higher-priority work pending (via the Scheduler) or whether it has exceeded its time slice (5ms by default). If so, it yields back to the browser's event loop and schedules a continuation via <code>MessageChannel</code> or <code>requestIdleCallback</code> polyfill.
+      </p>
+      <p>
+        Fiber introduced two-phase rendering: the <strong>render/reconcile phase</strong> (async, interruptible) and the <strong>commit phase</strong> (synchronous, uninterruptible). During the render phase, React builds a new "work-in-progress" Fiber tree by diffing it against the current tree. During the commit phase, all accumulated DOM mutations and side effects are applied atomically. Splitting these two phases was the key engineering breakthrough that enabled concurrent rendering.
+      </p>
+      <pre class="code-block">
+// Simplified mental model of a Fiber node structure
+const fiber = {
+  // Identity
+  tag: FunctionComponent, // 0=FunctionComponent, 1=ClassComponent, 5=HostComponent (DOM), etc.
+  type: MyComponent,       // the function or string 'div'
+  key: null,
+
+  // Tree pointers (linked list, not a tree array)
+  child: firstChildFiber,
+  sibling: nextSiblingFiber,
+  return: parentFiber,
+
+  // State
+  pendingProps:   { children: ... },
+  memoizedProps:  { children: ... },
+  memoizedState:  hookLinkedList,   // for function components: linked list of hook state
+  updateQueue:    pendingUpdates,
+
+  // Effects
+  flags: Update | Passive,  // bitmask — what work needs to happen in commit phase
+  subtreeFlags: ...,         // aggregated flags from subtree (React 18 optimisation)
+  deletions: [...],          // child fibers to be removed
+
+  // Scheduling
+  lanes: TransitionLane,     // bitmask — which priorities are pending
+
+  // DOM / class instance
+  stateNode: domNodeOrClassInstance,
+
+  // Double buffering
+  alternate: currentFiber,   // pointer to the mirror tree
+};
+
+// The work loop pseudocode
+function workLoopConcurrent() {
+  while (workInProgress !== null &amp;&amp; !shouldYield()) {
+    performUnitOfWork(workInProgress);
+  }
+  // If workInProgress !== null we yielded — scheduler will resume us
+}
+
+function shouldYield() {
+  return scheduler.getCurrentTime() &gt;= deadline; // exceeded 5ms time slice
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q17 ==================== -->
+<div class="accordion-item" id="advanced-q17">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q17-collapse" aria-expanded="false" aria-controls="advanced-q17-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;17. What are work units (fibers) in React Fiber?
+    </button>
+  </h2>
+  <div id="advanced-q17-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        A <strong>fiber</strong> is React's unit of work — a JavaScript object that represents one node in the component tree and carries all the information React needs to process that node: what component it is, what props it received, what state it holds, what DOM node it maps to, what work is pending on it, what side effects need to run, and pointers to its parent, first child, and next sibling. One fiber is created for every React element in the tree.
+      </p>
+      <p>
+        The <code>tag</code> field classifies the fiber: <code>FunctionComponent (0)</code>, <code>ClassComponent (1)</code>, <code>HostRoot (3)</code> (the root container), <code>HostComponent (5)</code> (a DOM element like <code>div</code>), <code>HostText (6)</code> (a text node), <code>Fragment (7)</code>, <code>SuspenseComponent (13)</code>, <code>MemoComponent (14)</code>, <code>LazyComponent (16)</code>, and others. This tag drives which branch of the reconciler's giant switch statement handles each node.
+      </p>
+      <p>
+        Hooks in function components are stored as a <strong>linked list</strong> on the fiber's <code>memoizedState</code> field. The first hook called maps to the first node in the list, the second hook to the second node, and so on. This is why hooks must always be called in the same order — React identifies each hook by its position in the list, not by name. Each hook node stores the current state/value, the dispatch function (for <code>useState</code>/<code>useReducer</code>), and a pointer to the next hook.
+      </p>
+      <p>
+        The <code>updateQueue</code> field holds a circular linked list of pending state updates for class components, or a list of pending effect descriptors for function components. During the render phase, React processes this queue to compute the new state; during the commit phase, it executes the effects.
+      </p>
+      <p>
+        The <code>flags</code> field is a bitmask of side effects that need to be applied in the commit phase: <code>Placement (2)</code> for new nodes to insert, <code>Update (4)</code> for DOM attribute changes, <code>Deletion (8)</code> for nodes to remove, <code>Passive (512)</code> for <code>useEffect</code> callbacks pending, <code>Layout (4096)</code> for <code>useLayoutEffect</code> callbacks, and more. React 18 added <code>subtreeFlags</code> so a parent can skip an entire subtree if no descendant has any pending flags — a significant commit-phase optimisation.
+      </p>
+      <pre class="code-block">
+// Hook linked list mental model (useState then useEffect)
+// memoizedState points to:
+const hook1 = {
+  memoizedState: 42,          // current state value for useState(42)
+  baseState:     42,
+  queue: { pending: null },   // pending setState calls
+  next: hook2,
+};
+
+const hook2 = {
+  memoizedState: {            // for useEffect: the effect descriptor
+    tag: HookPassive,         // Passive = useEffect, Layout = useLayoutEffect
+    create:  () =&gt; { /* effect fn */ },
+    destroy: undefined,       // cleanup fn (set after first run)
+    deps:    [dep1, dep2],
+    next:    null,
+  },
+  next: null,
+};
+
+// Fiber tree structure: child → sibling linked list
+//   App
+//   ├── Header
+//   │   └── Logo
+//   └── Main
+//       ├── Sidebar
+//       └── Content
+
+// Fiber pointers:
+// App.child   = Header
+// Header.sibling = Main
+// Header.child   = Logo
+// Main.child     = Sidebar
+// Sidebar.sibling = Content
+// All .return pointers point to their parent fiber
+
+// flags bitmask examples
+const NoFlags         = 0b000000000000000000000000000;
+const Placement       = 0b000000000000000000000000010; // 2
+const Update          = 0b000000000000000000000000100; // 4
+const Deletion        = 0b000000000000000000000001000; // 8
+const ChildDeletion   = 0b000000000000000000000010000; // 16
+const Passive         = 0b000000000000000001000000000; // 512 (useEffect)
+const Layout          = 0b000000000000000100000000000; // 4096 (useLayoutEffect)
+
+// React checks: fiber.flags & Passive !== 0 → schedule useEffect
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q18 ==================== -->
+<div class="accordion-item" id="advanced-q18">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q18-collapse" aria-expanded="false" aria-controls="advanced-q18-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;18. What is the work loop in React Fiber?
+    </button>
+  </h2>
+  <div id="advanced-q18-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        The <strong>work loop</strong> is the core algorithm inside React's reconciler that iterates over the Fiber tree, processing one fiber at a time. There are two variants: <code>workLoopSync</code> (for synchronous/urgent renders) and <code>workLoopConcurrent</code> (for concurrent/transition renders). The difference is that the concurrent loop calls <code>shouldYield()</code> before each fiber to check whether the current time slice has expired, enabling interruption. The synchronous loop runs without yielding until all work is done.
+      </p>
+      <p>
+        The loop maintains a module-level pointer <code>workInProgress</code> that points to the next fiber to process. Processing a single fiber is done by <code>performUnitOfWork(fiber)</code>, which calls <code>beginWork(current, workInProgress, renderLanes)</code> to process the fiber (calling the component function, diffing children, creating new child fibers) and then advances <code>workInProgress</code> to the next fiber: first the <code>child</code> (descend), or if there is no child, the <code>sibling</code> (move right), or if there is no sibling it calls <code>completeWork</code> on the current fiber and walks up via <code>return</code> pointers looking for a sibling.
+      </p>
+      <p>
+        <code>beginWork</code> is the "downward" pass: it examines the fiber's tag to dispatch to the right handler (<code>updateFunctionComponent</code>, <code>updateClassComponent</code>, <code>updateHostComponent</code>, etc.), calls the component function (for function components), reconciles the returned children against the previous children (the diffing step), and returns the first child fiber (or null if it is a leaf). During this pass, new work-in-progress fibers are created for each child.
+      </p>
+      <p>
+        <code>completeWork</code> is the "upward" pass: it runs when a fiber has no more children to process. For host components (DOM elements), it creates or updates the actual DOM node and builds up the DOM subtree. It also collects the fiber's <code>flags</code> and merges them into the parent's <code>subtreeFlags</code> field (React 18 optimisation), so the commit phase can skip subtrees with no pending effects. When <code>completeWork</code> finishes for the root fiber, the render phase is complete and the commit phase can begin.
+      </p>
+      <p>
+        If the concurrent work loop is interrupted (yielding due to time exhaustion), the work-in-progress tree is left in a partially built state. When the scheduler resumes React, it restores <code>workInProgress</code> and continues from exactly where it left off. If a higher-priority update arrives while the loop is yielded, React may throw away the partial work-in-progress tree entirely and restart the render with the new combined state — this is called <strong>render interruption/restart</strong> and is why render functions must be idempotent.
+      </p>
+      <pre class="code-block">
+// ---- Simplified React source pseudocode ----
+
+let workInProgress = null; // current fiber being processed
+
+// Synchronous — no yield checks, runs to completion
+function workLoopSync() {
+  while (workInProgress !== null) {
+    performUnitOfWork(workInProgress);
+  }
+}
+
+// Concurrent — yields back to browser if time slice expires
+function workLoopConcurrent() {
+  while (workInProgress !== null &amp;&amp; !shouldYield()) {
+    performUnitOfWork(workInProgress);
+  }
+}
+
+function performUnitOfWork(unitOfWork) {
+  const current = unitOfWork.alternate; // fiber from the current (committed) tree
+
+  // --- DOWNWARD PASS ---
+  const next = beginWork(current, unitOfWork, renderLanes);
+  unitOfWork.memoizedProps = unitOfWork.pendingProps;
+
+  if (next === null) {
+    // No children — complete this fiber and walk up
+    completeUnitOfWork(unitOfWork);
+  } else {
+    // Descend into the first child
+    workInProgress = next;
+  }
+}
+
+function completeUnitOfWork(unitOfWork) {
+  let completedWork = unitOfWork;
+  do {
+    const current = completedWork.alternate;
+    const returnFiber = completedWork.return;
+
+    // --- UPWARD PASS ---
+    completeWork(current, completedWork, renderLanes); // creates DOM nodes for HostComponents
+    // Merge flags upward for subtreeFlags optimisation
+    if (returnFiber) {
+      returnFiber.subtreeFlags |= completedWork.subtreeFlags | completedWork.flags;
+    }
+
+    const siblingFiber = completedWork.sibling;
+    if (siblingFiber !== null) {
+      // Switch to sibling — it will start its own downward pass
+      workInProgress = siblingFiber;
+      return;
+    }
+    // No sibling — continue completing the parent
+    completedWork = returnFiber;
+    workInProgress = completedWork;
+  } while (completedWork !== null);
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q19 ==================== -->
+<div class="accordion-item" id="advanced-q19">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q19-collapse" aria-expanded="false" aria-controls="advanced-q19-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;19. What is the difference between the render phase and commit phase in React Fiber?
+    </button>
+  </h2>
+  <div id="advanced-q19-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        React Fiber splits all work into two fundamentally different phases with different guarantees: the <strong>render phase</strong> (also called the reconcile phase) and the <strong>commit phase</strong>. This split is the architectural foundation of concurrent rendering, because only the render phase can be made interruptible — the commit phase must always run to completion atomically.
+      </p>
+      <p>
+        <strong>Render phase</strong>: This is where React calls component functions, evaluates hooks' returned state, and diffs the new element tree against the previous fiber tree to determine what changed. The output is a complete work-in-progress fiber tree with all change flags set but no DOM mutations applied yet. Because the render phase produces no observable side effects (in correctly written code), it can be safely paused, resumed, or restarted any number of times. In development, React Strict Mode intentionally runs the render phase twice to expose any side effects hidden in render logic.
+      </p>
+      <p>
+        <strong>Commit phase</strong>: Once the render phase completes and the work-in-progress tree is finalised, React enters the commit phase, which is always synchronous and cannot be interrupted. The commit phase is divided into three sub-phases: (1) <strong>Before mutation</strong> — calls <code>getSnapshotBeforeUpdate</code> on class components and schedules <code>useEffect</code> cleanups; (2) <strong>Mutation</strong> — walks the effect list and applies all DOM mutations (insertions, updates, deletions), also calling <code>useLayoutEffect</code> cleanups; (3) <strong>Layout</strong> — calls <code>useLayoutEffect</code> setup callbacks and <code>componentDidMount</code>/<code>componentDidUpdate</code>. After all three sub-phases, the work-in-progress tree becomes the current tree.
+      </p>
+      <p>
+        <code>useEffect</code> callbacks are scheduled <em>after</em> the commit phase, deferred to the next browser paint, which means they run asynchronously relative to the DOM mutations. <code>useLayoutEffect</code> runs synchronously during the layout sub-phase, before the browser paints — equivalent to <code>componentDidMount</code>/<code>componentDidUpdate</code>. This timing difference is critical: code that measures DOM layout (e.g., computing element dimensions) must use <code>useLayoutEffect</code> to avoid a layout flash.
+      </p>
+      <p>
+        A practical implication: you should never perform side effects (DOM manipulations, subscriptions, API calls) during the render phase. If React restarts a render (as it does in concurrent mode when a higher-priority update interrupts), your side effect would fire twice before any commit happens, causing race conditions or duplicate API calls. This is why the React team is strict: render = pure computation; side effects = commit phase only (via effect hooks or lifecycle methods).
+      </p>
+      <pre class="code-block">
+// Timeline of a React update:
+
+// 1. RENDER PHASE (interruptible in concurrent mode)
+//    - workLoopConcurrent / workLoopSync
+//    - beginWork: call component fn, reconcile children, set flags
+//    - completeWork: create/update DOM nodes (not yet inserted), propagate subtreeFlags
+//    - Result: work-in-progress tree with flags set, no DOM mutations yet
+
+// 2. COMMIT PHASE (always synchronous, 3 sub-phases)
+//    Sub-phase A: beforeMutation
+//      - getSnapshotBeforeUpdate (class)
+//      - scheduleUseEffectCleanup
+//    Sub-phase B: mutation
+//      - applyDOMInsertions(Placement)
+//      - applyDOMUpdates(Update)
+//      - applyDOMDeletions(Deletion)
+//      - call useLayoutEffect cleanup functions
+//    Sub-phase C: layout
+//      - call componentDidMount / componentDidUpdate
+//      - call useLayoutEffect setup functions   ← runs before paint
+//      - swap: workInProgress tree becomes current tree
+
+// 3. PASSIVE EFFECTS (after browser paint, async)
+//    - call useEffect cleanup functions (previous render)
+//    - call useEffect setup functions (current render)
+
+// Demonstrating timing with hooks
+function TimingDemo() {
+  useEffect(() =&gt; {
+    // Runs AFTER paint — safe for subscriptions, analytics, API calls
+    console.log('useEffect: DOM is painted');
+    return () =&gt; console.log('useEffect cleanup');
+  }, []);
+
+  useLayoutEffect(() =&gt; {
+    // Runs BEFORE paint — safe for DOM measurements
+    const height = divRef.current.getBoundingClientRect().height;
+    console.log('useLayoutEffect: height =', height);
+    return () =&gt; console.log('useLayoutEffect cleanup');
+  }, []);
+
+  return &lt;div ref={divRef}&gt;Hello&lt;/div&gt;;
+}
+// Console order: useLayoutEffect → paint → useEffect
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q20 ==================== -->
+<div class="accordion-item" id="advanced-q20">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q20-collapse" aria-expanded="false" aria-controls="advanced-q20-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;20. What are effects in React Fiber?
+    </button>
+  </h2>
+  <div id="advanced-q20-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        In React Fiber's internal model, an <strong>effect</strong> is any work that must happen during or after the commit phase — any operation that produces observable changes to the outside world. Effects include DOM mutations (inserting, updating, or removing nodes), calling lifecycle methods, running <code>useLayoutEffect</code> and <code>useEffect</code> callbacks, attaching and detaching refs, and scheduling cleanup functions. The word "effect" in the Fiber source is broader than the user-facing <code>useEffect</code> hook.
+      </p>
+      <p>
+        Each fiber tracks its pending effects via a bitmask in the <code>flags</code> field. Key flags include: <code>Placement</code> (DOM insert), <code>Update</code> (DOM attribute update), <code>ChildDeletion</code> (remove child), <code>Ref</code> (ref attachment/detachment), <code>Layout</code> (useLayoutEffect), and <code>Passive</code> (useEffect). React 18 added <code>subtreeFlags</code> on each fiber that is the bitwise OR of all flags in its entire subtree, allowing the commit phase to bail out of entire branches when no effects are pending.
+      </p>
+      <p>
+        For function components, hook effects are stored in a linked list on the fiber's <code>memoizedState</code> (the hook list). Each <code>useEffect</code> or <code>useLayoutEffect</code> creates an <strong>effect object</strong> with: <code>create</code> (the callback), <code>destroy</code> (the cleanup, set after first invocation), <code>deps</code> (the dependency array), and <code>tag</code> (HookLayout vs HookPassive). React compares <code>deps</code> from the previous render to skip effects that don't need to re-run.
+      </p>
+      <p>
+        The <strong>passive effects</strong> (useEffect) are deliberately deferred past the paint. React queues them using <code>scheduleCallback(NormalPriority, flushPassiveEffects)</code> after the commit phase ends. The browser is allowed to paint first, ensuring that heavy effect work doesn't block the visual update. This is why you should never use <code>useEffect</code> for tasks that read layout (that's <code>useLayoutEffect</code>) or need to synchronously update state before the user sees anything (that's also <code>useLayoutEffect</code> or batched synchronous state updates).
+      </p>
+      <p>
+        React 18 introduced <code>useInsertionEffect</code> for CSS-in-JS libraries — it runs before any DOM mutations during the commit phase, even before <code>useLayoutEffect</code>. The execution order across all effect types is: <code>useInsertionEffect</code> → DOM mutations → <code>useLayoutEffect</code> cleanup → <code>useLayoutEffect</code> setup → browser paint → <code>useEffect</code> cleanup → <code>useEffect</code> setup.
+      </p>
+      <pre class="code-block">
+// Effect lifecycle and ordering demonstration
+
+function Component({ id }) {
+  // useInsertionEffect — fires first, before DOM mutations
+  // Used by CSS-in-JS libraries (emotion, styled-components v6) to inject styles
+  useInsertionEffect(() =&gt; {
+    const style = document.createElement('style');
+    style.textContent = `.box-${id} { color: red; }`;
+    document.head.appendChild(style);
+    return () =&gt; document.head.removeChild(style);
+  }, [id]);
+
+  // useLayoutEffect — fires after DOM mutation, before paint
+  // Use for: measuring DOM, synchronously updating scroll position
+  useLayoutEffect(() =&gt; {
+    console.log('2. useLayoutEffect setup — DOM mutated, not yet painted');
+    return () =&gt; console.log('2. useLayoutEffect cleanup');
+  }, [id]);
+
+  // useEffect — fires after paint, asynchronously
+  // Use for: data fetching, subscriptions, analytics
+  useEffect(() =&gt; {
+    console.log('3. useEffect setup — DOM painted');
+    const sub = subscribeToStore(id);
+    return () =&gt; { sub.unsubscribe(); console.log('3. useEffect cleanup'); };
+  }, [id]);
+
+  return &lt;div className={`box-${id}`}&gt;Box {id}&lt;/div&gt;;
+}
+
+// Full order across a render cycle:
+// COMMIT MUTATION PHASE:
+//   1. useInsertionEffect cleanup (prev render)
+//   2. useInsertionEffect setup  (new render)
+//   3. DOM mutations applied
+//   4. useLayoutEffect cleanup (prev render)
+//   5. useLayoutEffect setup   (new render)
+//   [ browser paints here ]
+// PASSIVE EFFECTS (scheduled post-paint):
+//   6. useEffect cleanup (prev render)
+//   7. useEffect setup   (new render)
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q21 ==================== -->
+<div class="accordion-item" id="advanced-q21">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q21-collapse" aria-expanded="false" aria-controls="advanced-q21-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;21. What is the double buffering technique in React Fiber?
+    </button>
+  </h2>
+  <div id="advanced-q21-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong>Double buffering</strong> (or double buffering in Fiber terminology) is the technique by which React maintains <em>two fiber trees simultaneously</em>: the <strong>current tree</strong> (the one whose output is currently visible in the DOM) and the <strong>work-in-progress tree</strong> (the one React is building for the next render). This mirrors the double buffering pattern in graphics programming, where you draw the next frame on a back buffer while the front buffer is being displayed, then atomically swap them.
+      </p>
+      <p>
+        The two trees are linked by a field called <code>alternate</code>. Every fiber in the current tree has an <code>alternate</code> pointer to its corresponding fiber in the work-in-progress tree, and vice versa. When React starts a new render, it creates work-in-progress fibers either by cloning the current fiber (<code>createWorkInProgress</code>) or creating entirely new ones for newly mounted components. Cloning reuses the object allocation, updating only the fields that changed.
+      </p>
+      <p>
+        After the commit phase, React atomically swaps the two trees: <code>root.current = finishedWork</code>. The former work-in-progress tree becomes the new current tree, and the former current tree becomes available as the next work-in-progress base. This swap is just a pointer assignment — O(1) — meaning the commit is instantaneous from JavaScript's perspective. The actual observable state change to the DOM has already happened during the mutation sub-phase, but the React-internal "source of truth" pointer flips here.
+      </p>
+      <p>
+        Double buffering is what makes concurrent rendering safe. Because the in-progress work is always on a separate tree, React can throw away the entire work-in-progress tree at any point without affecting the current tree or the visible DOM. If a higher-priority update arrives during a concurrent render, React discards the work-in-progress tree and starts fresh from the current tree, incorporating both the new update and any pending updates from the discarded work.
+      </p>
+      <p>
+        The technique also enables <strong>optimistic UI patterns</strong>: you can speculatively render a "pending" state on the work-in-progress tree (e.g., showing a button as "liked") and if the server confirms the action, commit it; if the server rejects it, roll back by discarding the work-in-progress and committing an error state. React's upcoming "optimistic updates" built-in API (<code>useOptimistic</code>, stable in React 19) is built on this capability.
+      </p>
+      <pre class="code-block">
+// Conceptual illustration of double buffering
+
+// At rest: only the current tree exists
+const root = {
+  current: currentFiberTree,  // displayed in the DOM
+};
+
+// --- React receives a setState call ---
+
+// 1. Create / reuse work-in-progress tree (the "back buffer")
+function createWorkInProgress(current, pendingProps) {
+  let workInProgress = current.alternate;
+
+  if (workInProgress === null) {
+    // First render: allocate new fiber
+    workInProgress = createFiber(current.tag, pendingProps, current.key);
+    workInProgress.elementType = current.elementType;
+    workInProgress.type        = current.type;
+    workInProgress.stateNode   = current.stateNode;
+
+    // Link the two trees
+    workInProgress.alternate   = current;
+    current.alternate          = workInProgress;
+  } else {
+    // Subsequent renders: reuse object, reset fields
+    workInProgress.pendingProps = pendingProps;
+    workInProgress.flags        = NoFlags;
+    workInProgress.subtreeFlags = NoFlags;
+    workInProgress.deletions    = null;
+  }
+
+  // Copy memoized data from current (will be overwritten by beginWork if stale)
+  workInProgress.childLanes    = current.childLanes;
+  workInProgress.lanes         = current.lanes;
+  workInProgress.memoizedState = current.memoizedState;
+  workInProgress.updateQueue   = current.updateQueue;
+  return workInProgress;
+}
+
+// 2. Build the work-in-progress tree during render phase…
+// 3. Commit: mutate DOM, then swap the pointer
+function commitRoot(root) {
+  const finishedWork = root.finishedWork; // the completed WIP root fiber
+  // … apply DOM mutations …
+  // SWAP — this is the "flip"
+  root.current = finishedWork;
+  // The old current tree is now available as the next WIP base via .alternate
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q22 ==================== -->
+<div class="accordion-item" id="advanced-q22">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q22-collapse" aria-expanded="false" aria-controls="advanced-q22-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;22. What is lane-based priority scheduling in React?
+    </button>
+  </h2>
+  <div id="advanced-q22-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong>Lane-based priority scheduling</strong> is the scheduling model introduced in React 18 that replaced the earlier expiration time model. Instead of assigning each update a numeric timestamp expiration, React assigns each update to one or more <strong>lanes</strong> — bit positions in a 31-bit integer bitmask. Each lane represents a priority level, and multiple updates can be batched together by OR-ing their lanes. React's work loop picks the highest-priority (lowest bit position) non-empty lane set and renders all updates assigned to those lanes.
+      </p>
+      <p>
+        The lane assignments (approximate, from the React source) are: <code>SyncLane (1)</code> — synchronous, highest priority; <code>InputContinuousLane (4)</code> — continuous input like scroll/hover; <code>DefaultLane (16)</code> — normal setState; <code>TransitionLanes (64–4096)</code> — startTransition updates (32 transition lanes); <code>RetryLanes (8192–...)</code> — Suspense retry; <code>IdleLane</code> — lowest priority, deferred work; <code>OffscreenLane</code> — invisible work (e.g., keep-alive). The bit positions directly encode priority: a lower bit number = higher urgency.
+      </p>
+      <p>
+        The bitmask design enables powerful batching and compositing. To check whether any high-priority work is pending: <code>pendingLanes &amp; SyncLane !== 0</code>. To find the most urgent lane to work on: <code>getHighestPriorityLane(pendingLanes)</code> (which is simply <code>pendingLanes &amp; -pendingLanes</code> — isolating the lowest set bit). To mark a render as complete: <code>remainingLanes &amp;= ~renderLanes</code>. These are all O(1) bitwise operations.
+      </p>
+      <p>
+        Multiple Transition lanes (there are 32 of them) exist to enable <strong>lane entanglement</strong> prevention. If two different <code>startTransition</code> calls are both in-flight, they occupy different transition lanes and can be processed independently. However, if a transition reads state that is being updated by a sync lane, React entangles those lanes (forces the transition to re-render after the sync update completes) to maintain consistency.
+      </p>
+      <p>
+        Each fiber's <code>lanes</code> field stores the lanes for which that fiber has pending work. The root fiber's <code>pendingLanes</code> is the OR of all pending lanes in the entire tree. When React selects work to perform (<code>getNextLanes</code>), it considers <code>pendingLanes</code>, any lanes currently being rendered (to avoid rendering twice), and any lanes that have been suspended (to avoid wasteful retries). The result is a <code>renderLanes</code> set that the work loop processes, skipping any fiber that has no work in those lanes (<code>fiber.lanes &amp; renderLanes === 0</code>) — this is the bailout mechanism.
+      </p>
+      <pre class="code-block">
+// Lane constants (simplified — actual React uses 31-bit bitmasks)
+const NoLanes              = 0b0000000000000000000000000000000; // 0
+const SyncLane             = 0b0000000000000000000000000000001; // 1
+const InputContinuousLane  = 0b0000000000000000000000000000100; // 4
+const DefaultLane          = 0b0000000000000000000000000010000; // 16
+const TransitionLane1      = 0b0000000000000000000001000000000; // 512
+const TransitionLane2      = 0b0000000000000000000010000000000; // 1024
+// ... up to TransitionLane32
+const RetryLane1           = 0b0000000000000100000000000000000;
+const IdleLane             = 0b0010000000000000000000000000000;
+const OffscreenLane        = 0b0100000000000000000000000000000;
+
+// Priority decision: get the single most urgent lane
+function getHighestPriorityLane(lanes) {
+  return lanes &amp; -lanes; // isolates lowest set bit — O(1)
+}
+
+// Example: two updates pending
+let pendingLanes = SyncLane | TransitionLane1;
+// pendingLanes = 0b...0001 | 0b...1000000000 = 0b...1000000001
+
+const nextLane = getHighestPriorityLane(pendingLanes);
+// nextLane = SyncLane (1) — sync wins
+
+// After sync render completes:
+pendingLanes &amp;= ~SyncLane; // clear lane 1
+// pendingLanes = TransitionLane1 — still has transition work
+
+// Fiber bailout: skip this fiber if no work in renderLanes
+function checkIfWorkInProgress(fiber, renderLanes) {
+  if ((fiber.lanes &amp; renderLanes) === 0 &amp;&amp;
+      (fiber.childLanes &amp; renderLanes) === 0) {
+    return false; // bail out — nothing to do in this subtree
+  }
+  return true;
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q23 ==================== -->
+<div class="accordion-item" id="advanced-q23">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q23-collapse" aria-expanded="false" aria-controls="advanced-q23-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;23. What is the role of the scheduler package in React?
+    </button>
+  </h2>
+  <div id="advanced-q23-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        The <strong><code>scheduler</code></strong> package is a standalone, host-agnostic cooperative scheduling library that React uses internally to manage when and in what order units of rendering work are executed. It is separate from the React reconciler on purpose: the scheduler knows nothing about React or fibers; it only knows about <em>callbacks</em>, their <em>priority levels</em>, and <em>deadlines</em>. This separation means the scheduler could theoretically be used by any JavaScript library that needs cooperative task scheduling.
+      </p>
+      <p>
+        The scheduler implements a <strong>min-heap priority queue</strong> of tasks. Each task has a priority level, a scheduled start time (which may be in the future for delayed tasks), and a callback function. The scheduler processes tasks in priority order and uses a <strong>time-slicing mechanism</strong> to yield back to the browser's event loop periodically. The default time slice is 5ms — calibrated to allow the browser to process input events and run animations at 60fps (16.7ms per frame) even when React is busy.
+      </p>
+      <p>
+        The host environment integration uses <code>MessageChannel</code> to schedule continuations. When the scheduler needs to yield, it posts a message to a <code>MessageChannel</code> and returns. The message event fires after any pending user input events and style/layout flushes, but before the next paint — giving the browser a chance to handle interactions. <code>requestAnimationFrame</code> was previously used but was abandoned because it only fires before paints, causing jank when React needed to yield mid-update without a paint.
+      </p>
+      <p>
+        The scheduler exposes five priority levels, which React maps to: <code>ImmediatePriority (1)</code> — synchronous, run right now (maps to SyncLane); <code>UserBlockingPriority (2)</code> — runs within 250ms (input events); <code>NormalPriority (3)</code> — runs within 5 seconds (default setState, transitions); <code>LowPriority (4)</code> — runs within 10 seconds; <code>IdlePriority (5)</code> — runs only when nothing else is pending. These priorities translate to expiration times: <code>ImmediatePriority</code> tasks expire in -1ms (already expired, run immediately), while <code>IdlePriority</code> tasks expire in a very large number.
+      </p>
+      <p>
+        React's <code>ensureRootIsScheduled</code> function is the bridge between the React reconciler (lanes model) and the scheduler (priority callbacks). It translates the most urgent pending React lane into a scheduler priority, then calls <code>scheduleCallback(priority, performConcurrentWorkOnRoot)</code>. If an existing scheduled callback already covers the required priority, no new callback is scheduled. This prevents double-scheduling and ensures React only has one callback in flight per root at a time.
+      </p>
+      <pre class="code-block">
+// scheduler package public API (simplified)
+import {
+  scheduleCallback,
+  cancelCallback,
+  shouldYield,
+  NormalPriority,
+  UserBlockingPriority,
+  ImmediatePriority,
+} from 'scheduler';
+
+// Schedule a task with normal priority
+const task = scheduleCallback(NormalPriority, function performWork(didTimeout) {
+  // didTimeout = true if this task's expiration time has passed
+  // and it's being forced to run regardless of time slice
+
+  while (moreToDo()) {
+    doUnitOfWork();
+    if (shouldYield()) {
+      // Time slice expired — return a continuation
+      return performWork; // returning a function tells scheduler to re-schedule us
+    }
+  }
+  // Returning nothing (or undefined) means the task is done
+});
+
+// Cancel a scheduled task
+cancelCallback(task);
+
+// shouldYield() internals (approximate)
+function shouldYield() {
+  const currentTime = getCurrentTime(); // performance.now()
+  return currentTime &gt;= deadline;       // deadline = taskStartTime + 5ms
+}
+
+// MessageChannel trick for yielding
+const channel = new MessageChannel();
+const port    = channel.port2;
+channel.port1.onmessage = performWorkUntilDeadline; // the continuation
+
+function schedulePerformWorkUntilDeadline() {
+  port.postMessage(null); // yield — fires after current task queue is drained
+}
+
+// React ↔ Scheduler bridge
+function ensureRootIsScheduled(root) {
+  const nextLanes   = getNextLanes(root, NoLanes);
+  const newCallbackPriority = getHighestPriorityLane(nextLanes);
+
+  // Map React lane → scheduler priority
+  let schedulerPriorityLevel;
+  if (newCallbackPriority === SyncLane) {
+    schedulerPriorityLevel = ImmediatePriority;
+  } else if (includesBlockingLane(root, nextLanes)) {
+    schedulerPriorityLevel = UserBlockingPriority;
+  } else {
+    schedulerPriorityLevel = NormalPriority;
+  }
+
+  root.callbackNode = scheduleCallback(
+    schedulerPriorityLevel,
+    performConcurrentWorkOnRoot.bind(null, root)
+  );
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q24 ==================== -->
+<div class="accordion-item" id="advanced-q24">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q24-collapse" aria-expanded="false" aria-controls="advanced-q24-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;24. What is streaming SSR and how does it work in React 18?
+    </button>
+  </h2>
+  <div id="advanced-q24-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong>Streaming SSR</strong> (Server-Side Rendering) is the React 18 capability that allows the server to send HTML to the browser incrementally as it is generated, rather than waiting for the entire page to be rendered before sending a single byte. This dramatically improves Time to First Byte (TTFB) and Time to First Contentful Paint (FCP) for pages that contain components with long data-fetching times.
+      </p>
+      <p>
+        React 18 replaced the old <code>renderToString</code> (synchronous, blocking) API with <code>renderToPipeableStream</code> (Node.js streams) and <code>renderToReadableStream</code> (Web Streams / edge runtimes). Both produce a stream of HTML chunks. The outer shell of the page — everything outside any <code>&lt;Suspense&gt;</code> boundaries — is flushed first as soon as it is ready. Components inside Suspense boundaries that are awaiting data are sent as placeholder HTML (the fallback content).
+      </p>
+      <p>
+        When a suspended component's data resolves on the server, React generates the HTML for that section and sends it as a subsequent stream chunk. Along with the HTML, React sends a small inline <code>&lt;script&gt;</code> tag that instructs the browser-side React to replace the placeholder with the new HTML. This replacement happens using DOM APIs (<code>insertBefore</code>, <code>replaceChild</code>) client-side without a full re-render, and is so fast that it often happens before the user notices the placeholder.
+      </p>
+      <p>
+        The key Suspense integration: each <code>&lt;Suspense&gt;</code> boundary on the server acts as a flush boundary. The server can begin streaming the outer shell immediately while inner suspended sections continue to be computed. Multiple suspended sections can be in flight simultaneously, and they resolve independently in any order. The browser progressively fills in the page as each section arrives.
+      </p>
+      <p>
+        Streaming SSR composes with <strong>selective hydration</strong>: the client React begins hydrating the HTML the moment it arrives, even before all sections are present. Suspense boundaries also serve as hydration boundaries — each section can be hydrated independently, and React prioritises hydrating whichever section the user is interacting with. This means a user can start interacting with the top of the page while the bottom is still being streamed and hydrated.
+      </p>
+      <pre class="code-block">
+// Node.js server using renderToPipeableStream (React 18)
+import { renderToPipeableStream } from 'react-dom/server';
+import { createServer } from 'http';
+import App from './App';
+
+createServer((req, res) =&gt; {
+  let didError = false;
+
+  const { pipe, abort } = renderToPipeableStream(
+    &lt;App url={req.url} /&gt;,
+    {
+      bootstrapScripts: ['/static/client.js'],
+
+      onShellReady() {
+        // The outer shell (everything outside Suspense) is ready
+        res.statusCode = didError ? 500 : 200;
+        res.setHeader('Content-Type', 'text/html');
+        pipe(res); // start streaming HTML to the browser
+      },
+
+      onShellError(err) {
+        // The shell itself errored — fall back to client-only render
+        res.statusCode = 500;
+        res.end('&lt;h1&gt;Something went wrong.&lt;/h1&gt;');
+      },
+
+      onAllReady() {
+        // All content (including suspended) is ready
+        // Use this instead of onShellReady for crawlers / static generation
+      },
+
+      onError(err) {
+        didError = true;
+        console.error(err);
+      },
+    }
+  );
+
+  // Abort if the client disconnects or times out
+  setTimeout(abort, 10000);
+}).listen(3000);
+
+// App.tsx — Suspense boundaries define stream flush points
+function App() {
+  return (
+    &lt;html&gt;
+      &lt;head&gt;&lt;title&gt;My App&lt;/title&gt;&lt;/head&gt;
+      &lt;body&gt;
+        {/* Shell — streamed first, immediately */}
+        &lt;NavBar /&gt;
+        &lt;main&gt;
+          {/* Each Suspense is an independent stream chunk */}
+          &lt;Suspense fallback={&lt;HeroSkeleton /&gt;}&gt;
+            &lt;HeroBanner /&gt;  {/* fetches featured content */}
+          &lt;/Suspense&gt;
+
+          &lt;Suspense fallback={&lt;FeedSkeleton /&gt;}&gt;
+            &lt;NewsFeed /&gt;    {/* fetches articles */}
+          &lt;/Suspense&gt;
+        &lt;/main&gt;
+        &lt;Footer /&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  );
+}
+// Stream order: NavBar + Footer HTML → HeroBanner HTML → NewsFeed HTML
+// Each arrives as soon as the server resolves the corresponding data
+      </pre>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Q25 ==================== -->
+<div class="accordion-item" id="advanced-q25">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#advanced-q25-collapse" aria-expanded="false" aria-controls="advanced-q25-collapse">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;25. What is selective hydration and how does it use Suspense?
+    </button>
+  </h2>
+  <div id="advanced-q25-collapse" class="accordion-collapse collapse" data-bs-parent="#acc-advanced">
+    <div class="accordion-body">
+      <p>
+        <strong>Selective hydration</strong> is a React 18 capability that allows the client to begin hydrating server-rendered HTML incrementally — section by section — rather than waiting for the entire JavaScript bundle to load and then hydrating the whole page at once. Combined with streaming SSR, it means parts of the page can become interactive as soon as they are both: (1) present in the DOM as streamed HTML, and (2) their corresponding JavaScript code has been downloaded and parsed.
+      </p>
+      <p>
+        Selective hydration is gated by <strong>Suspense boundaries</strong>. Each <code>&lt;Suspense&gt;</code> boundary in the tree acts as an independent hydration unit. React can begin hydrating the content of one Suspense boundary even while adjacent boundaries are still waiting for their code chunks to download or their streamed HTML to arrive. This transforms hydration from a monolithic, blocking operation into a fine-grained, parallelisable process.
+      </p>
+      <p>
+        A particularly compelling feature is <strong>interaction-driven priority hydration</strong>. If a user clicks or types inside a section of the page that has not yet been hydrated, React recognises this as a high-priority signal and immediately prioritises hydrating that specific section first. The click event is recorded in a queue, the target Suspense boundary is hydrated synchronously (jumping the queue ahead of other pending sections), and then the queued event is replayed on the freshly hydrated component. The user sees essentially zero latency for their interaction.
+      </p>
+      <p>
+        Before React 18, the hydration model was all-or-nothing: if any part of the component tree was not ready, nothing was hydrated. This created a painful scenario where a slow component (e.g., one that imports a large third-party library) would block interactivity for the entire page. Selective hydration breaks this coupling entirely: wrap the slow component in <code>&lt;Suspense&gt;</code> and it no longer blocks the rest of the page from becoming interactive.
+      </p>
+      <p>
+        Under the hood, selective hydration is implemented using the same lane and Suspense plumbing as concurrent rendering. Hydration work is assigned to <code>DefaultLane</code> or <code>TransitionLane</code> (non-blocking). When user interaction targets an unhydrated section, it generates a <code>SyncLane</code> update that forces immediate hydration of the target boundary. The <code>retryDehydratedSuspenseBoundary</code> function in the reconciler handles the resumption of a suspended hydration boundary once its client code is available.
+      </p>
+      <pre class="code-block">
+// ---- How selective hydration works in practice ----
+
+// client.tsx — hydrateRoot instead of createRoot for SSR
+import { hydrateRoot } from 'react-dom/client';
+import App from './App';
+
+// hydrateRoot starts hydration; selective hydration happens automatically
+// when Suspense boundaries are used in the tree
+hydrateRoot(document.getElementById('root'), &lt;App /&gt;);
+
+// App.tsx — Suspense boundaries are the unit of selective hydration
+function App() {
+  return (
+    &lt;&gt;
+      {/* Section A — hydrates as soon as NavBar.js is loaded */}
+      &lt;Suspense fallback={null}&gt;
+        &lt;NavBar /&gt;
+      &lt;/Suspense&gt;
+
+      {/* Section B — hydrates independently; if user clicks here first,
+          React prioritises hydrating this boundary immediately */}
+      &lt;Suspense fallback={&lt;ProductsSkeleton /&gt;}&gt;
+        &lt;ProductList /&gt;
+      &lt;/Suspense&gt;
+
+      {/* Section C — lazy-loaded; won't block A or B from hydrating */}
+      &lt;Suspense fallback={&lt;RecommendationsSkeleton /&gt;}&gt;
+        &lt;React.lazy(() =&gt; import('./Recommendations'))&gt;
+          {/* ... */}
+        &lt;/React.lazy&gt;
+      &lt;/Suspense&gt;
+    &lt;/&gt;
+  );
+}
+
+// What happens step by step:
+// 1. Server streams NavBar HTML → ProductList HTML → Recommendations placeholder
+// 2. Browser receives initial HTML and displays it (FCP achieved)
+// 3. client.js downloads; hydrateRoot starts
+// 4. React starts hydrating NavBar (Suspense A) — non-blocking
+// 5. User clicks on ProductList while it's still hydrating
+// 6. React detects click on unhydrated boundary (Suspense B)
+// 7. React IMMEDIATELY prioritises hydrating Suspense B (SyncLane)
+// 8. Queued click event is replayed on the now-hydrated ProductList
+// 9. User sees instantaneous response — no missed click
+// 10. Hydration of remaining boundaries continues in the background
+
+// Checking hydration state (useful for debugging)
+// React DevTools shows each Suspense boundary's hydration status
+// in the component inspector panel
+      </pre>
+    </div>
+  </div>
+</div>

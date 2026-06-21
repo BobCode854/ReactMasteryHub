@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Bootstrap with React — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-item{background:#111827;border-color:#1e293b;}
+    [data-theme="dark"] .accordion-button{background:#111827;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-button:not(.collapsed){background:#1e293b;color:#61dafb;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    /* Setup tab styles */
+    .setup-tabs .nav-link{border-radius:8px 8px 0 0;font-weight:600;color:#64748b;}
+    .setup-tabs .nav-link.active{background:#0f172a;color:#61dafb;border-color:#0f172a;}
+    [data-theme="dark"] .setup-tabs .nav-link.active{background:#1e293b;border-color:#334155;}
+    .tab-panel{background:#0f172a;border-radius:0 10px 10px 10px;padding:1.2rem 1.3rem;}
+    /* Utility cheat sheet */
+    .util-category{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#61dafb;margin:1rem 0 .4rem;}
+    .util-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.4rem;margin-bottom:.5rem;}
+    .util-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:.4rem .7rem;font-size:.8rem;}
+    [data-theme="dark"] .util-item{background:#1e293b;border-color:#334155;color:#cbd5e1;}
+    .util-item code{color:#6366f1;font-size:.78rem;}
+    [data-theme="dark"] .util-item code{color:#a78bfa;}
+    .pattern-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;}
+    .pattern-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border-radius:50%;font-weight:700;font-size:.8rem;flex-shrink:0;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;font-size:.85rem;padding:.4rem .9rem;">Section 28</span>
+      <span class="badge bg-purple text-white" style="background:#7c3aed!important;">Styling</span>
+    </div>
+    <h1 class="fw-900 mb-2" style="font-size:clamp(1.8rem,4vw,2.8rem);">Bootstrap with React</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;max-width:650px;">Three setup options, real-world component patterns, and a complete Bootstrap 5 utility class cheat sheet.</p>
+    <div class="d-flex flex-wrap gap-2 mt-3">
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Setup Options</span>
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Dynamic Table</span>
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Toast Notifications</span>
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Card Grid</span>
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Dark Mode</span>
+    </div>
+  </div>
+</section>
+
+<div class="container-xl pb-4">
+
+  <!-- Setup Section -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-4" style="font-size:1.4rem;"><i class="bi bi-gear-fill me-2" style="color:#6366f1;"></i>Setup — 3 Options</h2>
+
+    <ul class="nav setup-tabs mb-0" id="setupTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button">
+          <i class="bi bi-1-circle me-1"></i>Bootstrap CSS + JS
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button">
+          <i class="bi bi-2-circle me-1"></i>React Bootstrap
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button">
+          <i class="bi bi-3-circle me-1"></i>CDN (Quick Prototype)
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <!-- Tab 1 -->
+      <div class="tab-pane fade show active" id="tab1" role="tabpanel">
+        <div class="tab-panel">
+          <div style="color:#86efac;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin-bottom:.75rem;font-weight:600;"># Option 1 — Bootstrap CSS + JS (simplest, use Bootstrap classes directly)</div>
+          <pre style="color:#e2e8f0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.65;margin:0;"><span style="color:#c084fc;">npm</span> install bootstrap bootstrap-icons</pre>
+          <div style="color:#64748b;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin:.75rem 0 .4rem;font-style:italic;"># In your main entry file (main.jsx or index.js):</div>
+          <pre style="color:#e2e8f0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.65;margin:0;"><span style="color:#c084fc;">import</span> <span style="color:#86efac;">'bootstrap/dist/css/bootstrap.min.css'</span>;
+<span style="color:#c084fc;">import</span> <span style="color:#86efac;">'bootstrap/dist/js/bootstrap.bundle.min.js'</span>;
+<span style="color:#c084fc;">import</span> <span style="color:#86efac;">'bootstrap-icons/font/bootstrap-icons.css'</span>;
+
+<span style="color:#64748b;font-style:italic;">// Then use Bootstrap classes directly in JSX:</span>
+<span style="color:#c084fc;">function</span> <span style="color:#60a5fa;">MyButton</span>() {
+  <span style="color:#c084fc;">return</span> &lt;button <span style="color:#86efac;">className</span>=<span style="color:#86efac;">"btn btn-primary"</span>&gt;Click me&lt;/button&gt;;
+}</pre>
+          <div class="mt-3" style="background:rgba(97,218,251,.08);border:1px solid rgba(97,218,251,.2);border-radius:8px;padding:.7rem 1rem;color:#94a3b8;font-size:.82rem;">
+            <i class="bi bi-check-circle-fill me-1" style="color:#22c55e;"></i><strong style="color:#f1f5f9;">Best for:</strong> Most React projects. You get the full Bootstrap utility system. JavaScript components (modals, dropdowns) work via data attributes or Bootstrap's JS API.
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2 -->
+      <div class="tab-pane fade" id="tab2" role="tabpanel">
+        <div class="tab-panel">
+          <div style="color:#86efac;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin-bottom:.75rem;font-weight:600;"># Option 2 — React Bootstrap (proper React component library)</div>
+          <pre style="color:#e2e8f0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.65;margin:0;"><span style="color:#c084fc;">npm</span> install react-bootstrap bootstrap</pre>
+          <div style="color:#64748b;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin:.75rem 0 .4rem;font-style:italic;"># Import CSS in main.jsx, then use components:</div>
+          <pre style="color:#e2e8f0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.65;margin:0;"><span style="color:#c084fc;">import</span> { Button, Modal, Form, Table, Card, Nav,
+         Navbar, Badge, Alert, Spinner } <span style="color:#c084fc;">from</span> <span style="color:#86efac;">'react-bootstrap'</span>;
+
+<span style="color:#c084fc;">function</span> <span style="color:#60a5fa;">UserForm</span>({ show, onHide, onSubmit }) {
+  <span style="color:#c084fc;">const</span> [name, setName] = useState(<span style="color:#86efac;">''</span>);
+  <span style="color:#c084fc;">const</span> [email, setEmail] = useState(<span style="color:#86efac;">''</span>);
+
+  <span style="color:#c084fc;">return</span> (
+    &lt;Modal show={show} onHide={onHide} centered&gt;
+      &lt;Modal.Header closeButton&gt;
+        &lt;Modal.Title&gt;Add User&lt;/Modal.Title&gt;
+      &lt;/Modal.Header&gt;
+      &lt;Modal.Body&gt;
+        &lt;Form&gt;
+          &lt;Form.Group className=<span style="color:#86efac;">"mb-3"</span>&gt;
+            &lt;Form.Label&gt;Name&lt;/Form.Label&gt;
+            &lt;Form.Control
+              value={name}
+              onChange={e =&gt; setName(e.target.value)}
+              placeholder=<span style="color:#86efac;">"Enter name"</span>
+            /&gt;
+          &lt;/Form.Group&gt;
+          &lt;Form.Group className=<span style="color:#86efac;">"mb-3"</span>&gt;
+            &lt;Form.Label&gt;Email&lt;/Form.Label&gt;
+            &lt;Form.Control
+              type=<span style="color:#86efac;">"email"</span>
+              value={email}
+              onChange={e =&gt; setEmail(e.target.value)}
+            /&gt;
+          &lt;/Form.Group&gt;
+        &lt;/Form&gt;
+      &lt;/Modal.Body&gt;
+      &lt;Modal.Footer&gt;
+        &lt;Button variant=<span style="color:#86efac;">"secondary"</span> onClick={onHide}&gt;Cancel&lt;/Button&gt;
+        &lt;Button variant=<span style="color:#86efac;">"primary"</span> onClick={() =&gt; onSubmit({ name, email })}&gt;
+          Save
+        &lt;/Button&gt;
+      &lt;/Modal.Footer&gt;
+    &lt;/Modal&gt;
+  );
+}</pre>
+          <div class="mt-3" style="background:rgba(97,218,251,.08);border:1px solid rgba(97,218,251,.2);border-radius:8px;padding:.7rem 1rem;color:#94a3b8;font-size:.82rem;">
+            <i class="bi bi-check-circle-fill me-1" style="color:#22c55e;"></i><strong style="color:#f1f5f9;">Best for:</strong> Projects where you want Bootstrap components (Modal, Dropdown, Tooltip) to work as proper React components with props — no jQuery or Bootstrap JS manipulation needed.
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3 -->
+      <div class="tab-pane fade" id="tab3" role="tabpanel">
+        <div class="tab-panel">
+          <div style="color:#86efac;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin-bottom:.75rem;font-weight:600;"># Option 3 — Bootstrap via CDN (quick prototypes, no build step)</div>
+          <div style="color:#64748b;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin-bottom:.4rem;font-style:italic;">&lt;!-- Add to public/index.html &lt;head&gt; --&gt;</div>
+          <pre style="color:#e2e8f0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.65;margin:0;">&lt;link
+  href=<span style="color:#86efac;">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"</span>
+  rel=<span style="color:#86efac;">"stylesheet"</span>
+/&gt;
+&lt;link
+  rel=<span style="color:#86efac;">"stylesheet"</span>
+  href=<span style="color:#86efac;">"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"</span>
+/&gt;
+
+<span style="color:#64748b;font-style:italic;">&lt;!-- Add before closing &lt;/body&gt; --&gt;</span>
+&lt;script
+  src=<span style="color:#86efac;">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"</span>
+&gt;&lt;/script&gt;</pre>
+          <div class="mt-3" style="background:rgba(97,218,251,.08);border:1px solid rgba(97,218,251,.2);border-radius:8px;padding:.7rem 1rem;color:#94a3b8;font-size:.82rem;">
+            <i class="bi bi-check-circle-fill me-1" style="color:#22c55e;"></i><strong style="color:#f1f5f9;">Best for:</strong> Quick demos, CodeSandbox/StackBlitz, or static HTML prototypes. Not recommended for production — no tree-shaking, always loads everything.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 1: Dynamic Table -->
+  <div class="content-card">
+    <div class="pattern-header">
+      <span class="pattern-num">1</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Dynamic Sortable Table</h2>
+    </div>
+    <p class="text-muted mb-3">A reusable table component with column-based sorting, sort direction indicator, and Bootstrap table styles.</p>
+    <div class="code-block"><pre><span class="kw">function</span> <span class="fn">DataTable</span>({ columns, data, onSort }) {
+  <span class="kw">const</span> [sortField, setSortField] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [sortDir, setSortDir] = <span class="fn">useState</span>(<span class="st">'asc'</span>);
+
+  <span class="kw">const</span> <span class="fn">handleSort</span> = (field) =&gt; {
+    <span class="kw">const</span> dir = sortField === field &amp;&amp; sortDir === <span class="st">'asc'</span> ? <span class="st">'desc'</span> : <span class="st">'asc'</span>;
+    <span class="fn">setSortField</span>(field);
+    <span class="fn">setSortDir</span>(dir);
+    onSort?.(field, dir);
+  };
+
+  <span class="kw">return</span> (
+    &lt;div className=<span class="st">"table-responsive"</span>&gt;
+      &lt;table className=<span class="st">"table table-hover table-bordered align-middle"</span>&gt;
+        &lt;thead className=<span class="st">"table-dark"</span>&gt;
+          &lt;tr&gt;
+            {columns.<span class="fn">map</span>(col =&gt; (
+              &lt;th
+                key={col.field}
+                onClick={() =&gt; <span class="fn">handleSort</span>(col.field)}
+                style={{ cursor: <span class="st">'pointer'</span>, userSelect: <span class="st">'none'</span> }}
+              &gt;
+                {col.label}
+                {sortField === col.field &amp;&amp; (
+                  &lt;i className={`bi bi-sort-${sortDir === <span class="st">'asc'</span> ? <span class="st">'down'</span> : <span class="st">'up'</span>} ms-1`} /&gt;
+                )}
+              &lt;/th&gt;
+            ))}
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          {data.<span class="fn">map</span>((row, i) =&gt; (
+            &lt;tr key={row.id || i}&gt;
+              {columns.<span class="fn">map</span>(col =&gt; (
+                &lt;td key={col.field}&gt;
+                  {col.render ? col.<span class="fn">render</span>(row[col.field], row) : row[col.field]}
+                &lt;/td&gt;
+              ))}
+            &lt;/tr&gt;
+          ))}
+          {data.length === <span class="st">0</span> &amp;&amp; (
+            &lt;tr&gt;
+              &lt;td colSpan={columns.length} className=<span class="st">"text-center text-muted py-4"</span>&gt;
+                No data found
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          )}
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  );
+}
+
+<span class="cm">// Usage example</span>
+<span class="kw">const</span> columns = [
+  { field: <span class="st">'name'</span>, label: <span class="st">'Name'</span> },
+  { field: <span class="st">'email'</span>, label: <span class="st">'Email'</span> },
+  {
+    field: <span class="st">'status'</span>,
+    label: <span class="st">'Status'</span>,
+    render: (val) =&gt; (
+      &lt;span className={`badge bg-${val === <span class="st">'active'</span> ? <span class="st">'success'</span> : <span class="st">'secondary'</span>}`}&gt;
+        {val}
+      &lt;/span&gt;
+    )
+  },
+];
+
+&lt;DataTable columns={columns} data={users} onSort={(field, dir) =&gt; console.<span class="fn">log</span>(field, dir)} /&gt;</pre></div>
+  </div>
+
+  <!-- Pattern 2: Toast Notifications -->
+  <div class="content-card">
+    <div class="pattern-header">
+      <span class="pattern-num">2</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Toast Notification System</h2>
+    </div>
+    <p class="text-muted mb-3">A custom hook + container for Bootstrap-styled toast notifications that auto-dismiss after 3 seconds.</p>
+    <div class="code-block"><pre><span class="cm">// Custom hook — returns the toasts array and a show() function</span>
+<span class="kw">function</span> <span class="fn">useToast</span>() {
+  <span class="kw">const</span> [toasts, setToasts] = <span class="fn">useState</span>([]);
+
+  <span class="kw">const</span> <span class="fn">show</span> = <span class="fn">useCallback</span>((message, type = <span class="st">'success'</span>) =&gt; {
+    <span class="kw">const</span> id = Date.<span class="fn">now</span>();
+    <span class="fn">setToasts</span>(prev =&gt; [...prev, { id, message, type }]);
+    <span class="fn">setTimeout</span>(() =&gt; {
+      <span class="fn">setToasts</span>(prev =&gt; prev.<span class="fn">filter</span>(t =&gt; t.id !== id));
+    }, <span class="st">3000</span>);
+  }, []);
+
+  <span class="kw">const</span> <span class="fn">dismiss</span> = <span class="fn">useCallback</span>((id) =&gt; {
+    <span class="fn">setToasts</span>(prev =&gt; prev.<span class="fn">filter</span>(t =&gt; t.id !== id));
+  }, []);
+
+  <span class="kw">return</span> { toasts, show, dismiss };
+}
+
+<span class="cm">// Toast container — renders in top-right corner</span>
+<span class="kw">function</span> <span class="fn">ToastContainer</span>({ toasts, onDismiss }) {
+  <span class="kw">return</span> (
+    &lt;div
+      className=<span class="st">"position-fixed top-0 end-0 p-3"</span>
+      style={{ zIndex: <span class="st">9999</span> }}
+    &gt;
+      {toasts.<span class="fn">map</span>(toast =&gt; (
+        &lt;div
+          key={toast.id}
+          className={`toast show align-items-center text-white bg-${toast.type} border-0 mb-2`}
+          role=<span class="st">"alert"</span>
+        &gt;
+          &lt;div className=<span class="st">"d-flex"</span>&gt;
+            &lt;div className=<span class="st">"toast-body"</span>&gt;{toast.message}&lt;/div&gt;
+            &lt;button
+              type=<span class="st">"button"</span>
+              className=<span class="st">"btn-close btn-close-white me-2 m-auto"</span>
+              onClick={() =&gt; <span class="fn">onDismiss</span>(toast.id)}
+            /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+<span class="cm">// Usage in your app</span>
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">const</span> { toasts, show, dismiss } = <span class="fn">useToast</span>();
+
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;ToastContainer toasts={toasts} onDismiss={dismiss} /&gt;
+      &lt;button onClick={() =&gt; <span class="fn">show</span>(<span class="st">'Saved successfully!'</span>, <span class="st">'success'</span>)}&gt;Save&lt;/button&gt;
+      &lt;button onClick={() =&gt; <span class="fn">show</span>(<span class="st">'Failed to load data'</span>, <span class="st">'danger'</span>)}&gt;Fail&lt;/button&gt;
+      &lt;button onClick={() =&gt; <span class="fn">show</span>(<span class="st">'Processing...'</span>, <span class="st">'warning'</span>)}&gt;Warn&lt;/button&gt;
+    &lt;/&gt;
+  );
+}</pre></div>
+    <div class="tip-box"><i class="bi bi-lightbulb-fill me-2"></i><strong>Production tip:</strong> For larger apps, extract the toast state into a Context + Provider so any component can call <code>show()</code> without prop drilling.</div>
+  </div>
+
+  <!-- Pattern 3: Responsive Card Grid -->
+  <div class="content-card">
+    <div class="pattern-header">
+      <span class="pattern-num">3</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Responsive Card Grid</h2>
+    </div>
+    <p class="text-muted mb-3">A fully responsive grid using Bootstrap's column system — 1 column on mobile, 2 on tablet, 3 on desktop, 4 on xl.</p>
+    <div class="code-block"><pre><span class="kw">function</span> <span class="fn">CardGrid</span>({ items, onSelect }) {
+  <span class="kw">return</span> (
+    &lt;div className=<span class="st">"row g-4"</span>&gt;  <span class="cm">{/* g-4 = gap between all cards */}</span>
+      {items.<span class="fn">map</span>(item =&gt; (
+        &lt;div key={item.id} className=<span class="st">"col-sm-6 col-lg-4 col-xl-3"</span>&gt;
+          <span class="cm">{/* col-sm-6 = 2 cols on sm+, col-lg-4 = 3 cols on lg+, col-xl-3 = 4 cols on xl+ */}</span>
+          &lt;div
+            className=<span class="st">"card h-100 shadow-sm border-0"</span>
+            style={{ cursor: <span class="st">'pointer'</span>, transition: <span class="st">'transform .15s'</span> }}
+            onClick={() =&gt; onSelect?.(item)}
+            onMouseEnter={e =&gt; e.currentTarget.style.transform = <span class="st">'translateY(-4px)'</span>}
+            onMouseLeave={e =&gt; e.currentTarget.style.transform = <span class="st">'none'</span>}
+          &gt;
+            {item.image &amp;&amp; (
+              &lt;img
+                src={item.image}
+                className=<span class="st">"card-img-top"</span>
+                alt={item.title}
+                style={{ height: <span class="st">'200px'</span>, objectFit: <span class="st">'cover'</span> }}
+              /&gt;
+            )}
+            &lt;div className=<span class="st">"card-body d-flex flex-column"</span>&gt;
+              &lt;div className=<span class="st">"d-flex justify-content-between align-items-start mb-2"</span>&gt;
+                &lt;h5 className=<span class="st">"card-title mb-0"</span>&gt;{item.title}&lt;/h5&gt;
+                {item.badge &amp;&amp; (
+                  &lt;span className=<span class="st">"badge bg-primary ms-2"</span>&gt;{item.badge}&lt;/span&gt;
+                )}
+              &lt;/div&gt;
+              &lt;p className=<span class="st">"card-text text-muted flex-grow-1 small"</span>&gt;{item.description}&lt;/p&gt;
+              &lt;a href={item.link} className=<span class="st">"btn btn-primary mt-auto"</span>&gt;
+                Learn More &lt;i className=<span class="st">"bi bi-arrow-right ms-1"</span> /&gt;
+              &lt;/a&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</pre></div>
+  </div>
+
+  <!-- Pattern 4: Dark Mode Toggle -->
+  <div class="content-card">
+    <div class="pattern-header">
+      <span class="pattern-num">4</span>
+      <h2 class="fw-800 mb-0" style="font-size:1.4rem;">Dark Mode Toggle with Bootstrap 5.3</h2>
+    </div>
+    <p class="text-muted mb-3">Bootstrap 5.3 introduced native dark mode via <code>data-bs-theme</code>. This component syncs React state, the DOM attribute, and localStorage.</p>
+    <div class="code-block"><pre><span class="cm">// Custom hook — handles all the logic</span>
+<span class="kw">function</span> <span class="fn">useDarkMode</span>() {
+  <span class="kw">const</span> [dark, setDark] = <span class="fn">useState</span>(() =&gt; {
+    <span class="kw">const</span> stored = localStorage.<span class="fn">getItem</span>(<span class="st">'theme'</span>);
+    <span class="kw">if</span> (stored) <span class="kw">return</span> stored === <span class="st">'dark'</span>;
+    <span class="cm">// Default to user's OS preference</span>
+    <span class="kw">return</span> window.matchMedia(<span class="st">'(prefers-color-scheme: dark)'</span>).matches;
+  });
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    document.documentElement.<span class="fn">setAttribute</span>(<span class="st">'data-bs-theme'</span>, dark ? <span class="st">'dark'</span> : <span class="st">'light'</span>);
+    localStorage.<span class="fn">setItem</span>(<span class="st">'theme'</span>, dark ? <span class="st">'dark'</span> : <span class="st">'light'</span>);
+  }, [dark]);
+
+  <span class="kw">const</span> toggle = <span class="fn">useCallback</span>(() =&gt; <span class="fn">setDark</span>(d =&gt; !d), []);
+
+  <span class="kw">return</span> { dark, toggle };
+}
+
+<span class="cm">// Button component</span>
+<span class="kw">function</span> <span class="fn">DarkModeToggle</span>() {
+  <span class="kw">const</span> { dark, toggle } = <span class="fn">useDarkMode</span>();
+
+  <span class="kw">return</span> (
+    &lt;button
+      className=<span class="st">"btn btn-outline-secondary"</span>
+      onClick={toggle}
+      title={dark ? <span class="st">'Switch to light mode'</span> : <span class="st">'Switch to dark mode'</span>}
+      aria-label=<span class="st">"Toggle dark mode"</span>
+    &gt;
+      &lt;i className={`bi bi-${dark ? <span class="st">'sun'</span> : <span class="st">'moon-stars'</span>}-fill`} /&gt;
+      &lt;span className=<span class="st">"ms-2 d-none d-sm-inline"</span>&gt;{dark ? <span class="st">'Light'</span> : <span class="st">'Dark'</span>}&lt;/span&gt;
+    &lt;/button&gt;
+  );
+}
+
+<span class="cm">// Add to your Navbar:</span>
+<span class="cm">// &lt;DarkModeToggle /&gt;</span></pre></div>
+    <div class="concept-box blue">
+      <strong><i class="bi bi-info-circle me-1"></i>Bootstrap 5.3 Dark Mode:</strong> When <code>data-bs-theme="dark"</code> is set on <code>&lt;html&gt;</code>, Bootstrap automatically adjusts all component colors — cards, tables, navbars, inputs. No custom CSS needed for standard components.
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 Utilities Cheat Sheet -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-1" style="font-size:1.4rem;"><i class="bi bi-lightning-charge-fill me-2" style="color:#f59e0b;"></i>Bootstrap 5 Utility Classes — Cheat Sheet</h2>
+    <p class="text-muted mb-3 small">The most-used utility classes when building React UIs with Bootstrap.</p>
+
+    <div class="util-category">Spacing — margin &amp; padding</div>
+    <div class="util-grid">
+      <div class="util-item"><code>m-{0-5}</code> — margin all sides</div>
+      <div class="util-item"><code>mt-{0-5}</code> — margin top</div>
+      <div class="util-item"><code>mb-{0-5}</code> — margin bottom</div>
+      <div class="util-item"><code>ms-{0-5}</code> — margin start (left)</div>
+      <div class="util-item"><code>me-{0-5}</code> — margin end (right)</div>
+      <div class="util-item"><code>mx-auto</code> — horizontal center</div>
+      <div class="util-item"><code>p-{0-5}</code> — padding all sides</div>
+      <div class="util-item"><code>px-{0-5}</code> — padding horizontal</div>
+      <div class="util-item"><code>py-{0-5}</code> — padding vertical</div>
+      <div class="util-item"><code>gap-{0-5}</code> — flex/grid gap</div>
+    </div>
+
+    <div class="util-category">Flexbox</div>
+    <div class="util-grid">
+      <div class="util-item"><code>d-flex</code> — display flex</div>
+      <div class="util-item"><code>flex-column</code> — column direction</div>
+      <div class="util-item"><code>flex-wrap</code> — wrap items</div>
+      <div class="util-item"><code>align-items-center</code> — align center</div>
+      <div class="util-item"><code>align-items-start</code> — align start</div>
+      <div class="util-item"><code>justify-content-between</code> — space between</div>
+      <div class="util-item"><code>justify-content-center</code> — center</div>
+      <div class="util-item"><code>justify-content-end</code> — end</div>
+      <div class="util-item"><code>flex-grow-1</code> — fill available space</div>
+      <div class="util-item"><code>flex-shrink-0</code> — don't shrink</div>
+      <div class="util-item"><code>ms-auto</code> — push to right</div>
+      <div class="util-item"><code>me-auto</code> — push to left</div>
+    </div>
+
+    <div class="util-category">Display</div>
+    <div class="util-grid">
+      <div class="util-item"><code>d-none</code> — hide</div>
+      <div class="util-item"><code>d-block</code> — block</div>
+      <div class="util-item"><code>d-inline-flex</code> — inline flex</div>
+      <div class="util-item"><code>d-sm-none</code> — hide on sm+</div>
+      <div class="util-item"><code>d-none d-md-block</code> — show on md+</div>
+      <div class="util-item"><code>d-none d-sm-inline</code> — show on sm+ inline</div>
+    </div>
+
+    <div class="util-category">Typography &amp; Text</div>
+    <div class="util-grid">
+      <div class="util-item"><code>fw-bold</code> — font-weight: 700</div>
+      <div class="util-item"><code>fw-semibold</code> — font-weight: 600</div>
+      <div class="util-item"><code>fs-{1-6}</code> — font size scale</div>
+      <div class="util-item"><code>text-muted</code> — muted gray text</div>
+      <div class="util-item"><code>text-center</code> — center align</div>
+      <div class="util-item"><code>text-truncate</code> — truncate overflow</div>
+      <div class="util-item"><code>small</code> — 87.5% font size</div>
+      <div class="util-item"><code>text-uppercase</code> — uppercase</div>
+    </div>
+
+    <div class="util-category">Colors &amp; Backgrounds</div>
+    <div class="util-grid">
+      <div class="util-item"><code>text-primary</code> — primary color</div>
+      <div class="util-item"><code>text-success</code> — green</div>
+      <div class="util-item"><code>text-danger</code> — red</div>
+      <div class="util-item"><code>text-warning</code> — yellow</div>
+      <div class="util-item"><code>text-info</code> — cyan</div>
+      <div class="util-item"><code>bg-primary</code> — primary background</div>
+      <div class="util-item"><code>bg-light</code> — light background</div>
+      <div class="util-item"><code>bg-dark</code> — dark background</div>
+      <div class="util-item"><code>bg-transparent</code> — transparent bg</div>
+    </div>
+
+    <div class="util-category">Sizing &amp; Position</div>
+    <div class="util-grid">
+      <div class="util-item"><code>w-100</code> — width: 100%</div>
+      <div class="util-item"><code>h-100</code> — height: 100%</div>
+      <div class="util-item"><code>mw-100</code> — max-width: 100%</div>
+      <div class="util-item"><code>min-vw-100</code> — min-width: 100vw</div>
+      <div class="util-item"><code>position-relative</code> — relative</div>
+      <div class="util-item"><code>position-absolute</code> — absolute</div>
+      <div class="util-item"><code>position-fixed</code> — fixed</div>
+      <div class="util-item"><code>top-0 start-0</code> — pin top-left</div>
+      <div class="util-item"><code>top-0 end-0</code> — pin top-right</div>
+    </div>
+
+    <div class="util-category">Borders &amp; Shadows</div>
+    <div class="util-grid">
+      <div class="util-item"><code>border</code> — 1px border</div>
+      <div class="util-item"><code>border-0</code> — remove border</div>
+      <div class="util-item"><code>rounded</code> — border-radius</div>
+      <div class="util-item"><code>rounded-circle</code> — circle/pill</div>
+      <div class="util-item"><code>rounded-{1-5}</code> — radius scale</div>
+      <div class="util-item"><code>shadow-sm</code> — small shadow</div>
+      <div class="util-item"><code>shadow</code> — medium shadow</div>
+      <div class="util-item"><code>shadow-lg</code> — large shadow</div>
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-4" style="font-size:1.4rem;"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions — Bootstrap with React</h2>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>What is the difference between using Bootstrap CSS directly in React vs using the <code>react-bootstrap</code> library? When would you choose one over the other?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>Why does using Bootstrap's JavaScript (modals, dropdowns) directly via <code>data-*</code> attributes sometimes cause issues in React? How does <code>react-bootstrap</code> solve this?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>How does Bootstrap 5.3's native dark mode work, and how do you implement a dark mode toggle in React that persists across page refreshes?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>How would you build a reusable toast/notification system in React with Bootstrap? What state management approach would you use for a large app?</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center"><span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — From Zero to Architect</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

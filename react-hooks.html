@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>React Hooks — Section 8 — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;background:var(--bg,#f0f4ff);color:var(--text,#1e293b);}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--surface2:#1e293b;--text:#f1f5f9;--text-muted:#94a3b8;--border:#1e293b;}
+    .concept-box{border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.83rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;} .code-block .fn{color:#60a5fa;} .code-block .st{color:#86efac;}
+    .code-block .cm{color:#64748b;font-style:italic;} .code-block .cl{color:#f9a8d4;} .code-block .num{color:#fb923c;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;border-color:#ef4444;color:#fecaca;}
+    .hook-card{border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:2px solid transparent;transition:all .2s;}
+    .hook-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(97,218,251,.15);}
+    .hook-card.blue{background:#eff6ff;border-color:#93c5fd;}
+    .hook-card.purple{background:#f5f3ff;border-color:#c4b5fd;}
+    .hook-card.green{background:#f0fdf4;border-color:#6ee7b7;}
+    .hook-card.amber{background:#fffbeb;border-color:#fcd34d;}
+    [data-theme="dark"] .hook-card.blue{background:#1e3a5f;border-color:#3b82f6;}
+    [data-theme="dark"] .hook-card.purple{background:#3b0764;border-color:#a78bfa;}
+    [data-theme="dark"] .hook-card.green{background:#14532d;border-color:#22c55e;}
+    [data-theme="dark"] .hook-card.amber{background:#451a03;border-color:#f59e0b;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3.5rem 0 2.5rem;margin-bottom:2rem;}
+    .hook-number{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0;}
+    .rule-card{border-radius:12px;padding:1.2rem 1.5rem;border:2px solid;margin-bottom:1rem;}
+    .rule-card.danger{background:#fff5f5;border-color:#fca5a5;}
+    [data-theme="dark"] .rule-card.danger{background:#450a0a;border-color:#ef4444;color:#fecaca;}
+    .toc-item{display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:8px;text-decoration:none;color:inherit;font-size:.9rem;transition:background .15s;}
+    .toc-item:hover{background:rgba(97,218,251,.1);}
+    .state-card{background:#fff;box-shadow:0 2px 16px rgba(0,0,0,.06);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;}
+    [data-theme="dark"] .state-card{background:#111827;box-shadow:0 2px 16px rgba(0,0,0,.3);}
+    .comparison-table{width:100%;border-collapse:collapse;margin:1rem 0;}
+    .comparison-table th{background:#1e293b;color:#f1f5f9;padding:.6rem 1rem;text-align:left;}
+    .comparison-table td{padding:.6rem 1rem;border-bottom:1px solid #e2e8f0;}
+    [data-theme="dark"] .comparison-table td{border-color:#1e293b;color:#e2e8f0;}
+    [data-theme="dark"] .comparison-table tr:nth-child(even) td{background:#0f172a;}
+    .comparison-table tr:nth-child(even) td{background:#f8fafc;}
+    [data-theme="dark"] .accordion-item{background:#111827;border-color:#1e293b;}
+    [data-theme="dark"] .accordion-button{background:#111827;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-button:not(.collapsed){background:#1e293b;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-body{background:#0f172a;color:#e2e8f0;}
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg sticky-top" style="background:#0f172a;border-bottom:1px solid #1e293b;">
+  <div class="container-xl">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+      <span style="background:linear-gradient(135deg,#61dafb,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;font-size:1.3rem;">&#9883; React Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link text-secondary" href="react-intro.html">Intro</a></li>
+        <li class="nav-item"><a class="nav-link text-secondary" href="react-components.html">Components</a></li>
+        <li class="nav-item"><a class="nav-link text-secondary" href="react-props.html">Props</a></li>
+        <li class="nav-item"><a class="nav-link text-secondary" href="react-state.html">State</a></li>
+        <li class="nav-item"><a class="nav-link fw-bold" href="react-hooks.html" style="color:#61dafb!important;">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link text-secondary" href="react-forms.html">Forms</a></li>
+        <li class="nav-item"><a class="nav-link text-secondary" href="react-routing.html">Routing</a></li>
+        <li class="nav-item"><a class="nav-link text-secondary" href="react-performance.html">Performance</a></li>
+        <li class="nav-item"><a class="nav-link text-secondary" href="react-api.html">API</a></li>
+        <li class="nav-item ms-2">
+          <button id="themeToggle" class="btn btn-sm" style="background:#1e293b;color:#94a3b8;border:1px solid #334155;" title="Toggle theme">
+            <i class="bi bi-moon-stars-fill"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <span class="badge" style="background:#1e293b;color:#61dafb;font-size:.85rem;padding:.5rem .9rem;">Section 8</span>
+      <span class="badge" style="background:#1e3a5f;color:#93c5fd;font-size:.85rem;">10 Hooks + Rules</span>
+      <span class="badge" style="background:#14532d;color:#6ee7b7;font-size:.85rem;">20 Interview Qs</span>
+    </div>
+    <h1 style="font-size:2.8rem;font-weight:900;background:linear-gradient(135deg,#61dafb,#a78bfa,#f9a8d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">React Hooks</h1>
+    <p class="text-secondary mt-2 mb-0" style="font-size:1.1rem;max-width:640px;">Master all built-in hooks &mdash; useState, useEffect, useContext, useRef, useMemo, useCallback, useReducer, useLayoutEffect, useImperativeHandle &mdash; plus custom hooks, rules, and real interview questions.</p>
+  </div>
+</section>
+
+<main class="container-xl pb-5">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="accordion mb-4" id="tocAccordion" data-aos="fade-up">
+    <div class="accordion-item" style="border-radius:12px;overflow:hidden;border:1.5px solid #e2e8f0;">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#tocBody" style="background:#1e293b;color:#f1f5f9;font-size:1rem;">
+          <i class="bi bi-list-ul me-2 text-info"></i> Table of Contents &mdash; Section 8: React Hooks
+        </button>
+      </h2>
+      <div id="tocBody" class="accordion-collapse collapse">
+        <div class="accordion-body" style="background:#0f172a;">
+          <div class="row g-2">
+            <div class="col-md-4"><a href="#useState" class="toc-item text-light"><span style="color:#60a5fa;">&#9312;</span> useState</a></div>
+            <div class="col-md-4"><a href="#useEffect" class="toc-item text-light"><span style="color:#6ee7b7;">&#9313;</span> useEffect</a></div>
+            <div class="col-md-4"><a href="#useContext" class="toc-item text-light"><span style="color:#c4b5fd;">&#9314;</span> useContext</a></div>
+            <div class="col-md-4"><a href="#useRef" class="toc-item text-light"><span style="color:#fcd34d;">&#9315;</span> useRef</a></div>
+            <div class="col-md-4"><a href="#useMemo" class="toc-item text-light"><span style="color:#60a5fa;">&#9316;</span> useMemo</a></div>
+            <div class="col-md-4"><a href="#useCallback" class="toc-item text-light"><span style="color:#6ee7b7;">&#9317;</span> useCallback</a></div>
+            <div class="col-md-4"><a href="#useReducer" class="toc-item text-light"><span style="color:#c4b5fd;">&#9318;</span> useReducer</a></div>
+            <div class="col-md-4"><a href="#useLayoutEffect" class="toc-item text-light"><span style="color:#fcd34d;">&#9319;</span> useLayoutEffect</a></div>
+            <div class="col-md-4"><a href="#useImperativeHandle" class="toc-item text-light"><span style="color:#c4b5fd;">&#9320;</span> useImperativeHandle</a></div>
+            <div class="col-md-4"><a href="#customHooks" class="toc-item text-light"><span style="color:#6ee7b7;">&#9321;</span> Custom Hooks</a></div>
+            <div class="col-md-4"><a href="#rulesOfHooks" class="toc-item text-light"><span style="color:#ef4444;">!</span> Rules of Hooks</a></div>
+            <div class="col-md-4"><a href="#interviewQuestions" class="toc-item text-light"><span style="color:#f9a8d4;">?</span> Interview Questions</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOOK 1: useState -->
+  <div class="hook-card blue" id="useState" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#3b82f6;color:#fff;">1</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">useState</h2>
+      <span class="badge ms-auto" style="background:#1e3a5f;color:#93c5fd;">Core State Hook</span>
+    </div>
+    <div class="concept-box blue">
+      <strong>What it does:</strong> useState returns a pair &mdash; the current state value and a setter function. React re-renders the component whenever the setter is called with a new value. The initial value argument is only used on the first render.
+    </div>
+    <div class="concept-box purple">
+      <strong>How it works internally (React Fiber):</strong> React maintains a linked list of hook objects inside each component&rsquo;s fiber node. Each useState call reserves one slot in this list, identified purely by its <em>call order</em>. On every render React replays the hook calls in order, reading from and writing to the matching slot. The setter enqueues an update action on that slot&rsquo;s queue, which triggers a re-render and processes the queue to compute the new state. This is why the Rules of Hooks forbid calling hooks inside conditions &mdash; changing the order corrupts the slot mapping.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> React, { useState } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Shopping cart with multiple independent states</span>
+<span class="kw">function</span> <span class="fn">ShoppingCart</span>() {
+  <span class="kw">const</span> [items, setItems] = <span class="fn">useState</span>([]);
+  <span class="kw">const</span> [total, setTotal] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="kw">const</span> [isOpen, setIsOpen] = <span class="fn">useState</span>(<span class="kw">false</span>);
+
+  <span class="cm">// Functional update -- always use when new state depends on previous</span>
+  <span class="kw">const</span> <span class="fn">addItem</span> = (product) =&gt; {
+    setItems(prev =&gt; [...prev, product]);
+    setTotal(prev =&gt; prev + product.price);
+  };
+
+  <span class="kw">const</span> <span class="fn">removeItem</span> = (id) =&gt; {
+    setItems(prev =&gt; {
+      <span class="kw">const</span> removed = prev.<span class="fn">find</span>(i =&gt; i.id === id);
+      setTotal(t =&gt; t - (removed?.price ?? <span class="num">0</span>));
+      <span class="kw">return</span> prev.<span class="fn">filter</span>(i =&gt; i.id !== id);
+    });
+  };
+
+  <span class="cm">// Object state -- always spread to preserve other fields</span>
+  <span class="kw">const</span> [user, setUser] = <span class="fn">useState</span>({ name: <span class="st">''</span>, email: <span class="st">''</span>, role: <span class="st">'guest'</span> });
+  <span class="kw">const</span> <span class="fn">updateName</span> = (name) =&gt; setUser(prev =&gt; ({ ...prev, name }));
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      &lt;<span class="cl">button</span> onClick={() =&gt; <span class="fn">setIsOpen</span>(o =&gt; !o)}&gt;
+        Cart ({items.length}) -- ${total.<span class="fn">toFixed</span>(<span class="num">2</span>)}
+      &lt;/<span class="cl">button</span>&gt;
+      {isOpen &amp;&amp; (
+        &lt;<span class="cl">ul</span>&gt;
+          {items.<span class="fn">map</span>(item =&gt; (
+            &lt;<span class="cl">li</span> key={item.id}&gt;
+              {item.name}
+              &lt;<span class="cl">button</span> onClick={() =&gt; <span class="fn">removeItem</span>(item.id)}&gt;Remove&lt;/<span class="cl">button</span>&gt;
+            &lt;/<span class="cl">li</span>&gt;
+          ))}
+        &lt;/<span class="cl">ul</span>&gt;
+      )}
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}</pre>
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i> Functional Updates:</strong> Always use <code>setState(prev =&gt; ...)</code> when the new state depends on the previous state. Without it, you risk a stale closure &mdash; especially in event handlers set up during earlier renders.
+    </div>
+    <div class="concept-box amber">
+      <strong>Lazy initialization:</strong> If the initial state is expensive to compute, pass a <em>function</em> to useState: <code>useState(() =&gt; JSON.parse(localStorage.getItem('cart') || '[]'))</code>. React calls this function only on the first render.
+    </div>
+  </div>
+
+  <!-- HOOK 2: useEffect -->
+  <div class="hook-card green" id="useEffect" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#22c55e;color:#fff;">2</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">useEffect</h2>
+      <span class="badge ms-auto" style="background:#14532d;color:#6ee7b7;">Side Effects &amp; Lifecycle</span>
+    </div>
+    <div class="concept-box green">
+      <strong>What it does:</strong> useEffect synchronizes a component with an external system &mdash; APIs, timers, subscriptions, DOM APIs, etc. It runs <em>after</em> the browser has painted. The optional cleanup function returned from the effect runs before the next effect execution and when the component unmounts.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Pattern 1: Run once on mount (empty deps array)</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="fn">initAnalytics</span>();
+  <span class="kw">return</span> () =&gt; <span class="fn">cleanupAnalytics</span>();
+}, []);
+
+<span class="cm">// Pattern 2: Run when specific dep changes</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="fn">loadUserProfile</span>(userId);
+}, [userId]);
+
+<span class="cm">// Pattern 3: Timer with cleanup (no stale closure)</span>
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> id = <span class="fn">setInterval</span>(() =&gt; {
+      setCount(c =&gt; c + <span class="num">1</span>); <span class="cm">// functional update avoids stale closure</span>
+    }, <span class="num">1000</span>);
+    <span class="kw">return</span> () =&gt; <span class="fn">clearInterval</span>(id);
+  }, []);
+  <span class="kw">return</span> &lt;<span class="cl">p</span>&gt;{count}&lt;/<span class="cl">p</span>&gt;;
+}
+
+<span class="cm">// Pattern 4: API call with AbortController (cancellation)</span>
+<span class="kw">function</span> <span class="fn">UserProfile</span>({ userId }) {
+  <span class="kw">const</span> [data, setData] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">false</span>);
+  <span class="kw">const</span> [error, setError] = <span class="fn">useState</span>(<span class="kw">null</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> controller = <span class="kw">new</span> <span class="cl">AbortController</span>();
+    <span class="kw">const</span> { signal } = controller;
+
+    <span class="kw">const</span> <span class="fn">fetchUser</span> = <span class="kw">async</span> () =&gt; {
+      <span class="fn">setLoading</span>(<span class="kw">true</span>);
+      <span class="fn">setError</span>(<span class="kw">null</span>);
+      <span class="kw">try</span> {
+        <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`/api/users/${userId}`</span>, { signal });
+        <span class="kw">if</span> (!res.ok) <span class="kw">throw new</span> <span class="cl">Error</span>(<span class="st">'Failed to fetch'</span>);
+        <span class="fn">setData</span>(<span class="kw">await</span> res.<span class="fn">json</span>());
+      } <span class="kw">catch</span> (err) {
+        <span class="kw">if</span> (err.name !== <span class="st">'AbortError'</span>) <span class="fn">setError</span>(err.message);
+      } <span class="kw">finally</span> {
+        <span class="fn">setLoading</span>(<span class="kw">false</span>);
+      }
+    };
+
+    <span class="fn">fetchUser</span>();
+    <span class="kw">return</span> () =&gt; controller.<span class="fn">abort</span>(); <span class="cm">// cancel on userId change or unmount</span>
+  }, [userId]);
+
+  <span class="kw">if</span> (loading) <span class="kw">return</span> &lt;<span class="cl">p</span>&gt;Loading...&lt;/<span class="cl">p</span>&gt;;
+  <span class="kw">if</span> (error) <span class="kw">return</span> &lt;<span class="cl">p</span>&gt;Error: {error}&lt;/<span class="cl">p</span>&gt;;
+  <span class="kw">return</span> &lt;<span class="cl">p</span>&gt;{data?.name}&lt;/<span class="cl">p</span>&gt;;
+}</pre>
+    <div class="mistake-box">
+      <strong><i class="bi bi-exclamation-triangle-fill text-danger me-1"></i> Infinite Loop Trap:</strong> Putting an object literal directly in the deps array creates a new reference on every render, looping forever.<br/>
+      <code style="display:block;background:#0f172a;color:#fca5a5;padding:.4rem .7rem;border-radius:6px;margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;">// BAD: new object reference every render<br/>useEffect(() =&gt; {}, [{ id: userId }]);<br/>// GOOD: primitive in deps<br/>useEffect(() =&gt; {}, [userId]);</code>
+    </div>
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i> Dep array:</strong> <code>[]</code> = mount only &nbsp;|&nbsp; <code>[a,b]</code> = when a or b changes &nbsp;|&nbsp; no array = every render.
+    </div>
+  </div>
+
+  <!-- HOOK 3: useContext -->
+  <div class="hook-card purple" id="useContext" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#7c3aed;color:#fff;">3</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">useContext</h2>
+      <span class="badge ms-auto" style="background:#3b0764;color:#c4b5fd;">Global State Without Prop Drilling</span>
+    </div>
+    <div class="concept-box purple">
+      <strong>What it does:</strong> useContext subscribes a component to a React context object. When the Provider&rsquo;s <code>value</code> prop changes, <strong>ALL</strong> components consuming that context re-render. This makes context ideal for low-frequency updates like theme, locale, and auth.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> React, { createContext, useContext, useState } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Step 1: Create context with sensible default</span>
+<span class="kw">const</span> <span class="cl">ThemeContext</span> = <span class="fn">createContext</span>({ theme: <span class="st">'light'</span>, toggleTheme: () =&gt; {} });
+
+<span class="cm">// Step 2: Custom hook with safety guard</span>
+<span class="kw">export function</span> <span class="fn">useTheme</span>() {
+  <span class="kw">const</span> ctx = <span class="fn">useContext</span>(<span class="cl">ThemeContext</span>);
+  <span class="kw">if</span> (!ctx) <span class="kw">throw new</span> <span class="cl">Error</span>(<span class="st">'useTheme must be inside ThemeProvider'</span>);
+  <span class="kw">return</span> ctx;
+}
+
+<span class="cm">// Step 3: Provider owns and manages state</span>
+<span class="kw">export function</span> <span class="fn">ThemeProvider</span>({ children }) {
+  <span class="kw">const</span> [theme, setTheme] = <span class="fn">useState</span>(<span class="st">'light'</span>);
+  <span class="kw">const</span> <span class="fn">toggleTheme</span> = () =&gt; setTheme(t =&gt; t === <span class="st">'light'</span> ? <span class="st">'dark'</span> : <span class="st">'light'</span>);
+
+  <span class="cm">// Memoize to prevent consumers re-rendering on unrelated parent renders</span>
+  <span class="kw">const</span> value = React.<span class="fn">useMemo</span>(() =&gt; ({ theme, toggleTheme }), [theme]);
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">ThemeContext.Provider</span> value={value}&gt;
+      {children}
+    &lt;/<span class="cl">ThemeContext.Provider</span>&gt;
+  );
+}
+
+<span class="cm">// Step 4: Consume anywhere -- no prop drilling</span>
+<span class="kw">function</span> <span class="fn">ThemedButton</span>() {
+  <span class="kw">const</span> { theme, toggleTheme } = <span class="fn">useTheme</span>();
+  <span class="kw">return</span> (
+    &lt;<span class="cl">button</span>
+      onClick={toggleTheme}
+      style={{ background: theme === <span class="st">'dark'</span> ? <span class="st">'#1e293b'</span> : <span class="st">'#f1f5f9'</span> }}
+    &gt;
+      Theme: {theme}
+    &lt;/<span class="cl">button</span>&gt;
+  );
+}</pre>
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i> Split contexts by update frequency.</strong> ThemeContext (rare) should be separate from CartContext (frequent). Consumers of the theme won&rsquo;t re-render when the cart changes.
+    </div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-exclamation-triangle-fill text-danger me-1"></i> Passing a new object literal as value without memoization</strong> creates a new reference on every parent render, causing all consumers to re-render unnecessarily. Always wrap in <code>useMemo</code>.
+    </div>
+  </div>
+
+  <!-- HOOK 4: useRef -->
+  <div class="hook-card amber" id="useRef" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#d97706;color:#fff;">4</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">useRef</h2>
+      <span class="badge ms-auto" style="background:#451a03;color:#fcd34d;">Mutable Values &amp; DOM Access</span>
+    </div>
+    <div class="concept-box amber">
+      <strong>What it does:</strong> useRef returns a mutable object <code>{ current: value }</code> that persists for the full lifetime of the component. Changing <code>.current</code> does <strong>NOT</strong> trigger a re-render. Use it for DOM references, persisting mutable values, and storing instance values like timer IDs.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useRef, useEffect, useState } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Use Case 1: DOM Reference</span>
+<span class="kw">function</span> <span class="fn">FocusInput</span>() {
+  <span class="kw">const</span> inputRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+  <span class="fn">useEffect</span>(() =&gt; { inputRef.current?.<span class="fn">focus</span>(); }, []);
+  <span class="kw">return</span> &lt;<span class="cl">input</span> ref={inputRef} placeholder=<span class="st">"Auto-focused"</span> /&gt;;
+}
+
+<span class="cm">// Use Case 2: Track Previous Value</span>
+<span class="kw">function</span> <span class="fn">usePrevious</span>(value) {
+  <span class="kw">const</span> ref = <span class="fn">useRef</span>();
+  <span class="fn">useEffect</span>(() =&gt; { ref.current = value; }); <span class="cm">// runs after render</span>
+  <span class="kw">return</span> ref.current; <span class="cm">// value from previous render</span>
+}
+
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="kw">const</span> prevCount = <span class="fn">usePrevious</span>(count);
+  <span class="kw">return</span> &lt;<span class="cl">p</span>&gt;Now: {count} | Before: {prevCount}&lt;/<span class="cl">p</span>&gt;;
+}
+
+<span class="cm">// Use Case 3: Store Timer ID -- no re-render when cleared</span>
+<span class="kw">function</span> <span class="fn">Stopwatch</span>() {
+  <span class="kw">const</span> [time, setTime] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="kw">const</span> [running, setRunning] = <span class="fn">useState</span>(<span class="kw">false</span>);
+  <span class="kw">const</span> intervalRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+
+  <span class="kw">const</span> <span class="fn">start</span> = () =&gt; {
+    <span class="kw">if</span> (running) <span class="kw">return</span>;
+    <span class="fn">setRunning</span>(<span class="kw">true</span>);
+    intervalRef.current = <span class="fn">setInterval</span>(() =&gt; setTime(t =&gt; t + <span class="num">1</span>), <span class="num">10</span>);
+  };
+  <span class="kw">const</span> <span class="fn">stop</span> = () =&gt; {
+    <span class="fn">clearInterval</span>(intervalRef.current);
+    intervalRef.current = <span class="kw">null</span>;
+    <span class="fn">setRunning</span>(<span class="kw">false</span>);
+  };
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      &lt;<span class="cl">p</span>&gt;{(time / <span class="num">100</span>).<span class="fn">toFixed</span>(<span class="num">2</span>)}s&lt;/<span class="cl">p</span>&gt;
+      &lt;<span class="cl">button</span> onClick={start}&gt;Start&lt;/<span class="cl">button</span>&gt;
+      &lt;<span class="cl">button</span> onClick={stop}&gt;Stop&lt;/<span class="cl">button</span>&gt;
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}</pre>
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i> Mental model:</strong> Refs are like instance variables &mdash; survive renders but don&rsquo;t cause them. If you need a value in the UI, use useState. If you just need it for logic, use useRef.
+    </div>
+  </div>
+
+  <!-- HOOK 5: useMemo -->
+  <div class="hook-card blue" id="useMemo" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#3b82f6;color:#fff;">5</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">useMemo</h2>
+      <span class="badge ms-auto" style="background:#1e3a5f;color:#93c5fd;">Memoize Computed Values</span>
+    </div>
+    <div class="concept-box blue">
+      <strong>What it does:</strong> useMemo memoizes the <em>return value</em> of a computation &mdash; it only recalculates when one of its dependencies changes. Use it to avoid expensive recalculations on every render, and to stabilize object/array references passed as props or used in other hooks&rsquo; dependency arrays.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useState, useMemo } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">ProductList</span>({ products }) {
+  <span class="kw">const</span> [search, setSearch] = <span class="fn">useState</span>(<span class="st">''</span>);
+  <span class="kw">const</span> [sortBy, setSortBy] = <span class="fn">useState</span>(<span class="st">'name'</span>);
+  <span class="kw">const</span> [minPrice, setMinPrice] = <span class="fn">useState</span>(<span class="num">0</span>);
+
+  <span class="cm">// Only recalculates when these 4 deps change -- not on unrelated renders</span>
+  <span class="kw">const</span> filteredProducts = <span class="fn">useMemo</span>(() =&gt; {
+    <span class="kw">return</span> products
+      .<span class="fn">filter</span>(p =&gt;
+        p.name.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(search.<span class="fn">toLowerCase</span>()) &amp;&amp;
+        p.price &gt;= minPrice
+      )
+      .<span class="fn">sort</span>((a, b) =&gt;
+        sortBy === <span class="st">'price'</span> ? a.price - b.price : a.name.<span class="fn">localeCompare</span>(b.name)
+      );
+  }, [products, search, sortBy, minPrice]);
+
+  <span class="cm">// Stabilize object reference -- prevents useEffect from re-firing unnecessarily</span>
+  <span class="kw">const</span> queryParams = <span class="fn">useMemo</span>(
+    () =&gt; ({ search, minPrice, sortBy }),
+    [search, minPrice, sortBy]
+  );
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      &lt;<span class="cl">input</span> value={search} onChange={e =&gt; <span class="fn">setSearch</span>(e.target.value)} /&gt;
+      &lt;<span class="cl">p</span>&gt;{filteredProducts.length} products found&lt;/<span class="cl">p</span>&gt;
+      {filteredProducts.<span class="fn">map</span>(p =&gt; &lt;<span class="cl">div</span> key={p.id}&gt;{p.name}&lt;/<span class="cl">div</span>&gt;)}
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}</pre>
+    <div class="concept-box green">
+      <strong>When to use useMemo:</strong> Expensive computations (filtering/sorting large arrays), stabilizing object refs used in hook dependency arrays, and props passed to React.memo-wrapped children. Do NOT use for trivial computations like <code>a + b</code>.
+    </div>
+    <div class="mistake-box">
+      <strong><i class="bi bi-exclamation-triangle-fill text-danger me-1"></i> Don&rsquo;t overuse:</strong> useMemo has its own cost &mdash; memory allocation and dependency comparison on every render. Profile first, optimize second.
+    </div>
+  </div>
+
+  <!-- HOOK 6: useCallback -->
+  <div class="hook-card green" id="useCallback" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#22c55e;color:#fff;">6</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">useCallback</h2>
+      <span class="badge ms-auto" style="background:#14532d;color:#6ee7b7;">Memoize Function References</span>
+    </div>
+    <div class="concept-box green">
+      <strong>What it does:</strong> useCallback memoizes a function <em>reference</em>. Without it, a new function instance is created on every parent render, breaking React.memo on child components that receive the function as a prop.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useState, useCallback, memo } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// React.memo skips re-render if props unchanged (shallow comparison)</span>
+<span class="kw">const</span> <span class="cl">MemoizedChild</span> = <span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">Child</span>({ onSearch, label }) {
+  console.<span class="fn">log</span>(<span class="st">'Child rendered'</span>);
+  <span class="kw">return</span> &lt;<span class="cl">button</span> onClick={onSearch}&gt;{label}&lt;/<span class="cl">button</span>&gt;;
+});
+
+<span class="kw">function</span> <span class="fn">Parent</span>() {
+  <span class="kw">const</span> [name, setName] = <span class="fn">useState</span>(<span class="st">''</span>);
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+
+  <span class="cm">// BAD: new reference every render -- defeats React.memo</span>
+  <span class="kw">const</span> <span class="fn">handleBad</span> = () =&gt; <span class="fn">fetchResults</span>(name);
+
+  <span class="cm">// GOOD: stable reference -- only changes when name changes</span>
+  <span class="kw">const</span> <span class="fn">handleSearch</span> = <span class="fn">useCallback</span>(() =&gt; {
+    <span class="fn">fetchResults</span>(name);
+  }, [name]);
+
+  <span class="cm">// No deps -- functional setState avoids closure over count</span>
+  <span class="kw">const</span> <span class="fn">handleIncrement</span> = <span class="fn">useCallback</span>(() =&gt; setCount(c =&gt; c + <span class="num">1</span>), []);
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      &lt;<span class="cl">input</span> value={name} onChange={e =&gt; <span class="fn">setName</span>(e.target.value)} /&gt;
+      &lt;<span class="cl">MemoizedChild</span> onSearch={handleSearch} label=<span class="st">"Search"</span> /&gt;
+      &lt;<span class="cl">button</span> onClick={handleIncrement}&gt;Count: {count}&lt;/<span class="cl">button</span>&gt;
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}</pre>
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i> The golden rule:</strong> useCallback is useless without React.memo on the receiving component. Both pieces must be in place for the optimization to work.
+    </div>
+    <div class="concept-box amber">
+      <strong>Equivalence:</strong> <code>useCallback(fn, deps)</code> is exactly <code>useMemo(() =&gt; fn, deps)</code>. useCallback is syntactic sugar that memoizes the function itself rather than its return value.
+    </div>
+  </div>
+
+  <!-- HOOK 7: useReducer -->
+  <div class="hook-card purple" id="useReducer" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#7c3aed;color:#fff;">7</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">useReducer</h2>
+      <span class="badge ms-auto" style="background:#3b0764;color:#c4b5fd;">Complex State Management</span>
+    </div>
+    <div class="concept-box purple">
+      <strong>What it does:</strong> useReducer is an alternative to useState for managing complex state. <code>reducer(state, action) =&gt; newState</code>. The reducer is a pure function &mdash; receives current state and an action, returns next state without mutations. Easy to unit test in isolation.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useReducer } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">const</span> initialState = { items: [], total: <span class="num">0</span>, loading: <span class="kw">false</span>, error: <span class="kw">null</span> };
+
+<span class="kw">function</span> <span class="fn">cartReducer</span>(state, action) {
+  <span class="kw">switch</span> (action.type) {
+    <span class="kw">case</span> <span class="st">'ADD_ITEM'</span>: {
+      <span class="kw">const</span> exists = state.items.<span class="fn">find</span>(i =&gt; i.id === action.payload.id);
+      <span class="kw">const</span> items = exists
+        ? state.items.<span class="fn">map</span>(i =&gt; i.id === action.payload.id ? { ...i, qty: i.qty + <span class="num">1</span> } : i)
+        : [...state.items, { ...action.payload, qty: <span class="num">1</span> }];
+      <span class="kw">return</span> { ...state, items, total: state.total + action.payload.price };
+    }
+    <span class="kw">case</span> <span class="st">'REMOVE_ITEM'</span>: {
+      <span class="kw">const</span> item = state.items.<span class="fn">find</span>(i =&gt; i.id === action.payload);
+      <span class="kw">return</span> {
+        ...state,
+        items: state.items.<span class="fn">filter</span>(i =&gt; i.id !== action.payload),
+        total: state.total - (item?.price * item?.qty ?? <span class="num">0</span>),
+      };
+    }
+    <span class="kw">case</span> <span class="st">'UPDATE_QUANTITY'</span>:
+      <span class="kw">return</span> { ...state, items: state.items.<span class="fn">map</span>(i =&gt; i.id === action.payload.id ? { ...i, qty: action.payload.qty } : i) };
+    <span class="kw">case</span> <span class="st">'SET_LOADING'</span>: <span class="kw">return</span> { ...state, loading: action.payload };
+    <span class="kw">case</span> <span class="st">'SET_ERROR'</span>: <span class="kw">return</span> { ...state, error: action.payload, loading: <span class="kw">false</span> };
+    <span class="kw">case</span> <span class="st">'CLEAR'</span>: <span class="kw">return</span> initialState;
+    <span class="kw">default</span>: <span class="kw">throw new</span> <span class="cl">Error</span>(<span class="st">`Unknown action: ${action.type}`</span>);
+  }
+}
+
+<span class="kw">function</span> <span class="fn">Cart</span>() {
+  <span class="kw">const</span> [state, dispatch] = <span class="fn">useReducer</span>(cartReducer, initialState);
+  <span class="kw">const</span> { items, total, loading, error } = state;
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      {loading &amp;&amp; &lt;<span class="cl">p</span>&gt;Loading...&lt;/<span class="cl">p</span>&gt;}
+      {error &amp;&amp; &lt;<span class="cl">p</span>&gt;{error}&lt;/<span class="cl">p</span>&gt;}
+      {items.<span class="fn">map</span>(item =&gt; (
+        &lt;<span class="cl">div</span> key={item.id}&gt;
+          {item.name} x{item.qty}
+          &lt;<span class="cl">button</span> onClick={() =&gt; <span class="fn">dispatch</span>({ type: <span class="st">'REMOVE_ITEM'</span>, payload: item.id })}&gt;Remove&lt;/<span class="cl">button</span>&gt;
+        &lt;/<span class="cl">div</span>&gt;
+      ))}
+      &lt;<span class="cl">p</span>&gt;Total: ${total.<span class="fn">toFixed</span>(<span class="num">2</span>)}&lt;/<span class="cl">p</span>&gt;
+      &lt;<span class="cl">button</span> onClick={() =&gt; <span class="fn">dispatch</span>({ type: <span class="st">'CLEAR'</span> })}&gt;Clear&lt;/<span class="cl">button</span>&gt;
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}</pre>
+    <table class="comparison-table">
+      <thead><tr><th>Criterion</th><th>useState</th><th>useReducer</th></tr></thead>
+      <tbody>
+        <tr><td>Complexity</td><td>Simple independent values</td><td>Multiple inter-related sub-values</td></tr>
+        <tr><td>Logic location</td><td>Inline in handlers</td><td>Centralized in reducer</td></tr>
+        <tr><td>Testability</td><td>Test via component</td><td>Reducer is pure fn -- unit-testable directly</td></tr>
+        <tr><td>Best for</td><td>Toggle, counter, single input</td><td>Forms, cart, FSM, async loading states</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- HOOK 8: useLayoutEffect -->
+  <div class="hook-card amber" id="useLayoutEffect" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#d97706;color:#fff;">8</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">useLayoutEffect</h2>
+      <span class="badge ms-auto" style="background:#451a03;color:#fcd34d;">Synchronous DOM Reads</span>
+    </div>
+    <div class="concept-box amber">
+      <strong>What it does:</strong> Identical API to useEffect, but fires <em>synchronously</em> after DOM mutations and <em>before</em> the browser paints. Ideal for reading DOM measurements and synchronously updating layout to prevent visual flickering.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useRef, useState, useLayoutEffect } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Tooltip that positions itself based on measured DOM dimensions</span>
+<span class="kw">function</span> <span class="fn">SmartTooltip</span>({ targetRef, children }) {
+  <span class="kw">const</span> tooltipRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [style, setStyle] = <span class="fn">useState</span>({});
+
+  <span class="cm">// Runs BEFORE paint -- no flicker</span>
+  <span class="fn">useLayoutEffect</span>(() =&gt; {
+    <span class="kw">if</span> (!tooltipRef.current || !targetRef.current) <span class="kw">return</span>;
+    <span class="kw">const</span> targetRect = targetRef.current.<span class="fn">getBoundingClientRect</span>();
+    <span class="kw">const</span> tooltipRect = tooltipRef.current.<span class="fn">getBoundingClientRect</span>();
+    <span class="kw">const</span> showAbove = targetRect.top &gt;= tooltipRect.height + <span class="num">8</span>;
+    <span class="fn">setStyle</span>({
+      position: <span class="st">'fixed'</span>,
+      left: targetRect.left + (targetRect.width - tooltipRect.width) / <span class="num">2</span>,
+      top: showAbove ? targetRect.top - tooltipRect.height - <span class="num">8</span> : targetRect.bottom + <span class="num">8</span>,
+      opacity: <span class="num">1</span>,
+    });
+  }, [targetRef]);
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span> ref={tooltipRef} style={{ ...style, opacity: style.opacity ?? <span class="num">0</span>, background: <span class="st">'#1e293b'</span>, color: <span class="st">'#fff'</span>, padding: <span class="st">'4px 8px'</span>, borderRadius: <span class="st">'6px'</span> }}&gt;
+      {children}
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}</pre>
+    <table class="comparison-table">
+      <thead><tr><th></th><th>useEffect</th><th>useLayoutEffect</th></tr></thead>
+      <tbody>
+        <tr><td>Timing</td><td>After browser paint (async)</td><td>After DOM mutation, before paint (sync)</td></tr>
+        <tr><td>Blocks paint?</td><td>No</td><td>Yes</td></tr>
+        <tr><td>SSR safe?</td><td>Yes</td><td>Warning server-side</td></tr>
+        <tr><td>Default choice?</td><td>Yes -- start here always</td><td>Only if useEffect causes flicker</td></tr>
+      </tbody>
+    </table>
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i> Rule of thumb:</strong> Always start with <code>useEffect</code>. Switch to <code>useLayoutEffect</code> only when you observe a visual flicker caused by the effect needing to read and synchronously update the DOM before paint.
+    </div>
+  </div>
+
+  <!-- HOOK 9: useImperativeHandle -->
+  <div class="hook-card purple" id="useImperativeHandle" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#7c3aed;color:#fff;">9</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">useImperativeHandle</h2>
+      <span class="badge ms-auto" style="background:#3b0764;color:#c4b5fd;">Control Exposed Ref API</span>
+    </div>
+    <div class="concept-box purple">
+      <strong>What it does:</strong> Customizes the ref object that a parent component receives when using <code>forwardRef</code>. Instead of exposing the raw DOM node, you expose a controlled API with specific methods. Prefer props-based communication when possible.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useRef, useImperativeHandle, forwardRef } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Child exposes a controlled API -- not the raw DOM video element</span>
+<span class="kw">const</span> <span class="cl">VideoPlayer</span> = <span class="fn">forwardRef</span>(<span class="kw">function</span> <span class="fn">VideoPlayer</span>({ src }, ref) {
+  <span class="kw">const</span> videoRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+
+  <span class="fn">useImperativeHandle</span>(ref, () =&gt; ({
+    <span class="fn">play</span>()  { videoRef.current?.<span class="fn">play</span>(); },
+    <span class="fn">pause</span>() { videoRef.current?.<span class="fn">pause</span>(); },
+    <span class="fn">seek</span>(time) { <span class="kw">if</span> (videoRef.current) videoRef.current.currentTime = time; },
+    <span class="fn">getTime</span>() { <span class="kw">return</span> videoRef.current?.currentTime ?? <span class="num">0</span>; },
+    <span class="cm">// Parent cannot access videoRef.current.src -- good encapsulation</span>
+  }), []);
+
+  <span class="kw">return</span> &lt;<span class="cl">video</span> ref={videoRef} src={src} /&gt;;
+});
+
+<span class="cm">// Parent uses the exposed API -- not the raw DOM node</span>
+<span class="kw">function</span> <span class="fn">MoviePage</span>() {
+  <span class="kw">const</span> playerRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+
+  <span class="kw">const</span> <span class="fn">handleSkipIntro</span> = () =&gt; {
+    playerRef.current?.<span class="fn">seek</span>(<span class="num">90</span>);
+    playerRef.current?.<span class="fn">play</span>();
+  };
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      &lt;<span class="cl">VideoPlayer</span> ref={playerRef} src=<span class="st">"/movie.mp4"</span> /&gt;
+      &lt;<span class="cl">button</span> onClick={() =&gt; playerRef.current?.<span class="fn">play</span>()}&gt;Play&lt;/<span class="cl">button</span>&gt;
+      &lt;<span class="cl">button</span> onClick={() =&gt; playerRef.current?.<span class="fn">pause</span>()}&gt;Pause&lt;/<span class="cl">button</span>&gt;
+      &lt;<span class="cl">button</span> onClick={handleSkipIntro}&gt;Skip Intro&lt;/<span class="cl">button</span>&gt;
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}</pre>
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i> Use for:</strong> media players (play/pause/seek), custom inputs (focus/clear/validate), canvas drawing APIs. Always prefer prop-based communication first.
+    </div>
+  </div>
+
+  <!-- HOOK 10: Custom Hooks -->
+  <div class="hook-card green" id="customHooks" data-aos="fade-up">
+    <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+      <div class="hook-number" style="background:#22c55e;color:#fff;">10</div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.6rem;">Custom Hooks</h2>
+      <span class="badge ms-auto" style="background:#14532d;color:#6ee7b7;">Reusable Stateful Logic</span>
+    </div>
+    <div class="concept-box green">
+      <strong>What they are:</strong> Custom hooks are plain JavaScript functions whose names start with <code>use</code> and that may call other hooks. They extract reusable stateful logic from components &mdash; the modern replacement for Higher-Order Components and render props. Each component calling a custom hook gets its own isolated state.
+    </div>
+    <pre class="code-block"><span class="kw">import</span> { useState, useEffect, useCallback } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// useFetch -- data fetching with cancellation</span>
+<span class="kw">function</span> <span class="fn">useFetch</span>(url) {
+  <span class="kw">const</span> [data, setData] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">false</span>);
+  <span class="kw">const</span> [error, setError] = <span class="fn">useState</span>(<span class="kw">null</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">if</span> (!url) <span class="kw">return</span>;
+    <span class="kw">const</span> controller = <span class="kw">new</span> <span class="cl">AbortController</span>();
+    <span class="fn">setLoading</span>(<span class="kw">true</span>); <span class="fn">setError</span>(<span class="kw">null</span>);
+    <span class="fn">fetch</span>(url, { signal: controller.signal })
+      .<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>())
+      .<span class="fn">then</span>(setData)
+      .<span class="fn">catch</span>(err =&gt; { <span class="kw">if</span> (err.name !== <span class="st">'AbortError'</span>) <span class="fn">setError</span>(err.message); })
+      .<span class="fn">finally</span>(() =&gt; <span class="fn">setLoading</span>(<span class="kw">false</span>));
+    <span class="kw">return</span> () =&gt; controller.<span class="fn">abort</span>();
+  }, [url]);
+  <span class="kw">return</span> { data, loading, error };
+}
+
+<span class="cm">// useLocalStorage -- synced with localStorage</span>
+<span class="kw">function</span> <span class="fn">useLocalStorage</span>(key, initialValue) {
+  <span class="kw">const</span> [value, setValue] = <span class="fn">useState</span>(() =&gt; {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> stored = localStorage.<span class="fn">getItem</span>(key);
+      <span class="kw">return</span> stored ? <span class="cl">JSON</span>.<span class="fn">parse</span>(stored) : initialValue;
+    } <span class="kw">catch</span> { <span class="kw">return</span> initialValue; }
+  });
+  <span class="kw">const</span> <span class="fn">setStoredValue</span> = <span class="fn">useCallback</span>((val) =&gt; {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> toStore = val <span class="kw">instanceof</span> <span class="cl">Function</span> ? <span class="fn">val</span>(value) : val;
+      localStorage.<span class="fn">setItem</span>(key, <span class="cl">JSON</span>.<span class="fn">stringify</span>(toStore));
+      <span class="fn">setValue</span>(toStore);
+    } <span class="kw">catch</span> (err) { console.<span class="fn">warn</span>(<span class="st">'localStorage write failed'</span>, err); }
+  }, [key, value]);
+  <span class="kw">return</span> [value, setStoredValue];
+}
+
+<span class="cm">// useDebounce -- delays expensive operations</span>
+<span class="kw">function</span> <span class="fn">useDebounce</span>(value, delay = <span class="num">300</span>) {
+  <span class="kw">const</span> [debouncedValue, setDebouncedValue] = <span class="fn">useState</span>(value);
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> timer = <span class="fn">setTimeout</span>(() =&gt; <span class="fn">setDebouncedValue</span>(value), delay);
+    <span class="kw">return</span> () =&gt; <span class="fn">clearTimeout</span>(timer);
+  }, [value, delay]);
+  <span class="kw">return</span> debouncedValue;
+}
+
+<span class="cm">// Usage: SearchBox combining useFetch + useDebounce</span>
+<span class="kw">function</span> <span class="fn">SearchBox</span>() {
+  <span class="kw">const</span> [query, setQuery] = <span class="fn">useState</span>(<span class="st">''</span>);
+  <span class="kw">const</span> debouncedQuery = <span class="fn">useDebounce</span>(query, <span class="num">400</span>);
+  <span class="kw">const</span> { data, loading } = <span class="fn">useFetch</span>(debouncedQuery ? <span class="st">`/api/search?q=${debouncedQuery}`</span> : <span class="kw">null</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="cl">div</span>&gt;
+      &lt;<span class="cl">input</span> value={query} onChange={e =&gt; <span class="fn">setQuery</span>(e.target.value)} placeholder=<span class="st">"Search..."</span> /&gt;
+      {loading &amp;&amp; &lt;<span class="cl">p</span>&gt;Searching...&lt;/<span class="cl">p</span>&gt;}
+      {data?.results?.<span class="fn">map</span>(r =&gt; &lt;<span class="cl">p</span> key={r.id}&gt;{r.name}&lt;/<span class="cl">p</span>&gt;)}
+    &lt;/<span class="cl">div</span>&gt;
+  );
+}</pre>
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill text-success me-1"></i> Naming rule:</strong> The <code>use</code> prefix signals to <code>eslint-plugin-react-hooks</code> to enforce the Rules of Hooks inside your custom hook. Without it, the linter won&rsquo;t catch violations inside your hook function.
+    </div>
+  </div>
+
+  <!-- RULES OF HOOKS -->
+  <div class="state-card" id="rulesOfHooks" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="font-size:1.5rem;"><i class="bi bi-exclamation-octagon-fill text-danger me-2"></i>Rules of Hooks</h2>
+    <div class="rule-card danger">
+      <strong>Rule 1 &mdash; Only call hooks at the top level</strong>
+      <p class="mb-0 mt-1">Never call hooks inside loops, conditions, nested functions, or try/catch blocks. React identifies each hook by its <em>order of call</em> within a component render. Changing the order corrupts the fiber slot mapping, causing state to be assigned to the wrong hooks.</p>
+    </div>
+    <div class="rule-card danger">
+      <strong>Rule 2 &mdash; Only call hooks from React functions</strong>
+      <p class="mb-0 mt-1">Call hooks only from React function components or custom hook functions (names starting with <code>use</code>). Never from regular JavaScript functions, class components, event handlers, or async callbacks outside a hook.</p>
+    </div>
+    <pre class="code-block"><span class="cm">// VIOLATION -- conditional hook call</span>
+<span class="kw">function</span> <span class="fn">BadComponent</span>({ isLoggedIn }) {
+  <span class="kw">if</span> (isLoggedIn) {
+    <span class="kw">const</span> [data, setData] = <span class="fn">useState</span>(<span class="kw">null</span>); <span class="cm">// skipped when false -- corrupts all slots!</span>
+  }
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>); <span class="cm">// now occupies wrong slot</span>
+}
+
+<span class="cm">// CORRECT -- condition goes INSIDE the effect, not around the hook</span>
+<span class="kw">function</span> <span class="fn">GoodComponent</span>({ isLoggedIn }) {
+  <span class="kw">const</span> [data, setData] = <span class="fn">useState</span>(<span class="kw">null</span>);   <span class="cm">// always slot 0</span>
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>); <span class="cm">// always slot 1</span>
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">if</span> (!isLoggedIn) <span class="kw">return</span>; <span class="cm">// condition is INSIDE the effect</span>
+    <span class="fn">fetchUserData</span>().<span class="fn">then</span>(setData);
+  }, [isLoggedIn]);
+}</pre>
+    <div class="concept-box amber">
+      <strong><i class="bi bi-shield-fill-check me-1"></i> Enforcement:</strong> Install <code>eslint-plugin-react-hooks</code> and enable <code>"react-hooks/rules-of-hooks": "error"</code> and <code>"react-hooks/exhaustive-deps": "warn"</code>. These catch violations at lint/build time.
+    </div>
+  </div>
+
+  <!-- INTERVIEW QUESTIONS -->
+  <div id="interviewQuestions" data-aos="fade-up">
+    <h2 class="fw-bold mb-3" style="font-size:1.5rem;"><i class="bi bi-patch-question-fill me-2" style="color:#a78bfa;"></i>20 Interview Questions &mdash; React Hooks</h2>
+    <div class="accordion" id="iqAccordion">
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq1">
+            <strong class="me-2" style="color:#7c3aed;">Q1</strong> What are React Hooks? Why were they introduced in React 16.8?
+          </button>
+        </h2>
+        <div id="iq1" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            Hooks are functions that let you use state and other React features in functional components. They were introduced to solve three core problems with class components: (1) <strong>Complex lifecycle logic</strong> &mdash; related logic was split across componentDidMount, componentDidUpdate, and componentWillUnmount. (2) <strong>Stateful logic was hard to reuse</strong> &mdash; HOCs and render props caused &ldquo;wrapper hell.&rdquo; (3) <strong>Classes confused both people and machines</strong> &mdash; <code>this</code> binding was error-prone, class syntax didn&rsquo;t minify well, and hot reloading was unreliable. Hooks enable cleaner, more reusable logic using only functions.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq2">
+            <strong class="me-2" style="color:#7c3aed;">Q2</strong> What is the difference between useState and useReducer? When do you use each?
+          </button>
+        </h2>
+        <div id="iq2" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            <strong>useState</strong> is simpler &mdash; ideal for independent primitive values or simple objects where each setter is self-contained. <strong>useReducer</strong> shines when state has multiple sub-values that update together, next state depends on previous state in complex ways, or you want state logic testable in isolation (the reducer is a pure function you can unit test directly without rendering a component). Rule of thumb: if you find yourself writing multiple useState setters in the same event handler to keep state consistent, that&rsquo;s a sign useReducer would be cleaner.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq3">
+            <strong class="me-2" style="color:#7c3aed;">Q3</strong> When would you use useCallback vs useMemo?
+          </button>
+        </h2>
+        <div id="iq3" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            Use <strong>useMemo</strong> to memoize the <em>result</em> of a computation (a value): <code>useMemo(() =&gt; expensiveCalc(a, b), [a, b])</code>. Use <strong>useCallback</strong> to memoize a <em>function reference</em>: <code>useCallback(() =&gt; doSomething(x), [x])</code>. They are equivalent: <code>useCallback(fn, deps)</code> equals <code>useMemo(() =&gt; fn, deps)</code>. useCallback is syntactic sugar. In practice: useMemo when avoiding recomputing an expensive value; useCallback when you want a stable function reference to pass to React.memo-wrapped children or use in another hook&rsquo;s dependency array. Neither is useful without a concrete performance reason &mdash; profile first.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq4">
+            <strong class="me-2" style="color:#7c3aed;">Q4</strong> What is the difference between useEffect and useLayoutEffect?
+          </button>
+        </h2>
+        <div id="iq4" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            <strong>useEffect</strong> fires asynchronously after the browser has painted &mdash; non-blocking, the default choice for data fetching, subscriptions, logging. <strong>useLayoutEffect</strong> fires synchronously after DOM mutations but before the browser paints &mdash; blocks the paint. Use it when you need to read a DOM measurement (like <code>getBoundingClientRect</code>) and synchronously update the DOM to prevent visual flickering. Example: a tooltip that measures its target and positions itself &mdash; useEffect would flash the tooltip in the wrong position first; useLayoutEffect positions it correctly on the same frame. Note: useLayoutEffect causes a warning in SSR since DOM isn&rsquo;t available server-side.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq5">
+            <strong class="me-2" style="color:#7c3aed;">Q5</strong> Explain the dependency array in useEffect. What happens with [], [dep], and no array?
+          </button>
+        </h2>
+        <div id="iq5" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            <strong>[] (empty array)</strong>: The effect runs only once after the initial mount (equivalent to componentDidMount). Cleanup runs on unmount. <strong>[dep] (with dependencies)</strong>: The effect runs after mount AND after every render where any listed dependency changed (React uses Object.is for comparison). <strong>No dependency array</strong>: The effect runs after every single render &mdash; rare and dangerous, can cause infinite loops if the effect updates state. The rule: include ALL values from component scope used inside the effect. The exhaustive-deps ESLint rule helps enforce this.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq6">
+            <strong class="me-2" style="color:#7c3aed;">Q6</strong> What happens if you don&rsquo;t pass a dependency array to useEffect at all?
+          </button>
+        </h2>
+        <div id="iq6" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            Without a dependency array, the effect runs after <em>every</em> render &mdash; both initial mount and every subsequent update. This is rarely what you want. It can cause infinite loops if the effect updates state (state update &rarr; re-render &rarr; effect runs &rarr; state update&hellip;), or severe performance issues if it makes API calls. The only legitimate use case is effects that genuinely need to run after every render. Most of the time, omitting the array is a bug &mdash; either the developer forgot it (should be <code>[]</code>) or hasn&rsquo;t properly identified dependencies.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq7">
+            <strong class="me-2" style="color:#7c3aed;">Q7</strong> What is a custom hook? What are the naming rules?
+          </button>
+        </h2>
+        <div id="iq7" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            A custom hook is a plain JavaScript function whose name starts with <code>use</code> and that may call other hooks inside it. The <code>use</code> prefix is not just a convention &mdash; it signals to <code>eslint-plugin-react-hooks</code> to enforce the Rules of Hooks inside the function. Without the prefix, the linter won&rsquo;t catch violations. Custom hooks don&rsquo;t share state between components &mdash; each component calling a custom hook gets its own isolated state instance. They replaced HOCs and render props for logic reuse in modern React.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq8">
+            <strong class="me-2" style="color:#7c3aed;">Q8</strong> Can you call a hook inside a condition? Why not?
+          </button>
+        </h2>
+        <div id="iq8" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            No. React identifies each hook by its <em>order of calls</em> within a component render. React maintains an internal linked list (fiber) where each hook call maps to a slot by position (slot 0, 1, 2&hellip;). If a hook is inside a condition, it might be skipped on some renders, shifting all subsequent hooks to wrong slots &mdash; state values get assigned to the wrong hooks, causing unpredictable bugs. The fix: move the condition <em>inside</em> the hook or effect, not around it. The <code>eslint-plugin-react-hooks/rules-of-hooks</code> rule catches this at build time.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq9">
+            <strong class="me-2" style="color:#7c3aed;">Q9</strong> How do you prevent infinite loops in useEffect?
+          </button>
+        </h2>
+        <div id="iq9" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            Infinite loops occur when the effect updates state that is also in the dependency array. Solutions: (1) <strong>Remove the dependency if truly not needed</strong>. (2) <strong>Use functional state updates</strong> &mdash; <code>setState(prev =&gt; prev + 1)</code> lets you read current state without adding it to deps. (3) <strong>Memoize objects/functions</strong> with useMemo/useCallback before adding to deps &mdash; a new object reference on every render triggers the effect on every render. (4) <strong>Move static objects/arrays outside the component</strong>. (5) <strong>Use a ref</strong> for values you need to read inside an effect but shouldn&rsquo;t re-run when they change.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq10">
+            <strong class="me-2" style="color:#7c3aed;">Q10</strong> What are the 3 main uses of useRef?
+          </button>
+        </h2>
+        <div id="iq10" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            (1) <strong>DOM references</strong> &mdash; attach the ref to a DOM element via the <code>ref</code> prop to access it imperatively: focusing an input, measuring its dimensions, triggering animations, or scrolling to it. (2) <strong>Persisting mutable values across renders without triggering re-renders</strong> &mdash; track the previous value of a prop or state, store a render count, or track whether a component is still mounted. (3) <strong>Storing mutable instance values</strong> like timer IDs (setInterval, setTimeout), WebSocket connections, or subscription handles &mdash; so they can be read or cleared in effects and event handlers without causing re-renders when they are set.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq11">
+            <strong class="me-2" style="color:#7c3aed;">Q11</strong> How does useContext work? What are the performance implications?
+          </button>
+        </h2>
+        <div id="iq11" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            <code>useContext(MyContext)</code> subscribes a component to a React context object. When the Provider&rsquo;s <code>value</code> prop changes by reference, React re-renders <em>all</em> components consuming that context &mdash; even if a consumer only uses one field from a multi-field context object. Mitigations: (1) <strong>Split contexts by update frequency</strong> &mdash; ThemeContext (rarely changes) separate from CartContext (changes often). (2) <strong>Memoize the context value</strong> with useMemo. (3) For fine-grained subscriptions at scale, consider Zustand, Jotai, or Redux.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq12">
+            <strong class="me-2" style="color:#7c3aed;">Q12</strong> What is useImperativeHandle and when do you use it?
+          </button>
+        </h2>
+        <div id="iq12" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            <code>useImperativeHandle(ref, createHandle, deps)</code> customizes the ref object exposed to a parent when using <code>forwardRef</code>. Without it, forwardRef exposes the raw DOM node. With it, you expose a controlled API &mdash; only the methods you explicitly define. Use it for: media players (play/pause/seek), custom input components (focus/clear/validate), canvas drawing APIs. As a general principle: prefer props and callbacks over imperative handles. Use useImperativeHandle only when the imperative API is genuinely more natural or when you need to prevent parent access to internal DOM nodes.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq13">
+            <strong class="me-2" style="color:#7c3aed;">Q13</strong> How does React.memo work with useCallback? Why do you need both?
+          </button>
+        </h2>
+        <div id="iq13" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            <code>React.memo</code> wraps a component and skips re-rendering if its props haven&rsquo;t changed (shallow comparison). The problem: if a parent passes a function as a prop, that function is recreated on every parent render &mdash; React.memo sees &ldquo;props changed&rdquo; and re-renders the child anyway. <code>useCallback</code> in the parent stabilizes the function reference. You need BOTH: React.memo on the child to opt into prop-based optimization, AND useCallback in the parent to ensure function props don&rsquo;t break that optimization. Without React.memo, useCallback achieves nothing for rendering performance. Without useCallback, React.memo is defeated by unstable function props.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq14">
+            <strong class="me-2" style="color:#7c3aed;">Q14</strong> What is the stale closure problem in hooks? Give an example.
+          </button>
+        </h2>
+        <div id="iq14" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            A stale closure occurs when an effect or callback captures a value from a previous render and uses it even after the value has updated. Classic example: <code>setInterval</code> inside <code>useEffect(fn, [])</code> &mdash; the interval callback closes over the initial state value and always sees it, never the updated value.
+            <pre class="code-block mt-2"><span class="cm">// Stale -- count is always 0 inside the callback</span>
+<span class="fn">useEffect</span>(() =&gt; {
+  <span class="kw">const</span> id = <span class="fn">setInterval</span>(() =&gt; console.<span class="fn">log</span>(count), <span class="num">1000</span>); <span class="cm">// always 0!</span>
+  <span class="kw">return</span> () =&gt; <span class="fn">clearInterval</span>(id);
+}, []);
+
+<span class="cm">// Fix -- functional update reads current state without closure</span>
+setCount(c =&gt; c + <span class="num">1</span>);</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq15">
+            <strong class="me-2" style="color:#7c3aed;">Q15</strong> How do you handle cleanup in useEffect? Give 3 cleanup examples.
+          </button>
+        </h2>
+        <div id="iq15" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            Return a cleanup function from useEffect &mdash; React calls it before the next effect execution and when the component unmounts.<br/><br/>
+            <strong>1. Timer cleanup:</strong> <code>return () =&gt; clearInterval(id)</code><br/><br/>
+            <strong>2. Fetch cancellation:</strong> <code>const controller = new AbortController(); fetch(url, { signal: controller.signal }); return () =&gt; controller.abort()</code> &mdash; cancels in-flight requests when deps change or component unmounts, preventing setState on unmounted components.<br/><br/>
+            <strong>3. Event listener:</strong> <code>window.addEventListener('resize', handler); return () =&gt; window.removeEventListener('resize', handler)</code> &mdash; prevents duplicate listeners and memory leaks. Failing to clean up causes memory leaks and duplicate subscriptions.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq16">
+            <strong class="me-2" style="color:#7c3aed;">Q16</strong> Explain how useState works internally (fiber linked list / slots).
+          </button>
+        </h2>
+        <div id="iq16" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            React maintains a &ldquo;fiber&rdquo; object for each component instance. This fiber has a linked list of hook objects &mdash; one per hook call, identified purely by call order (slot 0, 1, 2&hellip;). On initial render (&ldquo;mount&rdquo;), React creates a new hook object for each hook call. Each useState creates a hook object with: <code>memoizedState</code> (current value), <code>queue</code> (an update queue), and <code>next</code> (pointer to next hook). On re-renders, React replays hook calls in the same order, reading from existing hook objects. The setter enqueues an update action on the hook object&rsquo;s <code>queue</code> and schedules a re-render. During re-render, React processes the queue to compute the new <code>memoizedState</code>. This is why hooks must be called in the same order every render &mdash; the linked list has no names, only positions.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq17">
+            <strong class="me-2" style="color:#7c3aed;">Q17</strong> When would you choose useReducer over useState?
+          </button>
+        </h2>
+        <div id="iq17" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            Choose useReducer when: (1) <strong>State has multiple sub-values that update together</strong> &mdash; a shopping cart needs items, total, loading, and error to update in coordinated ways. (2) <strong>Next state depends on the previous in complex ways</strong>. (3) <strong>State logic should be testable in isolation</strong> &mdash; the reducer is a pure function; write unit tests directly without rendering any component. (4) <strong>Multiple distinct actions trigger state updates</strong> &mdash; like a finite state machine with named transitions. (5) <strong>Complex forms, wizards, or multi-step processes</strong> where many handlers update shared state. Use useState for simple, independent values like a single toggle, counter, or text input.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq18">
+            <strong class="me-2" style="color:#7c3aed;">Q18</strong> What are the Rules of Hooks and why do they exist?
+          </button>
+        </h2>
+        <div id="iq18" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            <strong>Rule 1 &mdash; Only call hooks at the top level:</strong> Never inside loops, conditions, nested functions, or try/catch blocks. <strong>Rule 2 &mdash; Only call hooks from React functions:</strong> Only from React function components or custom hooks (functions starting with <code>use</code>), never from regular JS functions or class components.<br/><br/>
+            These rules exist because React relies on the <em>stable order of hook calls</em> to correctly map each call to its internal state slot in the fiber linked list. Hooks have no names &mdash; they are identified purely by position. If a hook is inside a condition or loop, it might be called a different number of times on different renders, changing the order. React would then read wrong state from wrong slots, causing hard-to-debug bugs. <code>eslint-plugin-react-hooks</code> enforces both rules at lint time.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq19">
+            <strong class="me-2" style="color:#7c3aed;">Q19</strong> How do you fetch data in useEffect properly (with cancellation)?
+          </button>
+        </h2>
+        <div id="iq19" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            Proper data fetching in useEffect: (1) Create an <code>AbortController</code> at the start. (2) Pass its <code>signal</code> to fetch options. (3) Return a cleanup function that calls <code>controller.abort()</code>. (4) In the catch block, check for <code>AbortError</code> separately &mdash; it is not a real error, just a cancellation signal. (5) Reset loading/error state at the start of each effect run to avoid stale states.<br/><br/>
+            Without cancellation, if the user navigates away or deps change before the fetch completes, the async callback may call setState on an unmounted component, or set state with stale data from a previous request (race condition). In production, consider React Query or SWR which handle cancellation, caching, and deduplication automatically.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2" style="border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#iq20">
+            <strong class="me-2" style="color:#7c3aed;">Q20</strong> What is the difference between controlled and uncontrolled components in hooks context?
+          </button>
+        </h2>
+        <div id="iq20" class="accordion-collapse collapse" data-bs-parent="#iqAccordion">
+          <div class="accordion-body">
+            In <strong>controlled components</strong>, form element values are driven by React state (useState). Every keystroke calls onChange, which calls setState, which re-renders with the new value prop &mdash; React is the single source of truth. Enables real-time validation, conditional disabling, instant formatting, and sync across components.<br/><br/>
+            In <strong>uncontrolled components</strong>, the DOM manages its own state. You use <code>useRef</code> to access the value when needed (e.g., on submit): <code>inputRef.current.value</code>. Uncontrolled components have less re-rendering overhead and simpler code for one-time reads, but real-time validation, programmatic reset, and keeping values in sync across components is much harder.<br/><br/>
+            Rule of thumb: prefer controlled for forms that need validation, dynamic behavior, or synced state. Use uncontrolled for simple standalone inputs where you only need the value at submit time.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer style="background:#0f172a;border-top:1px solid #1e293b;padding:2.5rem 0;margin-top:3rem;">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col-md-4 mb-3 mb-md-0">
+        <span style="background:linear-gradient(135deg,#61dafb,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:1.1rem;">&#9883; React Mastery Hub</span>
+        <p class="text-secondary small mt-1 mb-0">Section 8 &mdash; React Hooks</p>
+      </div>
+      <div class="col-md-4 text-center mb-3 mb-md-0">
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+          <a href="react-state.html" class="text-secondary small text-decoration-none">&larr; Section 7: State</a>
+          <a href="index.html" class="text-secondary small text-decoration-none">Home</a>
+          <a href="react-forms.html" class="text-secondary small text-decoration-none">Section 9: Forms &rarr;</a>
+        </div>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <p class="text-secondary small mb-0">10 Hooks &nbsp;&middot;&nbsp; Rules of Hooks &nbsp;&middot;&nbsp; 20 Interview Qs</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 500, once: true, offset: 60 });
+
+  const themeToggle = document.getElementById('themeToggle');
+  const html = document.documentElement;
+
+  function applyTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    themeToggle.innerHTML = theme === 'dark'
+      ? '<i class="bi bi-sun-fill"></i>'
+      : '<i class="bi bi-moon-stars-fill"></i>';
+    localStorage.setItem('rmh-theme', theme);
+  }
+
+  const savedTheme = localStorage.getItem('rmh-theme');
+  if (savedTheme) applyTheme(savedTheme);
+
+  themeToggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>

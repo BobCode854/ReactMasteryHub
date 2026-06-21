@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>System Design — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0;}
+    .compare-card{border-radius:12px;padding:1.2rem;border:2px solid transparent;}
+    .compare-card.left{background:#eff6ff;border-color:#93c5fd;}
+    .compare-card.right{background:#f0fdf4;border-color:#6ee7b7;}
+    [data-theme="dark"] .compare-card.left{background:#1e3a5f;border-color:#3b82f6;}
+    [data-theme="dark"] .compare-card.right{background:#14532d;border-color:#22c55e;}
+    .step-card{border-radius:12px;padding:1.2rem;margin-bottom:.75rem;border-left:5px solid #3b82f6;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+    [data-theme="dark"] .step-card{background:#111827;}
+    .step-card.s1{border-color:#3b82f6;}
+    .step-card.s2{border-color:#8b5cf6;}
+    .step-card.s3{border-color:#22c55e;}
+    .step-card.s4{border-color:#f59e0b;}
+    .step-card.s5{border-color:#ef4444;}
+    .step-card.s6{border-color:#06b6d4;}
+    .step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;flex-shrink:0;}
+    .tree-line{font-family:'JetBrains Mono',monospace;font-size:.83rem;background:#0f172a;color:#e2e8f0;padding:1.2rem;border-radius:10px;line-height:1.8;}
+    .tree-line .dir{color:#60a5fa;font-weight:600;}
+    .tree-line .comment{color:#64748b;font-style:italic;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge rounded-pill px-3 py-2" style="background:rgba(97,218,251,.15);color:#61dafb;font-size:.85rem;border:1px solid rgba(97,218,251,.3);">Section 24</span>
+      <span class="badge rounded-pill px-3 py-2" style="background:#dc2626;">Senior Level</span>
+    </div>
+    <h1 class="fw-800 mb-2" style="font-size:2.4rem;">System Design for React</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;max-width:640px;">How to approach frontend system design interviews — frameworks, real-world case studies, and performance budgets.</p>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- Interview Framework -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-1" style="font-size:1.5rem;"><i class="bi bi-diagram-3 me-2" style="color:#3b82f6;"></i>System Design Interview Framework</h2>
+    <p class="text-muted mb-4">Use this 6-step structure for every frontend system design interview. Speak through each step explicitly.</p>
+
+    <div class="step-card s1">
+      <div class="d-flex align-items-start gap-3">
+        <div class="step-num" style="background:#eff6ff;color:#3b82f6;">1</div>
+        <div>
+          <div class="fw-700 fs-6">Requirements Gathering</div>
+          <div class="row g-2 mt-1">
+            <div class="col-md-6">
+              <div class="small fw-600 text-muted mb-1">Functional Requirements</div>
+              <ul class="small mb-0">
+                <li>What are the core user flows?</li>
+                <li>Who are the users? (scale matters)</li>
+                <li>What devices/browsers must be supported?</li>
+                <li>Real-time features needed?</li>
+                <li>Offline support needed?</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <div class="small fw-600 text-muted mb-1">Non-Functional Requirements</div>
+              <ul class="small mb-0">
+                <li>Performance targets (LCP, FID, TTI)</li>
+                <li>Availability (99.9% uptime?)</li>
+                <li>Accessibility (WCAG 2.1 AA?)</li>
+                <li>Security (auth, XSS, CSRF)</li>
+                <li>SEO requirements?</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card s2">
+      <div class="d-flex align-items-start gap-3">
+        <div class="step-num" style="background:#f5f3ff;color:#8b5cf6;">2</div>
+        <div>
+          <div class="fw-700 fs-6">Capacity Estimation</div>
+          <div class="small mt-1">Think about scale from the start. Numbers drive architecture decisions.</div>
+          <div class="row g-2 mt-1">
+            <div class="col-md-4">
+              <div class="fw-600 small">Users</div>
+              <div class="small text-muted">DAU, MAU, peak concurrent users</div>
+            </div>
+            <div class="col-md-4">
+              <div class="fw-600 small">Requests/sec</div>
+              <div class="small text-muted">API calls per user session, WebSocket connections</div>
+            </div>
+            <div class="col-md-4">
+              <div class="fw-600 small">Data Volume</div>
+              <div class="small text-muted">Bundle size budget, images/media, real-time event frequency</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card s3">
+      <div class="d-flex align-items-start gap-3">
+        <div class="step-num" style="background:#f0fdf4;color:#22c55e;">3</div>
+        <div>
+          <div class="fw-700 fs-6">High-Level Design</div>
+          <div class="small mt-1">Draw the component tree, data flow, and system boundaries.</div>
+          <ul class="small mt-1 mb-0">
+            <li>Choose rendering strategy: CSR, SSR, SSG, ISR, or hybrid</li>
+            <li>Identify major sections / page regions</li>
+            <li>Map user flows to component hierarchies</li>
+            <li>Identify shared state vs local state</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card s4">
+      <div class="d-flex align-items-start gap-3">
+        <div class="step-num" style="background:#fffbeb;color:#f59e0b;">4</div>
+        <div>
+          <div class="fw-700 fs-6">Component Design (Deep Dive)</div>
+          <div class="small mt-1">Pick 2-3 critical components and design them in detail.</div>
+          <ul class="small mt-1 mb-0">
+            <li>Props interface / TypeScript types</li>
+            <li>Internal state and side effects</li>
+            <li>Child component breakdown</li>
+            <li>Performance considerations (memoization, virtualization)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card s5">
+      <div class="d-flex align-items-start gap-3">
+        <div class="step-num" style="background:#fff5f5;color:#ef4444;">5</div>
+        <div>
+          <div class="fw-700 fs-6">Performance &amp; Scalability</div>
+          <div class="small mt-1">How does it hold up under load and on slow connections?</div>
+          <ul class="small mt-1 mb-0">
+            <li>Code splitting and lazy loading strategy</li>
+            <li>CDN for static assets (images, fonts, JS chunks)</li>
+            <li>Caching: React Query stale time, HTTP cache headers</li>
+            <li>Virtualization for large lists</li>
+            <li>Service Worker / offline support if needed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card s6">
+      <div class="d-flex align-items-start gap-3">
+        <div class="step-num" style="background:#ecfeff;color:#06b6d4;">6</div>
+        <div>
+          <div class="fw-700 fs-6">Trade-offs Discussion</div>
+          <div class="small mt-1">No design is perfect. Discuss what you'd change with different constraints.</div>
+          <ul class="small mt-1 mb-0">
+            <li>CSR vs SSR vs SSG — SEO vs simplicity vs cost</li>
+            <li>REST vs GraphQL vs WebSocket — use case fit</li>
+            <li>Redux vs React Query — complexity vs capability</li>
+            <li>Monorepo vs separate repos — coordination overhead</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case Study 1: Chat App -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge bg-primary px-3 py-2">Case Study 1</span>
+      <h2 class="fw-700 mb-0" style="font-size:1.4rem;"><i class="bi bi-chat-dots me-2" style="color:#3b82f6;"></i>Real-time Chat Application</h2>
+    </div>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <div class="concept-box blue">
+          <div class="fw-700 mb-2">Functional Requirements</div>
+          <ul class="small mb-0">
+            <li>Send and receive messages in real time</li>
+            <li>Group conversations and DMs</li>
+            <li>Typing indicators</li>
+            <li>Online/offline presence</li>
+            <li>Message history with infinite scroll</li>
+            <li>File/image sharing</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box green">
+          <div class="fw-700 mb-2">Technical Decisions</div>
+          <ul class="small mb-0">
+            <li>WebSocket (Socket.IO) for real-time events</li>
+            <li>REST for initial data load and history</li>
+            <li>Normalized Redux state for messages</li>
+            <li>Optimistic updates for sent messages</li>
+            <li>Virtual scroll for message thread</li>
+            <li>Debounced typing indicator events</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h6 class="fw-700 mb-2">Frontend Architecture (Component Tree)</h6>
+    <div class="tree-line mb-3">
+<span class="dir">ChatApp</span>
+├── <span class="dir">AuthProvider</span>         <span class="comment">JWT context — user identity</span>
+├── <span class="dir">SocketProvider</span>       <span class="comment">WebSocket singleton — single connection shared app-wide</span>
+├── <span class="dir">ConversationList</span>     <span class="comment">Virtualized list, sorted by lastMessage.createdAt</span>
+│   ├── ConversationItem   <span class="comment">Optimistic unread count, last message preview</span>
+│   └── ConversationSearch <span class="comment">Debounced local search</span>
+├── <span class="dir">MessageThread</span>
+│   ├── VirtualizedMessages <span class="comment">react-virtual, batch renders on scroll</span>
+│   ├── MessageBubble       <span class="comment">Memo'd, only re-renders on edit/delete</span>
+│   ├── MessageInput        <span class="comment">Draft persistence in localStorage</span>
+│   └── TypingIndicator     <span class="comment">Debounced WebSocket events, auto-timeout 3s</span>
+└── <span class="dir">UserPresence</span>         <span class="comment">Online/offline/away via heartbeat ping</span>
+    </div>
+
+    <h6 class="fw-700 mb-2">State Shape (Normalized)</h6>
+    <div class="code-block"><span class="cm">// Normalized state — avoid nested arrays, use byId/allIds pattern</span>
+{
+  conversations: {
+    byId: { <span class="st">'conv_1'</span>: { id, name, lastMessage, unreadCount } },
+    allIds: [<span class="st">'conv_1'</span>, <span class="st">'conv_2'</span>],
+    activeId: <span class="st">'conv_1'</span>
+  },
+  messages: {
+    <span class="st">'conv_1'</span>: [{ id, senderId, body, createdAt, status }],
+    <span class="st">'conv_2'</span>: [...]
+  },
+  presences: {
+    <span class="st">'user_42'</span>: <span class="st">'online'</span>,
+    <span class="st">'user_99'</span>: <span class="st">'typing'</span>,
+    <span class="st">'user_7'</span>: <span class="st">'offline'</span>
+  },
+  drafts: {
+    <span class="st">'conv_1'</span>: <span class="st">'Hey, did you see...'</span>
+  }
+}</div>
+
+    <h6 class="fw-700 mb-2">WebSocket Provider</h6>
+    <div class="code-block"><span class="kw">function</span> <span class="fn">SocketProvider</span>({ children }) {
+  <span class="kw">const</span> socketRef = <span class="fn">useRef</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> dispatch = <span class="fn">useDispatch</span>();
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    socketRef.current = <span class="fn">io</span>(SOCKET_URL, { auth: { token: <span class="fn">getToken</span>() } });
+
+    socketRef.current.<span class="fn">on</span>(<span class="st">'message:new'</span>, (msg) =&gt; {
+      <span class="fn">dispatch</span>(<span class="fn">addMessage</span>(msg));
+      <span class="fn">dispatch</span>(<span class="fn">updateConversationLastMessage</span>(msg));
+    });
+
+    socketRef.current.<span class="fn">on</span>(<span class="st">'user:typing'</span>, ({ userId, conversationId }) =&gt; {
+      <span class="fn">dispatch</span>(<span class="fn">setTyping</span>({ userId, conversationId }));
+    });
+
+    socketRef.current.<span class="fn">on</span>(<span class="st">'user:presence'</span>, ({ userId, status }) =&gt; {
+      <span class="fn">dispatch</span>(<span class="fn">updatePresence</span>({ userId, status }));
+    });
+
+    <span class="kw">return</span> () =&gt; socketRef.current?.<span class="fn">disconnect</span>();
+  }, []);
+
+  <span class="kw">return</span> &lt;<span class="fn">SocketContext.Provider</span> value={socketRef.current}&gt;{children}&lt;/<span class="fn">SocketContext.Provider</span>&gt;;
+}</div>
+
+    <div class="concept-box amber">
+      <div class="fw-700 mb-2">Key Performance Considerations</div>
+      <ul class="small mb-0">
+        <li><strong>Virtual scroll</strong> for message thread — never render 10,000 messages at once</li>
+        <li><strong>Debounce typing events</strong> — emit at most every 300ms, auto-clear after 3s silence</li>
+        <li><strong>Optimistic sends</strong> — show message immediately, mark with "sending" status, confirm on ACK</li>
+        <li><strong>Batch Redux updates</strong> — use unstable_batchedUpdates for multiple dispatches in one WebSocket event</li>
+        <li><strong>Singleton WebSocket</strong> — one connection per app, not one per component</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Case Study 2: E-commerce -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge bg-success px-3 py-2">Case Study 2</span>
+      <h2 class="fw-700 mb-0" style="font-size:1.4rem;"><i class="bi bi-bag me-2" style="color:#22c55e;"></i>E-commerce Platform (Like Amazon)</h2>
+    </div>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <h6 class="fw-700">Rendering Strategy by Page Type</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered align-middle">
+            <thead class="table-dark">
+              <tr><th>Page</th><th>Strategy</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Homepage</td><td><span class="badge bg-success">SSG</span></td><td>Static content, fast CDN delivery</td></tr>
+              <tr><td>Product Listing</td><td><span class="badge bg-primary">ISR</span></td><td>SEO + fresh stock/pricing (revalidate 60s)</td></tr>
+              <tr><td>Product Detail</td><td><span class="badge bg-primary">ISR</span></td><td>SEO-critical, stock updates via revalidation</td></tr>
+              <tr><td>Cart / Checkout</td><td><span class="badge bg-warning text-dark">CSR</span></td><td>Personalized, no SEO needed</td></tr>
+              <tr><td>Search Results</td><td><span class="badge bg-warning text-dark">CSR</span></td><td>Dynamic filters, real-time results</td></tr>
+              <tr><td>Order History</td><td><span class="badge bg-secondary">SSR</span></td><td>Auth-protected, personalized data</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-700">Key Design Decisions</h6>
+        <div class="concept-box purple h-auto">
+          <ul class="small mb-0">
+            <li><strong>Cart state:</strong> localStorage + server sync. Optimistic updates keep UI fast. Reconcile on login.</li>
+            <li><strong>Search:</strong> Debounce 300ms. Faceted filters in URL params. Cache recent queries in React Query.</li>
+            <li><strong>Checkout:</strong> Multi-step wizard with React Hook Form. Each step validates before progression.</li>
+            <li><strong>Images:</strong> WebP format, CDN delivery, lazy loading, responsive srcset.</li>
+            <li><strong>Product catalog:</strong> Algolia or ElasticSearch for faceted search at scale.</li>
+            <li><strong>Payment:</strong> Stripe Elements — never handle raw card data client-side.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="cm">// Optimistic cart update</span>
+<span class="kw">function</span> <span class="fn">useAddToCart</span>() {
+  <span class="kw">const</span> queryClient = <span class="fn">useQueryClient</span>();
+
+  <span class="kw">return</span> <span class="fn">useMutation</span>({
+    mutationFn: (item) =&gt; cartApi.<span class="fn">addItem</span>(item),
+    <span class="cm">// Optimistically update before server response</span>
+    onMutate: <span class="kw">async</span> (newItem) =&gt; {
+      <span class="kw">await</span> queryClient.<span class="fn">cancelQueries</span>([<span class="st">'cart'</span>]);
+      <span class="kw">const</span> previousCart = queryClient.<span class="fn">getQueryData</span>([<span class="st">'cart'</span>]);
+      queryClient.<span class="fn">setQueryData</span>([<span class="st">'cart'</span>], old =&gt; ({ ...old, items: [...old.items, newItem] }));
+      <span class="kw">return</span> { previousCart };
+    },
+    <span class="cm">// Rollback on error</span>
+    onError: (err, newItem, context) =&gt; {
+      queryClient.<span class="fn">setQueryData</span>([<span class="st">'cart'</span>], context.previousCart);
+    },
+    onSettled: () =&gt; queryClient.<span class="fn">invalidateQueries</span>([<span class="st">'cart'</span>]),
+  });
+}</div>
+  </div>
+
+  <!-- Case Study 3: Social Feed -->
+  <div class="content-card">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge bg-warning text-dark px-3 py-2">Case Study 3</span>
+      <h2 class="fw-700 mb-0" style="font-size:1.4rem;"><i class="bi bi-twitter-x me-2" style="color:#f59e0b;"></i>Social Media Feed (Like Twitter/X)</h2>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <h6 class="fw-700">Feed Architecture</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// Infinite scroll with React Query</span>
+<span class="kw">function</span> <span class="fn">useFeed</span>() {
+  <span class="kw">return</span> <span class="fn">useInfiniteQuery</span>({
+    queryKey: [<span class="st">'feed'</span>],
+    queryFn: ({ pageParam = <span class="kw">null</span> }) =&gt;
+      feedApi.<span class="fn">getPosts</span>({ cursor: pageParam, limit: <span class="st">20</span> }),
+    getNextPageParam: (lastPage) =&gt;
+      lastPage.hasMore ? lastPage.nextCursor : <span class="kw">undefined</span>,
+  });
+}
+
+<span class="cm">// Virtualized feed with TanStack Virtual</span>
+<span class="kw">function</span> <span class="fn">Feed</span>() {
+  <span class="kw">const</span> { data, fetchNextPage, hasNextPage } = <span class="fn">useFeed</span>();
+  <span class="kw">const</span> posts = data?.pages.<span class="fn">flatMap</span>(p =&gt; p.posts) ?? [];
+
+  <span class="kw">const</span> virtualizer = <span class="fn">useVirtualizer</span>({
+    count: posts.length,
+    getScrollElement: () =&gt; scrollRef.current,
+    estimateSize: () =&gt; <span class="st">120</span>,
+  });
+
+  <span class="kw">return</span> &lt;<span class="fn">div</span> ref={scrollRef} style={{ overflow: <span class="st">'auto'</span>, height: <span class="st">'100vh'</span> }}&gt;
+    {virtualizer.<span class="fn">getVirtualItems</span>().<span class="fn">map</span>(vi =&gt; (
+      &lt;<span class="fn">Post</span> key={posts[vi.index].id} post={posts[vi.index]} /&gt;
+    ))}
+  &lt;/<span class="fn">div</span>&gt;;
+}</div>
+      </div>
+      <div class="col-md-6">
+        <h6 class="fw-700">Optimistic Like / Retweet</h6>
+        <div class="code-block" style="font-size:.78rem;"><span class="kw">const</span> Post = React.<span class="fn">memo</span>(<span class="kw">function</span> <span class="fn">Post</span>({ post }) {
+  <span class="kw">const</span> queryClient = <span class="fn">useQueryClient</span>();
+
+  <span class="kw">const</span> likeMutation = <span class="fn">useMutation</span>({
+    mutationFn: () =&gt; postsApi.<span class="fn">like</span>(post.id),
+    onMutate: () =&gt; {
+      <span class="cm">// Optimistic: toggle like immediately</span>
+      queryClient.<span class="fn">setQueryData</span>([<span class="st">'feed'</span>], (old) =&gt;
+        <span class="fn">updatePostInPages</span>(old, post.id, p =&gt; ({
+          ...p,
+          liked: !p.liked,
+          likeCount: p.liked ? p.likeCount - <span class="st">1</span> : p.likeCount + <span class="st">1</span>
+        }))
+      );
+    },
+  });
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">article</span>&gt;
+      &lt;<span class="fn">p</span>&gt;{post.body}&lt;/<span class="fn">p</span>&gt;
+      &lt;<span class="fn">button</span> onClick={() =&gt; likeMutation.<span class="fn">mutate</span>()}&gt;
+        {post.liked ? <span class="st">'♥'</span> : <span class="st">'♡'</span>} {post.likeCount}
+      &lt;/<span class="fn">button</span>&gt;
+    &lt;/<span class="fn">article</span>&gt;
+  );
+});</div>
+
+        <div class="concept-box amber mt-2">
+          <div class="fw-700 mb-1 small">Feed Performance Tricks</div>
+          <ul class="small mb-0">
+            <li>Virtualize feed — never render all posts in DOM</li>
+            <li>Memo posts — only re-render on data change</li>
+            <li>Intersection Observer for load-more trigger</li>
+            <li>Cursor-based pagination (not page number)</li>
+            <li>Prefetch next page when 80% scrolled</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Budgets -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-graph-up me-2" style="color:#ef4444;"></i>Web Performance Budgets</h2>
+    <p class="mb-3">Define performance targets up front. These are the Core Web Vitals and key metrics used by Google for SEO ranking.</p>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Metric</th>
+            <th>Good</th>
+            <th>Needs Work</th>
+            <th>Poor</th>
+            <th>Measurement Tool</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fw-600">First Contentful Paint (FCP)</td>
+            <td class="text-success fw-600">&lt; 1.8s</td>
+            <td class="text-warning fw-600">1.8–3.0s</td>
+            <td class="text-danger fw-600">&gt; 3.0s</td>
+            <td>Lighthouse, PageSpeed Insights</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Largest Contentful Paint (LCP)</td>
+            <td class="text-success fw-600">&lt; 2.5s</td>
+            <td class="text-warning fw-600">2.5–4.0s</td>
+            <td class="text-danger fw-600">&gt; 4.0s</td>
+            <td>Lighthouse, CrUX, Search Console</td>
+          </tr>
+          <tr>
+            <td class="fw-600">First Input Delay (FID)</td>
+            <td class="text-success fw-600">&lt; 100ms</td>
+            <td class="text-warning fw-600">100–300ms</td>
+            <td class="text-danger fw-600">&gt; 300ms</td>
+            <td>Chrome UX Report (CrUX)</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Interaction to Next Paint (INP)</td>
+            <td class="text-success fw-600">&lt; 200ms</td>
+            <td class="text-warning fw-600">200–500ms</td>
+            <td class="text-danger fw-600">&gt; 500ms</td>
+            <td>Lighthouse, PerformanceObserver</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Cumulative Layout Shift (CLS)</td>
+            <td class="text-success fw-600">&lt; 0.1</td>
+            <td class="text-warning fw-600">0.1–0.25</td>
+            <td class="text-danger fw-600">&gt; 0.25</td>
+            <td>Lighthouse, Chrome DevTools</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Time to Interactive (TTI)</td>
+            <td class="text-success fw-600">&lt; 3.8s</td>
+            <td class="text-warning fw-600">3.8–7.3s</td>
+            <td class="text-danger fw-600">&gt; 7.3s</td>
+            <td>Lighthouse</td>
+          </tr>
+          <tr>
+            <td class="fw-600">Total Blocking Time (TBT)</td>
+            <td class="text-success fw-600">&lt; 200ms</td>
+            <td class="text-warning fw-600">200–600ms</td>
+            <td class="text-danger fw-600">&gt; 600ms</td>
+            <td>Lighthouse</td>
+          </tr>
+          <tr>
+            <td class="fw-600">JS Bundle Size (gzipped)</td>
+            <td class="text-success fw-600">&lt; 200KB</td>
+            <td class="text-warning fw-600">200–500KB</td>
+            <td class="text-danger fw-600">&gt; 500KB</td>
+            <td>webpack-bundle-analyzer, bundlesize</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tip-box">
+      <i class="bi bi-lightbulb me-2"></i><strong>Core Web Vitals</strong> (LCP, INP, CLS) directly affect Google Search rankings. Prioritize these for any SEO-important pages. Monitor with <a href="https://pagespeed.web.dev" target="_blank">PageSpeed Insights</a> and the <a href="https://developer.chrome.com/docs/crux" target="_blank">Chrome UX Report</a>.
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <h2 class="fw-700 mb-3" style="font-size:1.5rem;"><i class="bi bi-chat-left-quote me-2" style="color:#7c3aed;"></i>Interview Questions</h2>
+
+    <div class="interview-q">1. How would you design a real-time collaborative document editor (like Google Docs)?</div>
+    <div class="mb-3 ps-3 small">Key challenges: conflict resolution with CRDT (Conflict-free Replicated Data Types) or OT (Operational Transformation), real-time presence via WebSocket, cursor positions for each collaborator, autosave with debounce, undo/redo history, and offline support with sync-on-reconnect. Use Yjs or Automerge for the CRDT layer, Tiptap or ProseMirror for the editor.</div>
+
+    <div class="interview-q">2. How does ISR (Incremental Static Regeneration) work in Next.js and when would you use it?</div>
+    <div class="mb-3 ps-3 small">ISR pre-renders pages at build time (like SSG) but regenerates them in the background on a schedule. Set <code>revalidate: 60</code> to rebuild every 60 seconds. The first request after expiry gets the stale page and triggers a rebuild; subsequent requests get the new page. Best for product pages, blog posts, dashboards — content that changes but doesn't need real-time freshness.</div>
+
+    <div class="interview-q">3. Explain optimistic updates. How do you handle rollback if the server rejects the update?</div>
+    <div class="mb-3 ps-3 small">Optimistic updates apply state changes immediately before server confirmation, making the UI feel instant. In React Query, use <code>onMutate</code> to update the cache and capture the previous state. On <code>onError</code>, restore <code>context.previousData</code>. On <code>onSettled</code>, invalidate the query to sync with the server's ground truth.</div>
+
+    <div class="interview-q">4. How do you handle WebSocket reconnection and state resync after a disconnect?</div>
+    <div class="mb-3 ps-3 small">Socket.IO handles reconnection automatically with exponential backoff. On reconnect: (1) re-authenticate with JWT, (2) fetch missed events since last cursor/timestamp via REST, (3) rehydrate local state with the delta. Keep a sequence number or last-event timestamp to detect gaps. Show a "Reconnecting..." UI during the gap to avoid displaying stale data.</div>
+
+    <div class="interview-q">5. How would you implement infinite scroll vs pagination? When to choose each?</div>
+    <div class="mb-3 ps-3 small">Use cursor-based infinite scroll for feeds (social, chat history) — better UX for browsing. Use page-number pagination for search results, tables, and data grids — users need to jump to specific pages. Implement infinite scroll with Intersection Observer on a sentinel element at the bottom. Use TanStack Virtual for large virtualized lists to avoid DOM bloat.</div>
+
+    <div class="interview-q">6. What are Core Web Vitals and how would you improve LCP on a React app?</div>
+    <div class="mb-3 ps-3 small">LCP measures when the largest above-the-fold element renders. To improve: (1) SSR/SSG for above-the-fold HTML, (2) CDN-serve images in WebP, (3) preload the hero image with &lt;link rel="preload"&gt;, (4) eliminate render-blocking resources (defer non-critical JS/CSS), (5) reduce server response time with caching, (6) avoid lazy loading above-the-fold images.</div>
+
+    <div class="interview-q">7. How do you approach security in a React frontend? (XSS, CSRF, auth)</div>
+    <div class="mb-3 ps-3 small">XSS: React escapes JSX by default — never use dangerouslySetInnerHTML with user input. Sanitize with DOMPurify if needed. CSRF: Use httpOnly cookies for tokens (can't be read by JS) + SameSite=Strict. Store JWTs in memory (not localStorage). HTTPS everywhere. CSP headers to restrict script sources. Validate and sanitize on the server too — frontend validation is UX, not security.</div>
+
+    <div class="interview-q">8. Design the state management architecture for a multi-tenant SaaS dashboard.</div>
+    <div class="mb-3 ps-3 small">Separate concerns: tenant config in Context (theme, feature flags, permissions), server data in React Query (per tenant queryKey prefix), user session in a small Redux slice or Zustand, form state in React Hook Form. Per-tenant API scoping: inject tenantId into Axios interceptor. Role-based rendering: AuthGuard HOC checks permissions from JWT claims before rendering sensitive UI.</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

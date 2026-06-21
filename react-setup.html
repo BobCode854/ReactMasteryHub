@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>React Setup — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <style>
+    :root{--bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--text:#1e293b;--text2:#475569;--border:#e2e8f0;}
+    [data-theme="dark"]{--bg:#0a0f1e;--surface:#0f172a;--surface2:#1e293b;--text:#f1f5f9;--text2:#94a3b8;--border:#334155;}
+    *{box-sizing:border-box;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;margin:0;}
+    .concept-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0;margin-bottom:2rem;}
+    .concept-box{border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;color:#1e3a5f;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;color:#14532d;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;color:#78350f;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;color:#7f1d1d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;color:#3b0764;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.amber{background:#78350f;border-color:#f59e0b;color:#fef3c7;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.red{background:#450a0a;border-color:#ef4444;color:#fecaca;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.83rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;} .code-block .fn{color:#60a5fa;} .code-block .st{color:#86efac;}
+    .code-block .cm{color:#64748b;} .code-block .cl{color:#f9a8d4;} .code-block .num{color:#fb923c;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-badge{background:linear-gradient(135deg,#61dafb,#7c3aed);color:#fff;padding:.25rem .8rem;border-radius:20px;font-size:.75rem;font-weight:800;}
+    .toc-pill{display:inline-flex;align-items:center;gap:.3rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:.3rem .8rem;font-size:.82rem;font-weight:600;text-decoration:none;color:#e2e8f0;margin:.2rem;}
+    .toc-pill:hover{background:rgba(97,218,251,.2);border-color:#61dafb;color:#61dafb;}
+    .sidebar-link{display:block;padding:.5rem 1rem;color:#94a3b8;text-decoration:none;font-size:.85rem;border-left:3px solid transparent;transition:all .2s;}
+    .sidebar-link:hover,.sidebar-link.active{color:#61dafb;background:rgba(97,218,251,.07);border-left-color:#61dafb;}
+    .topic-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;transition:box-shadow .3s;}
+    .topic-card:hover{box-shadow:0 4px 20px rgba(97,218,251,.1);}
+    [data-theme="dark"] .topic-card{background:#0f172a;border-color:#1e293b;}
+    .comparison-table th{background:#0f172a;color:#61dafb;}
+    .comparison-table td{background:var(--surface);}
+    [data-theme="dark"] .comparison-table td{background:#1e293b;color:#e2e8f0;}
+    .section-divider{height:3px;background:linear-gradient(90deg,#61dafb,#7c3aed,transparent);border-radius:2px;margin:2rem 0;}
+    .nav-tabs .nav-link{color:var(--text2);border:1px solid transparent;border-radius:10px 10px 0 0;font-weight:600;}
+    .nav-tabs .nav-link.active{background:var(--surface);color:#61dafb;border-color:var(--border) var(--border) var(--surface);border-bottom-color:transparent;}
+    .nav-tabs{border-bottom:1px solid var(--border);}
+    .tab-content{background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:1.5rem;}
+    [data-theme="dark"] .tab-content{background:#0f172a;}
+    .pro-badge{background:#f0fdf4;color:#16a34a;border:1px solid #86efac;border-radius:6px;padding:.15rem .5rem;font-size:.72rem;font-weight:700;}
+    .con-badge{background:#fff5f5;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;padding:.15rem .5rem;font-size:.72rem;font-weight:700;}
+    .step-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#61dafb,#7c3aed);color:#fff;font-size:.8rem;font-weight:800;flex-shrink:0;}
+    .ext-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem;display:flex;align-items:flex-start;gap:.8rem;}
+    [data-theme="dark"] .ext-card{background:#1e293b;border-color:#334155;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+      <svg width="28" height="28" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Learn</a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="react-intro.html">1. Introduction</a></li>
+            <li><a class="dropdown-item" href="js-for-react.html">2. JS for React</a></li>
+            <li><a class="dropdown-item active" href="react-setup.html">3. Setup</a></li>
+            <li><a class="dropdown-item" href="react-jsx.html">4. JSX</a></li>
+            <li><a class="dropdown-item" href="react-components.html">5. Components</a></li>
+            <li><a class="dropdown-item" href="react-hooks.html">8. Hooks</a></li>
+            <li><a class="dropdown-item" href="react-redux.html">15. Redux</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item">
+          <button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;">
+            <i class="bi bi-moon-stars-fill"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="d-flex" style="padding-top:64px;">
+  <nav class="d-none d-lg-flex flex-column" style="width:260px;min-height:100vh;background:#0f172a;position:fixed;top:64px;left:0;overflow-y:auto;padding:1rem 0;border-right:1px solid rgba(97,218,251,.15);">
+    <div class="px-3 mb-2"><small style="color:#475569;text-transform:uppercase;font-weight:700;font-size:.7rem;letter-spacing:.1em;">Section 03 — Setup</small></div>
+    <a href="#setup-methods" class="sidebar-link active"><i class="bi bi-tools me-2"></i>Setup Methods</a>
+    <a href="#vite" class="sidebar-link"><i class="bi bi-lightning me-2"></i>Vite (Recommended)</a>
+    <a href="#cra" class="sidebar-link"><i class="bi bi-archive me-2"></i>Create React App</a>
+    <a href="#nextjs" class="sidebar-link"><i class="bi bi-box me-2"></i>Next.js</a>
+    <a href="#parcel" class="sidebar-link"><i class="bi bi-box-seam me-2"></i>Parcel</a>
+    <a href="#manual" class="sidebar-link"><i class="bi bi-wrench me-2"></i>Manual Setup</a>
+    <a href="#comparison" class="sidebar-link"><i class="bi bi-table me-2"></i>Comparison</a>
+    <a href="#devtools" class="sidebar-link"><i class="bi bi-code-square me-2"></i>Dev Environment</a>
+    <a href="#mistakes" class="sidebar-link"><i class="bi bi-exclamation-triangle me-2"></i>Common Mistakes</a>
+    <a href="#env-vars" class="sidebar-link"><i class="bi bi-key me-2"></i>Env Variables</a>
+    <div class="px-3 mt-4 mb-2"><small style="color:#475569;text-transform:uppercase;font-weight:700;font-size:.7rem;letter-spacing:.1em;">Other Sections</small></div>
+    <a href="react-intro.html" class="sidebar-link"><i class="bi bi-info-circle me-2"></i>Introduction</a>
+    <a href="js-for-react.html" class="sidebar-link"><i class="bi bi-filetype-js me-2"></i>JS for React</a>
+    <a href="react-jsx.html" class="sidebar-link"><i class="bi bi-code-slash me-2"></i>JSX</a>
+    <a href="react-hooks.html" class="sidebar-link"><i class="bi bi-arrow-repeat me-2"></i>Hooks</a>
+  </nav>
+
+  <main style="margin-left:260px;width:calc(100% - 260px);min-height:100vh;">
+    <div class="concept-hero">
+      <div class="container-xl px-4">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <span class="section-badge">Section 03</span>
+          <span style="font-size:2rem;">&#9881;&#65039;</span>
+        </div>
+        <h1 style="font-family:'Poppins',sans-serif;font-size:2.6rem;font-weight:900;margin-bottom:.5rem;">React Setup</h1>
+        <p class="lead mb-4" style="color:#94a3b8;max-width:640px;">5 ways to set up a React project — from Vite (recommended) to manual Webpack configuration. With performance comparisons and best practices.</p>
+        <div class="d-flex flex-wrap gap-1">
+          <a href="#vite" class="toc-pill">&#9889; Vite</a>
+          <a href="#cra" class="toc-pill">&#128230; CRA</a>
+          <a href="#nextjs" class="toc-pill">&#128314; Next.js</a>
+          <a href="#parcel" class="toc-pill">&#128205; Parcel</a>
+          <a href="#manual" class="toc-pill">&#128295; Manual</a>
+          <a href="#comparison" class="toc-pill">&#128202; Compare</a>
+          <a href="#devtools" class="toc-pill">&#128736;&#65039; Dev Tools</a>
+          <a href="#env-vars" class="toc-pill">&#128273; Env Vars</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-xl px-4 pb-5">
+
+      <!-- SETUP METHODS TABS -->
+      <section id="setup-methods" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">01</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">5 Ways to Set Up React</h2>
+        </div>
+        <div class="section-divider"></div>
+
+        <ul class="nav nav-tabs mb-0" id="setupTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="vite-tab" data-bs-toggle="tab" data-bs-target="#vite-pane" type="button" role="tab">
+              <i class="bi bi-lightning-charge-fill me-1" style="color:#fbbf24;"></i> Vite <span class="badge ms-1" style="background:#61dafb;color:#000;font-size:.65rem;">Recommended</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="cra-tab" data-bs-toggle="tab" data-bs-target="#cra-pane" type="button" role="tab">
+              <i class="bi bi-archive me-1"></i> CRA
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="next-tab" data-bs-toggle="tab" data-bs-target="#next-pane" type="button" role="tab">
+              <i class="bi bi-triangle me-1" style="color:#000;"></i> Next.js
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="parcel-tab" data-bs-toggle="tab" data-bs-target="#parcel-pane" type="button" role="tab">
+              <i class="bi bi-box-seam me-1"></i> Parcel
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual-pane" type="button" role="tab">
+              <i class="bi bi-wrench me-1"></i> Manual
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="setupTabContent">
+
+          <!-- VITE TAB -->
+          <div class="tab-pane fade show active" id="vite-pane" role="tabpanel">
+            <div id="vite">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div>
+                  <h4 class="fw-800 mb-1" style="font-family:'Poppins',sans-serif;">&#9889; Vite &mdash; The Modern Way</h4>
+                  <p class="mb-0" style="color:var(--text2);">Created by Evan You (Vue creator). Uses native ES modules for near-instant dev server startup.</p>
+                </div>
+              </div>
+              <h6 class="fw-700 mb-2">Quick Start Commands</h6>
+              <div class="code-block">
+<span class="cm"># Create a new React + Vite project:</span>
+npm create vite@latest my-app -- --template react
+<span class="cm"># Or with TypeScript (recommended):</span>
+npm create vite@latest my-app -- --template react-ts
+
+<span class="cm"># Navigate and install:</span>
+cd my-app
+npm install
+
+<span class="cm"># Start dev server (port 5173 by default):</span>
+npm run dev
+
+<span class="cm"># Build for production:</span>
+npm run build
+
+<span class="cm"># Preview production build locally:</span>
+npm run preview
+              </div>
+
+              <h6 class="fw-700 mb-2 mt-3">Project Structure After Setup</h6>
+              <div class="code-block">
+my-app/
+├── public/              <span class="cm"># Static files (favicon, etc.)</span>
+│   └── vite.svg
+├── src/
+│   ├── assets/          <span class="cm"># Images, fonts</span>
+│   ├── App.css          <span class="cm"># App styles</span>
+│   ├── App.jsx          <span class="cm"># Root component</span>
+│   ├── index.css        <span class="cm"># Global styles</span>
+│   └── main.jsx         <span class="cm"># Entry point (createRoot)</span>
+├── .gitignore
+├── index.html           <span class="cm"># HTML entry (in root, not public!)</span>
+├── package.json
+└── vite.config.js       <span class="cm"># Vite configuration</span>
+              </div>
+
+              <h6 class="fw-700 mb-2 mt-3">vite.config.js &mdash; Common Configuration</h6>
+              <div class="code-block">
+<span class="kw">import</span> { defineConfig } <span class="kw">from</span> <span class="st">'vite'</span>
+<span class="kw">import</span> react <span class="kw">from</span> <span class="st">'@vitejs/plugin-react'</span>
+
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  plugins: [<span class="fn">react</span>()],
+  server: {
+    port: <span class="num">3000</span>,    <span class="cm">// change default port</span>
+    open: <span class="num">true</span>,    <span class="cm">// auto-open browser</span>
+  },
+  resolve: {
+    alias: {
+      <span class="st">'@'</span>: <span class="st">'/src'</span>,  <span class="cm">// path alias: import from '@/components/...'</span>
+    },
+  },
+  build: {
+    outDir: <span class="st">'dist'</span>,
+    sourcemap: <span class="num">true</span>,
+  },
+})
+              </div>
+
+              <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3" style="background:#f0fdf4;border:1.5px solid #6ee7b7;">
+                    <h6 class="fw-800" style="color:#16a34a;"><i class="bi bi-check-circle-fill me-2"></i>Pros</h6>
+                    <ul class="mb-0" style="color:#14532d;">
+                      <li>Cold start in <strong>&lt;500ms</strong> (vs 30s+ for CRA)</li>
+                      <li>Instant Hot Module Replacement (HMR)</li>
+                      <li>Uses native ES modules &mdash; no bundling in dev</li>
+                      <li>Small, optimized production builds (Rollup)</li>
+                      <li>TypeScript support out of the box</li>
+                      <li>Official React docs now recommend Vite</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3" style="background:#fffbeb;border:1.5px solid #fcd34d;">
+                    <h6 class="fw-800" style="color:#d97706;"><i class="bi bi-exclamation-triangle-fill me-2"></i>Cons</h6>
+                    <ul class="mb-0" style="color:#78350f;">
+                      <li>Newer &mdash; fewer Stack Overflow answers than CRA</li>
+                      <li>Requires Node 18+</li>
+                      <li>Some CRA-specific tutorials don't apply</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="tip-box mt-3">
+                <i class="bi bi-lightbulb-fill me-2"></i>
+                <strong>Performance stat:</strong> Vite starts a fresh React project in ~300ms. Create React App takes 10-30 seconds. For large projects the difference is even more dramatic.
+              </div>
+            </div>
+          </div>
+
+          <!-- CRA TAB -->
+          <div class="tab-pane fade" id="cra-pane" role="tabpanel">
+            <div id="cra">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <h4 class="fw-800 mb-0" style="font-family:'Poppins',sans-serif;">&#128230; Create React App</h4>
+                <span class="badge" style="background:#fff5f5;color:#dc2626;border:1px solid #fca5a5;">Legacy / Deprecated</span>
+              </div>
+              <p style="color:var(--text2);">The original zero-config React toolchain by Facebook. No longer recommended by the React team as of 2023.</p>
+
+              <h6 class="fw-700 mb-2">Commands</h6>
+              <div class="code-block">
+<span class="cm"># Create new CRA project:</span>
+npx create-react-app my-app
+
+<span class="cm"># With TypeScript template:</span>
+npx create-react-app my-app --template typescript
+
+cd my-app
+npm start          <span class="cm"># Dev server on port 3000</span>
+npm run build      <span class="cm"># Production build</span>
+npm test           <span class="cm"># Run Jest tests</span>
+npm run eject      <span class="cm"># ⚠️ Irreversible! Exposes all config</span>
+              </div>
+
+              <h6 class="fw-700 mb-2 mt-3">Project Structure</h6>
+              <div class="code-block">
+my-app/
+├── public/
+│   ├── index.html       <span class="cm"># HTML template (in public/)</span>
+│   └── favicon.ico
+├── src/
+│   ├── App.js
+│   ├── App.test.js
+│   ├── index.js         <span class="cm"># Entry point</span>
+│   └── setupTests.js
+├── package.json
+└── README.md
+              </div>
+
+              <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3" style="background:#f0fdf4;border:1.5px solid #6ee7b7;">
+                    <h6 class="fw-800" style="color:#16a34a;"><i class="bi bi-check-circle-fill me-2"></i>Pros</h6>
+                    <ul class="mb-0" style="color:#14532d;">
+                      <li>Official Facebook toolchain (historically)</li>
+                      <li>Huge number of tutorials available</li>
+                      <li>Zero configuration to get started</li>
+                      <li>Jest + Testing Library included</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3" style="background:#fff5f5;border:1.5px solid #fca5a5;">
+                    <h6 class="fw-800" style="color:#dc2626;"><i class="bi bi-x-circle-fill me-2"></i>Cons</h6>
+                    <ul class="mb-0" style="color:#7f1d1d;">
+                      <li><strong>Extremely slow</strong> &mdash; 10-30s startup, 2s+ HMR</li>
+                      <li>Very large node_modules (~300MB)</li>
+                      <li>Webpack under the hood &mdash; outdated</li>
+                      <li>Not maintained &mdash; deprecated by React team</li>
+                      <li>Eject is irreversible and messy</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="mistake-box mt-3">
+                <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                <strong>Warning:</strong> The React documentation (react.dev) no longer recommends CRA. New projects should use Vite or a full framework like Next.js. Use CRA only if following an older tutorial.
+              </div>
+            </div>
+          </div>
+
+          <!-- NEXT.JS TAB -->
+          <div class="tab-pane fade" id="next-pane" role="tabpanel">
+            <div id="nextjs">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <h4 class="fw-800 mb-0" style="font-family:'Poppins',sans-serif;">&#128314; Next.js &mdash; Full-Stack React Framework</h4>
+                <span class="badge" style="background:#f0fdf4;color:#16a34a;border:1px solid #6ee7b7;">Production Ready</span>
+              </div>
+              <p style="color:var(--text2);">The most popular React framework. Built by Vercel. Adds SSR, SSG, file-based routing, API routes, and more on top of React.</p>
+
+              <h6 class="fw-700 mb-2">Quick Start</h6>
+              <div class="code-block">
+<span class="cm"># Create Next.js app (interactive setup):</span>
+npx create-next-app@latest my-app
+
+<span class="cm"># The CLI asks you:</span>
+<span class="cm"># Would you like to use TypeScript? (Yes)</span>
+<span class="cm"># Would you like to use ESLint? (Yes)</span>
+<span class="cm"># Would you like to use Tailwind CSS? (Yes)</span>
+<span class="cm"># Would you like to use App Router? (Yes — recommended)</span>
+<span class="cm"># Would you like to use src/ directory? (Yes)</span>
+
+cd my-app
+npm run dev    <span class="cm"># Dev server on port 3000</span>
+npm run build  <span class="cm"># Production build</span>
+npm start      <span class="cm"># Start production server</span>
+              </div>
+
+              <h6 class="fw-700 mb-2 mt-3">App Router Structure (Next.js 13+)</h6>
+              <div class="code-block">
+my-app/
+├── src/
+│   └── app/
+│       ├── layout.tsx       <span class="cm"># Root layout (replaces _app.js)</span>
+│       ├── page.tsx         <span class="cm"># Home page → route "/"</span>
+│       ├── globals.css
+│       ├── about/
+│       │   └── page.tsx     <span class="cm"># Route "/about"</span>
+│       ├── blog/
+│       │   ├── page.tsx     <span class="cm"># Route "/blog"</span>
+│       │   └── [slug]/
+│       │       └── page.tsx <span class="cm"># Dynamic route "/blog/:slug"</span>
+│       └── api/
+│           └── users/
+│               └── route.ts <span class="cm"># API endpoint "/api/users"</span>
+├── public/
+└── next.config.js
+              </div>
+
+              <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3" style="background:#f0fdf4;border:1.5px solid #6ee7b7;">
+                    <h6 class="fw-800" style="color:#16a34a;"><i class="bi bi-check-circle-fill me-2"></i>Pros</h6>
+                    <ul class="mb-0" style="color:#14532d;">
+                      <li><strong>SSR/SSG</strong> built-in &mdash; great SEO</li>
+                      <li>File-based routing &mdash; no React Router needed</li>
+                      <li>API routes &mdash; backend in the same repo</li>
+                      <li>Server Components &mdash; less JS to the client</li>
+                      <li>Image/Font optimization built-in</li>
+                      <li>Deploy to Vercel in one click</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3" style="background:#fffbeb;border:1.5px solid #fcd34d;">
+                    <h6 class="fw-800" style="color:#d97706;"><i class="bi bi-exclamation-triangle-fill me-2"></i>Cons</h6>
+                    <ul class="mb-0" style="color:#78350f;">
+                      <li>More complex &mdash; client vs server components</li>
+                      <li>Opinionated structure</li>
+                      <li>Slower local dev than Vite (but improving)</li>
+                      <li>Overkill for simple SPAs</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="tip-box mt-3">
+                <i class="bi bi-lightbulb-fill me-2"></i>
+                <strong>When to use Next.js:</strong> E-commerce, blogs, marketing sites (need SEO), full-stack apps, or any production app that needs more than just a SPA. If you're building a React app that users will find via Google search, use Next.js.
+              </div>
+            </div>
+          </div>
+
+          <!-- PARCEL TAB -->
+          <div class="tab-pane fade" id="parcel-pane" role="tabpanel">
+            <div id="parcel">
+              <h4 class="fw-800 mb-2" style="font-family:'Poppins',sans-serif;">&#128205; Parcel &mdash; Zero-Config Bundler</h4>
+              <p style="color:var(--text2);">Parcel is a zero-configuration bundler. No webpack.config.js, no babel.config.js &mdash; it figures everything out automatically from your files.</p>
+
+              <h6 class="fw-700 mb-2">Setup Steps</h6>
+              <div class="code-block">
+<span class="cm"># Initialize project:</span>
+npm init -y
+
+<span class="cm"># Install Parcel and React:</span>
+npm install react react-dom
+npm install -D parcel
+
+<span class="cm"># Create src/index.html:</span>
+<span class="cm"># &lt;!DOCTYPE html&gt;</span>
+<span class="cm"># &lt;html&gt;&lt;body&gt;</span>
+<span class="cm">#   &lt;div id="root"&gt;&lt;/div&gt;</span>
+<span class="cm">#   &lt;script type="module" src="./index.jsx"&gt;&lt;/script&gt;</span>
+<span class="cm"># &lt;/body&gt;&lt;/html&gt;</span>
+
+<span class="cm"># Add to package.json scripts:</span>
+<span class="cm"># "start": "parcel src/index.html",</span>
+<span class="cm"># "build": "parcel build src/index.html"</span>
+
+npm start  <span class="cm"># That's it! Parcel detects JSX automatically</span>
+              </div>
+
+              <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3" style="background:#f0fdf4;border:1.5px solid #6ee7b7;">
+                    <h6 class="fw-800" style="color:#16a34a;">Pros</h6>
+                    <ul class="mb-0" style="color:#14532d;">
+                      <li>True zero-config &mdash; just works</li>
+                      <li>Fast build times with caching</li>
+                      <li>Great for quick prototypes</li>
+                      <li>Auto-detects JSX, TypeScript, CSS Modules</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3" style="background:#fffbeb;border:1.5px solid #fcd34d;">
+                    <h6 class="fw-800" style="color:#d97706;">Cons</h6>
+                    <ul class="mb-0" style="color:#78350f;">
+                      <li>Less popular &mdash; fewer resources</li>
+                      <li>Less control over bundling config</li>
+                      <li>Not used in most enterprise projects</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MANUAL TAB -->
+          <div class="tab-pane fade" id="manual-pane" role="tabpanel">
+            <div id="manual">
+              <h4 class="fw-800 mb-2" style="font-family:'Poppins',sans-serif;">&#128295; Manual Setup &mdash; Learn the Internals</h4>
+              <p style="color:var(--text2);">Setting up React manually teaches you exactly what Vite and CRA do under the hood. Recommended once as a learning exercise.</p>
+
+              <div class="d-flex flex-column gap-3 mt-3">
+                <div class="d-flex gap-3 align-items-start">
+                  <span class="step-num">1</span>
+                  <div class="flex-grow-1">
+                    <strong>Initialize npm project</strong>
+                    <div class="code-block">npm init -y</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-start">
+                  <span class="step-num">2</span>
+                  <div class="flex-grow-1">
+                    <strong>Install React and ReactDOM</strong>
+                    <div class="code-block">npm install react react-dom</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-start">
+                  <span class="step-num">3</span>
+                  <div class="flex-grow-1">
+                    <strong>Install Babel (JSX transpiler) and Webpack (bundler)</strong>
+                    <div class="code-block">npm install -D @babel/core @babel/preset-react @babel/preset-env babel-loader webpack webpack-cli webpack-dev-server html-webpack-plugin</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-start">
+                  <span class="step-num">4</span>
+                  <div class="flex-grow-1">
+                    <strong>Create <code>.babelrc</code></strong>
+                    <div class="code-block">{
+  <span class="st">"presets"</span>: [
+    <span class="st">"@babel/preset-env"</span>,
+    [<span class="st">"@babel/preset-react"</span>, { <span class="st">"runtime"</span>: <span class="st">"automatic"</span> }]
+  ]
+}</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-start">
+                  <span class="step-num">5</span>
+                  <div class="flex-grow-1">
+                    <strong>Create <code>webpack.config.js</code></strong>
+                    <div class="code-block"><span class="kw">const</span> HtmlWebpackPlugin = <span class="fn">require</span>(<span class="st">'html-webpack-plugin'</span>);
+<span class="kw">const</span> path = <span class="fn">require</span>(<span class="st">'path'</span>);
+
+module.exports = {
+  entry: <span class="st">'./src/index.js'</span>,
+  output: {
+    path: path.<span class="fn">resolve</span>(__dirname, <span class="st">'dist'</span>),
+    filename: <span class="st">'bundle.js'</span>,
+  },
+  module: {
+    rules: [{
+      test: <span class="num">/\.(js|jsx)$/</span>,
+      exclude: <span class="num">/node_modules/</span>,
+      use: <span class="st">'babel-loader'</span>,
+    }],
+  },
+  plugins: [
+    <span class="kw">new</span> <span class="cl">HtmlWebpackPlugin</span>({ template: <span class="st">'./public/index.html'</span> })
+  ],
+  devServer: { port: <span class="num">3000</span>, hot: <span class="num">true</span> },
+};</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-start">
+                  <span class="step-num">6</span>
+                  <div class="flex-grow-1">
+                    <strong>Create entry files</strong>
+                    <div class="code-block"><span class="cm">// public/index.html</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;&lt;body&gt;
+  &lt;div id=<span class="st">"root"</span>&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;
+
+<span class="cm">// src/index.js</span>
+<span class="kw">import</span> { <span class="fn">createRoot</span> } <span class="kw">from</span> <span class="st">'react-dom/client'</span>;
+<span class="kw">import</span> <span class="cl">App</span> <span class="kw">from</span> <span class="st">'./App'</span>;
+
+<span class="kw">const</span> root = <span class="fn">createRoot</span>(document.<span class="fn">getElementById</span>(<span class="st">'root'</span>));
+root.<span class="fn">render</span>(&lt;<span class="cl">App</span> /&gt;);
+
+<span class="cm">// src/App.jsx</span>
+<span class="kw">export default function</span> <span class="cl">App</span>() {
+  <span class="kw">return</span> &lt;<span class="cl">h1</span>&gt;Hello from manual setup!&lt;/<span class="cl">h1</span>&gt;;
+}</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-3 align-items-start">
+                  <span class="step-num">7</span>
+                  <div class="flex-grow-1">
+                    <strong>Add scripts to <code>package.json</code> and run</strong>
+                    <div class="code-block"><span class="cm">// package.json scripts:</span>
+<span class="st">"start"</span>: <span class="st">"webpack serve --mode development"</span>,
+<span class="st">"build"</span>: <span class="st">"webpack --mode production"</span>
+
+<span class="cm"># Run:</span>
+npm start</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tip-box mt-3">
+                <i class="bi bi-lightbulb-fill me-2"></i>
+                <strong>Learning Value:</strong> Doing this once shows you exactly what Vite and CRA abstract away. You'll understand why Babel exists, what Webpack does, and why build tools were created. After this exercise, Vite's magic makes complete sense.
+              </div>
+            </div>
+          </div>
+
+        </div><!-- tab-content -->
+      </section>
+
+      <!-- COMPARISON TABLE -->
+      <section id="comparison" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">02</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">Performance Comparison</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered comparison-table">
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>Cold Start</th>
+                  <th>HMR Speed</th>
+                  <th>Bundle Size</th>
+                  <th>Config</th>
+                  <th>Best For</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color:#fbbf24;">&#9889; Vite</strong> <span class="badge" style="background:#61dafb;color:#000;font-size:.65rem;">Recommended</span></td>
+                  <td><span class="badge bg-success">&lt;500ms</span></td>
+                  <td><span class="badge bg-success">Instant</span></td>
+                  <td><span class="badge bg-success">Small</span></td>
+                  <td>Minimal</td>
+                  <td>All new projects</td>
+                </tr>
+                <tr>
+                  <td><strong>&#128230; CRA</strong> <span class="badge" style="background:#fee2e2;color:#dc2626;font-size:.65rem;">Deprecated</span></td>
+                  <td><span class="badge bg-danger">10-30s</span></td>
+                  <td><span class="badge bg-warning text-dark">~2s</span></td>
+                  <td><span class="badge bg-danger">Large</span></td>
+                  <td>Zero</td>
+                  <td>Old tutorials only</td>
+                </tr>
+                <tr>
+                  <td><strong>&#128314; Next.js</strong></td>
+                  <td><span class="badge bg-warning text-dark">2-5s</span></td>
+                  <td><span class="badge bg-success">Fast</span></td>
+                  <td><span class="badge bg-warning text-dark">Medium</span></td>
+                  <td>Moderate</td>
+                  <td>Production apps, SEO</td>
+                </tr>
+                <tr>
+                  <td><strong>&#128205; Parcel</strong></td>
+                  <td><span class="badge bg-success">Fast</span></td>
+                  <td><span class="badge bg-success">Fast</span></td>
+                  <td><span class="badge bg-success">Small</span></td>
+                  <td>Zero</td>
+                  <td>Quick prototypes</td>
+                </tr>
+                <tr>
+                  <td><strong>&#128295; Manual Webpack</strong></td>
+                  <td>Depends</td>
+                  <td>Manual</td>
+                  <td>Depends</td>
+                  <td>Full control</td>
+                  <td>Learning internals</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="concept-box green">
+            <i class="bi bi-trophy-fill me-2"></i>
+            <strong>Recommendation:</strong> Use <strong>Vite</strong> for SPAs, dashboards, and learning React. Use <strong>Next.js</strong> for production apps needing SEO, SSR, or full-stack capabilities. Never start a new project with CRA.
+          </div>
+        </div>
+      </section>
+
+      <!-- DEV ENVIRONMENT -->
+      <section id="devtools" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">03</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">Dev Environment Best Practices</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <h5 class="fw-700 mb-3">Essential VSCode Extensions</h5>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="ext-card">
+                <div style="font-size:1.5rem;">&#128295;</div>
+                <div>
+                  <div class="fw-700">ESLint</div>
+                  <div style="color:var(--text2);font-size:.83rem;">Catches JavaScript/React errors as you type. Must-have for React development.</div>
+                  <code style="font-size:.75rem;">dbaeumer.vscode-eslint</code>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="ext-card">
+                <div style="font-size:1.5rem;">&#128133;</div>
+                <div>
+                  <div class="fw-700">Prettier</div>
+                  <div style="color:var(--text2);font-size:.83rem;">Auto-formats code on save. Enforces consistent style across the team.</div>
+                  <code style="font-size:.75rem;">esbenp.prettier-vscode</code>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="ext-card">
+                <div style="font-size:1.5rem;">&#9883;&#65039;</div>
+                <div>
+                  <div class="fw-700">ES7+ React/Redux/React-Native snippets</div>
+                  <div style="color:var(--text2);font-size:.83rem;">Type <code>rafce</code> + Tab &rarr; generates a full arrow function component. Massive time saver.</div>
+                  <code style="font-size:.75rem;">dsznajder.es7-react-js-snippets</code>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="ext-card">
+                <div style="font-size:1.5rem;">&#127912;</div>
+                <div>
+                  <div class="fw-700">Tailwind CSS IntelliSense</div>
+                  <div style="color:var(--text2);font-size:.83rem;">Autocomplete for Tailwind classes. Essential if using Tailwind with React.</div>
+                  <code style="font-size:.75rem;">bradlc.vscode-tailwindcss</code>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="ext-card">
+                <div style="font-size:1.5rem;">&#128309;</div>
+                <div>
+                  <div class="fw-700">TypeScript (built-in)</div>
+                  <div style="color:var(--text2);font-size:.83rem;">VSCode has TypeScript support built-in. Use <code>.tsx</code> files for typed React components.</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="ext-card">
+                <div style="font-size:1.5rem;">&#128030;</div>
+                <div>
+                  <div class="fw-700">React Developer Tools (Browser)</div>
+                  <div style="color:var(--text2);font-size:.83rem;">Chrome/Firefox extension. Inspect component tree, props, state, and performance in DevTools.</div>
+                  <code style="font-size:.75rem;">chrome.google.com/webstore &rarr; React DevTools</code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h5 class="fw-700 mb-3">Useful Snippet Shortcuts (ES7+ Snippets)</h5>
+          <div class="code-block">
+<span class="cm">// Type these + Tab in VSCode:</span>
+rafce  &rarr; <span class="kw">const</span> <span class="cl">ComponentName</span> = () =&gt; { <span class="kw">return</span> &lt;<span class="cl">div</span>&gt;&lt;/<span class="cl">div</span>&gt; }; <span class="kw">export default</span> <span class="cl">ComponentName</span>
+rafc   &rarr; Same but without export
+rfc    &rarr; Function declaration component
+rfce   &rarr; Function declaration with export
+useState  &rarr; <span class="kw">const</span> [state, setState] = <span class="fn">useState</span>(initialState)
+useEffect &rarr; <span class="fn">useEffect</span>(() =&gt; {}, [])
+clg    &rarr; console.<span class="fn">log</span>()
+          </div>
+
+          <h5 class="fw-700 mb-3 mt-4">Recommended <code>.eslintrc.json</code> for React</h5>
+          <div class="code-block">{
+  <span class="st">"extends"</span>: [
+    <span class="st">"react-app"</span>,
+    <span class="st">"react-app/jest"</span>
+  ],
+  <span class="st">"rules"</span>: {
+    <span class="st">"no-console"</span>: <span class="st">"warn"</span>,
+    <span class="st">"react-hooks/rules-of-hooks"</span>: <span class="st">"error"</span>,
+    <span class="st">"react-hooks/exhaustive-deps"</span>: <span class="st">"warn"</span>,
+    <span class="st">"react/prop-types"</span>: <span class="st">"off"</span>  <span class="cm">// off if using TypeScript</span>
+  }
+}</div>
+        </div>
+      </section>
+
+      <!-- COMMON MISTAKES -->
+      <section id="mistakes" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">04</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">Common First-Time Setup Mistakes</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="mistake-box">
+            <strong><i class="bi bi-x-circle-fill text-danger me-2"></i>Using Create React App for new projects in 2024</strong>
+            <p class="mb-1 mt-1">CRA is deprecated. Starting a new project with CRA means starting with a slow, outdated toolchain that the React team no longer recommends.</p>
+            <div class="tip-box mb-0"><i class="bi bi-check-circle-fill me-2"></i><strong>Fix:</strong> Use <code>npm create vite@latest my-app -- --template react</code> instead.</div>
+          </div>
+          <div class="mistake-box">
+            <strong><i class="bi bi-x-circle-fill text-danger me-2"></i>Forgetting to run <code>npm install</code> after cloning</strong>
+            <p class="mb-1 mt-1"><code>node_modules/</code> is git-ignored. After cloning a React project, you must run <code>npm install</code> before <code>npm run dev</code>.</p>
+            <div class="tip-box mb-0"><i class="bi bi-check-circle-fill me-2"></i><strong>Fix:</strong> Always run <code>npm install</code> (or <code>yarn</code> / <code>pnpm install</code>) after cloning.</div>
+          </div>
+          <div class="mistake-box">
+            <strong><i class="bi bi-x-circle-fill text-danger me-2"></i>Committing <code>node_modules/</code> to git</strong>
+            <p class="mb-1 mt-1">node_modules can contain 100,000+ files and 300MB+. Committing it bloats the repository and causes merge conflicts.</p>
+            <div class="tip-box mb-0"><i class="bi bi-check-circle-fill me-2"></i><strong>Fix:</strong> Ensure <code>node_modules</code> is in your <code>.gitignore</code>. Vite and CRA add this automatically.</div>
+          </div>
+          <div class="mistake-box">
+            <strong><i class="bi bi-x-circle-fill text-danger me-2"></i>Committing <code>.env</code> files with secrets</strong>
+            <p class="mb-1 mt-1">API keys, database credentials, and other secrets should never be committed to git.</p>
+            <div class="tip-box mb-0"><i class="bi bi-check-circle-fill me-2"></i><strong>Fix:</strong> Add <code>.env</code> to <code>.gitignore</code>. Use <code>.env.example</code> (with fake values) to show teammates what variables are needed.</div>
+          </div>
+          <div class="mistake-box">
+            <strong><i class="bi bi-x-circle-fill text-danger me-2"></i>Using wrong Node.js version</strong>
+            <p class="mb-1 mt-1">React 18 + Vite requires Node.js 18+. Using an older version causes cryptic errors.</p>
+            <div class="tip-box mb-0"><i class="bi bi-check-circle-fill me-2"></i><strong>Fix:</strong> Use <code>node --version</code> to check. Use <code>nvm</code> (Node Version Manager) to switch versions: <code>nvm use 20</code>.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ENV VARIABLES -->
+      <section id="env-vars" class="mb-5" data-aos="fade-up">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-badge">05</span>
+          <h2 class="mb-0" style="font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;">Environment Variables in React</h2>
+        </div>
+        <div class="section-divider"></div>
+        <div class="topic-card">
+          <div class="concept-box blue">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            Environment variables let you have different configs for development, staging, and production without changing code. In Vite, variables must be prefixed with <code>VITE_</code> to be exposed to the browser.
+          </div>
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <h6 class="fw-700 mb-2">Vite (<code>.env</code> files)</h6>
+              <div class="code-block">
+<span class="cm"># .env (all environments)</span>
+VITE_API_URL=https://api.example.com
+VITE_APP_NAME=My App
+
+<span class="cm"># .env.development (dev only)</span>
+VITE_API_URL=http://localhost:3001
+
+<span class="cm"># .env.production (prod only)</span>
+VITE_API_URL=https://api.production.com
+
+<span class="cm"># Accessing in code:</span>
+<span class="kw">const</span> apiUrl = import.meta.env.VITE_API_URL;
+<span class="kw">const</span> appName = import.meta.env.VITE_APP_NAME;
+
+<span class="cm"># .env.example (commit this — no real secrets!)</span>
+VITE_API_URL=
+VITE_APP_NAME=
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <h6 class="fw-700 mb-2">CRA / Next.js (<code>.env</code> files)</h6>
+              <div class="code-block">
+<span class="cm"># CRA — prefix with REACT_APP_</span>
+REACT_APP_API_URL=https://api.example.com
+REACT_APP_KEY=your-key
+
+<span class="cm"># Access in CRA:</span>
+process.env.REACT_APP_API_URL
+
+<span class="cm"># Next.js — NEXT_PUBLIC_ for browser access</span>
+NEXT_PUBLIC_API_URL=https://api.example.com
+DATABASE_URL=private-server-only  <span class="cm"># NOT exposed to browser</span>
+
+<span class="cm"># Access in Next.js:</span>
+process.env.NEXT_PUBLIC_API_URL
+              </div>
+              <div class="mistake-box mt-3">
+                <i class="bi bi-shield-exclamation me-2"></i>
+                <strong>Security:</strong> NEVER put secrets (API keys, private keys, passwords) in <code>VITE_</code> or <code>REACT_APP_</code> vars &mdash; they get bundled into the client-side JS and are visible to anyone who views the page source!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="d-flex justify-content-between align-items-center mt-4 pt-4" style="border-top:1px solid var(--border);">
+        <a href="js-for-react.html" class="btn" style="background:var(--surface2);color:var(--text);font-weight:700;border-radius:12px;padding:.6rem 1.5rem;border:1px solid var(--border);">
+          <i class="bi bi-arrow-left me-2"></i> Prev: JS for React
+        </a>
+        <a href="react-jsx.html" class="btn" style="background:linear-gradient(135deg,#61dafb,#7c3aed);color:#fff;font-weight:700;border-radius:12px;padding:.6rem 1.5rem;">
+          Next: JSX <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;text-align:center;margin-left:260px;">
+  <div class="container-xl">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> &mdash; Complete React Learning Platform
+    <div class="mt-2 d-flex justify-content-center gap-3 flex-wrap">
+      <a href="index.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Home</a>
+      <a href="react-intro.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Introduction</a>
+      <a href="react-hooks.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Hooks</a>
+      <a href="react-interview.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Interview Prep</a>
+      <a href="react-projects.html" style="color:#64748b;text-decoration:none;font-size:.85rem;">Projects</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({duration:700,once:true,offset:80});
+const t=document.getElementById('themeToggle');
+const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+
+const sections = document.querySelectorAll('section[id], div[id]');
+const sidebarLinks = document.querySelectorAll('.sidebar-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 150) current = sec.getAttribute('id');
+  });
+  sidebarLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

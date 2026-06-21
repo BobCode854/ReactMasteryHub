@@ -1,0 +1,1787 @@
+<div class="tab-pane fade" id="tab-state" role="tabpanel">
+  <div class="accordion" id="acc-state">
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q1">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is Redux?
+    </button>
+  </h2>
+  <div id="state-q1" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Redux is a predictable state container for JavaScript applications, most commonly used with React. It centralizes all application state in a single JavaScript object called the store, making state changes traceable and debuggable. Redux follows three core principles: a single source of truth (one store), state is read-only (only actions can trigger changes), and changes are made with pure functions (reducers). The Redux DevTools extension enables powerful debugging features including time-travel (replaying past states). Redux was created by Dan Abramov and Andrew Clark in 2015, inspired by the Flux architecture and Elm's functional state management.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q2">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What are the three principles of Redux?
+    </button>
+  </h2>
+  <div id="state-q2" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      The three fundamental principles of Redux are: 1) Single Source of Truth — the entire application state is stored in a single JavaScript object tree within one store, making it easy to inspect and debug the full application state at any point. 2) State is Read-Only — the only way to change state is to dispatch an action (a plain object describing what happened); you cannot directly mutate the state. 3) Changes are Made with Pure Functions — to specify how the state tree is transformed by actions, you write pure reducer functions that take the previous state and an action, and return the next state deterministically. These principles together make state changes explicit, predictable, and reversible.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q3">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is an action in Redux?
+    </button>
+  </h2>
+  <div id="state-q3" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      An action in Redux is a plain JavaScript object that describes an intent to change the state. Every action must have a <code>type</code> property — a string constant that identifies the kind of change being made (e.g., <code>'ADD_TODO'</code>, <code>'INCREMENT_COUNTER'</code>). Actions can optionally carry additional data in a <code>payload</code> property (the Flux Standard Action convention) that provides the information needed to make the state change. Actions are the only way to get data into the Redux store — you dispatch actions to the store, and the reducers process them. Action creators are functions that return action objects, making it easy to create actions programmatically and keeping the action structure consistent across your codebase.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q4">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is a reducer in Redux?
+    </button>
+  </h2>
+  <div id="state-q4" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      A reducer is a pure function that takes the current state and an action as arguments, and returns the next state. Reducers must be pure: given the same inputs they always produce the same output, and they produce no side effects — no API calls, no mutations of the input state, no random values. When an action is dispatched, Redux passes the current state and the action to the root reducer, which typically delegates to smaller "slice" reducers responsible for portions of the state tree. The convention is to return the previous state unchanged for unknown action types (<code>default: return state</code>). Reducers must treat state as immutable — they must return new objects/arrays rather than mutating existing ones.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q5">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the Redux store?
+    </button>
+  </h2>
+  <div id="state-q5" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      The Redux store is the central object that holds the application's state tree, provides methods to dispatch actions and subscribe to state changes, and manages the root reducer. You create a store with <code>configureStore</code> (Redux Toolkit) or the legacy <code>createStore</code>. The store exposes three key methods: <code>getState()</code> (returns the current state), <code>dispatch(action)</code> (sends an action through the reducer and updates state), and <code>subscribe(listener)</code> (registers a callback called after every state change). There is only one store in a Redux application (single source of truth). In React apps, the store is provided to the component tree via the <code>&lt;Provider store={store}&gt;</code> component from <code>react-redux</code>.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q6">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is Redux Toolkit and why was it created?
+    </button>
+  </h2>
+  <div id="state-q6" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Redux Toolkit (RTK) is the official, opinionated toolset for Redux development that solves the major pain points of vanilla Redux. The problems RTK solves: too much boilerplate (separate action type constants, action creators, and reducers for every feature), easy to accidentally mutate state (RTK uses Immer under the hood so you can write "mutating" code safely), configuring middleware and DevTools was complex, and writing normalized state and async logic required multiple additional packages. RTK provides <code>configureStore</code> (sets up store with sensible defaults), <code>createSlice</code> (generates action creators and reducers together), <code>createAsyncThunk</code> (handles async logic), and <code>createEntityAdapter</code> (normalized state management). The Redux team officially recommends RTK for all new Redux projects.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q7">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is createSlice in Redux Toolkit?
+    </button>
+  </h2>
+  <div id="state-q7" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      <code>createSlice</code> is a function from Redux Toolkit that generates a Redux slice — a combination of a reducer function, action creators, and action types — all from a single configuration object. You provide a <code>name</code> (used to namespace actions), <code>initialState</code>, and a <code>reducers</code> object where each key becomes both a reducer case and an action creator. RTK's Immer integration means reducer functions inside <code>createSlice</code> can use "mutating" syntax (<code>state.value++</code>) and Immer will produce an immutable update under the hood. The returned slice object has <code>.reducer</code> (the generated reducer function to pass to <code>configureStore</code>) and <code>.actions</code> (the generated action creators).
+      <pre class="code-block">import { createSlice } from '@reduxjs/toolkit';
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { value: 0, status: 'idle' },
+  reducers: {
+    increment: (state) =&gt; { state.value += 1; },   // Immer: looks like mutation, produces immutable
+    decrement: (state) =&gt; { state.value -= 1; },
+    incrementByAmount: (state, action) =&gt; { state.value += action.payload; },
+  },
+});
+
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export default counterSlice.reducer;</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q8">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is createAsyncThunk?
+    </button>
+  </h2>
+  <div id="state-q8" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      <code>createAsyncThunk</code> is a Redux Toolkit utility for creating async action creators that automatically dispatch <code>pending</code>, <code>fulfilled</code>, and <code>rejected</code> action types based on the lifecycle of a Promise. You provide an action type string prefix and a "payload creator" — an async function that returns a Promise. RTK dispatches <code>prefix/pending</code> when the thunk starts, <code>prefix/fulfilled</code> when the Promise resolves (with the resolved value as payload), and <code>prefix/rejected</code> when it rejects (with the error as payload). You handle these lifecycle actions in <code>extraReducers</code> inside <code>createSlice</code> using the <code>builder.addCase</code> API. This eliminates the boilerplate of manually dispatching multiple actions for async operations.
+      <pre class="code-block">import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+export const fetchUser = createAsyncThunk('user/fetch', async (userId) =&gt; {
+  const response = await fetch(`/api/users/${userId}`);
+  return response.json();
+});
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: { data: null, loading: false, error: null },
+  reducers: {},
+  extraReducers: (builder) =&gt; {
+    builder
+      .addCase(fetchUser.pending, (state) =&gt; { state.loading = true; })
+      .addCase(fetchUser.fulfilled, (state, action) =&gt; {
+        state.loading = false;
+        state.data = action.payload;
+      })
+      .addCase(fetchUser.rejected, (state, action) =&gt; {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  },
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q9">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the difference between Redux and the Context API?
+    </button>
+  </h2>
+  <div id="state-q9" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Redux and React Context both solve the problem of sharing data across components without prop drilling, but they are architecturally different. Context is a built-in React feature that provides a way to broadcast a value to all descendant consumers; it has no built-in mechanism for structured state updates, middleware, selectors, or DevTools integration. Redux is a dedicated state management library with a strict unidirectional data flow pattern: actions → reducers → new state → re-render. Redux has a rich middleware system (for async, logging, analytics), the Redux DevTools with time-travel debugging, and selectors (reselect) for derived state memoization. Context re-renders all consumers when the provided value changes; Redux (via react-redux's <code>useSelector</code>) only re-renders components when the selected slice of state changes. For complex, frequently-updated global state, Redux's optimized subscriptions outperform Context.
+      <pre class="code-block">// Context: re-renders all consumers on any value change
+const GlobalContext = React.createContext(null);
+function Provider({ children }) {
+  const [state, setState] = React.useState({ user: null, theme: 'light', count: 0 });
+  return &lt;GlobalContext.Provider value={{ state, setState }}&gt;{children}&lt;/GlobalContext.Provider&gt;;
+}
+// Any change to state re-renders ALL consumers — even if they only use `theme`
+
+// Redux: component only re-renders when selected slice changes
+function ThemeToggle() {
+  const theme = useSelector(state =&gt; state.ui.theme); // only re-renders on theme change
+  return &lt;button&gt;{theme}&lt;/button&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q10">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;When should you use Redux vs Context?
+    </button>
+  </h2>
+  <div id="state-q10" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Use Context for: low-frequency updates (theme, language, auth user, feature flags) that many components need but that rarely change; small-to-medium apps where the overhead of Redux isn't justified; data that's truly global but doesn't need complex update logic. Use Redux for: complex state with many types of updates and interactions; data that updates frequently and is consumed by many components (performance matters); when you need middleware for side effects (API calls, analytics, WebSockets); when time-travel debugging and action logging are important for your team; when you have complex async workflows; large teams where a strict update pattern reduces bugs. A rough heuristic: if you find yourself writing complex useEffect chains to synchronize Context state, Redux would likely be cleaner. The two are not mutually exclusive — many apps use Redux for server/feature state and Context for static configuration like themes.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q11">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is Immer and how does Redux Toolkit use it?
+    </button>
+  </h2>
+  <div id="state-q11" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Immer is a JavaScript library that allows you to write "mutating" code that actually produces immutable updates. It uses JavaScript Proxies to intercept mutations on a draft object, recording every change, and then producing a new immutable state based on those recorded mutations. Redux Toolkit wraps all <code>createSlice</code> reducer functions with Immer automatically, so you can write <code>state.user.name = 'Alice'</code> inside a reducer and get an immutable update without manually spreading every level of nesting. This dramatically reduces the verbosity of writing reducers for deeply nested state. Immer also detects if you accidentally return a new value AND mutate the draft, throwing an error to prevent bugs. You can use Immer independently of Redux Toolkit via the <code>produce</code> function.
+      <pre class="code-block">// Without Immer (verbose, error-prone)
+function reducer(state, action) {
+  return {
+    ...state,
+    users: {
+      ...state.users,
+      [action.userId]: {
+        ...state.users[action.userId],
+        profile: {
+          ...state.users[action.userId].profile,
+          name: action.name,
+        }
+      }
+    }
+  };
+}
+
+// With Immer (via createSlice) — same result, much simpler
+updateUserName: (state, action) =&gt; {
+  state.users[action.payload.userId].profile.name = action.payload.name;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q12">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is a selector in Redux? What is reselect?
+    </button>
+  </h2>
+  <div id="state-q12" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      A selector is a function that derives data from the Redux store state. The simplest selectors just read a property: <code>state =&gt; state.users.list</code>. More complex selectors compute derived data: filtering, sorting, combining multiple parts of state. Reselect is a library (bundled with RTK) that creates memoized selectors using <code>createSelector</code>. A memoized selector only recomputes when its input selectors produce new values (using reference equality), caching the result otherwise. This prevents unnecessary re-renders in components using <code>useSelector</code> — if a complex derived value (like a filtered, sorted list) would produce the same output, reselect returns the cached result with the same reference, and <code>useSelector</code> skips the re-render. RTK exports <code>createSelector</code> directly from <code>@reduxjs/toolkit</code>.
+      <pre class="code-block">import { createSelector } from '@reduxjs/toolkit';
+
+// Input selectors (simple, cheap)
+const selectAllTodos = (state) =&gt; state.todos.items;
+const selectFilter = (state) =&gt; state.todos.filter;
+
+// Memoized derived selector — only recomputes when todos or filter changes
+export const selectFilteredTodos = createSelector(
+  [selectAllTodos, selectFilter],
+  (todos, filter) =&gt; {
+    if (filter === 'all') return todos;
+    return todos.filter(t =&gt; t.status === filter);
+  }
+);
+
+// Component: only re-renders when filtered result changes
+function TodoList() {
+  const todos = useSelector(selectFilteredTodos);
+  return &lt;ul&gt;{todos.map(t =&gt; &lt;li key={t.id}&gt;{t.text}&lt;/li&gt;)}&lt;/ul&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q13">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is normalized state and why is it important?
+    </button>
+  </h2>
+  <div id="state-q13" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Normalized state means storing entities (users, posts, comments) as flat lookup tables (objects keyed by ID) instead of nested arrays of objects. For example, instead of <code>[{ id: 1, name: 'Alice', posts: [{ id: 10, title: '...' }] }]</code>, you store <code>{ users: { 1: { id: 1, name: 'Alice', postIds: [10] } }, posts: { 10: { id: 10, title: '...' } } }</code>. This avoids duplication (the same user appearing in multiple places), makes updates O(1) by ID (no array search), prevents complex cascade updates when an entity changes, and mirrors how a database organizes data. Redux Toolkit's <code>createEntityAdapter</code> provides normalized state utilities out of the box. The normalized shape (inspired by <code>normalizr</code>) is the recommended pattern for any Redux store containing relational data.
+      <pre class="code-block">// Normalized state shape
+{
+  users: {
+    ids: [1, 2, 3],
+    entities: {
+      1: { id: 1, name: 'Alice' },
+      2: { id: 2, name: 'Bob' },
+    }
+  },
+  posts: {
+    ids: [10, 11],
+    entities: {
+      10: { id: 10, title: 'Hello', authorId: 1 },
+    }
+  }
+}
+
+// O(1) update — no need to find item in array
+state.users.entities[userId].name = newName;</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q14">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is RTK Query?
+    </button>
+  </h2>
+  <div id="state-q14" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      RTK Query is a powerful data fetching and caching solution built into Redux Toolkit. It eliminates the boilerplate of writing thunks, reducers, and loading/error state for every API endpoint. You define an API using <code>createApi</code> with a <code>baseQuery</code> (typically <code>fetchBaseQuery</code> wrapping fetch) and a set of <code>endpoints</code> (queries for GET-like operations, mutations for POST/PUT/DELETE). RTK Query automatically generates React hooks (e.g., <code>useGetUsersQuery</code>, <code>useCreateUserMutation</code>) that handle caching, loading states, background refetching, invalidation, and optimistic updates. Data is stored in Redux and can be inspected with DevTools. RTK Query reduces a typical CRUD feature from ~200 lines of Redux code to ~30 lines.
+      <pre class="code-block">import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+const api = createApi({
+  reducerPath: 'api',
+  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+  tagTypes: ['User'],
+  endpoints: (builder) =&gt; ({
+    getUsers: builder.query({ query: () =&gt; '/users', providesTags: ['User'] }),
+    createUser: builder.mutation({
+      query: (user) =&gt; ({ url: '/users', method: 'POST', body: user }),
+      invalidatesTags: ['User'], // automatically refetch users after creation
+    }),
+  }),
+});
+
+export const { useGetUsersQuery, useCreateUserMutation } = api;
+
+// Component
+function UserList() {
+  const { data, isLoading } = useGetUsersQuery();
+  if (isLoading) return &lt;Spinner /&gt;;
+  return &lt;ul&gt;{data.map(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q15">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the difference between RTK Query and React Query?
+    </button>
+  </h2>
+  <div id="state-q15" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Both RTK Query and React Query (TanStack Query) are data-fetching libraries that solve caching, loading states, and synchronization, but they differ in integration and scope. RTK Query is built into Redux Toolkit and stores its cache in Redux — state is inspectable via Redux DevTools, and you can combine server state with Redux client state seamlessly; it is ideal if you're already using Redux. React Query is framework-agnostic (works without Redux), has its own cache independent of Redux, and has a larger ecosystem, more advanced features (infinite queries, optimistic updates, SSR hydration), and better TypeScript ergonomics. React Query is often preferred in non-Redux apps or when a standalone data-fetching solution is preferred. RTK Query wins when deep Redux integration is valuable. Both significantly outperform manual useEffect fetching patterns.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q16">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is Zustand?
+    </button>
+  </h2>
+  <div id="state-q16" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Zustand is a small, fast, and flexible state management library for React that uses hooks as its primary API. You define a store using <code>create</code>, providing a setup function that receives <code>set</code> and <code>get</code> helpers and returns an object with state and actions. Components subscribe to the store via the generated hook, optionally passing a selector to subscribe to only a portion of the state — preventing re-renders when unrelated state changes. Zustand requires no Provider wrapper, works outside React components (accessing state from utility functions), and supports middleware for persistence, DevTools integration, and Immer-style mutations. Its tiny bundle size (~1KB) and minimal boilerplate make it popular for small-to-medium apps that need global state without Redux's complexity. The lack of enforced patterns is both a feature (flexibility) and a risk (inconsistency in larger teams).
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q17">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is Jotai?
+    </button>
+  </h2>
+  <div id="state-q17" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Jotai is an atomic state management library for React inspired by Recoil and the Atom model. State is broken into small, independent atoms (think: individual useState values at the global level), and components subscribe to only the atoms they need. Atoms can be composed: derived atoms compute their value from other atoms, similar to reselect selectors but with automatic dependency tracking. Jotai is extremely lightweight, requires no Provider (it uses a default global store), and avoids the context re-render problem since components only re-render when their specific atoms change. It works well for fine-grained, per-entity state (e.g., per-row selected state in a table). The atom model encourages splitting state into small, focused units rather than one large state tree, making incremental adoption alongside existing solutions very easy.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q18">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is Recoil?
+    </button>
+  </h2>
+  <div id="state-q18" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Recoil is Facebook's experimental atomic state management library for React. Like Jotai, it uses atoms (units of state) and selectors (derived state functions that auto-track atom dependencies). Components use <code>useRecoilState</code> (like useState but global), <code>useRecoilValue</code> (read-only), and <code>useSetRecoilState</code> (write-only). Recoil's key differentiator is its support for asynchronous selectors — selectors can return Promises, integrating with Suspense for data loading. It also has advanced features like atom families (parameterized atoms), snapshots (capturing full state for debugging/undo), and transactions. Recoil is still in experimental status (as of 2024) and less production-battle-tested than Redux or Zustand, but it demonstrates interesting ideas about fine-grained reactive state that influenced libraries like Jotai.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q19">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the Flux architecture?
+    </button>
+  </h2>
+  <div id="state-q19" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Flux is the application architecture pattern that Redux is based on, developed by Facebook as an alternative to MVC for client-side web applications. The core Flux pattern is unidirectional data flow: Action → Dispatcher → Store → View → (user interaction creates) → Action. In Flux, the Dispatcher is a central hub that receives all actions and broadcasts them to every registered store. Stores contain application state and logic and update themselves in response to dispatched actions. Views (React components) render based on store data and dispatch actions on user interaction. Redux simplified Flux by replacing the Dispatcher with pure reducer functions and the multiple stores with a single store. Flux ensures data flows in one direction, making state changes predictable and easier to debug compared to bidirectional data binding in MVC frameworks.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q20">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is middleware in Redux?
+    </button>
+  </h2>
+  <div id="state-q20" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Redux middleware is code that sits between the dispatching of an action and the moment it reaches the reducer. Middleware can intercept actions, modify them, dispatch additional actions, perform async operations, or cancel them entirely. The middleware API is a chain of higher-order functions: <code>store =&gt; next =&gt; action =&gt; { ... next(action) ... }</code>. Common middleware: <code>redux-thunk</code> (allows dispatching functions for async logic), <code>redux-saga</code> (handles complex async with generators), <code>redux-logger</code> (logs every action and state change to the console). Redux Toolkit includes <code>redux-thunk</code> by default via <code>configureStore</code>. Middleware is applied using <code>applyMiddleware</code> (legacy) or the <code>middleware</code> option in <code>configureStore</code>.
+      <pre class="code-block">// Custom middleware example: logger
+const loggerMiddleware = (store) =&gt; (next) =&gt; (action) =&gt; {
+  console.log('Dispatching:', action);
+  console.log('State before:', store.getState());
+  const result = next(action); // pass to next middleware / reducer
+  console.log('State after:', store.getState());
+  return result;
+};
+
+// Apply middleware
+import { configureStore } from '@reduxjs/toolkit';
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =&gt;
+    getDefaultMiddleware().concat(loggerMiddleware),
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q21">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is redux-thunk?
+    </button>
+  </h2>
+  <div id="state-q21" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Redux-thunk is a middleware that allows you to write action creators that return functions instead of plain action objects. The returned function receives <code>dispatch</code> and <code>getState</code> as arguments, allowing it to dispatch multiple actions and perform async operations (API calls, timers) before dispatching the final action. Without thunk, action creators must return plain objects — you couldn't perform any async logic in them. Thunks are the simplest async middleware and are included by default in Redux Toolkit's <code>configureStore</code>. The name "thunk" comes from computer science: a function that wraps an expression to delay its evaluation. <code>createAsyncThunk</code> in RTK builds on top of redux-thunk to provide the lifecycle action pattern automatically.
+      <pre class="code-block">// Manual thunk
+export const fetchUserThunk = (userId) =&gt; async (dispatch, getState) =&gt; {
+  dispatch({ type: 'user/fetchPending' });
+  try {
+    const response = await fetch(`/api/users/${userId}`);
+    const data = await response.json();
+    dispatch({ type: 'user/fetchFulfilled', payload: data });
+  } catch (error) {
+    dispatch({ type: 'user/fetchRejected', payload: error.message });
+  }
+};
+
+// RTK's createAsyncThunk does this automatically
+export const fetchUser = createAsyncThunk('user/fetch', (userId) =&gt;
+  fetch(`/api/users/${userId}`).then(r =&gt; r.json())
+);</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q22">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is redux-saga vs redux-thunk?
+    </button>
+  </h2>
+  <div id="state-q22" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Both redux-saga and redux-thunk handle async side effects in Redux, but with very different models. Redux-thunk uses plain async/await functions — simple, widely understood, good for straightforward async operations. Redux-saga uses ES6 generator functions (<code>function*</code>) that <code>yield</code> "effect descriptors" — plain objects describing what to do (call an API, dispatch an action, take an action) — that the saga middleware executes. This makes sagas highly testable (you test the yielded descriptors, not actual API calls), powerful (can cancel tasks, handle complex race conditions with <code>race()</code>, debounce with <code>takeLatest</code>), and composable. The trade-off: sagas have a steep learning curve (generators, saga effects). Use thunks for simple async; use sagas for complex orchestration (wizards, polling, WebSocket management, task cancellation).
+      <pre class="code-block">// redux-saga — generator functions, highly testable
+import { call, put, takeEvery } from 'redux-saga/effects';
+
+function* fetchUserSaga(action) {
+  try {
+    const user = yield call(fetchUserAPI, action.payload); // testable descriptor
+    yield put({ type: 'user/fetchFulfilled', payload: user });
+  } catch (error) {
+    yield put({ type: 'user/fetchRejected', error });
+  }
+}
+
+function* rootSaga() {
+  yield takeEvery('user/fetchRequested', fetchUserSaga);
+  // takeLatest: cancels previous if new action arrives
+  // takeLeading: ignores new actions while one is in progress
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q23">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How does Redux DevTools time travel work?
+    </button>
+  </h2>
+  <div id="state-q23" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Redux DevTools time travel works because Redux enforces immutable state and pure reducers — every state in the application's history is a separate JavaScript object that can be stored and replayed. The DevTools extension maintains an array of all dispatched actions and all state snapshots. To "travel back in time", it replays all actions from the initial state up to the selected point by re-running the reducer for each action in sequence, producing the exact state at that moment. The component tree then re-renders with that historical state. This is only possible because Redux's reducers are pure functions and state is never mutated — if state were mutable, previous snapshots would be overwritten. The DevTools also support "skip" (remove an action from the log and replay without it), "commit" (set current state as new initial), and "import/export state" features.
+      <pre class="code-block">// DevTools is enabled automatically with RTK's configureStore
+import { configureStore } from '@reduxjs/toolkit';
+
+const store = configureStore({
+  reducer: rootReducer,
+  // Redux DevTools are enabled in dev by default
+  devTools: process.env.NODE_ENV !== 'production'
+    ? { maxAge: 50, actionCreators: { fetchUser, createPost } }
+    : false,
+});
+
+// How time travel works internally (simplified):
+// history = [
+//   { action: { type: '@@INIT' }, state: initialState },
+//   { action: { type: 'counter/increment' }, state: { count: 1 } },
+//   { action: { type: 'counter/increment' }, state: { count: 2 } },
+// ]
+// Jump to index 1: render with state { count: 1 }</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q24">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the problem with large Redux stores and how do you optimize them?
+    </button>
+  </h2>
+  <div id="state-q24" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Large Redux stores face several problems: any state change causes all <code>useSelector</code> hooks to run their selector functions (even those for unrelated state), though RTK's default equality check usually catches this; large, unnormalized state means updates require deep object spreading that is verbose and slow; keeping all state in one store can cause all features to be loaded upfront even if code splitting is used; and serialization for DevTools becomes slow for very large state trees. Optimizations include: using <code>createEntityAdapter</code> for normalized collections, using <code>createSelector</code> (reselect) for memoized derived state, lazy loading feature reducers with Redux Toolkit's code splitting via <code>injectReducer</code>, splitting contexts so unrelated features don't trigger unnecessary selector runs, and avoiding storing non-serializable data (functions, class instances, DOM refs) in Redux.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q25">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you handle optimistic updates in Redux?
+    </button>
+  </h2>
+  <div id="state-q25" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Optimistic updates in Redux mean immediately updating the store with the expected server result before the async operation completes, then reconciling when the actual response arrives. The pattern: (1) dispatch an optimistic update action that immediately changes the UI state; (2) make the API call; (3) on success, optionally dispatch a confirmation action with server-generated data (like a real ID replacing a temp ID); (4) on failure, dispatch a rollback action that reverts the state to before the optimistic update. RTK Query has built-in <code>onQueryStarted</code> for optimistic updates with automatic rollback. For manual Redux, you need to preserve the pre-update state to enable rollback.
+      <pre class="code-block">// RTK Query optimistic update with rollback
+const api = createApi({
+  endpoints: (builder) =&gt; ({
+    updatePost: builder.mutation({
+      query: ({ id, ...patch }) =&gt; ({ url: `/posts/${id}`, method: 'PATCH', body: patch }),
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+        // Optimistically update cache
+        const patchResult = dispatch(
+          api.util.updateQueryData('getPost', id, (draft) =&gt; {
+            Object.assign(draft, patch); // Immer draft mutation
+          })
+        );
+        try {
+          await queryFulfilled; // wait for server response
+        } catch {
+          patchResult.undo(); // rollback on failure
+        }
+      },
+    }),
+  }),
+});</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q26">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the difference between local state and global state and when to use each?
+    </button>
+  </h2>
+  <div id="state-q26" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Local state (useState, useReducer within a component) is owned by a specific component and is not accessible outside it. It is appropriate for: UI state that only one component cares about (modal open/closed, input values, tab selection, hover state), state that is tightly coupled to a specific component's logic, and ephemeral state that doesn't need to survive navigation. Global state (Redux, Context, Zustand) is shared across multiple components and is appropriate for: authenticated user data, theme/language preferences, shopping cart contents, data fetched from an API that multiple views need, and any state that would require significant prop drilling to share. A useful heuristic: start with local state and only elevate to global when you find yourself either prop-drilling or duplicating state in multiple places. Over-globalizing state (putting everything in Redux) is a common anti-pattern that hurts performance and maintainability.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q27">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How does Redux Toolkit's createEntityAdapter work?
+    </button>
+  </h2>
+  <div id="state-q27" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      <code>createEntityAdapter</code> generates a set of prebuilt reducers and selectors for managing normalized collections of entities in a Redux slice. You provide an entity type and optionally a <code>selectId</code> function (defaults to <code>entity.id</code>) and a <code>sortComparer</code>. The adapter generates CRUD reducer methods: <code>addOne</code>, <code>addMany</code>, <code>updateOne</code>, <code>updateMany</code>, <code>removeOne</code>, <code>removeMany</code>, <code>upsertOne</code>, <code>setAll</code>. These can be spread into your slice's <code>reducers</code> object. The adapter also generates selectors: <code>selectAll</code>, <code>selectById</code>, <code>selectIds</code>, <code>selectEntities</code>, <code>selectTotal</code> — pre-bound to the slice's state. The state shape is <code>{ ids: [...], entities: { id: entity, ... } }</code> — the normalized structure. This eliminates the boilerplate of writing CRUD operations and normalized selectors from scratch.
+      <pre class="code-block">import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+
+const usersAdapter = createEntityAdapter();
+const initialState = usersAdapter.getInitialState({ loading: false });
+
+const usersSlice = createSlice({
+  name: 'users',
+  initialState,
+  reducers: {
+    userAdded: usersAdapter.addOne,
+    usersLoaded: usersAdapter.setAll,
+    userUpdated: usersAdapter.updateOne,
+    userRemoved: usersAdapter.removeOne,
+  },
+});
+
+// Selectors
+export const {
+  selectAll: selectAllUsers,
+  selectById: selectUserById,
+  selectIds: selectUserIds,
+} = usersAdapter.getSelectors((state) =&gt; state.users);</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q28">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you handle pagination with Redux?
+    </button>
+  </h2>
+  <div id="state-q28" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Pagination with Redux involves storing both the paginated data and pagination metadata (current page, total pages, page size, loading state per page) in the store. There are two common approaches: cursor-based (store a <code>nextCursor</code> token and fetch the next page using it) and offset-based (store <code>currentPage</code> and calculate offset = page * pageSize). The state typically includes a lookup of loaded pages to avoid refetching: <code>{ pages: { 1: [id1, id2, ...], 2: [...] }, entities: { id1: {...} }, currentPage: 1, totalPages: 10, loading: false }</code>. RTK Query handles pagination cleanly: use <code>useGetItemsQuery({ page })</code> and RTK Query caches each page separately. For infinite scroll, use <code>useLazyQuery</code> or implement an accumulate-pages pattern.
+      <pre class="code-block">const paginatedSlice = createSlice({
+  name: 'posts',
+  initialState: { entities: {}, ids: [], pagination: { page: 1, total: 0, loading: false } },
+  extraReducers: (builder) =&gt; {
+    builder
+      .addCase(fetchPosts.pending, (state) =&gt; { state.pagination.loading = true; })
+      .addCase(fetchPosts.fulfilled, (state, action) =&gt; {
+        const { items, total } = action.payload;
+        postsAdapter.setAll(state, items);
+        state.pagination.total = total;
+        state.pagination.loading = false;
+      });
+  },
+});
+
+function PostList() {
+  const [page, setPage] = React.useState(1);
+  const dispatch = useDispatch();
+  React.useEffect(() =&gt; { dispatch(fetchPosts({ page })); }, [page, dispatch]);
+  const posts = useSelector(selectAllPosts);
+  return &lt;div&gt;{posts.map(p =&gt; &lt;Post key={p.id} {...p} /&gt;)}&lt;/div&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q29">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What are the performance implications of Context API for global state?
+    </button>
+  </h2>
+  <div id="state-q29" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      The fundamental performance problem with Context is that every consumer re-renders when the provided value reference changes — React does not do a deep comparison of the value, just reference equality. If the Provider renders with a new object <code>value={{ user, theme, count }}</code> on every render (which is common since the object literal creates a new reference), every consumer re-renders regardless of which piece of data they actually use. Solutions: (1) memoize the context value with <code>useMemo</code>; (2) split a large context into smaller, more focused contexts (a UserContext, ThemeContext, etc.) so changes to theme don't re-render user-consuming components; (3) use context only for low-frequency updates and a library like Zustand or Redux for high-frequency state. Large apps with frequently updating state in a single Context can have catastrophic performance issues.
+      <pre class="code-block">// PROBLEM: new object reference on every render
+function App() {
+  const [user, setUser] = React.useState(null);
+  const [theme, setTheme] = React.useState('light');
+  // New object every render → ALL consumers re-render
+  return &lt;Ctx.Provider value={{ user, theme }}&gt;...&lt;/Ctx.Provider&gt;;
+}
+
+// FIX 1: memoize the value
+function App() {
+  const [user, setUser] = React.useState(null);
+  const [theme, setTheme] = React.useState('light');
+  const value = React.useMemo(() =&gt; ({ user, theme }), [user, theme]);
+  return &lt;Ctx.Provider value={value}&gt;...&lt;/Ctx.Provider&gt;;
+}
+
+// FIX 2: split contexts
+// &lt;UserContext.Provider value={user}&gt;
+//   &lt;ThemeContext.Provider value={theme}&gt;
+//     {children}
+//   &lt;/ThemeContext.Provider&gt;
+// &lt;/UserContext.Provider&gt;</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q30">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you split a Redux store into feature modules?
+    </button>
+  </h2>
+  <div id="state-q30" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Redux supports splitting the store into feature modules using <code>combineReducers</code> (or Redux Toolkit's automatic combination in <code>configureStore</code>). Each feature owns its slice file (reducer + actions + selectors), which is combined at the root. For code splitting (loading feature reducers only when the feature's route loads), Redux Toolkit supports dynamic reducer injection via a store enhancer or a custom hook that calls <code>store.replaceReducer</code> when a lazy-loaded feature mounts. The recommended pattern: organize each feature as a "duck" module (all Redux code for that feature in one file or directory), export the slice reducer as default, and import all reducers in the root store configuration. This keeps feature code co-located and prevents the root store from growing with feature-specific logic.
+      <pre class="code-block">// store.ts
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from '../features/auth/authSlice';
+import postsReducer from '../features/posts/postsSlice';
+import { api } from '../services/api';
+
+export const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    posts: postsReducer,
+    [api.reducerPath]: api.reducer,  // RTK Query
+  },
+  middleware: (getDefault) =&gt; getDefault().concat(api.middleware),
+});
+
+// Dynamic injection for code splitting
+function injectReducer(store, key, reducer) {
+  if (store.asyncReducers[key]) return;
+  store.asyncReducers[key] = reducer;
+  store.replaceReducer(createRootReducer(store.asyncReducers));
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q31">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the Provider pattern in React state management?
+    </button>
+  </h2>
+  <div id="state-q31" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      The Provider pattern involves a component that wraps part of the component tree and makes data or functionality available to all descendants via React Context, without requiring explicit prop passing. The Provider is responsible for managing the state (via useState or useReducer) and exposing it (and any update functions) through a context value. Any component inside the Provider can consume the provided value using <code>useContext</code>. This pattern is used by React-Redux (<code>&lt;Provider store={store}&gt;</code>), React Query (<code>&lt;QueryClientProvider&gt;</code>), React Router (<code>&lt;BrowserRouter&gt;</code>), and theme libraries. The Provider pattern decouples state management from the UI tree — consumers don't need to know how the state is managed, only how to access it via the context hook. It is commonly paired with a custom hook (e.g., <code>useAuth()</code>) that wraps <code>useContext</code> and adds type safety or error checking.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q32">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the atom pattern in Jotai/Recoil?
+    </button>
+  </h2>
+  <div id="state-q32" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      The atom pattern models application state as a collection of small, independent state units (atoms) rather than a single large state tree. Each atom represents one piece of state (similar to a global useState), and components subscribe to only the atoms they need, re-rendering only when those specific atoms change. Atoms can be composed: derived atoms (called selectors in Recoil, or computed atoms in Jotai) automatically track their atom dependencies and recompute only when those dependencies change. This fine-grained reactivity means a change to a user's email doesn't cause a component that only reads the user's name to re-render. The atom model is extremely granular and scalable for large apps with many independently updating pieces of state, and it avoids the "one context re-renders everything" problem of React Context. The trade-off is managing a large number of atoms across a codebase requires discipline.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q33">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How does Zustand differ from Redux conceptually?
+    </button>
+  </h2>
+  <div id="state-q33" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Zustand is much simpler and less structured than Redux. Where Redux enforces strict patterns (actions, reducers, immutable updates, dispatch), Zustand is permissive — you mutate state directly inside action functions using Immer (if configured) or just use <code>set</code>. There is no explicit action type system, no dispatch, no separate action creators; you just call functions on the store object. Zustand doesn't require a Provider component — the store is a module-level singleton. Zustand's selective subscription (components only re-render when their selected slice changes) is a first-class feature, whereas Redux requires careful selector memoization for the same result. Zustand is ideal for simple-to-medium global state; Redux scales better for large teams and complex state with extensive async workflows and debugging needs.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q34">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is MobX and how does it differ from Redux?
+    </button>
+  </h2>
+  <div id="state-q34" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      MobX is a reactive state management library that automatically tracks which components observe which state and updates only those components when the observed state changes. Instead of the explicit dispatch → reducer → update cycle of Redux, MobX uses observable state objects and derivations — you mark state as <code>@observable</code>, mark computed values as <code>@computed</code>, and mark UI-updating code as <code>@observer</code>. When observable state changes, MobX automatically re-runs all observer components that read that state. MobX is more "magic" (automatic dependency tracking) versus Redux's explicit data flow. MobX is more flexible (any state mutation triggers updates) while Redux enforces immutability and explicit updates. MobX with React requires fewer lines of code for equivalent functionality but is harder to debug since changes can happen from anywhere without a clear audit trail.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q35">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the observer pattern in state management?
+    </button>
+  </h2>
+  <div id="state-q35" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      The observer pattern is a design pattern where subjects (state stores) maintain a list of observers (subscribers/listeners) and automatically notify them when the subject's state changes. In React state management, it underpins many libraries: Redux's <code>store.subscribe()</code> notifies all subscribers on every dispatch; MobX's <code>@observer</code> decorator makes a component an observer of the observables it reads; Zustand's hook system subscribes components to the parts of the store they access. The React component that subscribes to the store is the "observer"; the store is the "subject." This pattern enables decoupled, reactive architectures where state changes automatically propagate to all interested parties without explicit event handling chains. React's own useState and useReducer are local implementations of the same idea — the component subscribes to its own state and re-renders when it changes.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q36">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you handle async state in Redux Toolkit (pending/fulfilled/rejected)?
+    </button>
+  </h2>
+  <div id="state-q36" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      RTK's <code>createAsyncThunk</code> generates three action types for each async operation: <code>prefix/pending</code> (dispatched when the thunk starts), <code>prefix/fulfilled</code> (dispatched with the resolved value on success), and <code>prefix/rejected</code> (dispatched with the error on failure). In <code>createSlice</code>, you handle these in <code>extraReducers</code> using the builder API. The standard pattern is to store <code>status: 'idle' | 'loading' | 'succeeded' | 'failed'</code> and <code>error: null | string</code> alongside the data. This three-state model maps cleanly to the UI: show spinner for loading, show data for succeeded, show error message for failed, and show initial UI for idle. RTK also provides <code>thunkArg</code>, <code>requestId</code>, and <code>requestStatus</code> on the thunk result for advanced abort handling.
+      <pre class="code-block">const postsSlice = createSlice({
+  name: 'posts',
+  initialState: { items: [], status: 'idle', error: null },
+  reducers: {},
+  extraReducers: (builder) =&gt; {
+    builder
+      .addCase(fetchPosts.pending, (state) =&gt; { state.status = 'loading'; state.error = null; })
+      .addCase(fetchPosts.fulfilled, (state, action) =&gt; {
+        state.status = 'succeeded';
+        state.items = action.payload;
+      })
+      .addCase(fetchPosts.rejected, (state, action) =&gt; {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
+  },
+});
+
+function Posts() {
+  const { items, status, error } = useSelector(s =&gt; s.posts);
+  if (status === 'loading') return &lt;Spinner /&gt;;
+  if (status === 'failed') return &lt;Error message={error} /&gt;;
+  return &lt;ul&gt;{items.map(p =&gt; &lt;li key={p.id}&gt;{p.title}&lt;/li&gt;)}&lt;/ul&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q37">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is optimistic locking in UI state management?
+    </button>
+  </h2>
+  <div id="state-q37" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Optimistic locking in UI state management is a pattern where you allow the user to make changes optimistically (immediately updating the UI without waiting for server confirmation) but detect and handle conflicts when the server rejects the update because the server-side data changed since the client last fetched it. The server uses a version number or ETag — when the client submits an update, it includes the version it last saw; if the server's current version is different, it rejects with a conflict error. The UI must then handle this by showing the user a conflict dialog, allowing them to choose between their changes and the server's current data, or automatically merging if possible. This is more complex than simple optimistic updates because you must handle the case where optimistic updates fail not due to network errors but due to concurrent modifications from other users. It is essential in collaborative editing applications.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q38">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement undo/redo functionality with Redux?
+    </button>
+  </h2>
+  <div id="state-q38" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Undo/redo with Redux leverages immutable state history. The <code>redux-undo</code> library is the standard approach: it wraps a reducer and maintains a history stack of past and future states. Dispatching <code>ActionCreators.undo()</code> moves back one step; <code>ActionCreators.redo()</code> moves forward. Manually, you maintain <code>{ past: [state1, state2, ...], present: currentState, future: [] }</code>. On any normal action, push <code>present</code> to <code>past</code>, set <code>present</code> to the new state, and clear <code>future</code>. On undo, pop from <code>past</code> into <code>present</code> (pushing current <code>present</code> to <code>future</code>). On redo, pop from <code>future</code> into <code>present</code>. Filter which actions are undoable with <code>redux-undo</code>'s <code>filter</code> option — you typically don't want to undo navigation actions or server sync actions.
+      <pre class="code-block">// Using redux-undo
+import undoable, { ActionCreators } from 'redux-undo';
+
+const undoableCounter = undoable(counterReducer, {
+  limit: 20, // max history depth
+  filter: (action) =&gt; action.type !== 'sync/serverUpdate', // skip some actions
+});
+
+// Dispatch undo/redo
+dispatch(ActionCreators.undo());
+dispatch(ActionCreators.redo());
+
+// State shape with redux-undo:
+// { past: [...], present: currentState, future: [...], index: 2 }</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q39">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;Explain the concept of "derived state" vs "source of truth" state.
+    </button>
+  </h2>
+  <div id="state-q39" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Source of truth state is the minimal, canonical set of data that everything else can be computed from. Derived state is any value that can be calculated from source of truth state — it is not stored but computed on demand. For example, in a todo app: the source of truth is the list of todos and the current filter setting. The derived state is the filtered list — it should NEVER be stored separately. Storing derived state creates dual sources of truth that can diverge: if you update <code>todos</code> but forget to recompute <code>filteredTodos</code>, the UI shows stale data. The Redux principle says: "Don't store in state what you can compute from state." Reselect's <code>createSelector</code> and <code>useMemo</code> implement this correctly — they compute derived values from source state on demand, with memoization for performance. Violating this principle is one of the most common sources of bugs in React apps.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#state-q40">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you migrate a class-based Redux app to Redux Toolkit with hooks?
+    </button>
+  </h2>
+  <div id="state-q40" class="accordion-collapse collapse" data-bs-parent="#acc-state">
+    <div class="accordion-body">
+      Migration from legacy Redux to Redux Toolkit should be done incrementally to avoid a big-bang rewrite. Step 1: Replace <code>createStore + combineReducers + applyMiddleware</code> with <code>configureStore</code> (which includes thunk and DevTools by default). Step 2: Migrate existing reducers to <code>createSlice</code> one feature at a time — createSlice is backward-compatible with existing action types via <code>extraReducers</code>. Step 3: Replace <code>connect()</code> HOC usage with <code>useSelector</code> and <code>useDispatch</code> hooks (can be done component by component). Step 4: Migrate async action creators to <code>createAsyncThunk</code>. Step 5: If using normalizr manually, migrate to <code>createEntityAdapter</code>. The key is that RTK is fully backward-compatible — old action creators still work, and you can mix old reducers with new slices during migration.
+      <pre class="code-block">// Before: legacy Redux
+const ADD_TODO = 'ADD_TODO';
+const addTodo = (text) =&gt; ({ type: ADD_TODO, payload: text });
+function todosReducer(state = [], action) {
+  switch (action.type) {
+    case ADD_TODO: return [...state, { text: action.payload, done: false }];
+    default: return state;
+  }
+}
+
+// After: Redux Toolkit createSlice
+const todosSlice = createSlice({
+  name: 'todos',
+  initialState: [],
+  reducers: {
+    addTodo: (state, action) =&gt; { state.push({ text: action.payload, done: false }); }
+  },
+});
+export const { addTodo } = todosSlice.actions;
+
+// Before: connect() HOC
+export default connect(mapState, mapDispatch)(TodoList);
+// After: hooks
+function TodoList() {
+  const todos = useSelector(s =&gt; s.todos);
+  const dispatch = useDispatch();
+  return &lt;ul onClick={() =&gt; dispatch(addTodo('New'))}&gt;...&lt;/ul&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<div class="tab-pane fade" id="tab-performance" role="tabpanel">
+  <div class="accordion" id="acc-performance">
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q1">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is React.memo?
+    </button>
+  </h2>
+  <div id="performance-q1" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      <code>React.memo</code> is a higher-order component that memoizes a functional component's rendered output. When React would normally re-render a component because its parent re-rendered, <code>React.memo</code> first checks whether the component's props have changed using a shallow comparison. If none of the props have changed (compared by reference using <code>Object.is</code>), React skips re-rendering and reuses the last rendered output. This is the functional component equivalent of <code>React.PureComponent</code> for class components. React.memo is a performance optimization — it only helps when a parent re-renders frequently and the child's props often remain the same. Wrapping every component in memo is unnecessary and adds comparison overhead; profile first and apply memo where it provides measurable benefit.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q2">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the purpose of useMemo?
+    </button>
+  </h2>
+  <div id="performance-q2" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      <code>useMemo(computeFn, deps)</code> memoizes the result of a computation, re-running <code>computeFn</code> only when its listed dependencies change. On every render where dependencies haven't changed, it returns the cached value from the last computation. Its purpose is to avoid re-running expensive calculations (filtering large arrays, complex sorting, building expensive derived data structures) on every render. <code>useMemo</code> returns a value (not a function). Common use cases: memoizing filtered/sorted lists from large datasets, creating stable object references to pass as props to memoized children, and computing expensive format transformations. The dependency array follows the same rules as useEffect — all reactive values used inside computeFn must be listed. Do not use useMemo for every computation — only when the computation is measurably expensive or when reference stability matters.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q3">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is the purpose of useCallback?
+    </button>
+  </h2>
+  <div id="performance-q3" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      <code>useCallback(fn, deps)</code> returns a memoized version of a function that only changes when its listed dependencies change. On renders where dependencies haven't changed, it returns the same function object from the previous render (same reference). The primary purpose is to create stable function references so that memoized child components (wrapped in React.memo) don't unnecessarily re-render when the parent renders. Without useCallback, every render creates a new function object — even with identical logic — and React.memo's shallow comparison sees a new reference and re-renders the child. useCallback is also used to stabilize functions listed as useEffect dependencies, preventing unintended effect re-runs. <code>useCallback(fn, deps)</code> is essentially <code>useMemo(() =&gt; fn, deps)</code> — they are the same mechanism.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q4">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is lazy loading in React?
+    </button>
+  </h2>
+  <div id="performance-q4" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Lazy loading (also called code splitting) is the practice of deferring the loading of a component or module until it is actually needed, rather than loading everything upfront when the app first starts. In React, you lazy-load components using <code>React.lazy()</code> combined with <code>Suspense</code>. When a user navigates to a route or triggers a condition that requires a lazily loaded component, React dynamically imports that component's JavaScript bundle at that moment. This reduces the initial bundle size, improving the Time to Interactive metric — users get a faster initial page load because they don't download code for features they haven't visited yet. Webpack, Vite, and other bundlers support automatic code splitting when they encounter dynamic <code>import()</code> calls.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q5">
+      <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is React.lazy and Suspense?
+    </button>
+  </h2>
+  <div id="performance-q5" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      <code>React.lazy(importFn)</code> takes a function that returns a dynamic import Promise and returns a React component that can be rendered like any other. When the lazy component is first rendered, React automatically starts loading the corresponding module. <code>Suspense</code> is the companion component that shows a fallback UI (like a spinner) while the lazy component's module is being loaded. Together they enable seamless code splitting: <code>const Dashboard = React.lazy(() =&gt; import('./Dashboard'))</code>, then <code>&lt;Suspense fallback={&lt;Spinner /&gt;}&gt;&lt;Dashboard /&gt;&lt;/Suspense&gt;</code>. React 18 extends Suspense to work with data fetching (via frameworks like Next.js) and streaming SSR. Multiple lazy components can share one Suspense boundary — all will show the same fallback while any of them loads.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q6">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;When should you use React.memo?
+    </button>
+  </h2>
+  <div id="performance-q6" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Use <code>React.memo</code> when: the component renders frequently due to parent re-renders, the component's props rarely change relative to how often the parent renders, and the component is expensive to render (complex JSX, large lists, heavy calculations). Do NOT use it when: the props change on every parent render (memo's comparison cost + re-render cost is worse than just re-rendering); the component is very cheap to render (a simple <code>&lt;span&gt;</code> — the comparison overhead exceeds the render cost); or when you haven't profiled and confirmed a performance issue. The React DevTools Profiler is the right tool to identify which components are re-rendering unnecessarily before applying memo. A useful heuristic: apply memo to leaf components or components with stable props at the "junction points" between frequently updating parents and expensive subtrees.
+      <pre class="code-block">// Good candidate for memo: expensive list item that receives stable props
+const PostCard = React.memo(function PostCard({ post, onLike }) {
+  return (
+    &lt;article&gt;
+      &lt;h2&gt;{post.title}&lt;/h2&gt;
+      &lt;Markdown content={post.body} /&gt;
+      &lt;button onClick={() =&gt; onLike(post.id)}&gt;Like&lt;/button&gt;
+    &lt;/article&gt;
+  );
+});
+
+// Parent must also stabilize onLike with useCallback, otherwise memo is useless
+function Feed({ posts }) {
+  const handleLike = React.useCallback((id) =&gt; likePost(id), []);
+  return posts.map(post =&gt; &lt;PostCard key={post.id} post={post} onLike={handleLike} /&gt;);
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q7">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the React Profiler?
+    </button>
+  </h2>
+  <div id="performance-q7" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      The React Profiler is a browser DevTools extension (and a programmatic <code>&lt;Profiler&gt;</code> component) that records rendering performance information for React components. The DevTools Profiler shows a flame graph of each render: which components rendered, how long each took, and why they rendered (what caused the re-render). It also shows which commits (DOM updates) occurred and their durations. The programmatic <code>&lt;Profiler id="..." onRender={callback}&gt;</code> component records render timing in production builds for performance monitoring. The <code>onRender</code> callback receives: component id, phase (mount/update), actual render duration, base duration (estimated without memoization), start time, and commit time. Use the DevTools Profiler to identify: components that render too often, components that take too long to render, and renders triggered by irrelevant parent state changes.
+      <pre class="code-block">import { Profiler } from 'react';
+
+function onRenderCallback(id, phase, actualDuration, baseDuration, startTime, commitTime) {
+  analytics.track('component_render', { componentId: id, phase, actualDuration, timestamp: startTime });
+}
+
+function App() {
+  return (
+    &lt;Profiler id="Navigation" onRender={onRenderCallback}&gt;
+      &lt;Navigation /&gt;
+    &lt;/Profiler&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q8">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is code splitting?
+    </button>
+  </h2>
+  <div id="performance-q8" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Code splitting is the technique of dividing your JavaScript bundle into smaller chunks that can be loaded on demand, rather than delivering one giant bundle upfront. Modern bundlers (Webpack, Vite, Rollup) support code splitting automatically when they encounter dynamic <code>import()</code> calls. In React, code splitting is typically done at the route level (each route's component is a separate chunk), at the component level (heavy modals, charts, rich text editors), or at the library level (splitting vendor code from app code). Code splitting reduces the initial bundle size, improving First Contentful Paint and Time to Interactive. The trade-off is additional network requests when chunks are loaded on demand — mitigated by prefetching critical chunks in the background.
+      <pre class="code-block">import { lazy, Suspense } from 'react';
+
+const Dashboard = lazy(() =&gt; import('./pages/Dashboard'));
+const Settings = lazy(() =&gt; import('./pages/Settings'));
+const Reports = lazy(() =&gt; import('./pages/Reports'));
+
+function App() {
+  return (
+    &lt;Suspense fallback={&lt;PageSpinner /&gt;}&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/dashboard" element={&lt;Dashboard /&gt;} /&gt;
+        &lt;Route path="/settings" element={&lt;Settings /&gt;} /&gt;
+        &lt;Route path="/reports" element={&lt;Reports /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/Suspense&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q9">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is bundle analysis and how do you do it?
+    </button>
+  </h2>
+  <div id="performance-q9" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Bundle analysis is the process of examining the contents and sizes of your JavaScript bundles to identify large dependencies, duplicate code, and opportunities for code splitting. The most common tool is <code>webpack-bundle-analyzer</code> (for Webpack) or <code>rollup-plugin-visualizer</code> (for Vite/Rollup), which render an interactive treemap of all modules sized proportionally to their contribution. Common findings: including all of lodash instead of tree-shaking individual functions, including multiple versions of the same library, large date libraries like moment.js (replace with date-fns), and heavy chart libraries in the main bundle. Bundle analysis should be a regular part of your build process.
+      <pre class="code-block">// vite.config.ts
+import { defineConfig } from 'vite';
+import { visualizer } from 'rollup-plugin-visualizer';
+
+export default defineConfig({
+  plugins: [
+    visualizer({ open: true, gzipSize: true, brotliSize: true, filename: 'dist/bundle-stats.html' }),
+  ],
+});
+// Run: npm run build — opens interactive treemap showing each module's size contribution</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q10">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is tree shaking?
+    </button>
+  </h2>
+  <div id="performance-q10" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Tree shaking is a dead code elimination technique performed by modern JavaScript bundlers (Webpack, Vite, Rollup) that removes unused exports from your final bundle. When you import only <code>{ formatDate }</code> from a utility library, tree shaking ensures that only <code>formatDate</code>'s code (and its dependencies) is included in the bundle — all other exports are "shaken out." For tree shaking to work, the module must use ES module syntax (<code>export</code>/<code>import</code>), not CommonJS (<code>module.exports</code>/<code>require</code>), because ES modules have static structure that bundlers can analyze. Tree shaking is automatic in Vite and in Webpack with <code>mode: 'production'</code>. Pitfalls: side-effectful modules (barrel files that execute code on import) can prevent tree shaking — use <code>"sideEffects": false</code> in package.json to help bundlers.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q11">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is virtualization and when do you need it?
+    </button>
+  </h2>
+  <div id="performance-q11" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Virtualization (also called windowing) is the technique of rendering only the visible portion of a large list instead of all items. Instead of creating DOM nodes for 10,000 list items (which is extremely slow and memory-intensive), a virtualized list only renders the ~20–50 items currently in the viewport, creating and recycling DOM nodes as the user scrolls. Virtualization becomes necessary when: rendering more than a few hundred items causes noticeable scroll lag; your list items are complex (images, interactions, nested components); or mobile performance is a concern (fewer DOM nodes = less memory). The trade-off is increased complexity (items must have known or estimated heights), accessibility considerations (screen readers may not see off-screen items), and the items' DOM nodes are destroyed and re-created on scroll.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q12">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What libraries provide virtualization in React?
+    </button>
+  </h2>
+  <div id="performance-q12" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      The main virtualization libraries for React are: <code>react-window</code> (small, lightweight, basic fixed and variable-size lists and grids), <code>@tanstack/react-virtual</code> (TanStack Virtual — headless, highly customizable), <code>react-virtuoso</code> (full-featured: auto-sizing items, sticky headers, grouping, infinite scroll), and <code>AG Grid</code> (enterprise-grade grid with row and column virtualization). <code>react-window</code> is the simplest choice for basic lists. <code>react-virtuoso</code> is the most production-ready for complex use cases without boilerplate. <code>@tanstack/virtual</code> is best when you need full control over DOM structure. Choose based on your list complexity and whether you need full grid (rows + columns) virtualization or just a simple scrolling list.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q13">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the windowing technique?
+    </button>
+  </h2>
+  <div id="performance-q13" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      The windowing technique renders only the "window" (the visible viewport area) of a large dataset, recycling DOM nodes as the user scrolls. Conceptually: the container has a fixed height with overflow-y scroll; a tall inner container sets the total scrollable height (number of items × item height); only the items whose calculated position falls within the viewport range are actually rendered as DOM nodes; as the user scrolls, items that leave the window are removed (or recycled) and new items that come into view are rendered. Efficient windowing requires knowing the position and height of each item to calculate which items should be visible — simpler for fixed-height items, more complex for variable-height items (which require measuring and caching heights). The result is that the DOM always contains roughly the same small number of nodes regardless of dataset size.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q14">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the cost of reconciliation and how to minimize it?
+    </button>
+  </h2>
+  <div id="performance-q14" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Reconciliation is React's process of diffing the previous and new virtual DOM trees to compute necessary DOM updates. The cost scales with the size of the component subtree being reconciled. Minimizing reconciliation cost: (1) Keep component trees shallow — deeply nested trees have more nodes to diff; (2) Use stable keys in lists — correct keys allow React to match and update nodes rather than unmount/remount them; (3) Use <code>React.memo</code> to skip subtrees whose inputs haven't changed; (4) Split large components into smaller ones that can independently skip reconciliation; (5) Use <code>startTransition</code> to make expensive reconciliations non-blocking; (6) Avoid creating anonymous object/array props inline (they create new references on every render); (7) Use the Profiler to find which reconciliations are most expensive.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q15">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is shouldComponentUpdate and when do you override it?
+    </button>
+  </h2>
+  <div id="performance-q15" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      <code>shouldComponentUpdate(nextProps, nextState)</code> is a class component lifecycle method that lets you control whether the component re-renders. It receives the upcoming props and state, and returns <code>true</code> (allow re-render) or <code>false</code> (skip re-render). React calls it before every update phase; if it returns false, neither <code>render()</code> nor <code>componentDidUpdate</code> will run. Override it when <code>React.PureComponent</code>'s shallow comparison isn't sufficient — for example, when you want to compare only specific deep properties of an object prop, or when certain prop changes are irrelevant to the rendered output. In modern functional components, <code>React.memo</code> with a custom comparison function is the equivalent. Returning false incorrectly can cause stale UI — always be conservative in deciding to skip renders.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q16">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How does React 18's automatic batching improve performance?
+    </button>
+  </h2>
+  <div id="performance-q16" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      In React 17, state updates inside async contexts (Promises, setTimeout, native events) were not batched — each <code>setState</code> triggered a separate render cycle. React 18's automatic batching collects all <code>setState</code> calls anywhere in the same macro/microtask and processes them in a single render. For example, if a network response triggers three setState calls, React 17 would produce three renders; React 18 produces one. This directly reduces the number of renders, the number of DOM updates, and the number of <code>useEffect</code> runs, improving performance especially in data-heavy operations like handling API responses that update multiple pieces of state simultaneously. The only behavioral change to be aware of: if your code relied on multiple re-renders from separate setState calls (rare), <code>flushSync</code> is the escape hatch to opt out of batching.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q17">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the Concurrent Mode feature and how does it help?
+    </button>
+  </h2>
+  <div id="performance-q17" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Concurrent Mode (now called "concurrent features" in React 18, enabled by default with <code>createRoot</code>) allows React to prepare multiple versions of the UI simultaneously and interrupt, pause, and resume rendering work. For responsiveness: expensive re-renders can be marked as low-priority (via <code>startTransition</code>) and interrupted when high-priority updates (like user input) arrive, keeping the UI responsive during heavy computation. For perceived performance: React can start rendering UI in the background before it's needed (Suspense prefetching, streaming SSR), and show the previous UI until the next one is ready (avoiding loading spinners for fast transitions). Concurrent Mode enables features like Suspense for data, streaming SSR with selective hydration, and Offscreen rendering (rendering hidden tabs in the background for instant activation).
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q18">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is startTransition?
+    </button>
+  </h2>
+  <div id="performance-q18" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      <code>startTransition(callback)</code> marks state updates inside <code>callback</code> as non-urgent — they are "transitions" that can be interrupted by higher-priority updates. This allows React to keep the UI responsive during expensive renders triggered by the transitions. The key behavior: if a higher-priority update (like a user keystroke) comes in while a transition is being rendered, React discards the in-progress transition render and handles the urgent update first, then restarts the transition. Without startTransition, all state updates have equal priority, and an expensive render blocks user input. You get an <code>isPending</code> boolean (via <code>useTransition</code>) to show a loading indicator while the transition is in progress. Use it for: search result filtering, tab switching, route transitions, and any state update that triggers expensive re-renders.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q19">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is deferred rendering with useDeferredValue?
+    </button>
+  </h2>
+  <div id="performance-q19" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      <code>useDeferredValue(value)</code> produces a deferred version of a value that may lag behind the original value during expensive renders. When the value changes, React first re-renders with the old deferred value (showing stale content), then schedules a lower-priority background render with the new value. This allows the UI that depends on the original value (like an input) to update immediately, while the expensive UI that depends on the deferred value (like a large list) updates in the background. The background render is interruptible — if the value changes again before it completes, React discards the in-progress background render and starts fresh. It is equivalent to using <code>startTransition</code> but applied to a value you receive from outside rather than controlling the state update yourself — useful when you don't control the state setter.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q20">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the why-did-you-render library?
+    </button>
+  </h2>
+  <div id="performance-q20" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      <code>@welldone-software/why-did-you-render</code> is a development tool that monkey-patches React to notify you in the console whenever a component re-renders and why — specifically, it tracks which props or state changed and which re-renders could have been avoided by memoization. You configure it to track specific components (<code>MyComponent.whyDidYouRender = true</code>) or all components. The console output shows the previous and next values of changed props/state, flagging re-renders where the values are shallowly equal (indicating a missed memoization opportunity). It is purely a development tool — it should never be active in production builds. It is especially useful for diagnosing why memoized components are still re-rendering despite apparently unchanged props, helping identify unstable references or missing useCallback/useMemo wrapping.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q21">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you identify performance bottlenecks in a React app?
+    </button>
+  </h2>
+  <div id="performance-q21" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Start with the React DevTools Profiler: record a user interaction, examine the flame graph for the longest bars, and check the "Why did this render?" panel. Look for components rendering more often than expected or taking disproportionately long. Next, check the browser's Performance tab for long tasks (&gt;50ms) and identify which React work caused them. Use the why-did-you-render library to find components re-rendering with identical props. Check for memory leaks using Chrome DevTools Memory tab (heap snapshots, allocation timeline). For perceived performance, measure Core Web Vitals: LCP, FID/INP, CLS. Common bottlenecks: unnormalized large lists being filtered/mapped on every render, context re-renders affecting many components, unstable function/object references passed as props defeating memoization, and large synchronous operations blocking the main thread.
+      <pre class="code-block">import { Profiler } from 'react';
+
+function onRender(id, phase, actualDuration) {
+  if (actualDuration &gt; 16) { // slower than one 60fps frame
+    console.warn(`Slow render: ${id} took ${actualDuration.toFixed(2)}ms in ${phase} phase`);
+  }
+}
+
+// Wrap the part of the app you want to measure
+function App() {
+  return (
+    &lt;Profiler id="App" onRender={onRender}&gt;
+      &lt;MainContent /&gt;
+    &lt;/Profiler&gt;
+  );
+}
+// Also use: React DevTools &gt; Profiler tab &gt; Record &gt; Interact &gt; Stop</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q22">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What are the common causes of unnecessary re-renders?
+    </button>
+  </h2>
+  <div id="performance-q22" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      The most common causes of unnecessary re-renders are: (1) New object/array/function references created inline in JSX props — <code>&lt;Child options={{ key: value }}&gt;</code> creates a new object every render; (2) Parent component re-renders propagating to children that don't need updating because they aren't wrapped in React.memo; (3) Context value changing (new object reference) causing all consumers to re-render; (4) Redux selector returning a new object reference on each call (should use reselect); (5) useEffect with missing or incorrectly specified dependencies triggering more state updates than needed; (6) State or refs set unnecessarily on every render inside effects; (7) Using array index as key in dynamic lists — React unmounts/remounts items on reorder; (8) Component defined inside another component — new function reference every render causes full re-mount.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q23">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you prevent a parent re-render from causing all children to re-render?
+    </button>
+  </h2>
+  <div id="performance-q23" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      The primary defense is <code>React.memo</code> on child components, which skips re-renders when props haven't changed by reference. For this to work, all props must be referentially stable: primitive values are fine (they compare by value), but objects, arrays, and functions must be memoized with <code>useMemo</code> or <code>useCallback</code>. For children passed via <code>props.children</code> (composition), the children are determined by the parent's parent — not the intermediate parent — so they are naturally stable during the intermediate parent's re-renders. Another powerful technique is "lifting content up" — moving state down to the component that needs it so only that subtree re-renders. Using <code>useDeferredValue</code> or <code>startTransition</code> can also help by making child re-renders non-blocking.
+      <pre class="code-block">const Item = React.memo(function Item({ data, onSelect }) {
+  return &lt;div onClick={() =&gt; onSelect(data.id)}&gt;{data.name}&lt;/div&gt;;
+});
+
+function List({ items }) {
+  const [selected, setSelected] = React.useState(null);
+  // Stable callback — Item's onSelect prop doesn't change between renders
+  const handleSelect = React.useCallback((id) =&gt; setSelected(id), []);
+  return (
+    &lt;div&gt;
+      {items.map(item =&gt; (
+        &lt;Item key={item.id} data={item} onSelect={handleSelect} /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q24">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;Explain the difference between expensive renders and too-many renders.
+    </button>
+  </h2>
+  <div id="performance-q24" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      These are two distinct performance problems that require different solutions. "Expensive renders" means each individual render takes too long — the component's render function itself is slow, perhaps computing a sort of 10,000 items, rendering hundreds of DOM nodes, or performing complex layout calculations. The fix is to make each render cheaper: memoize expensive calculations with useMemo, virtualize long lists, simplify JSX, or split the component. "Too-many renders" means the component renders more often than necessary — perhaps on every parent render even though nothing relevant changed. The fix is to reduce render frequency: React.memo, useCallback/useMemo for stable references, moving state down to reduce the re-render scope, or using a more granular state subscription (Zustand selector, reselect). Most apps benefit more from fixing too-many renders than from optimizing individual render cost — always profile to determine which problem you have before optimizing.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q25">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How does memoization interact with reference equality in JavaScript?
+    </button>
+  </h2>
+  <div id="performance-q25" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Memoization in React (React.memo, useMemo, useCallback) relies entirely on reference equality checks using <code>Object.is</code>. Primitives (numbers, strings, booleans) compare by value — <code>42 === 42</code> is true. Objects, arrays, and functions compare by reference — <code>{} === {}</code> is false even if contents are identical. This means: passing <code>&lt;Child options={{ size: 10 }}&gt;</code> creates a new object every render and React.memo always sees a "changed" prop; passing a callback defined inline always appears "changed." For memoization to work, you must ensure stable references for non-primitive props using useMemo (for objects/arrays) and useCallback (for functions). Understanding this is fundamental — almost every React performance optimization bug comes from inadvertently creating new references where stable ones are needed.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q26">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the overhead of React.memo and when is it NOT worth it?
+    </button>
+  </h2>
+  <div id="performance-q26" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      React.memo's overhead includes: running the props comparison function on every render of the parent (iterating all props with <code>Object.is</code>), maintaining a cache of the previous props, and the cognitive overhead of reasoning about memoization correctness. React.memo is NOT worth it when: the component is cheap to render (a simple div with text — the comparison costs more than re-rendering); the parent rarely re-renders (memo's benefit is zero if the parent only renders once); the props change on every render anyway (memo's comparison always returns "changed" — pure overhead); or when all props are primitive values that would be stable anyway. Measure first: React DevTools Profiler shows exact render times — if a component takes 0.1ms to render, memo's comparison overhead may be comparable. Apply memo to components whose renders you can confirm are expensive or too-frequent.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q27">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you optimize a large list rendering without virtualization?
+    </button>
+  </h2>
+  <div id="performance-q27" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      When virtualization is overkill (moderately-sized lists of 100–500 items), several techniques help: (1) React.memo on list item components to prevent re-renders when only some items change; (2) Stable keys from data IDs (not array index) to help React reconcile accurately and avoid re-mounting unchanged items; (3) Avoid inline functions/objects in list item props — create stable callbacks with useCallback; (4) Pagination or "load more" patterns to limit the number of items rendered at once; (5) CSS <code>contain: strict</code> on list items tells the browser that changes inside the item don't affect layout outside it, reducing layout recalculation scope; (6) Use <code>will-change: transform</code> sparingly for items that animate; (7) Avoid deeply nested item components — shallower trees reconcile faster.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q28">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is progressive hydration and selective hydration?
+    </button>
+  </h2>
+  <div id="performance-q28" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Progressive hydration is a technique where server-rendered HTML is hydrated in order of priority — critical interactive parts of the page are hydrated first, while less important parts are hydrated later (or lazily, on interaction). This ensures that the most important UI elements become interactive quickly without waiting for the entire page to hydrate. Selective hydration (React 18) is a related but distinct feature: React can hydrate different parts of the SSR tree independently in parallel, and if the user interacts with an unhydrated part before it's done, React prioritizes hydrating that part immediately. This is enabled by <code>&lt;Suspense&gt;</code> boundaries in SSR — each Suspense boundary is a selective hydration unit. Combined with streaming SSR (<code>renderToPipeableStream</code>), selective hydration means large pages become interactive piece by piece rather than all at once.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q29">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you reduce the size of your React bundle?
+    </button>
+  </h2>
+  <div id="performance-q29" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Bundle size reduction strategies: (1) Code splitting at route and component level using React.lazy() — don't load code for unvisited routes; (2) Tree shaking — use named imports from libraries and ensure your build uses ES modules; (3) Replace heavy libraries — lodash-es instead of lodash, date-fns instead of moment.js (moment is ~300KB vs date-fns's tree-shakable modules), day.js for minimal date handling; (4) Externalize large libraries with CDN links (React itself, charting libraries); (5) Analyze bundle with rollup-plugin-visualizer to find unexpectedly large dependencies; (6) Use dynamic imports for rarely-used features; (7) Minification and compression (gzip/brotli) — Vite handles this in production builds; (8) Avoid importing entire UI component libraries — import individual components only.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q30">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What are Web Vitals and how does React affect them?
+    </button>
+  </h2>
+  <div id="performance-q30" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Web Vitals are Google's set of performance metrics that measure real-user experience: LCP (Largest Contentful Paint — loading), FID/INP (First Input Delay / Interaction to Next Paint — interactivity), and CLS (Cumulative Layout Shift — visual stability). React directly affects these: LCP is hurt by client-side rendering (the user sees a blank page until React loads and renders) — SSR or SSG improves LCP by serving pre-rendered HTML. INP is hurt by long React renders blocking the main thread — concurrent features (startTransition, useDeferredValue) reduce this by breaking up work. CLS is caused by content shifting as components load — using Suspense with skeleton loaders instead of conditionally mounting components prevents shifts. The <code>web-vitals</code> npm package measures these metrics in real user sessions for analytics integration.
+      <pre class="code-block">import { onLCP, onINP, onCLS } from 'web-vitals';
+
+function sendToAnalytics({ name, value, id }) {
+  analytics.track('web_vital', { metric: name, value, id });
+}
+
+onLCP(sendToAnalytics);   // Largest Contentful Paint
+onINP(sendToAnalytics);   // Interaction to Next Paint
+onCLS(sendToAnalytics);   // Cumulative Layout Shift</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q31">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is image lazy loading and how do you implement it in React?
+    </button>
+  </h2>
+  <div id="performance-q31" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Image lazy loading defers loading off-screen images until they are about to enter the viewport, reducing initial page load time and bandwidth usage. The simplest approach is the native HTML <code>loading="lazy"</code> attribute on <code>&lt;img&gt;</code> tags, which is supported by all modern browsers and requires zero JavaScript. For custom behavior, use the <code>IntersectionObserver</code> API via a custom hook — only set the <code>src</code> attribute when the image enters the viewport. React libraries like <code>react-lazyload</code> or <code>react-intersection-observer</code> provide this functionality out of the box. For Next.js, the built-in <code>&lt;Image&gt;</code> component handles lazy loading, resizing, format conversion (WebP), and placeholder blurs automatically.
+      <pre class="code-block">// Native approach — simplest, best for most cases
+function ProductImage({ src, alt }) {
+  return &lt;img src={src} alt={alt} loading="lazy" /&gt;;
+}
+
+// Custom IntersectionObserver approach for full control
+function LazyImage({ src, alt }) {
+  const [loaded, setLoaded] = React.useState(false);
+  const imgRef = React.useRef(null);
+
+  React.useEffect(() =&gt; {
+    const observer = new IntersectionObserver(([entry]) =&gt; {
+      if (entry.isIntersecting) { setLoaded(true); observer.disconnect(); }
+    });
+    if (imgRef.current) observer.observe(imgRef.current);
+    return () =&gt; observer.disconnect();
+  }, []);
+
+  return &lt;img ref={imgRef} src={loaded ? src : undefined} alt={alt} /&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q32">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you implement skeleton loading screens?
+    </button>
+  </h2>
+  <div id="performance-q32" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Skeleton loading screens show placeholder shapes (grey boxes, lines) that mimic the layout of the actual content while it loads, creating better perceived performance than a spinner. In React, you conditionally render a skeleton component while data is loading. CSS-based skeletons use animated gradients (shimmer effect) via CSS animations. Popular libraries: <code>react-loading-skeleton</code> (highly configurable) and MUI's <code>&lt;Skeleton&gt;</code> component. For React Query or SWR, show the skeleton when <code>isLoading</code> is true. For SSR with Suspense, use skeleton as the <code>fallback</code> prop of <code>&lt;Suspense&gt;</code>.
+      <pre class="code-block">function SkeletonCard() {
+  return (
+    &lt;div className="skeleton-card"&gt;
+      &lt;div className="skeleton-avatar" /&gt;
+      &lt;div className="skeleton-line skeleton-line--short" /&gt;
+      &lt;div className="skeleton-line skeleton-line--long" /&gt;
+    &lt;/div&gt;
+  );
+}
+// CSS shimmer: background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+//   background-size: 200%; animation: shimmer 1.5s infinite;
+
+function UserCard({ userId }) {
+  const { data: user, isLoading } = useQuery(['user', userId], () =&gt; fetchUser(userId));
+  if (isLoading) return &lt;SkeletonCard /&gt;;
+  return &lt;div&gt;{user.name}&lt;/div&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q33">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is prefetching and how does React Router support it?
+    </button>
+  </h2>
+  <div id="performance-q33" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Prefetching is the practice of loading a resource before it's needed so it's available instantly when the user requests it. In React Router v6.4+, the <code>loader</code> system enables prefetching: when a user hovers over a <code>&lt;Link&gt;</code>, you can trigger the route's loader to start fetching data before the navigation happens. React Router provides <code>&lt;Link prefetch="intent"&gt;</code> (fetch on hover/focus) and <code>&lt;Link prefetch="render"&gt;</code> (fetch when the link renders). The loader's data is cached and served instantly when the user actually navigates. This eliminates loading spinners for predicted navigation paths. Next.js's <code>&lt;Link&gt;</code> component prefetches the destination page by default in production, including its JavaScript chunk and data, providing the best developer experience.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q34">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is memoizing API responses in React Query?
+    </button>
+  </h2>
+  <div id="performance-q34" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      React Query automatically memoizes (caches) API responses keyed by the <code>queryKey</code> array. When a query with the same key is requested by another component, React Query returns the cached data instantly without a new network request. The cache is managed by the <code>QueryClient</code> and each entry has a configurable <code>staleTime</code> (how long the data is considered fresh) and <code>gcTime</code> (how long it stays in memory after all consumers unmount). The <code>select</code> option in <code>useQuery</code> further memoizes the data transformation — it only re-runs the selector when the raw data changes, preventing unnecessary re-renders when other parts of the cache update. This cache-first strategy dramatically reduces redundant network requests in apps where multiple components need the same data.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q35">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you avoid prop drilling performance issues?
+    </button>
+  </h2>
+  <div id="performance-q35" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Prop drilling itself is primarily a code maintainability problem, but it causes performance issues when a state change high in the tree triggers re-renders down a long chain of components that only pass props through without using them. The fixes: (1) Use Context API for data that many components need — consumers only re-render when the context value changes; (2) Use component composition to pass children instead of props — intermediate components don't receive the data at all; (3) Use a global state solution (Zustand, Redux) where components subscribe directly to the data they need without the chain; (4) Move state down — if only a subtree needs the state, don't put it at the root. The performance issue specifically is that every intermediate component in the drilling chain re-renders when the prop changes, even though it doesn't use it.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q36">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;Explain the React rendering pipeline: trigger, render, commit phases.
+    </button>
+  </h2>
+  <div id="performance-q36" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      React's rendering pipeline has three phases. <strong>Trigger:</strong> a state update (useState setter, useReducer dispatch), a context value change, or the first render triggers React to schedule work. React queues the update and yields to the browser. <strong>Render (reconciliation) phase:</strong> React calls the component function to compute the new React element tree. This phase is pure and may be paused, resumed, or restarted in Concurrent Mode — it does NOT touch the real DOM yet. After computing the new tree, React diffs it against the previous tree to determine the minimal set of changes. <strong>Commit phase:</strong> React applies the computed changes to the actual DOM. This phase is synchronous and cannot be interrupted. It has three sub-phases: "before mutation" (getSnapshotBeforeUpdate, useLayoutEffect cleanup), "mutation" (actual DOM insertions/deletions/updates), and "layout" (useLayoutEffect fires). After commit, the browser paints and useEffect fires asynchronously.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q37">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the passive effects queue and how does it relate to performance?
+    </button>
+  </h2>
+  <div id="performance-q37" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      "Passive effects" are the effects created by <code>useEffect</code> — they are called "passive" because they run asynchronously after the browser has painted. React schedules all pending passive effects (mount, update, cleanup) to run after the browser's paint using <code>MessageChannel</code> or <code>setTimeout</code> fallback, ensuring they don't block the rendering pipeline. This is why useEffect is the right place for non-visual side effects (data fetching, subscriptions, analytics) — they run without delaying what the user sees. The contrast is "layout effects" (<code>useLayoutEffect</code>) which run synchronously after DOM mutations but before paint — blocking the pipeline. The passive effects queue can accumulate if effects are very expensive or if many components mount simultaneously; in extreme cases this can cause jank after the initial paint. Keep useEffect callbacks fast or use <code>startTransition</code> for non-urgent state updates triggered from effects.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q38">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How does React 18 streaming SSR improve performance?
+    </button>
+  </h2>
+  <div id="performance-q38" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Streaming SSR (via <code>renderToPipeableStream</code>) allows the server to send HTML to the browser as a stream rather than waiting for the entire page to render before sending anything. The browser starts displaying and parsing HTML immediately, improving Time to First Byte (TTFB) and First Contentful Paint (FCP). With React 18's Suspense integration, components waiting for data show a fallback (e.g., a skeleton) in the initial HTML stream; when the data resolves on the server, React streams the actual content as an inline script that replaces the fallback. Selective hydration then allows each Suspense boundary to hydrate independently — a user clicking on an unhydrated part causes React to immediately prioritize hydrating that part. Together: faster initial HTML, streaming data, and interactive parts becoming responsive as they're ready rather than all at once.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q39">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the impact of context on re-renders and how do you minimize it?
+    </button>
+  </h2>
+  <div id="performance-q39" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Every component calling <code>useContext(MyContext)</code> re-renders whenever <code>MyContext.Provider</code>'s <code>value</code> prop changes (by reference). For large, frequently-updated context objects, this means many components re-render even when the part of the context they use didn't change — React's Context has no per-field subscription. Minimization strategies: (1) Split context by update frequency — separate a read-rarely <code>UserContext</code> from a read-often <code>CounterContext</code>; (2) Memoize the context value with <code>useMemo</code> to prevent new references from causing re-renders when data hasn't changed; (3) Use context only for values that rarely change (auth, theme, locale); (4) The "split Provider + Reader" pattern: separate state from dispatch into two contexts so action dispatchers don't re-render on state changes.
+      <pre class="code-block">// Split state and dispatch into separate contexts to minimize re-renders
+const StateContext = React.createContext(null);
+const DispatchContext = React.createContext(null);
+
+function Provider({ children }) {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+  return (
+    &lt;DispatchContext.Provider value={dispatch}&gt;
+      &lt;StateContext.Provider value={state}&gt;
+        {children}
+      &lt;/StateContext.Provider&gt;
+    &lt;/DispatchContext.Provider&gt;
+  );
+}
+// Components that only dispatch never re-render on state changes</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q40">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you use the Performance API with React?
+    </button>
+  </h2>
+  <div id="performance-q40" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      The browser's Performance API (<code>performance.mark</code>, <code>performance.measure</code>) creates custom timing measurements around React renders and operations. You mark a timestamp before an expensive operation and measure the duration after it completes. React's Profiler component provides timing data at the component level; combining it with the Performance API gives you detailed measurements you can send to a Real User Monitoring (RUM) service. <code>PerformanceObserver</code> can listen for Long Task entries to detect when the main thread is blocked. The User Timing API marks appear in Chrome DevTools' Performance timeline, making them visible alongside React's own internal marks.
+      <pre class="code-block">function TrackedButton({ actionName, onClick, children }) {
+  const handleClick = React.useCallback(() =&gt; {
+    performance.mark(`${actionName}:start`);
+    onClick();
+    requestAnimationFrame(() =&gt; {
+      performance.measure(actionName, `${actionName}:start`);
+      const [measure] = performance.getEntriesByName(actionName);
+      analytics.track('interaction_duration', { action: actionName, duration: measure.duration });
+      performance.clearMarks(`${actionName}:start`);
+      performance.clearMeasures(actionName);
+    });
+  }, [actionName, onClick]);
+
+  return &lt;button onClick={handleClick}&gt;{children}&lt;/button&gt;;
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q41">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is Content Security Policy and does it affect React performance?
+    </button>
+  </h2>
+  <div id="performance-q41" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Content Security Policy (CSP) is a browser security mechanism that restricts which resources a page can load. For React apps, CSP primarily affects performance in two ways: inline scripts are blocked by default (<code>script-src 'self'</code>), which can conflict with React's development mode hot-reload scripts and some third-party integrations; and CSS-in-JS libraries (styled-components, Emotion) that inject style tags may require <code>'unsafe-inline'</code> or a nonce-based policy, adding complexity. Performance impact: a strict CSP that blocks unsafe-inline forces CSS-in-JS libraries to inject styles via nonces, which can add overhead. For production React apps, CSP itself has negligible performance impact — it's a network-level policy check done by the browser. The main interaction is ensuring your CSP doesn't inadvertently block scripts or styles that your app needs to function.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q42">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the difference between client-side and server-side rendering performance?
+    </button>
+  </h2>
+  <div id="performance-q42" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Client-side rendering (CSR) sends a minimal HTML shell with a large JavaScript bundle; the browser downloads, parses, and executes the JS before any content is visible. This means slower FCP/LCP (especially on slow connections or devices) but fast subsequent navigations (no server round trips). Server-side rendering (SSR) generates full HTML on the server and sends it immediately; the browser displays content before JS loads, improving FCP/LCP and SEO. The trade-off: SSR has higher server CPU cost, added complexity, and Time to Interactive (TTI) can still be poor if hydration is slow. React 18's streaming SSR improves TTI by hydrating incrementally. Static Site Generation (SSG) pre-renders at build time — fastest FCP/LCP with no server cost at runtime, but data freshness is limited. The right choice depends on content dynamism, SEO requirements, and user device profile.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q43">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you profile memory leaks in a React app?
+    </button>
+  </h2>
+  <div id="performance-q43" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Memory leaks in React apps typically occur from: event listeners not removed in useEffect cleanup, intervals/timeouts not cleared, WebSocket connections not closed, and state updates attempted on unmounted components. To profile: use Chrome DevTools Memory tab → take a heap snapshot → perform an action → take another snapshot → compare (filter by "objects allocated between snapshots"). Look for React component instances that should have been garbage collected. The Allocation instrumentation on timeline shows memory allocation over time — spikes that don't fall back indicate leaks. React 18 StrictMode's double-mount is specifically designed to surface unmount cleanup bugs: if your app has memory leaks in strict mode, the cleanup code is incomplete. Always pair every <code>addEventListener</code>, <code>setInterval</code>, and subscription in useEffect with a cleanup that removes it.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q44">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the impact of large dependency arrays in useEffect?
+    </button>
+  </h2>
+  <div id="performance-q44" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Large dependency arrays in useEffect have two impacts. First, React compares every element of the array on every render using <code>Object.is</code> — for arrays with many items or complex nested values, this comparison itself takes time, though the overhead is negligible for reasonable array sizes. The more significant impact is: the more dependencies an effect has, the more likely it is to re-run on each render, since any dependency changing triggers the effect. If you find yourself listing many dependencies, it often signals that the effect is doing too much (should be split) or that some dependencies are unstable references (objects/functions created inline). The ESLint <code>exhaustive-deps</code> rule helps by ensuring all used values are listed, but the goal should be simpler effects with fewer dependencies rather than suppressing the warnings.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q45">
+      <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you implement debounced search with performance in mind?
+    </button>
+  </h2>
+  <div id="performance-q45" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Debounced search keeps the input field responsive (updates immediately) while delaying the expensive search operation until the user pauses typing. The pattern: store the raw input value in state (updates on every keystroke for immediate display), debounce the search value with a custom hook or lodash/debounce, and trigger the search only with the debounced value. This prevents firing an API call (or re-filtering a large dataset) on every keystroke. Using <code>startTransition</code> for the search results update further helps by making the search results update non-blocking — the input stays responsive even during a slow results render.
+      <pre class="code-block">function useDebounce(value, delay = 300) {
+  const [debounced, setDebounced] = React.useState(value);
+  React.useEffect(() =&gt; {
+    const timer = setTimeout(() =&gt; setDebounced(value), delay);
+    return () =&gt; clearTimeout(timer);
+  }, [value, delay]);
+  return debounced;
+}
+
+function SearchInput() {
+  const [input, setInput] = React.useState('');
+  const [results, setResults] = React.useState([]);
+  const debouncedInput = useDebounce(input, 300);
+  const [isPending, startTransition] = React.useTransition();
+
+  React.useEffect(() =&gt; {
+    if (!debouncedInput) { setResults([]); return; }
+    fetchSearchResults(debouncedInput).then((data) =&gt;
+      startTransition(() =&gt; setResults(data))
+    );
+  }, [debouncedInput]);
+
+  return (
+    &lt;div&gt;
+      &lt;input value={input} onChange={e =&gt; setInput(e.target.value)} /&gt;
+      {isPending &amp;&amp; &lt;span&gt;Searching...&lt;/span&gt;}
+      &lt;ResultsList results={results} /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q46">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the "layout thrashing" problem and how does React prevent it?
+    </button>
+  </h2>
+  <div id="performance-q46" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Layout thrashing occurs when JavaScript alternates between reading and writing DOM properties that trigger browser layout recalculation (reflow). For example: reading <code>element.offsetWidth</code> forces the browser to recalculate layout; if you then write <code>element.style.width</code>, the browser must recalculate again; reading <code>offsetWidth</code> again in a loop causes every read to force a layout recalculation, causing exponential performance degradation. React prevents layout thrashing by batching all DOM writes (from the render/commit phase) before any reads (from useLayoutEffect). React updates the DOM in one pass during the commit phase, then lets <code>useLayoutEffect</code> read layout values — all reads happen after all writes are done. This write-then-read order avoids the interleaved read-write-read-write pattern that causes thrashing.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q47">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How does React batch DOM updates and why does it matter?
+    </button>
+  </h2>
+  <div id="performance-q47" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      During the commit phase, React applies all pending DOM mutations in a single synchronous operation. Even if 50 components updated in one render cycle (due to automatic batching of state updates), React makes all 50 DOM mutations in one pass rather than flushing after each. This matters because each DOM mutation can trigger browser layout recalculation, style computation, and repaint — expensive operations. A single batch of all mutations is far cheaper than 50 individual mutations each triggering their own browser calculations. React also separates DOM mutations from layout effects: it completes all mutations first, then runs all layout effects, ensuring layout reads happen after a fully consistent DOM. This is fundamentally different from manipulating the DOM manually in multiple event listeners, which would trigger layout recalculations between each manipulation.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q48">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;Explain time slicing and how React uses it to keep UIs responsive.
+    </button>
+  </h2>
+  <div id="performance-q48" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      Time slicing is the ability to split rendering work into small units and execute them across multiple frames, yielding to the browser between units to handle user input, paint frames, and other tasks. Without time slicing, a render that takes 200ms completely blocks the main thread — the browser cannot respond to clicks or update animations, causing a "frozen" feeling. With time slicing (Concurrent Mode), React processes a fiber unit, then checks if there's higher-priority work (like a user keypress) using <code>scheduler.shouldYield()</code>. If the frame budget (typically 5ms) is exhausted, React pauses its work, yields to the browser, and resumes in the next idle period. The user sees a responsive UI that's still rendering a large update in the background. React uses the <code>scheduler</code> package (a MessageChannel-based scheduler) rather than <code>requestIdleCallback</code> directly for more reliable timing.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q49">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the scheduler package in React and how does it prioritize work?
+    </button>
+  </h2>
+  <div id="performance-q49" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      The <code>scheduler</code> package is React's internal task scheduler that manages the priority and execution timing of React work. It is separate from React itself and operates independently of the browser's event loop. The scheduler assigns priorities to tasks: <code>ImmediatePriority</code> (runs synchronously, used for flushSync), <code>UserBlockingPriority</code> (runs within 250ms, for user-interactive updates), <code>NormalPriority</code> (runs within 5000ms, default), <code>LowPriority</code> (runs when the app is idle), and <code>IdlePriority</code> (runs when truly nothing else is pending). The scheduler uses a min-heap (priority queue) to ensure highest-priority tasks run first. It uses <code>MessageChannel</code> to schedule work in between browser paint frames, checking <code>performance.now()</code> to yield when the time budget is exceeded. Developers interact with it via <code>startTransition</code> (maps to NormalPriority for transition work) and <code>flushSync</code>.
+    </div>
+  </div>
+</div>
+
+<div class="accordion-item">
+  <h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#performance-q50">
+      <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement an efficient infinite scroll that doesn't accumulate DOM nodes?
+    </button>
+  </h2>
+  <div id="performance-q50" class="accordion-collapse collapse" data-bs-parent="#acc-performance">
+    <div class="accordion-body">
+      A naive infinite scroll appends new items to the DOM indefinitely, eventually accumulating thousands of DOM nodes that cause memory issues and slow scroll performance. An efficient infinite scroll combines virtualization with dynamic loading: use a virtual list (<code>@tanstack/react-virtual</code>, <code>react-window</code>) that only renders visible items regardless of total loaded count, combined with a sentinel element (using IntersectionObserver) at the bottom that triggers loading more data when visible. The virtual list recycles DOM nodes — as old items scroll out of view, their DOM nodes are reused for new items, keeping the DOM size constant. React Query's <code>useInfiniteQuery</code> handles the data layer. Combining these: the virtual list renders from the accumulated flat array, always only creating ~30 DOM nodes regardless of how many items are loaded.
+      <pre class="code-block">import { useVirtualizer } from '@tanstack/react-virtual';
+import { useInfiniteQuery } from '@tanstack/react-query';
+
+function InfiniteList() {
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: ['items'],
+    queryFn: ({ pageParam = 0 }) =&gt; fetchItems(pageParam),
+    getNextPageParam: (last) =&gt; last.nextCursor,
+  });
+
+  const allItems = data?.pages.flatMap(p =&gt; p.items) ?? [];
+  const parentRef = React.useRef(null);
+  const rowVirtualizer = useVirtualizer({
+    count: hasNextPage ? allItems.length + 1 : allItems.length,
+    getScrollElement: () =&gt; parentRef.current,
+    estimateSize: () =&gt; 50,
+  });
+
+  React.useEffect(() =&gt; {
+    const lastItem = rowVirtualizer.getVirtualItems().at(-1);
+    if (lastItem?.index &gt;= allItems.length - 1 &amp;&amp; hasNextPage) fetchNextPage();
+  }, [rowVirtualizer.getVirtualItems(), hasNextPage, allItems.length, fetchNextPage]);
+
+  return (
+    &lt;div ref={parentRef} style={{ height: '500px', overflow: 'auto' }}&gt;
+      &lt;div style={{ height: rowVirtualizer.getTotalSize(), position: 'relative' }}&gt;
+        {rowVirtualizer.getVirtualItems().map(vItem =&gt; (
+          &lt;div key={vItem.key} style={{ position: 'absolute', transform: `translateY(${vItem.start}px)`, width: '100%' }}&gt;
+            {allItems[vItem.index]?.name ?? 'Loading...'}
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+

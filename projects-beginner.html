@@ -1,0 +1,2916 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Beginner Projects (1–20) — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .content-card{background:#111827;}
+    [data-theme="dark"] .accordion-item{background:#111827;border-color:#1e293b;}
+    [data-theme="dark"] .accordion-button{background:#111827;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-button:not(.collapsed){background:#1e293b;color:#61dafb;}
+    .code-block{background:#0d1117;color:#e6edf3;padding:1.2rem 1.4rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.75;white-space:pre;}
+    .code-block .kw{color:#c792ea;font-weight:600;}.code-block .fn{color:#82aaff;}.code-block .st{color:#c3e88d;}.code-block .cm{color:#546e7a;font-style:italic;}.code-block .cl{color:#ffcb6b;}.code-block .num{color:#f78c6c;}.code-block .op{color:#89ddff;}.code-block .tag{color:#f07178;}.code-block .atr{color:#ffcb6b;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:2.5rem 0 1.5rem;margin-bottom:2rem;}
+    .project-num{background:linear-gradient(135deg,#61dafb,#3b82f6);color:#0f172a;font-weight:900;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.9rem;}
+    .diff-beginner{background:#dcfce7;color:#166534;border-radius:20px;padding:.2rem .7rem;font-size:.75rem;font-weight:700;}
+    [data-theme="dark"] .diff-beginner{background:#14532d;color:#bbf7d0;}
+    .tech-badge{background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:.15rem .5rem;font-size:.72rem;font-weight:600;margin:.1rem;}
+    [data-theme="dark"] .tech-badge{background:#1e3a5f;color:#93c5fd;}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">All Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="projects-intermediate.html">Intermediate</a></li>
+        <li class="nav-item"><a class="nav-link" href="projects-advanced.html">Advanced</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="section-hero">
+  <div class="container-xl">
+    <h1 class="fw-800 mb-2" style="font-size:2rem;">Beginner Projects 1–20</h1>
+    <p class="mb-0" style="color:#94a3b8;">20 complete React projects for beginners — each with full working code, key learning tips, and run instructions.</p>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+
+<!-- PROJECT 1 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">1</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Counter App</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">Event Handlers</span>
+        <span class="tech-badge">Conditional Styling</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">A counter with increment, decrement, and reset buttons plus a configurable step size. The display color changes based on whether the count is positive, negative, or zero.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>useState</code> is the fundamental hook for local component state. Passing a function to the setter (<code>setCount(c =&gt; c + step)</code>) ensures you always work with the latest state value — critical when updates are batched.
+  </div>
+<div class="code-block"><span class="kw">import</span> { <span class="fn">useState</span> } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="cl">Counter</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="kw">const</span> [step, setStep] = <span class="fn">useState</span>(<span class="num">1</span>);
+
+  <span class="kw">return</span> (
+    <span class="tag">&lt;div</span> <span class="atr">style</span>={{ textAlign: <span class="st">'center'</span>, padding: <span class="st">'2rem'</span>, fontFamily: <span class="st">'sans-serif'</span> }}<span class="tag">&gt;</span>
+      <span class="tag">&lt;h1&gt;</span>Counter App<span class="tag">&lt;/h1&gt;</span>
+      <span class="tag">&lt;div</span> <span class="atr">style</span>={{ fontSize: <span class="st">'4rem'</span>, fontWeight: <span class="st">'bold'</span>, margin: <span class="st">'1rem 0'</span>, color: count <span class="op">&lt;</span> <span class="num">0</span> ? <span class="st">'red'</span> : count <span class="op">&gt;</span> <span class="num">0</span> ? <span class="st">'green'</span> : <span class="st">'#333'</span> }}<span class="tag">&gt;</span>
+        {count}
+      <span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;div</span> <span class="atr">style</span>={{ marginBottom: <span class="st">'1rem'</span> }}<span class="tag">&gt;</span>
+        <span class="tag">&lt;label&gt;</span>Step: <span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="atr">type</span>=<span class="st">"number"</span> <span class="atr">value</span>={step} <span class="atr">onChange</span>={e <span class="op">=&gt;</span> <span class="fn">setStep</span>(<span class="fn">Number</span>(e.target.value))}
+          <span class="atr">style</span>={{ width: <span class="st">'60px'</span>, marginLeft: <span class="st">'8px'</span>, padding: <span class="st">'4px'</span>, textAlign: <span class="st">'center'</span> }} <span class="tag">/&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;div</span> <span class="atr">style</span>={{ display: <span class="st">'flex'</span>, gap: <span class="st">'8px'</span>, justifyContent: <span class="st">'center'</span> }}<span class="tag">&gt;</span>
+        <span class="tag">&lt;button</span> <span class="atr">onClick</span>={() <span class="op">=&gt;</span> <span class="fn">setCount</span>(c <span class="op">=&gt;</span> c - step)}
+          <span class="atr">style</span>={{ padding: <span class="st">'8px 20px'</span>, fontSize: <span class="st">'1rem'</span>, background: <span class="st">'#ef4444'</span>, color: <span class="st">'white'</span>, border: <span class="st">'none'</span>, borderRadius: <span class="st">'8px'</span>, cursor: <span class="st">'pointer'</span> }}<span class="tag">&gt;</span>
+          -{step}
+        <span class="tag">&lt;/button&gt;</span>
+        <span class="tag">&lt;button</span> <span class="atr">onClick</span>={() <span class="op">=&gt;</span> <span class="fn">setCount</span>(<span class="num">0</span>)}
+          <span class="atr">style</span>={{ padding: <span class="st">'8px 20px'</span>, fontSize: <span class="st">'1rem'</span>, background: <span class="st">'#6b7280'</span>, color: <span class="st">'white'</span>, border: <span class="st">'none'</span>, borderRadius: <span class="st">'8px'</span>, cursor: <span class="st">'pointer'</span> }}<span class="tag">&gt;</span>
+          Reset
+        <span class="tag">&lt;/button&gt;</span>
+        <span class="tag">&lt;button</span> <span class="atr">onClick</span>={() <span class="op">=&gt;</span> <span class="fn">setCount</span>(c <span class="op">=&gt;</span> c + step)}
+          <span class="atr">style</span>={{ padding: <span class="st">'8px 20px'</span>, fontSize: <span class="st">'1rem'</span>, background: <span class="st">'#22c55e'</span>, color: <span class="st">'white'</span>, border: <span class="st">'none'</span>, borderRadius: <span class="st">'8px'</span>, cursor: <span class="st">'pointer'</span> }}<span class="tag">&gt;</span>
+          +{step}
+        <span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;p</span> <span class="atr">style</span>={{ marginTop: <span class="st">'1rem'</span>, color: <span class="st">'#6b7280'</span> }}<span class="tag">&gt;</span>
+        {count <span class="op">===</span> <span class="num">0</span> ? <span class="st">'Start counting!'</span> : count <span class="op">&gt;</span> <span class="num">0</span> ? <span class="st">`${count} above zero`</span> : <span class="st">`${Math.abs(count)} below zero`</span>}
+      <span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}
+
+<span class="kw">export default</span> <span class="cl">Counter</span>;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 2 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">2</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Todo List</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useMemo</span>
+        <span class="tech-badge">CRUD</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Full-featured todo list with add, toggle, edit, delete, priority levels, and filter tabs. Uses useMemo for derived filtered lists and computed counts.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> Never mutate state arrays directly. Use <code>.map()</code> to update items, <code>.filter()</code> to remove items, and spread syntax <code>[...prev, newItem]</code> to add items — always returning a new array so React detects the change and re-renders.
+  </div>
+  <div class="code-block">import { useState, useMemo } from 'react';
+
+const PRIORITIES = { high: { label: 'High', color: '#ef4444', bg: '#fee2e2' },
+  medium: { label: 'Medium', color: '#f59e0b', bg: '#fef3c7' },
+  low: { label: 'Low', color: '#22c55e', bg: '#dcfce7' } };
+
+let nextId = 1;
+
+function TodoList() {
+  const [todos, setTodos] = useState([
+    { id: nextId++, text: 'Learn React hooks', done: false, priority: 'high' },
+    { id: nextId++, text: 'Build a todo app', done: true, priority: 'medium' },
+    { id: nextId++, text: 'Read the docs', done: false, priority: 'low' },
+  ]);
+  const [input, setInput] = useState('');
+  const [priority, setPriority] = useState('medium');
+  const [filter, setFilter] = useState('all');
+  const [editId, setEditId] = useState(null);
+  const [editText, setEditText] = useState('');
+
+  const filtered = useMemo(() =&gt; {
+    if (filter === 'active') return todos.filter(t =&gt; !t.done);
+    if (filter === 'completed') return todos.filter(t =&gt; t.done);
+    return todos;
+  }, [todos, filter]);
+
+  const counts = useMemo(() =&gt; ({
+    all: todos.length,
+    active: todos.filter(t =&gt; !t.done).length,
+    completed: todos.filter(t =&gt; t.done).length,
+  }), [todos]);
+
+  const add = () =&gt; {
+    if (!input.trim()) return;
+    setTodos(prev =&gt; [...prev, { id: nextId++, text: input.trim(), done: false, priority }]);
+    setInput('');
+  };
+
+  const toggle = (id) =&gt; setTodos(prev =&gt; prev.map(t =&gt; t.id === id ? { ...t, done: !t.done } : t));
+  const remove = (id) =&gt; setTodos(prev =&gt; prev.filter(t =&gt; t.id !== id));
+  const clearCompleted = () =&gt; setTodos(prev =&gt; prev.filter(t =&gt; !t.done));
+
+  const startEdit = (t) =&gt; { setEditId(t.id); setEditText(t.text); };
+  const saveEdit = (id) =&gt; {
+    if (editText.trim()) setTodos(prev =&gt; prev.map(t =&gt; t.id === id ? { ...t, text: editText.trim() } : t));
+    setEditId(null);
+  };
+
+  return (
+    &lt;div style={{ maxWidth: 520, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}&gt;✅ Todo List&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', gap: 8, marginBottom: '1rem' }}&gt;
+        &lt;input value={input} onChange={e =&gt; setInput(e.target.value)}
+          onKeyDown={e =&gt; e.key === 'Enter' &amp;&amp; add()}
+          placeholder="Add a new task..."
+          style={{ flex: 1, padding: '10px 14px', borderRadius: 10, border: '2px solid #e2e8f0', fontSize: '1rem', outline: 'none' }} /&gt;
+        &lt;select value={priority} onChange={e =&gt; setPriority(e.target.value)}
+          style={{ padding: '10px', borderRadius: 10, border: '2px solid #e2e8f0', fontSize: '.9rem', cursor: 'pointer' }}&gt;
+          {Object.entries(PRIORITIES).map(([k, v]) =&gt; &lt;option key={k} value={k}&gt;{v.label}&lt;/option&gt;)}
+        &lt;/select&gt;
+        &lt;button onClick={add}
+          style={{ padding: '10px 18px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer' }}&gt;Add&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ display: 'flex', gap: 6, marginBottom: '1rem' }}&gt;
+        {['all','active','completed'].map(f =&gt; (
+          &lt;button key={f} onClick={() =&gt; setFilter(f)}
+            style={{ flex: 1, padding: '8px', borderRadius: 10, border: '2px solid', fontWeight: 600, fontSize: '.85rem', cursor: 'pointer',
+              borderColor: filter === f ? '#3b82f6' : '#e2e8f0',
+              background: filter === f ? '#dbeafe' : '#f8fafc',
+              color: filter === f ? '#1d4ed8' : '#64748b' }}&gt;
+            {f.charAt(0).toUpperCase() + f.slice(1)} ({counts[f]})
+          &lt;/button&gt;
+        ))}
+      &lt;/div&gt;
+
+      &lt;div style={{ marginBottom: '1rem' }}&gt;
+        {filtered.length === 0 &amp;&amp; (
+          &lt;div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8', background: '#f8fafc', borderRadius: 12 }}&gt;No tasks here!&lt;/div&gt;
+        )}
+        {filtered.map(todo =&gt; (
+          &lt;div key={todo.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px', marginBottom: 8,
+            background: todo.done ? '#f8fafc' : '#fff', borderRadius: 12,
+            border: `2px solid ${PRIORITIES[todo.priority].bg}`,
+            opacity: todo.done ? 0.7 : 1 }}&gt;
+            &lt;input type="checkbox" checked={todo.done} onChange={() =&gt; toggle(todo.id)}
+              style={{ width: 18, height: 18, cursor: 'pointer', accentColor: '#3b82f6' }} /&gt;
+            &lt;span style={{ width: 8, height: 8, borderRadius: '50%', background: PRIORITIES[todo.priority].color, flexShrink: 0 }} /&gt;
+            {editId === todo.id ? (
+              &lt;input value={editText} onChange={e =&gt; setEditText(e.target.value)}
+                onKeyDown={e =&gt; e.key === 'Enter' &amp;&amp; saveEdit(todo.id)}
+                onBlur={() =&gt; saveEdit(todo.id)}
+                autoFocus
+                style={{ flex: 1, padding: '4px 8px', borderRadius: 6, border: '2px solid #3b82f6', fontSize: '.95rem', outline: 'none' }} /&gt;
+            ) : (
+              &lt;span style={{ flex: 1, textDecoration: todo.done ? 'line-through' : 'none', color: todo.done ? '#94a3b8' : '#1e293b', fontSize: '.95rem' }}&gt;
+                {todo.text}
+              &lt;/span&gt;
+            )}
+            &lt;button onClick={() =&gt; startEdit(todo)} style={{ padding: '4px 8px', background: '#f1f5f9', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: '.8rem' }}&gt;✏️&lt;/button&gt;
+            &lt;button onClick={() =&gt; remove(todo.id)} style={{ padding: '4px 8px', background: '#fee2e2', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: '.8rem' }}&gt;🗑️&lt;/button&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+
+      {counts.completed &gt; 0 &amp;&amp; (
+        &lt;button onClick={clearCompleted}
+          style={{ width: '100%', padding: '10px', background: '#fff', border: '2px solid #e2e8f0', borderRadius: 10, color: '#64748b', fontWeight: 600, cursor: 'pointer' }}&gt;
+          Clear {counts.completed} completed task{counts.completed !== 1 ? 's' : ''}
+        &lt;/button&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default TodoList;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 3 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">3</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Calculator (iOS Style)</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">event handling</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">An iOS-style dark calculator with circular buttons and orange operator highlights. Manages prev, current, operator, and fresh-entry state flags for correct chained calculations.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> Multiple <code>useState</code> variables work together as a mini state-machine. The <code>fresh</code> flag tells the app whether the next digit press should start a new number or append to the current display — this pattern is essential for calculators and text editors.
+  </div>
+  <div class="code-block">import { useState } from 'react';
+
+const BUTTONS = [
+  ['AC', '+/-', '%', '÷'],
+  ['7',  '8',  '9',  '×'],
+  ['4',  '5',  '6',  '−'],
+  ['1',  '2',  '3',  '+'],
+  ['0',  '.',  '='],
+];
+
+function Calculator() {
+  const [display, setDisplay] = useState('0');
+  const [prev, setPrev] = useState(null);
+  const [op, setOp] = useState(null);
+  const [fresh, setFresh] = useState(true);
+
+  const calculate = (a, b, operator) =&gt; {
+    const x = parseFloat(a), y = parseFloat(b);
+    switch (operator) {
+      case '+': return String(x + y);
+      case '−': return String(x - y);
+      case '×': return String(x * y);
+      case '÷': return y !== 0 ? String(x / y) : 'Error';
+      default: return b;
+    }
+  };
+
+  const handleBtn = (btn) =&gt; {
+    if (btn === 'AC') {
+      setDisplay('0'); setPrev(null); setOp(null); setFresh(true); return;
+    }
+    if (btn === '+/-') {
+      setDisplay(d =&gt; String(parseFloat(d) * -1)); return;
+    }
+    if (btn === '%') {
+      setDisplay(d =&gt; String(parseFloat(d) / 100)); return;
+    }
+    if (['+','−','×','÷'].includes(btn)) {
+      setPrev(display); setOp(btn); setFresh(true); return;
+    }
+    if (btn === '=') {
+      if (prev !== null &amp;&amp; op) {
+        const result = calculate(prev, display, op);
+        setDisplay(result); setPrev(null); setOp(null); setFresh(true);
+      }
+      return;
+    }
+    if (btn === '.') {
+      if (fresh) { setDisplay('0.'); setFresh(false); return; }
+      if (!display.includes('.')) setDisplay(d =&gt; d + '.');
+      return;
+    }
+    // digit
+    if (fresh) { setDisplay(btn); setFresh(false); }
+    else setDisplay(d =&gt; d === '0' ? btn : d.length &lt; 12 ? d + btn : d);
+  };
+
+  const isOp = (b) =&gt; ['+','−','×','÷'].includes(b);
+  const isTop = (b) =&gt; ['AC','+/-','%'].includes(b);
+
+  const btnStyle = (btn) =&gt; ({
+    width: btn === '0' ? '100%' : '100%',
+    aspectRatio: btn === '0' ? 'unset' : '1',
+    padding: btn === '0' ? '20px 32px' : '0',
+    height: btn === '0' ? 72 : 72,
+    textAlign: btn === '0' ? 'left' : 'center',
+    borderRadius: 36,
+    border: 'none',
+    fontSize: '1.5rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    background: isOp(btn) ? (op === btn ? '#fff' : '#ff9f0a') : isTop(btn) ? '#a5a5a5' : '#333333',
+    color: isOp(btn) ? (op === btn ? '#ff9f0a' : '#fff') : isTop(btn) ? '#000' : '#fff',
+    transition: 'transform .1s, opacity .1s',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: btn === '0' ? 'flex-start' : 'center',
+    paddingLeft: btn === '0' ? 26 : 0,
+  });
+
+  const fmt = (v) =&gt; {
+    if (v === 'Error') return v;
+    const n = parseFloat(v);
+    if (isNaN(n)) return v;
+    if (v.includes('.') &amp;&amp; !v.endsWith('.')) return parseFloat(v.toPrecision(10)).toString();
+    return v;
+  };
+
+  return (
+    &lt;div style={{ maxWidth: 320, margin: '2rem auto', background: '#000', borderRadius: 40, padding: '2rem 1.5rem', boxShadow: '0 30px 80px rgba(0,0,0,.5)' }}&gt;
+      &lt;div style={{ textAlign: 'right', padding: '1rem .5rem 1.5rem', color: '#fff', fontSize: display.length &gt; 9 ? '2.2rem' : '4rem', fontWeight: 200, letterSpacing: '-2px', minHeight: 100, display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', wordBreak: 'break-all' }}&gt;
+        {fmt(display)}
+      &lt;/div&gt;
+      {BUTTONS.map((row, ri) =&gt; (
+        &lt;div key={ri} style={{ display: 'grid', gridTemplateColumns: row.length === 3 ? '1fr 1fr 1fr' : '1fr 1fr 1fr 1fr', gap: 12, marginBottom: 12 }}&gt;
+          {row.map(btn =&gt; (
+            &lt;button key={btn} style={btnStyle(btn)} onClick={() =&gt; handleBtn(btn)}
+              onMouseDown={e =&gt; e.currentTarget.style.opacity = '.7'}
+              onMouseUp={e =&gt; e.currentTarget.style.opacity = '1'}&gt;
+              {btn}
+            &lt;/button&gt;
+          ))}
+        &lt;/div&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+export default Calculator;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 4 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">4</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Weather App</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">fetch API</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Fetches live weather from OpenWeatherMap with emoji icons, temperature/humidity/wind display, a 5-item forecast row, and full loading/error states.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> Use <code>async/await</code> inside event handlers for data fetching, and always wrap in <code>try/catch/finally</code>. Setting <code>loading</code> to <code>false</code> in <code>finally</code> ensures the UI never gets stuck loading even if the request throws an error.
+  </div>
+  <div class="code-block">import { useState } from 'react';
+
+// Get free API key at https://openweathermap.org/api
+const API_KEY = 'YOUR_API_KEY_HERE';
+
+const WEATHER_ICONS = {
+  'Clear': '☀️', 'Clouds': '☁️', 'Rain': '🌧️', 'Drizzle': '🌦️',
+  'Thunderstorm': '⛈️', 'Snow': '❄️', 'Mist': '🌫️', 'Fog': '🌫️',
+  'Haze': '🌁', 'Smoke': '💨', 'Dust': '🌪️', 'Tornado': '🌪️',
+};
+
+function WeatherApp() {
+  const [city, setCity] = useState('');
+  const [weather, setWeather] = useState(null);
+  const [forecast, setForecast] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const fetchWeather = async () =&gt; {
+    if (!city.trim()) return;
+    setLoading(true); setError(''); setWeather(null); setForecast([]);
+    try {
+      const [wRes, fRes] = await Promise.all([
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&amp;appid=${API_KEY}&amp;units=metric`),
+        fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&amp;appid=${API_KEY}&amp;units=metric&amp;cnt=5`)
+      ]);
+      if (!wRes.ok) throw new Error('City not found. Check the city name and API key.');
+      const wData = await wRes.json();
+      const fData = await fRes.json();
+      setWeather(wData);
+      setForecast(fData.list || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const icon = (main) =&gt; WEATHER_ICONS[main] || '🌡️';
+
+  return (
+    &lt;div style={{ maxWidth: 480, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}&gt;🌤️ Weather App&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', gap: 8, marginBottom: '1.5rem' }}&gt;
+        &lt;input value={city} onChange={e =&gt; setCity(e.target.value)}
+          onKeyDown={e =&gt; e.key === 'Enter' &amp;&amp; fetchWeather()}
+          placeholder="Enter city name..."
+          style={{ flex: 1, padding: '12px 16px', borderRadius: 12, border: '2px solid #e2e8f0', fontSize: '1rem', outline: 'none' }} /&gt;
+        &lt;button onClick={fetchWeather} disabled={loading}
+          style={{ padding: '12px 20px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: 12, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? .6 : 1 }}&gt;
+          {loading ? '...' : 'Search'}
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      {error &amp;&amp; (
+        &lt;div style={{ background: '#fee2e2', color: '#991b1b', padding: '12px 16px', borderRadius: 12, marginBottom: '1rem', textAlign: 'center' }}&gt;
+          ❌ {error}
+        &lt;/div&gt;
+      )}
+
+      {loading &amp;&amp; (
+        &lt;div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}&gt;
+          &lt;div style={{ fontSize: '3rem', marginBottom: '1rem' }}&gt;🔄&lt;/div&gt;
+          Loading weather data...
+        &lt;/div&gt;
+      )}
+
+      {weather &amp;&amp; (
+        &lt;div&gt;
+          &lt;div style={{ background: 'linear-gradient(135deg,#0f172a,#1e3a5f)', color: '#fff', borderRadius: 20, padding: '2rem', marginBottom: '1rem', textAlign: 'center' }}&gt;
+            &lt;div style={{ fontSize: '5rem', marginBottom: '.5rem' }}&gt;{icon(weather.weather[0].main)}&lt;/div&gt;
+            &lt;div style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '.25rem' }}&gt;{Math.round(weather.main.temp)}°C&lt;/div&gt;
+            &lt;div style={{ fontSize: '1.2rem', marginBottom: '.5rem', textTransform: 'capitalize' }}&gt;{weather.weather[0].description}&lt;/div&gt;
+            &lt;div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#93c5fd' }}&gt;{weather.name}, {weather.sys.country}&lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: '1rem' }}&gt;
+            {[
+              { label: 'Feels Like', val: `${Math.round(weather.main.feels_like)}°C`, icon: '🌡️' },
+              { label: 'Humidity', val: `${weather.main.humidity}%`, icon: '💧' },
+              { label: 'Wind', val: `${Math.round(weather.wind.speed)} m/s`, icon: '💨' },
+            ].map(item =&gt; (
+              &lt;div key={item.label} style={{ background: '#f8fafc', borderRadius: 12, padding: '1rem', textAlign: 'center', border: '1px solid #e2e8f0' }}&gt;
+                &lt;div style={{ fontSize: '1.5rem' }}&gt;{item.icon}&lt;/div&gt;
+                &lt;div style={{ fontWeight: 700, fontSize: '1.1rem' }}&gt;{item.val}&lt;/div&gt;
+                &lt;div style={{ fontSize: '.75rem', color: '#64748b' }}&gt;{item.label}&lt;/div&gt;
+              &lt;/div&gt;
+            ))}
+          &lt;/div&gt;
+
+          {forecast.length &gt; 0 &amp;&amp; (
+            &lt;div style={{ background: '#f8fafc', borderRadius: 12, padding: '1rem', border: '1px solid #e2e8f0' }}&gt;
+              &lt;div style={{ fontWeight: 700, marginBottom: 10, color: '#475569' }}&gt;3-Hour Forecast&lt;/div&gt;
+              &lt;div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}&gt;
+                {forecast.map((item, i) =&gt; (
+                  &lt;div key={i} style={{ flex: '0 0 auto', textAlign: 'center', padding: '8px 12px', background: '#fff', borderRadius: 10, border: '1px solid #e2e8f0', minWidth: 72 }}&gt;
+                    &lt;div style={{ fontSize: '.7rem', color: '#64748b', marginBottom: 4 }}&gt;{new Date(item.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}&lt;/div&gt;
+                    &lt;div style={{ fontSize: '1.4rem' }}&gt;{icon(item.weather[0].main)}&lt;/div&gt;
+                    &lt;div style={{ fontWeight: 700, fontSize: '.9rem' }}&gt;{Math.round(item.main.temp)}°&lt;/div&gt;
+                  &lt;/div&gt;
+                ))}
+              &lt;/div&gt;
+            &lt;/div&gt;
+          )}
+        &lt;/div&gt;
+      )}
+
+      {!weather &amp;&amp; !loading &amp;&amp; !error &amp;&amp; (
+        &lt;div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8', background: '#f8fafc', borderRadius: 16, border: '2px dashed #e2e8f0' }}&gt;
+          &lt;div style={{ fontSize: '4rem', marginBottom: '1rem' }}&gt;🌍&lt;/div&gt;
+          &lt;div&gt;Enter a city name to see weather.&lt;/div&gt;
+          &lt;div style={{ fontSize: '.85rem', marginTop: '0.5rem', color: '#cbd5e1' }}&gt;Requires OpenWeatherMap API key&lt;/div&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default WeatherApp;</div>
+  <div class="tip-box mt-3"><strong>How to run:</strong> Get a free API key at openweathermap.org, replace YOUR_API_KEY_HERE, then: npx create-react-app myapp &amp;&amp; cd myapp &amp;&amp; replace src/App.js &amp;&amp; npm start</div>
+</div>
+
+<!-- PROJECT 5 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">5</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Quiz App</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">timer</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">8-question React quiz with a 15-second per-question countdown timer. Answers flash green/red on selection, tracks score, and shows a detailed results log at the end.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> Conditional rendering with ternary operators (<code>condition ? A : B</code>) and short-circuit (<code>condition &amp;&amp; element</code>) are React's primary branching tools. Use them to show different UI states — loading, error, results — without complex if/else blocks.
+  </div>
+  <div class="code-block">import { useState, useEffect } from 'react';
+
+const QUESTIONS = [
+  { q: 'What hook manages local component state?', opts: ['useRef','useState','useContext','useReducer'], ans: 1 },
+  { q: 'Which hook runs side effects after render?', opts: ['useState','useCallback','useEffect','useMemo'], ans: 2 },
+  { q: 'What does the virtual DOM primarily help with?', opts: ['CSS styling','Server rendering','Performance via diffing','Data fetching'], ans: 2 },
+  { q: 'How do you pass data from parent to child in React?', opts: ['State','Context','Props','Refs'], ans: 2 },
+  { q: 'What is the correct way to update state based on previous state?', opts: ['setState(val+1)','setState(prev =&gt; prev+1)','state = state+1','setState(state+1)'], ans: 1 },
+  { q: 'Which React feature prevents unnecessary re-renders of components?', opts: ['useCallback','React.memo','useMemo','Both B and C'], ans: 3 },
+  { q: 'What is JSX?', opts: ['A JS library','A syntax extension for JS','A state manager','A CSS framework'], ans: 1 },
+  { q: 'When does useEffect with [] run?', opts: ['On every render','Never','Once after mount','Before every render'], ans: 2 },
+];
+
+function QuizApp() {
+  const [current, setCurrent] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [score, setScore] = useState(0);
+  const [log, setLog] = useState([]);
+  const [done, setDone] = useState(false);
+  const [timer, setTimer] = useState(15);
+
+  useEffect(() =&gt; {
+    if (done || selected !== null) return;
+    if (timer === 0) { handleAnswer(null); return; }
+    const id = setTimeout(() =&gt; setTimer(t =&gt; t - 1), 1000);
+    return () =&gt; clearTimeout(id);
+  }, [timer, done, selected]);
+
+  const handleAnswer = (idx) =&gt; {
+    const q = QUESTIONS[current];
+    const correct = idx === q.ans;
+    setSelected(idx === null ? -1 : idx);
+    if (correct) setScore(s =&gt; s + 1);
+    setLog(l =&gt; [...l, { q: q.q, chosen: idx, correct: q.ans, wasCorrect: correct }]);
+    setTimeout(() =&gt; {
+      if (current + 1 &lt; QUESTIONS.length) {
+        setCurrent(c =&gt; c + 1);
+        setSelected(null);
+        setTimer(15);
+      } else {
+        setDone(true);
+      }
+    }, 1200);
+  };
+
+  const restart = () =&gt; { setCurrent(0); setSelected(null); setScore(0); setLog([]); setDone(false); setTimer(15); };
+
+  const pct = Math.round((score / QUESTIONS.length) * 100);
+
+  if (done) return (
+    &lt;div style={{ maxWidth: 520, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;div style={{ textAlign: 'center', background: 'linear-gradient(135deg,#1e1b4b,#312e81)', color: '#fff', borderRadius: 20, padding: '2.5rem', marginBottom: '1.5rem' }}&gt;
+        &lt;div style={{ fontSize: '4rem', marginBottom: '.5rem' }}&gt;{pct &gt;= 80 ? '🏆' : pct &gt;= 50 ? '👍' : '📚'}&lt;/div&gt;
+        &lt;h2 style={{ fontWeight: 800, marginBottom: '.5rem' }}&gt;{score}/{QUESTIONS.length} correct&lt;/h2&gt;
+        &lt;div style={{ fontSize: '1.3rem', color: '#a5b4fc' }}&gt;{pct}% — {pct &gt;= 80 ? 'Excellent!' : pct &gt;= 50 ? 'Good job!' : 'Keep studying!'}&lt;/div&gt;
+      &lt;/div&gt;
+      {log.map((entry, i) =&gt; (
+        &lt;div key={i} style={{ padding: '12px 16px', marginBottom: 8, borderRadius: 12, background: entry.wasCorrect ? '#f0fdf4' : '#fef2f2', border: `2px solid ${entry.wasCorrect ? '#86efac' : '#fca5a5'}` }}&gt;
+          &lt;div style={{ fontWeight: 600, marginBottom: 4, fontSize: '.9rem' }}&gt;{i+1}. {entry.q}&lt;/div&gt;
+          &lt;div style={{ fontSize: '.85rem', color: entry.wasCorrect ? '#166534' : '#991b1b' }}&gt;
+            {entry.wasCorrect ? '✅ Correct' : `❌ You chose: "${entry.chosen === -1 ? 'Timed out' : QUESTIONS[i].opts[entry.chosen]}" — Correct: "${QUESTIONS[i].opts[entry.correct]}"`}
+          &lt;/div&gt;
+        &lt;/div&gt;
+      ))}
+      &lt;button onClick={restart} style={{ width: '100%', padding: '14px', background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 12, fontWeight: 700, fontSize: '1rem', cursor: 'pointer', marginTop: '1rem' }}&gt;
+        Try Again
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+
+  const q = QUESTIONS[current];
+  const timerColor = timer &lt;= 5 ? '#ef4444' : timer &lt;= 10 ? '#f59e0b' : '#22c55e';
+
+  return (
+    &lt;div style={{ maxWidth: 520, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1rem' }}&gt;🧠 React Quiz&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}&gt;
+        &lt;span style={{ fontSize: '.9rem', color: '#64748b', fontWeight: 600 }}&gt;Question {current + 1} / {QUESTIONS.length}&lt;/span&gt;
+        &lt;span style={{ background: timerColor, color: '#fff', borderRadius: 20, padding: '4px 14px', fontWeight: 700, fontSize: '1rem', transition: 'background .3s' }}&gt;
+          ⏱ {timer}s
+        &lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ height: 6, background: '#e2e8f0', borderRadius: 3, marginBottom: '1.5rem' }}&gt;
+        &lt;div style={{ height: '100%', width: `${((current) / QUESTIONS.length) * 100}%`, background: '#4f46e5', borderRadius: 3, transition: 'width .3s' }} /&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ background: '#f8fafc', borderRadius: 16, padding: '1.5rem', marginBottom: '1.5rem', border: '2px solid #e2e8f0', minHeight: 80 }}&gt;
+        &lt;p style={{ fontSize: '1.1rem', fontWeight: 600, margin: 0 }}&gt;{q.q}&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}&gt;
+        {q.opts.map((opt, i) =&gt; {
+          let bg = '#f8fafc', border = '#e2e8f0', color = '#1e293b';
+          if (selected !== null) {
+            if (i === q.ans) { bg = '#f0fdf4'; border = '#22c55e'; color = '#166534'; }
+            else if (i === selected &amp;&amp; selected !== q.ans) { bg = '#fef2f2'; border = '#ef4444'; color = '#991b1b'; }
+          }
+          return (
+            &lt;button key={i} onClick={() =&gt; selected === null &amp;&amp; handleAnswer(i)} disabled={selected !== null}
+              style={{ padding: '14px', background: bg, border: `2px solid ${border}`, color, borderRadius: 12, fontWeight: 600, fontSize: '.95rem', cursor: selected === null ? 'pointer' : 'default', textAlign: 'left', transition: 'all .2s' }}&gt;
+              &lt;span style={{ fontWeight: 700, marginRight: 8 }}&gt;{String.fromCharCode(65+i)}.&lt;/span&gt;{opt}
+            &lt;/button&gt;
+          );
+        })}
+      &lt;/div&gt;
+
+      &lt;div style={{ textAlign: 'center', marginTop: '1.5rem', color: '#64748b', fontSize: '.9rem' }}&gt;Score: {score} / {current}&lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default QuizApp;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 6 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">6</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Password Generator</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useCallback</span>
+        <span class="tech-badge">clipboard API</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Generates secure passwords with configurable length and character sets. Shows a live strength meter, copies to clipboard, and keeps a recent password history.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>useCallback</code> memoizes functions so they're not recreated on every render. It's useful when a function depends on state or props and is passed to child components or used in <code>useEffect</code> dependency arrays to avoid unnecessary re-runs.
+  </div>
+  <div class="code-block">import { useState, useCallback } from 'react';
+
+function PasswordGenerator() {
+  const [length, setLength] = useState(16);
+  const [opts, setOpts] = useState({ upper: true, lower: true, nums: true, syms: false });
+  const [password, setPassword] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [history, setHistory] = useState([]);
+
+  const CHARS = {
+    upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    lower: 'abcdefghijklmnopqrstuvwxyz',
+    nums: '0123456789',
+    syms: '!@#$%^&amp;*()_+-=[]{}|;:,.'
+  };
+
+  const getStrength = (pw) =&gt; {
+    let s = 0;
+    if (pw.length &gt;= 8) s++;
+    if (pw.length &gt;= 12) s++;
+    if (pw.length &gt;= 16) s++;
+    if (/[A-Z]/.test(pw)) s++;
+    if (/[0-9]/.test(pw)) s++;
+    if (/[^A-Za-z0-9]/.test(pw)) s++;
+    return s;
+  };
+
+  const generate = useCallback(() =&gt; {
+    const pool = Object.entries(opts).filter(([, v]) =&gt; v).map(([k]) =&gt; CHARS[k]).join('');
+    if (!pool) return;
+    let pw = '';
+    Object.entries(opts).filter(([, v]) =&gt; v).forEach(([k]) =&gt; {
+      pw += CHARS[k][Math.floor(Math.random() * CHARS[k].length)];
+    });
+    for (let i = pw.length; i &lt; length; i++) {
+      pw += pool[Math.floor(Math.random() * pool.length)];
+    }
+    pw = pw.split('').sort(() =&gt; Math.random() - 0.5).join('');
+    setPassword(pw);
+    setCopied(false);
+    setHistory(h =&gt; [pw, ...h.slice(0, 4)]);
+  }, [length, opts]);
+
+  const copy = (pw) =&gt; {
+    navigator.clipboard.writeText(pw).then(() =&gt; {
+      setCopied(true);
+      setTimeout(() =&gt; setCopied(false), 2000);
+    });
+  };
+
+  const strength = password ? getStrength(password) : 0;
+  const strengthLabel = ['', 'Very Weak', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'][strength];
+  const strengthColor = ['', '#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e', '#10b981'][strength];
+
+  return (
+    &lt;div style={{ maxWidth: 480, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}&gt;🔐 Password Generator&lt;/h1&gt;
+      &lt;div style={{ background: '#f8fafc', borderRadius: 16, padding: '1.5rem', marginBottom: '1rem', border: '1px solid #e2e8f0' }}&gt;
+        &lt;label style={{ fontWeight: 600, display: 'block', marginBottom: 8 }}&gt;Length: {length}&lt;/label&gt;
+        &lt;input type="range" min={6} max={32} value={length} onChange={e =&gt; setLength(Number(e.target.value))}
+          style={{ width: '100%', marginBottom: '1.2rem' }} /&gt;
+        &lt;div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: '1.2rem' }}&gt;
+          {[['upper','Uppercase A-Z'],['lower','Lowercase a-z'],['nums','Numbers 0-9'],['syms','Symbols !@#']].map(([k, label]) =&gt; (
+            &lt;label key={k} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', padding: '8px 12px', background: opts[k] ? '#dbeafe' : '#f1f5f9', borderRadius: 8, border: `2px solid ${opts[k] ? '#3b82f6' : '#e2e8f0'}` }}&gt;
+              &lt;input type="checkbox" checked={opts[k]} onChange={() =&gt; setOpts(o =&gt; ({ ...o, [k]: !o[k] }))} /&gt;
+              &lt;span style={{ fontSize: '.9rem', fontWeight: 500 }}&gt;{label}&lt;/span&gt;
+            &lt;/label&gt;
+          ))}
+        &lt;/div&gt;
+        &lt;button onClick={generate} style={{ width: '100%', padding: '12px', background: 'linear-gradient(135deg,#3b82f6,#1d4ed8)', color: 'white', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}&gt;
+          Generate Password
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      {password &amp;&amp; (
+        &lt;div style={{ background: '#0f172a', borderRadius: 12, padding: '1.2rem', marginBottom: '1rem' }}&gt;
+          &lt;div style={{ display: 'flex', alignItems: 'center', gap: 10 }}&gt;
+            &lt;code style={{ flex: 1, color: '#e2e8f0', fontSize: '.95rem', wordBreak: 'break-all', lineHeight: 1.6 }}&gt;{password}&lt;/code&gt;
+            &lt;button onClick={() =&gt; copy(password)} style={{ padding: '8px 16px', background: copied ? '#22c55e' : '#3b82f6', color: 'white', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', minWidth: 80, transition: 'background .2s' }}&gt;
+              {copied ? '✓ Copied' : 'Copy'}
+            &lt;/button&gt;
+          &lt;/div&gt;
+          &lt;div style={{ marginTop: 12 }}&gt;
+            &lt;div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '.8rem', color: '#94a3b8', marginBottom: 4 }}&gt;
+              &lt;span&gt;Strength&lt;/span&gt;&lt;span style={{ color: strengthColor, fontWeight: 700 }}&gt;{strengthLabel}&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div style={{ height: 6, background: '#334155', borderRadius: 3 }}&gt;
+              &lt;div style={{ height: '100%', width: `${(strength / 6) * 100}%`, background: strengthColor, borderRadius: 3, transition: 'width .3s, background .3s' }} /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+
+      {history.length &gt; 1 &amp;&amp; (
+        &lt;div style={{ background: '#f8fafc', borderRadius: 12, padding: '1rem', border: '1px solid #e2e8f0' }}&gt;
+          &lt;strong style={{ fontSize: '.85rem', color: '#64748b', display: 'block', marginBottom: 8 }}&gt;Recent passwords:&lt;/strong&gt;
+          {history.slice(1).map((pw, i) =&gt; (
+            &lt;div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', borderBottom: i &lt; history.length - 2 ? '1px solid #e2e8f0' : 'none' }}&gt;
+              &lt;code style={{ flex: 1, fontSize: '.8rem', color: '#475569', wordBreak: 'break-all' }}&gt;{pw}&lt;/code&gt;
+              &lt;button onClick={() =&gt; copy(pw)} style={{ padding: '3px 10px', background: '#e2e8f0', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: '.75rem', fontWeight: 600 }}&gt;Copy&lt;/button&gt;
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default PasswordGenerator;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 7 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">7</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Stopwatch</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">useRef</span>
+        <span class="tech-badge">Date.now()</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Millisecond-accurate stopwatch using Date.now() and useRef for drift-free timing. Records laps in a table showing lap time and cumulative time, with the best lap highlighted.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>useRef</code> holds values that persist across renders without causing re-renders — perfect for timers, intervals, and animation frame IDs. Always cancel intervals/animation frames in the <code>useEffect</code> cleanup function to avoid memory leaks.
+  </div>
+  <div class="code-block">import { useState, useEffect, useRef } from 'react';
+
+function fmt(ms) {
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  const cs = Math.floor((ms % 1000) / 10);
+  const pad = (n, d = 2) =&gt; String(n).padStart(d, '0');
+  return h &gt; 0 ? `${pad(h)}:${pad(m)}:${pad(s)}.${pad(cs)}` : `${pad(m)}:${pad(s)}.${pad(cs)}`;
+}
+
+function Stopwatch() {
+  const [elapsed, setElapsed] = useState(0);
+  const [running, setRunning] = useState(false);
+  const [laps, setLaps] = useState([]);
+  const startRef = useRef(null);
+  const rafRef = useRef(null);
+  const baseRef = useRef(0);
+
+  useEffect(() =&gt; {
+    if (running) {
+      startRef.current = Date.now() - baseRef.current;
+      const tick = () =&gt; {
+        setElapsed(Date.now() - startRef.current);
+        rafRef.current = requestAnimationFrame(tick);
+      };
+      rafRef.current = requestAnimationFrame(tick);
+    } else {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    }
+    return () =&gt; { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [running]);
+
+  const start = () =&gt; { baseRef.current = elapsed; setRunning(true); };
+  const stop = () =&gt; setRunning(false);
+  const reset = () =&gt; { setRunning(false); setElapsed(0); setLaps([]); baseRef.current = 0; };
+  const lap = () =&gt; {
+    setLaps(prev =&gt; {
+      const lapStart = prev.length &gt; 0 ? prev[prev.length - 1].total : 0;
+      return [...prev, { lap: elapsed - lapStart, total: elapsed }];
+    });
+  };
+
+  const bestLapIdx = laps.length &gt; 1
+    ? laps.reduce((best, l, i) =&gt; (l.lap &lt; laps[best].lap ? i : best), 0)
+    : -1;
+  const worstLapIdx = laps.length &gt; 1
+    ? laps.reduce((worst, l, i) =&gt; (l.lap &gt; laps[worst].lap ? i : worst), 0)
+    : -1;
+
+  return (
+    &lt;div style={{ maxWidth: 480, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}&gt;⏱️ Stopwatch&lt;/h1&gt;
+
+      &lt;div style={{ textAlign: 'center', background: '#0f172a', borderRadius: 24, padding: '2.5rem 2rem', marginBottom: '1.5rem' }}&gt;
+        &lt;div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '3.5rem', fontWeight: 700, color: running ? '#22c55e' : '#e2e8f0', letterSpacing: '2px', transition: 'color .3s' }}&gt;
+          {fmt(elapsed)}
+        &lt;/div&gt;
+        {laps.length &gt; 0 &amp;&amp; (
+          &lt;div style={{ color: '#64748b', fontSize: '.85rem', marginTop: '.5rem' }}&gt;
+            Current lap: {fmt(elapsed - laps[laps.length - 1].total)}
+          &lt;/div&gt;
+        )}
+      &lt;/div&gt;
+
+      &lt;div style={{ display: 'flex', gap: 10, marginBottom: '1.5rem', justifyContent: 'center' }}&gt;
+        &lt;button onClick={reset}
+          style={{ flex: 1, padding: '14px', borderRadius: 50, border: 'none', fontWeight: 700, fontSize: '1rem', background: '#1e293b', color: '#94a3b8', cursor: 'pointer' }}&gt;
+          Reset
+        &lt;/button&gt;
+        {!running ? (
+          &lt;button onClick={start}
+            style={{ flex: 1, padding: '14px', borderRadius: 50, border: 'none', fontWeight: 700, fontSize: '1rem', background: '#22c55e', color: '#fff', cursor: 'pointer' }}&gt;
+            Start
+          &lt;/button&gt;
+        ) : (
+          &lt;button onClick={stop}
+            style={{ flex: 1, padding: '14px', borderRadius: 50, border: 'none', fontWeight: 700, fontSize: '1rem', background: '#ef4444', color: '#fff', cursor: 'pointer' }}&gt;
+            Stop
+          &lt;/button&gt;
+        )}
+        &lt;button onClick={lap} disabled={!running}
+          style={{ flex: 1, padding: '14px', borderRadius: 50, border: 'none', fontWeight: 700, fontSize: '1rem', background: running ? '#334155' : '#1e293b', color: running ? '#e2e8f0' : '#475569', cursor: running ? 'pointer' : 'not-allowed' }}&gt;
+          Lap
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      {laps.length &gt; 0 &amp;&amp; (
+        &lt;div style={{ background: '#f8fafc', borderRadius: 16, border: '1px solid #e2e8f0', overflow: 'hidden' }}&gt;
+          &lt;table style={{ width: '100%', borderCollapse: 'collapse' }}&gt;
+            &lt;thead&gt;
+              &lt;tr style={{ background: '#f1f5f9' }}&gt;
+                &lt;th style={{ padding: '10px 16px', textAlign: 'left', fontSize: '.8rem', color: '#64748b', fontWeight: 700 }}&gt;Lap&lt;/th&gt;
+                &lt;th style={{ padding: '10px 16px', textAlign: 'right', fontSize: '.8rem', color: '#64748b', fontWeight: 700 }}&gt;Lap Time&lt;/th&gt;
+                &lt;th style={{ padding: '10px 16px', textAlign: 'right', fontSize: '.8rem', color: '#64748b', fontWeight: 700 }}&gt;Total Time&lt;/th&gt;
+              &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+              {[...laps].reverse().map((l, ri) =&gt; {
+                const i = laps.length - 1 - ri;
+                const isBest = i === bestLapIdx;
+                const isWorst = i === worstLapIdx;
+                return (
+                  &lt;tr key={i} style={{ background: isBest ? '#f0fdf4' : isWorst ? '#fef2f2' : 'white', borderTop: '1px solid #e2e8f0' }}&gt;
+                    &lt;td style={{ padding: '10px 16px', fontWeight: 600, color: isBest ? '#166534' : isWorst ? '#991b1b' : '#1e293b' }}&gt;
+                      Lap {i + 1} {isBest &amp;&amp; '🥇'}{isWorst &amp;&amp; '🐢'}
+                    &lt;/td&gt;
+                    &lt;td style={{ padding: '10px 16px', textAlign: 'right', fontFamily: 'monospace', fontWeight: 600, color: isBest ? '#22c55e' : isWorst ? '#ef4444' : '#475569' }}&gt;
+                      {fmt(l.lap)}
+                    &lt;/td&gt;
+                    &lt;td style={{ padding: '10px 16px', textAlign: 'right', fontFamily: 'monospace', color: '#94a3b8' }}&gt;
+                      {fmt(l.total)}
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                );
+              })}
+            &lt;/tbody&gt;
+          &lt;/table&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default Stopwatch;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 8 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">8</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Markdown Previewer</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">string parsing</span>
+        <span class="tech-badge">dangerouslySetInnerHTML</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Two-pane live Markdown editor with a custom inline parser for headings, bold, italic, code, links, and lists. Shows word/char counts and supports fullscreen toggle on either pane.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>dangerouslySetInnerHTML</code> lets you inject HTML strings into the DOM. The name is intentional — only use it with content you control. A custom <code>parseMarkdown</code> function using regex <code>.replace()</code> chains is a lightweight alternative to a full library.
+  </div>
+  <div class="code-block">import { useState } from 'react';
+
+const DEFAULT_MD = `# Hello, Markdown!
+
+## Features
+
+This is a **bold** statement and this is *italic*.
+
+Here is some \`inline code\` and a [link](https://react.dev).
+
+- Item one
+- Item two
+- Item three
+
+### Code Block
+
+\`\`\`
+const greet = name => \`Hello, \${name}!\`;
+\`\`\`
+
+> This is a blockquote.
+`;
+
+function parseMarkdown(md) {
+  const escape = s =&gt; s.replace(/&amp;/g,'&amp;amp;').replace(/&lt;/g,'&amp;lt;').replace(/&gt;/g,'&amp;gt;');
+  const inline = s =&gt;
+    escape(s)
+      .replace(/\*\*(.+?)\*\*/g, '&lt;strong&gt;$1&lt;/strong&gt;')
+      .replace(/\*(.+?)\*/g, '&lt;em&gt;$1&lt;/em&gt;')
+      .replace(/`([^`]+)`/g, '&lt;code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:monospace"&gt;$1&lt;/code&gt;')
+      .replace(/\[(.+?)\]\((.+?)\)/g, '&lt;a href="$2" target="_blank" style="color:#3b82f6"&gt;$1&lt;/a&gt;');
+
+  const lines = md.split('\n');
+  let html = '';
+  let inCode = false;
+  let codeBuffer = '';
+  let inList = false;
+
+  lines.forEach(line =&gt; {
+    if (line.startsWith('```')) {
+      if (!inCode) { inCode = true; codeBuffer = ''; return; }
+      html += `&lt;pre style="background:#0d1117;color:#e6edf3;padding:1rem;border-radius:8px;overflow-x:auto;margin:.75rem 0"&gt;&lt;code&gt;${escape(codeBuffer.trimEnd())}&lt;/code&gt;&lt;/pre&gt;`;
+      inCode = false; return;
+    }
+    if (inCode) { codeBuffer += line + '\n'; return; }
+    if (line.startsWith('&gt;')) {
+      if (inList) { html += '&lt;/ul&gt;'; inList = false; }
+      html += `&lt;blockquote style="border-left:4px solid #3b82f6;padding:.5rem 1rem;margin:.5rem 0;color:#475569;background:#f0f9ff"&gt;${inline(line.slice(1).trim())}&lt;/blockquote&gt;`;
+      return;
+    }
+    if (/^#{1,6}\s/.test(line)) {
+      if (inList) { html += '&lt;/ul&gt;'; inList = false; }
+      const lvl = line.match(/^(#+)/)[1].length;
+      const sizes = { 1:'2rem',2:'1.6rem',3:'1.3rem',4:'1.1rem',5:'1rem',6:'.9rem' };
+      html += `&lt;h${lvl} style="font-size:${sizes[lvl]};font-weight:800;margin:.8rem 0 .4rem;color:#1e293b"&gt;${inline(line.slice(lvl + 1))}&lt;/h${lvl}&gt;`;
+      return;
+    }
+    if (/^[-*]\s/.test(line)) {
+      if (!inList) { html += '&lt;ul style="padding-left:1.5rem;margin:.5rem 0"&gt;'; inList = true; }
+      html += `&lt;li style="margin:.25rem 0"&gt;${inline(line.slice(2))}&lt;/li&gt;`;
+      return;
+    }
+    if (inList) { html += '&lt;/ul&gt;'; inList = false; }
+    if (line.trim() === '') { html += '&lt;br/&gt;'; return; }
+    html += `&lt;p style="margin:.4rem 0;line-height:1.7"&gt;${inline(line)}&lt;/p&gt;`;
+  });
+  if (inList) html += '&lt;/ul&gt;';
+  return html;
+}
+
+function MarkdownPreviewer() {
+  const [md, setMd] = useState(DEFAULT_MD);
+  const [fullscreen, setFullscreen] = useState(null); // 'editor' | 'preview' | null
+
+  const words = md.trim() ? md.trim().split(/\s+/).length : 0;
+  const chars = md.length;
+  const parsed = parseMarkdown(md);
+
+  const editorVisible = fullscreen !== 'preview';
+  const previewVisible = fullscreen !== 'editor';
+
+  return (
+    &lt;div style={{ maxWidth: 1100, margin: '1rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}&gt;
+        &lt;h1 style={{ margin: 0 }}&gt;📝 Markdown Previewer&lt;/h1&gt;
+        &lt;div style={{ fontSize: '.85rem', color: '#64748b' }}&gt;
+          {words} words · {chars} chars
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ display: 'grid', gridTemplateColumns: fullscreen ? '1fr' : '1fr 1fr', gap: 16 }}&gt;
+        {editorVisible &amp;&amp; (
+          &lt;div style={{ display: 'flex', flexDirection: 'column' }}&gt;
+            &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}&gt;
+              &lt;span style={{ fontWeight: 700, color: '#475569' }}&gt;Editor&lt;/span&gt;
+              &lt;button onClick={() =&gt; setFullscreen(f =&gt; f === 'editor' ? null : 'editor')}
+                style={{ padding: '4px 12px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', fontSize: '.8rem', fontWeight: 600 }}&gt;
+                {fullscreen === 'editor' ? '⊠ Exit Fullscreen' : '⛶ Fullscreen'}
+              &lt;/button&gt;
+            &lt;/div&gt;
+            &lt;textarea value={md} onChange={e =&gt; setMd(e.target.value)}
+              style={{ flex: 1, minHeight: fullscreen ? '80vh' : 520, padding: '1rem', borderRadius: 12, border: '2px solid #e2e8f0', fontFamily: 'JetBrains Mono, monospace', fontSize: '.85rem', lineHeight: 1.7, resize: 'vertical', outline: 'none', background: '#0d1117', color: '#e6edf3' }} /&gt;
+          &lt;/div&gt;
+        )}
+
+        {previewVisible &amp;&amp; (
+          &lt;div style={{ display: 'flex', flexDirection: 'column' }}&gt;
+            &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}&gt;
+              &lt;span style={{ fontWeight: 700, color: '#475569' }}&gt;Preview&lt;/span&gt;
+              &lt;button onClick={() =&gt; setFullscreen(f =&gt; f === 'preview' ? null : 'preview')}
+                style={{ padding: '4px 12px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 8, cursor: 'pointer', fontSize: '.8rem', fontWeight: 600 }}&gt;
+                {fullscreen === 'preview' ? '⊠ Exit Fullscreen' : '⛶ Fullscreen'}
+              &lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div dangerouslySetInnerHTML={{ __html: parsed }}
+              style={{ flex: 1, minHeight: fullscreen ? '80vh' : 520, padding: '1.5rem', borderRadius: 12, border: '2px solid #e2e8f0', background: '#fff', overflowY: 'auto', lineHeight: 1.7 }} /&gt;
+          &lt;/div&gt;
+        )}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default MarkdownPreviewer;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 9 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">9</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Color Palette Generator</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">color math</span>
+        <span class="tech-badge">clipboard API</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Generates complementary, analogous, and triadic color schemes from a hex input. Click any swatch to copy its hex code, and save up to 3 full palettes to history.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> The Clipboard API (<code>navigator.clipboard.writeText()</code>) is async and returns a Promise. Converting between color formats (HEX, RGB, HSL) is pure math — understanding how to decompose a hex string into R, G, B channels is a valuable skill.
+  </div>
+  <div class="code-block">import { useState } from 'react';
+
+function hexToHsl(hex) {
+  let r = parseInt(hex.slice(1,3),16)/255;
+  let g = parseInt(hex.slice(3,5),16)/255;
+  let b = parseInt(hex.slice(5,7),16)/255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b);
+  let h, s, l = (max+min)/2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l &gt; 0.5 ? d/(2-max-min) : d/(max+min);
+    switch(max){
+      case r: h=((g-b)/d+(g&lt;b?6:0))/6; break;
+      case g: h=((b-r)/d+2)/6; break;
+      default: h=((r-g)/d+4)/6;
+    }
+  }
+  return [Math.round(h*360), Math.round(s*100), Math.round(l*100)];
+}
+
+function hslToHex(h, s, l) {
+  s /= 100; l /= 100;
+  const k = n =&gt; (n+h/30)%12;
+  const a = s*Math.min(l,1-l);
+  const f = n =&gt; Math.round(255*(l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)))));
+  return `#${[f(0),f(8),f(4)].map(v=&gt;v.toString(16).padStart(2,'0')).join('')}`;
+}
+
+function getSchemes(hex) {
+  const [h, s, l] = hexToHsl(hex);
+  const complementary = [hex, hslToHex((h+180)%360,s,l), hslToHex((h+180)%360,s,Math.min(l+15,95)), hslToHex(h,s,Math.min(l+20,95)), hslToHex(h,Math.max(s-20,10),l)];
+  const analogous = [-40,-20,0,20,40].map(d =&gt; hslToHex((h+d+360)%360, s, l));
+  const triadic = [0,1,2,3,4].map(i =&gt; hslToHex((h+i*30)%360, s, l));
+  return { complementary, analogous, triadic };
+}
+
+function textColor(hex) {
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  return (r*299+g*587+b*114)/1000 &gt; 128 ? '#1e293b' : '#ffffff';
+}
+
+function ColorPalette() {
+  const [base, setBase] = useState('#3b82f6');
+  const [copied, setCopied] = useState('');
+  const [savedPalettes, setSavedPalettes] = useState([]);
+
+  const schemes = getSchemes(base);
+
+  const copyHex = (hex) =&gt; {
+    navigator.clipboard.writeText(hex);
+    setCopied(hex);
+    setTimeout(() =&gt; setCopied(''), 1500);
+  };
+
+  const savePalette = () =&gt; {
+    setSavedPalettes(p =&gt; [{ base, schemes, id: Date.now() }, ...p].slice(0, 3));
+  };
+
+  const SchemeRow = ({ label, colors }) =&gt; (
+    &lt;div style={{ marginBottom: '1.2rem' }}&gt;
+      &lt;div style={{ fontWeight: 700, fontSize: '.9rem', color: '#475569', marginBottom: 8 }}&gt;{label}&lt;/div&gt;
+      &lt;div style={{ display: 'flex', gap: 8 }}&gt;
+        {colors.map((hex, i) =&gt; (
+          &lt;div key={i} onClick={() =&gt; copyHex(hex)}
+            title={hex}
+            style={{ flex: 1, height: 72, background: hex, borderRadius: 12, cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', padding: '6px', transition: 'transform .15s', boxShadow: '0 2px 8px rgba(0,0,0,.15)' }}
+            onMouseEnter={e =&gt; e.currentTarget.style.transform='scale(1.05)'}
+            onMouseLeave={e =&gt; e.currentTarget.style.transform='scale(1)'}&gt;
+            &lt;span style={{ fontSize: '.65rem', fontWeight: 700, color: textColor(hex), background: 'rgba(0,0,0,.2)', padding: '2px 6px', borderRadius: 6 }}&gt;
+              {copied === hex ? '✓ Copied!' : hex}
+            &lt;/span&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+
+  return (
+    &lt;div style={{ maxWidth: 560, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}&gt;🎨 Color Palette Generator&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: '2rem', background: '#f8fafc', padding: '1.2rem', borderRadius: 16, border: '1px solid #e2e8f0' }}&gt;
+        &lt;input type="color" value={base} onChange={e =&gt; setBase(e.target.value)}
+          style={{ width: 64, height: 64, borderRadius: 12, border: 'none', cursor: 'pointer', padding: 0 }} /&gt;
+        &lt;div style={{ flex: 1 }}&gt;
+          &lt;div style={{ fontWeight: 800, fontSize: '1.3rem' }}&gt;{base.toUpperCase()}&lt;/div&gt;
+          &lt;div style={{ fontSize: '.85rem', color: '#64748b' }}&gt;HSL: {hexToHsl(base).join('°, ')}%&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;button onClick={savePalette}
+          style={{ padding: '10px 16px', background: '#8b5cf6', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer' }}&gt;
+          💾 Save
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;SchemeRow label="🔄 Complementary" colors={schemes.complementary} /&gt;
+      &lt;SchemeRow label="🌈 Analogous" colors={schemes.analogous} /&gt;
+      &lt;SchemeRow label="🔺 Triadic" colors={schemes.triadic} /&gt;
+
+      {savedPalettes.length &gt; 0 &amp;&amp; (
+        &lt;div style={{ marginTop: '1.5rem' }}&gt;
+          &lt;div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 12, color: '#475569' }}&gt;Saved Palettes&lt;/div&gt;
+          {savedPalettes.map(p =&gt; (
+            &lt;div key={p.id} style={{ marginBottom: 12 }}&gt;
+              &lt;div style={{ fontSize: '.8rem', color: '#94a3b8', marginBottom: 6 }}&gt;Base: {p.base}&lt;/div&gt;
+              &lt;div style={{ display: 'flex', gap: 4 }}&gt;
+                {p.schemes.analogous.map((hex, i) =&gt; (
+                  &lt;div key={i} style={{ flex: 1, height: 36, background: hex, borderRadius: 8, cursor: 'pointer' }} onClick={() =&gt; copyHex(hex)} title={hex} /&gt;
+                ))}
+              &lt;/div&gt;
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default ColorPalette;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 10 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">10</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Pomodoro Timer</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">SVG</span>
+        <span class="tech-badge">Web Audio</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Full Pomodoro timer cycling through Focus, Short Break, and Long Break phases. Features an SVG circular progress ring and a Web Audio API beep when each phase completes.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>useEffect</code> with <code>setInterval</code> requires careful cleanup — always return a function that calls <code>clearInterval</code>. The effect dependencies control when the interval restarts. Storing the interval ID in a <code>useRef</code> lets you clear it imperatively from outside the effect.
+  </div>
+  <div class="code-block">import { useState, useEffect, useRef } from 'react';
+
+const PHASES = [
+  { name: 'Focus', mins: 25, color: '#ef4444', bg: '#fef2f2', emoji: '🍅' },
+  { name: 'Short Break', mins: 5, color: '#22c55e', bg: '#f0fdf4', emoji: '☕' },
+  { name: 'Short Break', mins: 5, color: '#22c55e', bg: '#f0fdf4', emoji: '☕' },
+  { name: 'Long Break', mins: 15, color: '#3b82f6', bg: '#eff6ff', emoji: '🧘' },
+];
+
+const R = 54;
+const CIRC = 2 * Math.PI * R; // ≈ 339.3
+
+function beep(ctx) {
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.frequency.value = 880;
+  gain.gain.setValueAtTime(0.4, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+  osc.start(); osc.stop(ctx.currentTime + 0.6);
+}
+
+function PomodoroTimer() {
+  const [phaseIdx, setPhaseIdx] = useState(0);
+  const [seconds, setSeconds] = useState(PHASES[0].mins * 60);
+  const [running, setRunning] = useState(false);
+  const [sessions, setSessions] = useState(0);
+  const audioCtxRef = useRef(null);
+
+  const phase = PHASES[phaseIdx];
+  const total = phase.mins * 60;
+  const progress = seconds / total;
+  const dashOffset = CIRC * (1 - progress);
+
+  useEffect(() =&gt; {
+    setSeconds(phase.mins * 60);
+    setRunning(false);
+  }, [phaseIdx]);
+
+  useEffect(() =&gt; {
+    if (!running) return;
+    if (seconds === 0) {
+      if (!audioCtxRef.current) audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      beep(audioCtxRef.current);
+      if (phaseIdx === 0) setSessions(s =&gt; s + 1);
+      setTimeout(() =&gt; setPhaseIdx(i =&gt; (i + 1) % PHASES.length), 800);
+      return;
+    }
+    const id = setInterval(() =&gt; setSeconds(s =&gt; s - 1), 1000);
+    return () =&gt; clearInterval(id);
+  }, [running, seconds]);
+
+  const reset = () =&gt; { setRunning(false); setSeconds(phase.mins * 60); };
+  const skip = () =&gt; setPhaseIdx(i =&gt; (i + 1) % PHASES.length);
+
+  const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const ss = String(seconds % 60).padStart(2, '0');
+
+  return (
+    &lt;div style={{ maxWidth: 400, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem', textAlign: 'center' }}&gt;
+      &lt;h1 style={{ marginBottom: '1rem' }}&gt;🍅 Pomodoro Timer&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: '2rem' }}&gt;
+        {PHASES.map((p, i) =&gt; (
+          &lt;button key={i} onClick={() =&gt; setPhaseIdx(i)}
+            style={{ padding: '6px 14px', borderRadius: 20, border: `2px solid ${phaseIdx === i ? p.color : '#e2e8f0'}`, background: phaseIdx === i ? p.bg : '#f8fafc', color: phaseIdx === i ? p.color : '#94a3b8', fontWeight: 700, cursor: 'pointer', fontSize: '.8rem' }}&gt;
+            {p.emoji} {p.name}
+          &lt;/button&gt;
+        ))}
+      &lt;/div&gt;
+
+      &lt;div style={{ position: 'relative', display: 'inline-block', marginBottom: '1.5rem' }}&gt;
+        &lt;svg width="140" height="140" viewBox="0 0 120 120"&gt;
+          &lt;circle cx="60" cy="60" r={R} fill="none" stroke="#e2e8f0" strokeWidth="8" /&gt;
+          &lt;circle cx="60" cy="60" r={R} fill="none" stroke={phase.color} strokeWidth="8"
+            strokeLinecap="round"
+            strokeDasharray={CIRC}
+            strokeDashoffset={dashOffset}
+            transform="rotate(-90 60 60)"
+            style={{ transition: 'stroke-dashoffset .5s ease, stroke .3s' }} /&gt;
+        &lt;/svg&gt;
+        &lt;div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', textAlign: 'center' }}&gt;
+          &lt;div style={{ fontSize: '2rem', fontWeight: 900, fontFamily: 'monospace', color: phase.color }}&gt;{mm}:{ss}&lt;/div&gt;
+          &lt;div style={{ fontSize: '.7rem', color: '#94a3b8', fontWeight: 600 }}&gt;{phase.name}&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginBottom: '1.5rem' }}&gt;
+        &lt;button onClick={reset}
+          style={{ padding: '12px 20px', borderRadius: 50, border: 'none', background: '#f1f5f9', color: '#475569', fontWeight: 700, cursor: 'pointer' }}&gt;Reset&lt;/button&gt;
+        &lt;button onClick={() =&gt; setRunning(r =&gt; !r)}
+          style={{ padding: '12px 32px', borderRadius: 50, border: 'none', background: phase.color, color: '#fff', fontWeight: 700, fontSize: '1.1rem', cursor: 'pointer' }}&gt;
+          {running ? '⏸ Pause' : '▶ Start'}
+        &lt;/button&gt;
+        &lt;button onClick={skip}
+          style={{ padding: '12px 20px', borderRadius: 50, border: 'none', background: '#f1f5f9', color: '#475569', fontWeight: 700, cursor: 'pointer' }}&gt;Skip ⏭&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ display: 'flex', justifyContent: 'center', gap: 20, color: '#64748b', fontSize: '.9rem' }}&gt;
+        &lt;span&gt;🍅 Sessions: &lt;strong style={{ color: '#ef4444' }}&gt;{sessions}&lt;/strong&gt;&lt;/span&gt;
+        &lt;span&gt;📍 Phase: &lt;strong&gt;{phaseIdx + 1}/4&lt;/strong&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default PomodoroTimer;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+
+<!-- PROJECT 11 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">11</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">GitHub Profile Viewer</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">GitHub API</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Fetches a GitHub user's profile and top 6 starred repos. Displays avatar, bio, location, stats, and repo cards with language badges. Includes loading skeleton and error state.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>useEffect</code> with an empty <code>[]</code> dependency array runs once on mount — perfect for initial data fetching. When dependencies change (like a username), React re-runs the effect. Always handle loading and error states so users get feedback during async operations.
+  </div>
+  <div class="code-block">import { useState } from 'react';
+
+const LANG_COLORS = { JavaScript:'#f1e05a', TypeScript:'#3178c6', Python:'#3572A5', Java:'#b07219', CSS:'#563d7c', HTML:'#e34c26', Go:'#00ADD8', Rust:'#dea584', Ruby:'#701516', Swift:'#F05138' };
+
+function GitHubViewer() {
+  const [username, setUsername] = useState('');
+  const [profile, setProfile] = useState(null);
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const search = async () =&gt; {
+    if (!username.trim()) return;
+    setLoading(true); setError(''); setProfile(null); setRepos([]);
+    try {
+      const [pRes, rRes] = await Promise.all([
+        fetch(`https://api.github.com/users/${username.trim()}`),
+        fetch(`https://api.github.com/users/${username.trim()}/repos?sort=stars&amp;per_page=6`)
+      ]);
+      if (!pRes.ok) throw new Error(pRes.status === 404 ? 'User not found.' : 'API error. Try again.');
+      setProfile(await pRes.json());
+      setRepos(await rRes.json());
+    } catch (e) { setError(e.message); }
+    finally { setLoading(false); }
+  };
+
+  return (
+    &lt;div style={{ maxWidth: 680, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}&gt;🐙 GitHub Profile Viewer&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', gap: 8, marginBottom: '1.5rem' }}&gt;
+        &lt;input value={username} onChange={e =&gt; setUsername(e.target.value)} onKeyDown={e =&gt; e.key === 'Enter' &amp;&amp; search()}
+          placeholder="Enter GitHub username..."
+          style={{ flex: 1, padding: '12px 16px', borderRadius: 12, border: '2px solid #e2e8f0', fontSize: '1rem', outline: 'none' }} /&gt;
+        &lt;button onClick={search} disabled={loading}
+          style={{ padding: '12px 22px', background: '#24292f', color: '#fff', border: 'none', borderRadius: 12, fontWeight: 700, cursor: 'pointer', opacity: loading ? .6 : 1 }}&gt;
+          {loading ? '...' : 'Search'}
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      {error &amp;&amp; &lt;div style={{ background:'#fee2e2',color:'#991b1b',padding:'12px 16px',borderRadius:12,marginBottom:'1rem',textAlign:'center' }}&gt;❌ {error}&lt;/div&gt;}
+
+      {loading &amp;&amp; (
+        &lt;div style={{ background:'#f8fafc',borderRadius:16,padding:'2rem',border:'1px solid #e2e8f0' }}&gt;
+          {[80,200,150].map((w,i) =&gt; &lt;div key={i} style={{ height:16,background:'#e2e8f0',borderRadius:8,marginBottom:12,width:w,animation:'pulse 1.5s infinite' }} /&gt;)}
+        &lt;/div&gt;
+      )}
+
+      {profile &amp;&amp; (
+        &lt;div&gt;
+          &lt;div style={{ display:'flex',gap:20,alignItems:'flex-start',background:'#f8fafc',borderRadius:16,padding:'1.5rem',border:'1px solid #e2e8f0',marginBottom:'1rem' }}&gt;
+            &lt;img src={profile.avatar_url} alt={profile.login} style={{ width:90,height:90,borderRadius:'50%',border:'3px solid #e2e8f0' }} /&gt;
+            &lt;div style={{ flex:1 }}&gt;
+              &lt;div style={{ fontWeight:800,fontSize:'1.3rem' }}&gt;{profile.name || profile.login}&lt;/div&gt;
+              &lt;div style={{ color:'#64748b',fontSize:'.9rem',marginBottom:6 }}&gt;@{profile.login}&lt;/div&gt;
+              {profile.bio &amp;&amp; &lt;div style={{ color:'#475569',marginBottom:8,fontSize:'.9rem' }}&gt;{profile.bio}&lt;/div&gt;}
+              &lt;div style={{ display:'flex',gap:16,flexWrap:'wrap',fontSize:'.85rem',color:'#64748b' }}&gt;
+                {profile.location &amp;&amp; &lt;span&gt;📍 {profile.location}&lt;/span&gt;}
+                {profile.company &amp;&amp; &lt;span&gt;🏢 {profile.company}&lt;/span&gt;}
+                {profile.blog &amp;&amp; &lt;a href={profile.blog} target="_blank" rel="noreferrer" style={{ color:'#3b82f6' }}&gt;🔗 {profile.blog}&lt;/a&gt;}
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div style={{ display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginBottom:'1.5rem' }}&gt;
+            {[['📦','Public Repos',profile.public_repos],['👥','Followers',profile.followers],['👤','Following',profile.following]].map(([icon,label,val]) =&gt; (
+              &lt;div key={label} style={{ background:'#fff',border:'1px solid #e2e8f0',borderRadius:12,padding:'1rem',textAlign:'center' }}&gt;
+                &lt;div style={{ fontSize:'1.4rem' }}&gt;{icon}&lt;/div&gt;
+                &lt;div style={{ fontWeight:800,fontSize:'1.3rem' }}&gt;{val?.toLocaleString()}&lt;/div&gt;
+                &lt;div style={{ fontSize:'.75rem',color:'#64748b' }}&gt;{label}&lt;/div&gt;
+              &lt;/div&gt;
+            ))}
+          &lt;/div&gt;
+
+          &lt;div style={{ fontWeight:700,marginBottom:10,color:'#475569' }}&gt;Top Repositories&lt;/div&gt;
+          &lt;div style={{ display:'grid',gridTemplateColumns:'1fr 1fr',gap:10 }}&gt;
+            {repos.map(repo =&gt; (
+              &lt;a key={repo.id} href={repo.html_url} target="_blank" rel="noreferrer"
+                style={{ background:'#fff',border:'1px solid #e2e8f0',borderRadius:12,padding:'1rem',textDecoration:'none',color:'inherit',display:'block',transition:'box-shadow .2s' }}
+                onMouseEnter={e =&gt; e.currentTarget.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'}
+                onMouseLeave={e =&gt; e.currentTarget.style.boxShadow='none'}&gt;
+                &lt;div style={{ fontWeight:700,fontSize:'.9rem',marginBottom:4,color:'#1d4ed8' }}&gt;{repo.name}&lt;/div&gt;
+                &lt;div style={{ fontSize:'.8rem',color:'#64748b',marginBottom:8,minHeight:32 }}&gt;{repo.description?.slice(0,80) || 'No description'}&lt;/div&gt;
+                &lt;div style={{ display:'flex',alignItems:'center',gap:10,fontSize:'.75rem' }}&gt;
+                  {repo.language &amp;&amp; (
+                    &lt;span style={{ display:'flex',alignItems:'center',gap:4 }}&gt;
+                      &lt;span style={{ width:10,height:10,borderRadius:'50%',background:LANG_COLORS[repo.language]||'#ccc' }} /&gt;
+                      {repo.language}
+                    &lt;/span&gt;
+                  )}
+                  &lt;span&gt;⭐ {repo.stargazers_count}&lt;/span&gt;
+                  &lt;span&gt;🍴 {repo.forks_count}&lt;/span&gt;
+                &lt;/div&gt;
+              &lt;/a&gt;
+            ))}
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default GitHubViewer;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 12 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">12</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Unit Converter</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">derived state</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Converts between Temperature, Length, Weight, and Volume units using tab navigation. Bidirectional conversion and tracks a history of the last 5 conversions.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> Controlled inputs (<code>value={state}</code> + <code>onChange</code>) give React full control over form data. When one input changes, you can recompute all derived values and update multiple state variables simultaneously — a powerful pattern for converters and calculators.
+  </div>
+  <div class="code-block">import { useState, useMemo } from 'react';
+
+const CONVERSIONS = {
+  Temperature: {
+    units: ['Celsius','Fahrenheit','Kelvin'],
+    toBase: { Celsius: v=&gt;v, Fahrenheit: v=&gt;(v-32)*5/9, Kelvin: v=&gt;v-273.15 },
+    fromBase: { Celsius: v=&gt;v, Fahrenheit: v=&gt;v*9/5+32, Kelvin: v=&gt;v+273.15 },
+  },
+  Length: {
+    units: ['Meter','Kilometer','Mile','Foot','Inch','Yard'],
+    toBase: { Meter:v=&gt;v, Kilometer:v=&gt;v*1000, Mile:v=&gt;v*1609.34, Foot:v=&gt;v*0.3048, Inch:v=&gt;v*0.0254, Yard:v=&gt;v*0.9144 },
+    fromBase: { Meter:v=&gt;v, Kilometer:v=&gt;v/1000, Mile:v=&gt;v/1609.34, Foot:v=&gt;v/0.3048, Inch:v=&gt;v/0.0254, Yard:v=&gt;v/0.9144 },
+  },
+  Weight: {
+    units: ['Kilogram','Gram','Pound','Ounce','Ton'],
+    toBase: { Kilogram:v=&gt;v, Gram:v=&gt;v/1000, Pound:v=&gt;v*0.453592, Ounce:v=&gt;v*0.0283495, Ton:v=&gt;v*1000 },
+    fromBase: { Kilogram:v=&gt;v, Gram:v=&gt;v*1000, Pound:v=&gt;v/0.453592, Ounce:v=&gt;v/0.0283495, Ton:v=&gt;v/1000 },
+  },
+  Volume: {
+    units: ['Liter','Milliliter','Gallon (US)','Cup','Tablespoon','Fluid Ounce'],
+    toBase: { 'Liter':v=&gt;v, 'Milliliter':v=&gt;v/1000, 'Gallon (US)':v=&gt;v*3.78541, 'Cup':v=&gt;v*0.236588, 'Tablespoon':v=&gt;v*0.0147868, 'Fluid Ounce':v=&gt;v*0.0295735 },
+    fromBase: { 'Liter':v=&gt;v, 'Milliliter':v=&gt;v*1000, 'Gallon (US)':v=&gt;v/3.78541, 'Cup':v=&gt;v/0.236588, 'Tablespoon':v=&gt;v/0.0147868, 'Fluid Ounce':v=&gt;v/0.0295735 },
+  },
+};
+
+function UnitConverter() {
+  const [tab, setTab] = useState('Temperature');
+  const [fromUnit, setFromUnit] = useState('Celsius');
+  const [toUnit, setToUnit] = useState('Fahrenheit');
+  const [value, setValue] = useState('');
+  const [history, setHistory] = useState([]);
+
+  const conv = CONVERSIONS[tab];
+
+  const result = useMemo(() =&gt; {
+    const n = parseFloat(value);
+    if (isNaN(n)) return '';
+    const base = conv.toBase[fromUnit](n);
+    const out = conv.fromBase[toUnit](base);
+    return parseFloat(out.toFixed(8)).toString();
+  }, [value, fromUnit, toUnit, tab]);
+
+  const handleTab = (t) =&gt; {
+    setTab(t);
+    setFromUnit(CONVERSIONS[t].units[0]);
+    setToUnit(CONVERSIONS[t].units[1]);
+    setValue('');
+  };
+
+  const addToHistory = () =&gt; {
+    if (!result) return;
+    setHistory(h =&gt; [`${value} ${fromUnit} = ${result} ${toUnit}`, ...h].slice(0, 5));
+  };
+
+  const swap = () =&gt; { setFromUnit(toUnit); setToUnit(fromUnit); setValue(result || value); };
+
+  return (
+    &lt;div style={{ maxWidth: 480, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}&gt;📐 Unit Converter&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', gap: 6, marginBottom: '1.5rem', flexWrap: 'wrap' }}&gt;
+        {Object.keys(CONVERSIONS).map(t =&gt; (
+          &lt;button key={t} onClick={() =&gt; handleTab(t)}
+            style={{ flex: 1, minWidth: 100, padding: '8px', borderRadius: 10, border: '2px solid', fontWeight: 700, cursor: 'pointer', fontSize: '.85rem',
+              borderColor: tab === t ? '#3b82f6' : '#e2e8f0',
+              background: tab === t ? '#dbeafe' : '#f8fafc',
+              color: tab === t ? '#1d4ed8' : '#64748b' }}&gt;
+            {t}
+          &lt;/button&gt;
+        ))}
+      &lt;/div&gt;
+
+      &lt;div style={{ background: '#f8fafc', borderRadius: 16, padding: '1.5rem', border: '1px solid #e2e8f0', marginBottom: '1rem' }}&gt;
+        &lt;div style={{ marginBottom: '1rem' }}&gt;
+          &lt;label style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}&gt;From&lt;/label&gt;
+          &lt;div style={{ display: 'flex', gap: 8 }}&gt;
+            &lt;input type="number" value={value} onChange={e =&gt; setValue(e.target.value)}
+              placeholder="Enter value..."
+              style={{ flex: 1, padding: '10px 14px', borderRadius: 10, border: '2px solid #e2e8f0', fontSize: '1rem', outline: 'none' }} /&gt;
+            &lt;select value={fromUnit} onChange={e =&gt; setFromUnit(e.target.value)}
+              style={{ padding: '10px', borderRadius: 10, border: '2px solid #e2e8f0', fontSize: '.9rem', cursor: 'pointer', background: '#fff' }}&gt;
+              {conv.units.map(u =&gt; &lt;option key={u} value={u}&gt;{u}&lt;/option&gt;)}
+            &lt;/select&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div style={{ textAlign: 'center', marginBottom: '1rem' }}&gt;
+          &lt;button onClick={swap}
+            style={{ padding: '8px 20px', background: '#e2e8f0', border: 'none', borderRadius: 20, fontWeight: 700, cursor: 'pointer', fontSize: '1.1rem' }}&gt;
+            ⇅ Swap
+          &lt;/button&gt;
+        &lt;/div&gt;
+
+        &lt;div style={{ marginBottom: '1rem' }}&gt;
+          &lt;label style={{ fontWeight: 600, display: 'block', marginBottom: 6 }}&gt;To&lt;/label&gt;
+          &lt;div style={{ display: 'flex', gap: 8 }}&gt;
+            &lt;div style={{ flex: 1, padding: '10px 14px', borderRadius: 10, border: '2px solid #e2e8f0', background: '#fff', fontSize: '1rem', color: result ? '#1e293b' : '#94a3b8', minHeight: 44, display: 'flex', alignItems: 'center' }}&gt;
+              {result || '—'}
+            &lt;/div&gt;
+            &lt;select value={toUnit} onChange={e =&gt; setToUnit(e.target.value)}
+              style={{ padding: '10px', borderRadius: 10, border: '2px solid #e2e8f0', fontSize: '.9rem', cursor: 'pointer', background: '#fff' }}&gt;
+              {conv.units.map(u =&gt; &lt;option key={u} value={u}&gt;{u}&lt;/option&gt;)}
+            &lt;/select&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        {result &amp;&amp; (
+          &lt;div style={{ background: '#dbeafe', borderRadius: 10, padding: '12px 16px', textAlign: 'center', marginBottom: '1rem' }}&gt;
+            &lt;span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#1d4ed8' }}&gt;{value} {fromUnit} = {result} {toUnit}&lt;/span&gt;
+          &lt;/div&gt;
+        )}
+
+        &lt;button onClick={addToHistory}
+          style={{ width: '100%', padding: '10px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer' }}&gt;
+          + Save to History
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      {history.length &gt; 0 &amp;&amp; (
+        &lt;div style={{ background: '#f8fafc', borderRadius: 12, padding: '1rem', border: '1px solid #e2e8f0' }}&gt;
+          &lt;div style={{ fontWeight: 700, fontSize: '.85rem', color: '#64748b', marginBottom: 8 }}&gt;Recent Conversions&lt;/div&gt;
+          {history.map((h, i) =&gt; (
+            &lt;div key={i} style={{ padding: '6px 0', borderBottom: i &lt; history.length - 1 ? '1px solid #e2e8f0' : 'none', fontSize: '.9rem', color: '#475569', fontFamily: 'monospace' }}&gt;
+              {h}
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default UnitConverter;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 13 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">13</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Notes App</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">localStorage</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Persistent notes app with localStorage. Create, edit, pin, delete, and search notes. Supports 6 background colors, sort by date or title, and shows character count per note.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>useEffect</code> with <code>localStorage</code> as a side effect syncs React state with the browser's persistent storage. Always <code>JSON.parse()</code> on read and <code>JSON.stringify()</code> on write. The <code>useEffect</code> runs after every render where the dependency changed.
+  </div>
+  <div class="code-block">import { useState, useEffect } from 'react';
+
+const NOTE_COLORS = ['#fef9c3','#dcfce7','#dbeafe','#fce7f3','#f3e8ff','#ffedd5'];
+let nid = Date.now();
+
+const INITIAL = [
+  { id: nid++, title: 'Welcome!', body: 'This is your notes app. Click any note to edit it.', color: '#dbeafe', pinned: true, created: Date.now() },
+  { id: nid++, title: 'Shopping list', body: 'Milk\nEggs\nBread\nCoffee', color: '#dcfce7', pinned: false, created: Date.now() - 1000 },
+];
+
+function NotesApp() {
+  const [notes, setNotes] = useState(() =&gt; {
+    try { const s = localStorage.getItem('rmnotes'); return s ? JSON.parse(s) : INITIAL; } catch { return INITIAL; }
+  });
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState('date');
+  const [editing, setEditing] = useState(null);
+  const [editData, setEditData] = useState({ title:'', body:'', color: NOTE_COLORS[0] });
+  const [creating, setCreating] = useState(false);
+
+  useEffect(() =&gt; { localStorage.setItem('rmnotes', JSON.stringify(notes)); }, [notes]);
+
+  const save = () =&gt; {
+    if (!editData.title.trim() &amp;&amp; !editData.body.trim()) { setEditing(null); setCreating(false); return; }
+    if (creating) {
+      setNotes(n =&gt; [...n, { ...editData, id: Date.now(), pinned: false, created: Date.now() }]);
+      setCreating(false);
+    } else {
+      setNotes(n =&gt; n.map(note =&gt; note.id === editing ? { ...note, ...editData } : note));
+      setEditing(null);
+    }
+  };
+
+  const startEdit = (note) =&gt; { setEditing(note.id); setEditData({ title: note.title, body: note.body, color: note.color }); };
+  const startCreate = () =&gt; { setCreating(true); setEditing(null); setEditData({ title: '', body: '', color: NOTE_COLORS[0] }); };
+  const deleteNote = (id) =&gt; setNotes(n =&gt; n.filter(note =&gt; note.id !== id));
+  const togglePin = (id) =&gt; setNotes(n =&gt; n.map(note =&gt; note.id === id ? { ...note, pinned: !note.pinned } : note));
+
+  const filtered = notes
+    .filter(n =&gt; n.title.toLowerCase().includes(search.toLowerCase()) || n.body.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) =&gt; {
+      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+      return sort === 'title' ? a.title.localeCompare(b.title) : b.created - a.created;
+    });
+
+  const Form = () =&gt; (
+    &lt;div style={{ background: editData.color, borderRadius: 16, padding: '1.5rem', marginBottom: '1.5rem', border: '2px solid rgba(0,0,0,.1)', boxShadow: '0 4px 20px rgba(0,0,0,.15)' }}&gt;
+      &lt;input value={editData.title} onChange={e =&gt; setEditData(d =&gt; ({ ...d, title: e.target.value }))}
+        placeholder="Note title..."
+        style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(0,0,0,.15)', fontSize: '1rem', fontWeight: 700, marginBottom: 10, background: 'rgba(255,255,255,.6)', outline: 'none', boxSizing: 'border-box' }} /&gt;
+      &lt;textarea value={editData.body} onChange={e =&gt; setEditData(d =&gt; ({ ...d, body: e.target.value }))}
+        placeholder="Write your note..."
+        rows={5}
+        style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(0,0,0,.15)', fontSize: '.95rem', lineHeight: 1.6, background: 'rgba(255,255,255,.6)', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }} /&gt;
+      &lt;div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 10, flexWrap: 'wrap' }}&gt;
+        &lt;div style={{ display: 'flex', gap: 6 }}&gt;
+          {NOTE_COLORS.map(c =&gt; (
+            &lt;button key={c} onClick={() =&gt; setEditData(d =&gt; ({ ...d, color: c }))}
+              style={{ width: 24, height: 24, borderRadius: '50%', background: c, border: editData.color === c ? '3px solid #1e293b' : '2px solid rgba(0,0,0,.2)', cursor: 'pointer', padding: 0 }} /&gt;
+          ))}
+        &lt;/div&gt;
+        &lt;span style={{ fontSize: '.8rem', color: '#64748b', marginLeft: 'auto' }}&gt;{editData.body.length} chars&lt;/span&gt;
+        &lt;button onClick={() =&gt; { setEditing(null); setCreating(false); }}
+          style={{ padding: '6px 14px', borderRadius: 8, border: '1px solid #e2e8f0', background: '#fff', fontWeight: 600, cursor: 'pointer' }}&gt;Cancel&lt;/button&gt;
+        &lt;button onClick={save}
+          style={{ padding: '6px 14px', borderRadius: 8, border: 'none', background: '#1e293b', color: '#fff', fontWeight: 700, cursor: 'pointer' }}&gt;Save&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+
+  return (
+    &lt;div style={{ maxWidth: 700, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}&gt;
+        &lt;h1 style={{ margin: 0 }}&gt;📓 Notes App&lt;/h1&gt;
+        &lt;button onClick={startCreate}
+          style={{ padding: '10px 18px', background: '#1e293b', color: '#fff', border: 'none', borderRadius: 12, fontWeight: 700, cursor: 'pointer' }}&gt;
+          + New Note
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ display: 'flex', gap: 8, marginBottom: '1.5rem' }}&gt;
+        &lt;input value={search} onChange={e =&gt; setSearch(e.target.value)} placeholder="Search notes..."
+          style={{ flex: 1, padding: '10px 14px', borderRadius: 10, border: '2px solid #e2e8f0', fontSize: '.95rem', outline: 'none' }} /&gt;
+        &lt;select value={sort} onChange={e =&gt; setSort(e.target.value)}
+          style={{ padding: '10px', borderRadius: 10, border: '2px solid #e2e8f0', fontSize: '.9rem', cursor: 'pointer', background: '#fff' }}&gt;
+          &lt;option value="date"&gt;By Date&lt;/option&gt;
+          &lt;option value="title"&gt;By Title&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/div&gt;
+
+      {creating &amp;&amp; &lt;Form /&gt;}
+
+      &lt;div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: 12 }}&gt;
+        {filtered.map(note =&gt; (
+          editing === note.id ? &lt;div key={note.id} style={{ gridColumn: '1 / -1' }}&gt;&lt;Form /&gt;&lt;/div&gt; : (
+            &lt;div key={note.id}
+              style={{ background: note.color, borderRadius: 14, padding: '1rem', border: '2px solid rgba(0,0,0,.06)', cursor: 'pointer', position: 'relative', transition: 'transform .15s, box-shadow .15s' }}
+              onMouseEnter={e =&gt; { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 6px 20px rgba(0,0,0,.12)'; }}
+              onMouseLeave={e =&gt; { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow=''; }}
+              onClick={() =&gt; startEdit(note)}&gt;
+              &lt;div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}&gt;
+                &lt;span style={{ fontWeight: 700, fontSize: '.95rem', flex: 1, paddingRight: 8 }}&gt;{note.pinned &amp;&amp; '📌 '}{note.title || 'Untitled'}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div style={{ fontSize: '.85rem', color: '#475569', whiteSpace: 'pre-wrap', maxHeight: 80, overflow: 'hidden', marginBottom: 10 }}&gt;{note.body}&lt;/div&gt;
+              &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '.7rem', color: '#94a3b8' }}&gt;
+                &lt;span&gt;{note.body.length} chars&lt;/span&gt;
+                &lt;div style={{ display: 'flex', gap: 4 }}&gt;
+                  &lt;button onClick={e =&gt; { e.stopPropagation(); togglePin(note.id); }}
+                    style={{ padding:'2px 6px',background:'rgba(0,0,0,.1)',border:'none',borderRadius:6,cursor:'pointer',fontSize:'.75rem' }}&gt;
+                    {note.pinned ? '📌' : '📍'}
+                  &lt;/button&gt;
+                  &lt;button onClick={e =&gt; { e.stopPropagation(); deleteNote(note.id); }}
+                    style={{ padding:'2px 6px',background:'rgba(255,0,0,.15)',border:'none',borderRadius:6,cursor:'pointer',fontSize:'.75rem' }}&gt;🗑️&lt;/button&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          )
+        ))}
+      &lt;/div&gt;
+
+      {filtered.length === 0 &amp;&amp; (
+        &lt;div style={{ textAlign:'center',padding:'3rem',color:'#94a3b8',background:'#f8fafc',borderRadius:16,border:'2px dashed #e2e8f0' }}&gt;
+          {search ? `No notes matching "${search}"` : 'No notes yet. Click + New Note to get started.'}
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default NotesApp;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 14 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">14</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Flashcard Study App</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">CSS 3D flip</span>
+        <span class="tech-badge">shuffle</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">3D-flipping flashcards with correct/wrong scoring, shuffle, progress bar, and category filtering. Includes a form to create new cards on the fly.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> CSS 3D transforms via inline <code>style</code> props create the flip effect. The key is <code>transform: rotateY(180deg)</code> on the back face, <code>backfaceVisibility: 'hidden'</code> on both faces, and <code>transformStyle: 'preserve-3d'</code> on the container. React state just toggles the transform class.
+  </div>
+  <div class="code-block">import { useState } from 'react';
+
+const INITIAL_CARDS = [
+  { id:1, front:'What is JSX?', back:'A syntax extension for JavaScript that looks like HTML', category:'React' },
+  { id:2, front:'What is a React Hook?', back:'A function that lets you use state and lifecycle features in function components', category:'React' },
+  { id:3, front:'What does useEffect do?', back:'Runs side effects after render — data fetching, subscriptions, DOM mutations', category:'React' },
+  { id:4, front:'What is the Virtual DOM?', back:'A lightweight in-memory representation of the real DOM used for efficient diffing', category:'React' },
+  { id:5, front:'What is useState?', back:'A Hook that adds local state to a function component', category:'React' },
+  { id:6, front:'What is O(n log n)?', back:'The time complexity of efficient sorting algorithms like mergesort and heapsort', category:'CS' },
+  { id:7, front:'What is a closure?', back:'A function that retains access to variables from its outer scope after that scope has closed', category:'JS' },
+  { id:8, front:'What is event bubbling?', back:'When an event on a child element propagates up through its ancestors in the DOM', category:'JS' },
+];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i &gt; 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function FlashcardApp() {
+  const [cards, setCards] = useState(INITIAL_CARDS);
+  const [deck, setDeck] = useState(INITIAL_CARDS);
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [score, setScore] = useState({ correct: 0, wrong: 0 });
+  const [done, setDone] = useState(false);
+  const [category, setCategory] = useState('All');
+  const [showForm, setShowForm] = useState(false);
+  const [newCard, setNewCard] = useState({ front:'', back:'', category:'React' });
+
+  const categories = ['All', ...new Set(cards.map(c =&gt; c.category))];
+
+  const filteredDeck = category === 'All' ? deck : deck.filter(c =&gt; c.category === category);
+  const card = filteredDeck[idx];
+  const progress = filteredDeck.length ? Math.round((idx / filteredDeck.length) * 100) : 0;
+
+  const flipCard = () =&gt; setFlipped(f =&gt; !f);
+
+  const answer = (correct) =&gt; {
+    setScore(s =&gt; ({ ...s, [correct ? 'correct' : 'wrong']: s[correct ? 'correct' : 'wrong'] + 1 }));
+    setFlipped(false);
+    setTimeout(() =&gt; {
+      if (idx + 1 &gt;= filteredDeck.length) setDone(true);
+      else setIdx(i =&gt; i + 1);
+    }, 300);
+  };
+
+  const restart = () =&gt; { setDeck(shuffle(cards)); setIdx(0); setFlipped(false); setScore({ correct:0, wrong:0 }); setDone(false); };
+
+  const addCard = () =&gt; {
+    if (!newCard.front.trim() || !newCard.back.trim()) return;
+    const card = { ...newCard, id: Date.now() };
+    setCards(c =&gt; [...c, card]);
+    setDeck(d =&gt; [...d, card]);
+    setNewCard({ front:'', back:'', category:'React' });
+    setShowForm(false);
+  };
+
+  return (
+    &lt;div style={{ maxWidth: 560, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}&gt;
+        &lt;h1 style={{ margin: 0 }}&gt;🃏 Flashcards&lt;/h1&gt;
+        &lt;button onClick={() =&gt; setShowForm(s =&gt; !s)}
+          style={{ padding: '8px 14px', background: '#8b5cf6', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer', fontSize: '.85rem' }}&gt;
+          {showForm ? 'Cancel' : '+ New Card'}
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      {showForm &amp;&amp; (
+        &lt;div style={{ background: '#f8fafc', borderRadius: 14, padding: '1.2rem', marginBottom: '1rem', border: '1px solid #e2e8f0' }}&gt;
+          &lt;input value={newCard.front} onChange={e =&gt; setNewCard(c =&gt; ({ ...c, front: e.target.value }))} placeholder="Front (question)"
+            style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid #e2e8f0', marginBottom: 8, fontSize: '.95rem', outline: 'none', boxSizing: 'border-box' }} /&gt;
+          &lt;textarea value={newCard.back} onChange={e =&gt; setNewCard(c =&gt; ({ ...c, back: e.target.value }))} placeholder="Back (answer)" rows={3}
+            style={{ width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid #e2e8f0', marginBottom: 8, fontSize: '.95rem', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }} /&gt;
+          &lt;div style={{ display: 'flex', gap: 8 }}&gt;
+            &lt;input value={newCard.category} onChange={e =&gt; setNewCard(c =&gt; ({ ...c, category: e.target.value }))} placeholder="Category"
+              style={{ flex: 1, padding: '8px 12px', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '.95rem', outline: 'none' }} /&gt;
+            &lt;button onClick={addCard}
+              style={{ padding: '8px 18px', background: '#8b5cf6', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer' }}&gt;Add&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+
+      &lt;div style={{ display: 'flex', gap: 6, marginBottom: '1rem', flexWrap: 'wrap' }}&gt;
+        {categories.map(c =&gt; (
+          &lt;button key={c} onClick={() =&gt; { setCategory(c); setIdx(0); setFlipped(false); setDone(false); }}
+            style={{ padding: '5px 12px', borderRadius: 20, border: '2px solid', fontWeight: 700, cursor: 'pointer', fontSize: '.8rem',
+              borderColor: category === c ? '#8b5cf6' : '#e2e8f0', background: category === c ? '#ede9fe' : '#f8fafc', color: category === c ? '#6d28d9' : '#64748b' }}&gt;
+            {c}
+          &lt;/button&gt;
+        ))}
+        &lt;button onClick={restart} style={{ marginLeft: 'auto', padding: '5px 12px', borderRadius: 20, border: '2px solid #e2e8f0', background: '#f8fafc', color: '#475569', fontWeight: 700, cursor: 'pointer', fontSize: '.8rem' }}&gt;
+          🔀 Shuffle
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ marginBottom: '1rem' }}&gt;
+        &lt;div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '.8rem', color: '#64748b', marginBottom: 4 }}&gt;
+          &lt;span&gt;Card {Math.min(idx + 1, filteredDeck.length)} / {filteredDeck.length}&lt;/span&gt;
+          &lt;span&gt;✅ {score.correct} &nbsp; ❌ {score.wrong}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div style={{ height: 6, background: '#e2e8f0', borderRadius: 3 }}&gt;
+          &lt;div style={{ height: '100%', width: `${progress}%`, background: '#8b5cf6', borderRadius: 3, transition: 'width .3s' }} /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      {done ? (
+        &lt;div style={{ textAlign: 'center', background: 'linear-gradient(135deg,#1e1b4b,#312e81)', color: '#fff', borderRadius: 20, padding: '3rem' }}&gt;
+          &lt;div style={{ fontSize: '3rem', marginBottom: '1rem' }}&gt;🎉&lt;/div&gt;
+          &lt;h2&gt;Deck Complete!&lt;/h2&gt;
+          &lt;p style={{ color: '#a5b4fc' }}&gt;{score.correct} correct, {score.wrong} wrong ({Math.round((score.correct / (score.correct + score.wrong)) * 100)}%)&lt;/p&gt;
+          &lt;button onClick={restart} style={{ padding: '12px 28px', background: '#8b5cf6', color: '#fff', border: 'none', borderRadius: 12, fontWeight: 700, cursor: 'pointer', fontSize: '1rem' }}&gt;Restart&lt;/button&gt;
+        &lt;/div&gt;
+      ) : card ? (
+        &lt;div&gt;
+          &lt;div onClick={flipCard} style={{ perspective: 1000, cursor: 'pointer', marginBottom: '1rem', height: 220 }}&gt;
+            &lt;div style={{ position: 'relative', width: '100%', height: '100%', transformStyle: 'preserve-3d', transform: flipped ? 'rotateY(180deg)' : 'rotateY(0)', transition: 'transform .5s' }}&gt;
+              &lt;div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', background: 'linear-gradient(135deg,#4f46e5,#7c3aed)', borderRadius: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', color: '#fff' }}&gt;
+                &lt;div style={{ fontSize: '.8rem', opacity: .7, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 2 }}&gt;{card.category} · Tap to flip&lt;/div&gt;
+                &lt;div style={{ fontSize: '1.3rem', fontWeight: 700, textAlign: 'center', lineHeight: 1.5 }}&gt;{card.front}&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', background: '#f8fafc', borderRadius: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', border: '2px solid #e2e8f0' }}&gt;
+                &lt;div style={{ fontSize: '.8rem', color: '#94a3b8', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 2 }}&gt;Answer&lt;/div&gt;
+                &lt;div style={{ fontSize: '1.1rem', color: '#1e293b', textAlign: 'center', lineHeight: 1.6 }}&gt;{card.back}&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          {flipped &amp;&amp; (
+            &lt;div style={{ display: 'flex', gap: 10 }}&gt;
+              &lt;button onClick={() =&gt; answer(false)} style={{ flex: 1, padding: '14px', background: '#fee2e2', color: '#991b1b', border: 'none', borderRadius: 12, fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}&gt;❌ Wrong&lt;/button&gt;
+              &lt;button onClick={() =&gt; answer(true)} style={{ flex: 1, padding: '14px', background: '#dcfce7', color: '#166534', border: 'none', borderRadius: 12, fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}&gt;✅ Correct&lt;/button&gt;
+            &lt;/div&gt;
+          )}
+        &lt;/div&gt;
+      ) : &lt;div style={{ textAlign:'center',padding:'2rem',color:'#94a3b8' }}&gt;No cards in this category.&lt;/div&gt;}
+    &lt;/div&gt;
+  );
+}
+
+export default FlashcardApp;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 15 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">15</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Recipe Finder</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">TheMealDB API</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Fetches recipes from TheMealDB free API by category. Displays recipe cards with thumbnails. Clicking a card opens a modal with full ingredients and instructions.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> Lifting state up means moving shared state to the nearest common ancestor. The parent manages <code>selectedRecipe</code> and passes it down as props. A modal is just a conditionally rendered overlay — <code>{selectedRecipe &amp;&amp; &lt;Modal /&gt;}</code> — no library needed.
+  </div>
+  <div class="code-block">import { useState, useEffect } from 'react';
+
+const CATEGORIES = ['Seafood','Chicken','Beef','Vegetarian','Dessert','Pasta','Lamb','Side'];
+
+function RecipeFinder() {
+  const [category, setCategory] = useState('Chicken');
+  const [meals, setMeals] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState(null);
+  const [modalLoading, setModalLoading] = useState(false);
+
+  useEffect(() =&gt; {
+    setLoading(true);
+    setMeals([]);
+    fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)
+      .then(r =&gt; r.json())
+      .then(d =&gt; setMeals(d.meals || []))
+      .catch(() =&gt; setMeals([]))
+      .finally(() =&gt; setLoading(false));
+  }, [category]);
+
+  const openMeal = async (id) =&gt; {
+    setModal({ loading: true });
+    setModalLoading(true);
+    try {
+      const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+      const data = await res.json();
+      setModal(data.meals[0]);
+    } catch { setModal(null); }
+    finally { setModalLoading(false); }
+  };
+
+  const getIngredients = (meal) =&gt; {
+    const items = [];
+    for (let i = 1; i &lt;= 20; i++) {
+      const ing = meal[`strIngredient${i}`];
+      const measure = meal[`strMeasure${i}`];
+      if (ing &amp;&amp; ing.trim()) items.push(`${measure?.trim() || ''} ${ing.trim()}`.trim());
+    }
+    return items;
+  };
+
+  return (
+    &lt;div style={{ maxWidth: 900, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}&gt;🍽️ Recipe Finder&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: '1.5rem', justifyContent: 'center' }}&gt;
+        {CATEGORIES.map(c =&gt; (
+          &lt;button key={c} onClick={() =&gt; setCategory(c)}
+            style={{ padding: '8px 16px', borderRadius: 20, border: '2px solid', fontWeight: 700, cursor: 'pointer', fontSize: '.85rem', transition: 'all .2s',
+              borderColor: category === c ? '#f59e0b' : '#e2e8f0',
+              background: category === c ? '#fef3c7' : '#f8fafc',
+              color: category === c ? '#92400e' : '#64748b' }}&gt;
+            {c}
+          &lt;/button&gt;
+        ))}
+      &lt;/div&gt;
+
+      {loading &amp;&amp; (
+        &lt;div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(180px,1fr))', gap: 16 }}&gt;
+          {Array(8).fill(0).map((_, i) =&gt; (
+            &lt;div key={i} style={{ borderRadius: 14, overflow: 'hidden', background: '#f1f5f9', height: 220 }}&gt;
+              &lt;div style={{ width: '100%', height: 150, background: '#e2e8f0' }} /&gt;
+              &lt;div style={{ padding: '10px' }}&gt;&lt;div style={{ height: 14, background: '#e2e8f0', borderRadius: 6, marginBottom: 6 }} /&gt;&lt;/div&gt;
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      )}
+
+      {!loading &amp;&amp; (
+        &lt;div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(180px,1fr))', gap: 16 }}&gt;
+          {meals.map(meal =&gt; (
+            &lt;div key={meal.idMeal} onClick={() =&gt; openMeal(meal.idMeal)}
+              style={{ borderRadius: 14, overflow: 'hidden', background: '#fff', border: '1px solid #e2e8f0', cursor: 'pointer', transition: 'transform .2s, box-shadow .2s', boxShadow: '0 2px 8px rgba(0,0,0,.06)' }}
+              onMouseEnter={e =&gt; { e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'; }}
+              onMouseLeave={e =&gt; { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow='0 2px 8px rgba(0,0,0,.06)'; }}&gt;
+              &lt;img src={meal.strMealThumb} alt={meal.strMeal} style={{ width: '100%', height: 150, objectFit: 'cover', display: 'block' }} loading="lazy" /&gt;
+              &lt;div style={{ padding: '10px 12px' }}&gt;
+                &lt;div style={{ fontWeight: 700, fontSize: '.9rem', color: '#1e293b', lineHeight: 1.3 }}&gt;{meal.strMeal}&lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      )}
+
+      {modal &amp;&amp; (
+        &lt;div onClick={() =&gt; setModal(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}&gt;
+          &lt;div onClick={e =&gt; e.stopPropagation()} style={{ background: '#fff', borderRadius: 20, maxWidth: 700, width: '100%', maxHeight: '90vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,.3)' }}&gt;
+            {modalLoading ? (
+              &lt;div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}&gt;Loading recipe...&lt;/div&gt;
+            ) : (
+              &lt;div&gt;
+                &lt;div style={{ position: 'relative' }}&gt;
+                  &lt;img src={modal.strMealThumb} alt={modal.strMeal} style={{ width: '100%', height: 280, objectFit: 'cover', borderRadius: '20px 20px 0 0' }} /&gt;
+                  &lt;button onClick={() =&gt; setModal(null)} style={{ position: 'absolute', top: 12, right: 12, width: 36, height: 36, borderRadius: '50%', background: 'rgba(0,0,0,.6)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}&gt;×&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div style={{ padding: '1.5rem' }}&gt;
+                  &lt;h2 style={{ marginBottom: '.5rem' }}&gt;{modal.strMeal}&lt;/h2&gt;
+                  &lt;div style={{ display: 'flex', gap: 8, marginBottom: '1rem', flexWrap: 'wrap' }}&gt;
+                    {modal.strCategory &amp;&amp; &lt;span style={{ background: '#fef3c7', color: '#92400e', borderRadius: 20, padding: '3px 10px', fontSize: '.8rem', fontWeight: 700 }}&gt;{modal.strCategory}&lt;/span&gt;}
+                    {modal.strArea &amp;&amp; &lt;span style={{ background: '#dbeafe', color: '#1d4ed8', borderRadius: 20, padding: '3px 10px', fontSize: '.8rem', fontWeight: 700 }}&gt;{modal.strArea}&lt;/span&gt;}
+                  &lt;/div&gt;
+                  &lt;h4 style={{ marginBottom: '0.5rem' }}&gt;Ingredients&lt;/h4&gt;
+                  &lt;div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}&gt;
+                    {getIngredients(modal).map((ing, i) =&gt; (
+                      &lt;span key={i} style={{ background: '#f1f5f9', padding: '4px 10px', borderRadius: 20, fontSize: '.8rem', color: '#475569' }}&gt;{ing}&lt;/span&gt;
+                    ))}
+                  &lt;/div&gt;
+                  &lt;h4 style={{ marginBottom: '0.5rem' }}&gt;Instructions&lt;/h4&gt;
+                  &lt;div style={{ fontSize: '.9rem', color: '#475569', lineHeight: 1.7, whiteSpace: 'pre-line' }}&gt;
+                    {modal.strInstructions?.slice(0, 800)}{modal.strInstructions?.length &gt; 800 ? '...' : ''}
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            )}
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default RecipeFinder;</div>
+  <div class="tip-box mt-3"><strong>How to run:</strong> npx create-react-app myapp &amp;&amp; cd myapp &amp;&amp; replace src/App.js with the code above &amp;&amp; npm start — uses the free TheMealDB API, no key needed.</div>
+</div>
+
+<!-- PROJECT 16 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">16</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Typing Speed Test</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">WPM</span>
+        <span class="tech-badge">localStorage</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Typing speed test that starts the timer on first keypress. Each character is rendered individually with green/red/cursor coloring. Calculates WPM and accuracy, stores your high score in localStorage.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>useRef</code> is ideal for tracking mutable values like timer start times that shouldn't trigger re-renders. Comparing typed characters against the target string character by character lets you calculate both accuracy and highlight errors in real time.
+  </div>
+  <div class="code-block">import { useState, useEffect, useRef } from 'react';
+
+const PARAGRAPHS = [
+  "The quick brown fox jumps over the lazy dog near the riverbank on a warm summer afternoon.",
+  "React is a JavaScript library for building user interfaces using reusable components and a virtual DOM.",
+  "Programming requires patience, creativity, and the ability to break complex problems into smaller manageable pieces.",
+  "The only way to learn a new programming language is by writing programs in it and making mistakes.",
+  "Good code is like good prose — clear, concise, and easy to understand by anyone who reads it.",
+];
+
+function TypingTest() {
+  const [paraIdx, setParaIdx] = useState(0);
+  const [typed, setTyped] = useState('');
+  const [started, setStarted] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const [highScore, setHighScore] = useState(() =&gt; Number(localStorage.getItem('typingHS') || 0));
+  const intervalRef = useRef(null);
+  const inputRef = useRef(null);
+
+  const target = PARAGRAPHS[paraIdx];
+
+  useEffect(() =&gt; {
+    if (started &amp;&amp; !finished) {
+      intervalRef.current = setInterval(() =&gt; setElapsed(e =&gt; e + 100), 100);
+    } else {
+      clearInterval(intervalRef.current);
+    }
+    return () =&gt; clearInterval(intervalRef.current);
+  }, [started, finished]);
+
+  useEffect(() =&gt; {
+    if (typed === target &amp;&amp; !finished) {
+      setFinished(true);
+      const wpm = calcWPM();
+      if (wpm &gt; highScore) { setHighScore(wpm); localStorage.setItem('typingHS', wpm); }
+    }
+  }, [typed]);
+
+  const calcWPM = () =&gt; {
+    const correctChars = typed.split('').filter((c, i) =&gt; c === target[i]).length;
+    const mins = elapsed / 60000 || 0.001;
+    return Math.round((correctChars / 5) / mins);
+  };
+
+  const calcAccuracy = () =&gt; {
+    if (!typed.length) return 100;
+    const correct = typed.split('').filter((c, i) =&gt; c === target[i]).length;
+    return Math.round((correct / typed.length) * 100);
+  };
+
+  const handleChange = (e) =&gt; {
+    const val = e.target.value;
+    if (!started &amp;&amp; val.length === 1) setStarted(true);
+    if (val.length &lt;= target.length) setTyped(val);
+  };
+
+  const restart = () =&gt; {
+    setParaIdx(i =&gt; (i + 1) % PARAGRAPHS.length);
+    setTyped(''); setStarted(false); setFinished(false); setElapsed(0);
+    setTimeout(() =&gt; inputRef.current?.focus(), 50);
+  };
+
+  const secs = Math.floor(elapsed / 1000);
+  const wpm = started ? calcWPM() : 0;
+  const accuracy = calcAccuracy();
+
+  return (
+    &lt;div style={{ maxWidth: 700, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}&gt;
+        &lt;h1 style={{ margin: 0 }}&gt;⌨️ Typing Speed Test&lt;/h1&gt;
+        &lt;span style={{ background: '#fef3c7', color: '#92400e', borderRadius: 20, padding: '4px 12px', fontWeight: 700, fontSize: '.85rem' }}&gt;🏆 Best: {highScore} WPM&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ display: 'flex', gap: 20, marginBottom: '1.5rem', justifyContent: 'center' }}&gt;
+        {[['⏱️', secs + 's', 'Time'], ['✍️', wpm + ' WPM', 'Speed'], ['🎯', accuracy + '%', 'Accuracy'], ['✅', typed.split('').filter((c,i)=&gt;c===target[i]).length, 'Correct']].map(([icon, val, label]) =&gt; (
+          &lt;div key={label} style={{ textAlign: 'center', padding: '12px 20px', background: '#f8fafc', borderRadius: 12, border: '1px solid #e2e8f0', minWidth: 80 }}&gt;
+            &lt;div style={{ fontSize: '1.2rem' }}&gt;{icon}&lt;/div&gt;
+            &lt;div style={{ fontWeight: 800, fontSize: '1.2rem' }}&gt;{val}&lt;/div&gt;
+            &lt;div style={{ fontSize: '.7rem', color: '#64748b' }}&gt;{label}&lt;/div&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+
+      &lt;div style={{ background: '#0d1117', borderRadius: 16, padding: '1.5rem', marginBottom: '1rem', lineHeight: 2.2, fontSize: '1.05rem', fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', letterSpacing: '.02em' }}&gt;
+        {target.split('').map((char, i) =&gt; {
+          let color = '#546e7a';
+          let bg = 'transparent';
+          if (i &lt; typed.length) {
+            color = typed[i] === char ? '#22c55e' : '#ef4444';
+            if (typed[i] !== char) bg = 'rgba(239,68,68,.15)';
+          } else if (i === typed.length) {
+            bg = 'rgba(59,130,246,.3)';
+            color = '#93c5fd';
+          }
+          return (
+            &lt;span key={i} style={{ color, background: bg, borderRadius: i === typed.length ? 2 : 0, transition: 'color .05s' }}&gt;
+              {char}
+            &lt;/span&gt;
+          );
+        })}
+      &lt;/div&gt;
+
+      {!finished ? (
+        &lt;textarea ref={inputRef} value={typed} onChange={handleChange}
+          placeholder="Click here and start typing..."
+          autoFocus
+          style={{ width: '100%', padding: '12px 16px', borderRadius: 12, border: '2px solid #e2e8f0', fontSize: '1rem', fontFamily: 'JetBrains Mono, monospace', lineHeight: 1.7, resize: 'none', outline: 'none', height: 80, boxSizing: 'border-box', background: started ? '#fff' : '#f8fafc' }} /&gt;
+      ) : (
+        &lt;div style={{ textAlign: 'center', background: 'linear-gradient(135deg,#f0fdf4,#dcfce7)', borderRadius: 16, padding: '2rem', border: '2px solid #86efac' }}&gt;
+          &lt;div style={{ fontSize: '3rem', marginBottom: '.5rem' }}&gt;🎉&lt;/div&gt;
+          &lt;h2 style={{ color: '#166534' }}&gt;{wpm} WPM — {accuracy}% accuracy&lt;/h2&gt;
+          {wpm === highScore &amp;&amp; &lt;p style={{ color: '#16a34a', fontWeight: 700 }}&gt;🏆 New High Score!&lt;/p&gt;}
+          &lt;button onClick={restart} style={{ padding: '12px 28px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: 12, fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}&gt;Try Next Paragraph →&lt;/button&gt;
+        &lt;/div&gt;
+      )}
+
+      &lt;div style={{ textAlign: 'center', marginTop: '1rem' }}&gt;
+        &lt;button onClick={restart} style={{ padding: '8px 20px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 10, color: '#64748b', fontWeight: 600, cursor: 'pointer' }}&gt;🔄 New Paragraph&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default TypingTest;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 17 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">17</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Memory Card Game</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">CSS 3D flip</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Emoji pair matching game with 3D card flip animations. Non-matching cards hide after 600ms. Tracks move count and elapsed time. Win detection with score display.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> Shuffling arrays with <code>.sort(() =&gt; Math.random() - 0.5)</code> combined with duplicated items creates a matching game. A two-step reveal process (first click, second click → check match) requires carefully managing multiple pieces of state: flipped cards, matched pairs, and move count.
+  </div>
+  <div class="code-block">import { useState, useEffect, useRef } from 'react';
+
+const EMOJIS = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼'];
+
+function createDeck() {
+  const pairs = [...EMOJIS, ...EMOJIS].map((emoji, i) =&gt; ({ id: i, emoji, matched: false, flipped: false }));
+  // Fisher-Yates shuffle
+  for (let i = pairs.length - 1; i &gt; 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+  }
+  return pairs;
+}
+
+function MemoryGame() {
+  const [cards, setCards] = useState(createDeck);
+  const [selected, setSelected] = useState([]);
+  const [moves, setMoves] = useState(0);
+  const [time, setTime] = useState(0);
+  const [running, setRunning] = useState(false);
+  const [won, setWon] = useState(false);
+  const [locked, setLocked] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() =&gt; {
+    if (running) {
+      timerRef.current = setInterval(() =&gt; setTime(t =&gt; t + 1), 1000);
+    }
+    return () =&gt; clearInterval(timerRef.current);
+  }, [running]);
+
+  useEffect(() =&gt; {
+    if (selected.length === 2) {
+      setMoves(m =&gt; m + 1);
+      const [a, b] = selected;
+      if (cards[a].emoji === cards[b].emoji) {
+        setCards(prev =&gt; prev.map((c, i) =&gt; i === a || i === b ? { ...c, matched: true } : c));
+        setSelected([]);
+        setCards(prev =&gt; {
+          const allMatched = prev.every(c =&gt; c.matched || cards[a].emoji === c.emoji);
+          if (allMatched) { clearInterval(timerRef.current); setRunning(false); setWon(true); }
+          return prev;
+        });
+      } else {
+        setLocked(true);
+        setTimeout(() =&gt; {
+          setCards(prev =&gt; prev.map((c, i) =&gt; i === a || i === b ? { ...c, flipped: false } : c));
+          setSelected([]);
+          setLocked(false);
+        }, 600);
+      }
+    }
+  }, [selected]);
+
+  // Check win separately
+  useEffect(() =&gt; {
+    if (cards.every(c =&gt; c.matched)) {
+      clearInterval(timerRef.current);
+      setRunning(false);
+      setWon(true);
+    }
+  }, [cards]);
+
+  const flipCard = (idx) =&gt; {
+    if (locked || cards[idx].matched || cards[idx].flipped || selected.length === 2) return;
+    if (!running) setRunning(true);
+    setCards(prev =&gt; prev.map((c, i) =&gt; i === idx ? { ...c, flipped: true } : c));
+    setSelected(prev =&gt; [...prev, idx]);
+  };
+
+  const restart = () =&gt; {
+    clearInterval(timerRef.current);
+    setCards(createDeck()); setSelected([]); setMoves(0); setTime(0); setRunning(false); setWon(false); setLocked(false);
+  };
+
+  const matched = cards.filter(c =&gt; c.matched).length / 2;
+  const mm = String(Math.floor(time / 60)).padStart(2,'0');
+  const ss = String(time % 60).padStart(2,'0');
+
+  return (
+    &lt;div style={{ maxWidth: 520, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem', textAlign: 'center' }}&gt;
+      &lt;h1 style={{ marginBottom: '1rem' }}&gt;🧠 Memory Game&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginBottom: '1.5rem' }}&gt;
+        {[['🎯','Moves',moves],['⏱️','Time',`${mm}:${ss}`],['✅','Pairs',`${matched}/${EMOJIS.length}`]].map(([icon,label,val]) =&gt; (
+          &lt;div key={label} style={{ textAlign: 'center', padding: '10px 20px', background: '#f8fafc', borderRadius: 12, border: '1px solid #e2e8f0', minWidth: 80 }}&gt;
+            &lt;div&gt;{icon}&lt;/div&gt;
+            &lt;div style={{ fontWeight: 800, fontSize: '1.2rem' }}&gt;{val}&lt;/div&gt;
+            &lt;div style={{ fontSize: '.7rem', color: '#64748b' }}&gt;{label}&lt;/div&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+
+      {won &amp;&amp; (
+        &lt;div style={{ background: 'linear-gradient(135deg,#f0fdf4,#dcfce7)', borderRadius: 16, padding: '1.5rem', marginBottom: '1.5rem', border: '2px solid #86efac' }}&gt;
+          &lt;div style={{ fontSize: '2.5rem' }}&gt;🎉&lt;/div&gt;
+          &lt;h3 style={{ color: '#166534', margin: '.5rem 0' }}&gt;You won in {moves} moves!&lt;/h3&gt;
+          &lt;p style={{ color: '#16a34a', margin: 0 }}&gt;Time: {mm}:{ss}&lt;/p&gt;
+        &lt;/div&gt;
+      )}
+
+      &lt;div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: '1.5rem' }}&gt;
+        {cards.map((card, i) =&gt; (
+          &lt;div key={card.id} onClick={() =&gt; flipCard(i)}
+            style={{ perspective: 600, cursor: card.matched || card.flipped ? 'default' : 'pointer', aspectRatio: '1', userSelect: 'none' }}&gt;
+            &lt;div style={{ position: 'relative', width: '100%', height: '100%', transformStyle: 'preserve-3d', transform: card.flipped || card.matched ? 'rotateY(180deg)' : 'rotateY(0)', transition: 'transform .4s' }}&gt;
+              &lt;div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', background: 'linear-gradient(135deg,#4f46e5,#7c3aed)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}&gt;
+                ❓
+              &lt;/div&gt;
+              &lt;div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', background: card.matched ? '#dcfce7' : '#fff', borderRadius: 12, border: `2px solid ${card.matched ? '#86efac' : '#e2e8f0'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}&gt;
+                {card.emoji}
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+
+      &lt;button onClick={restart}
+        style={{ padding: '12px 32px', background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 12, fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}&gt;
+        🔄 New Game
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default MemoryGame;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 18 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">18</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Budget Tracker</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useMemo</span>
+        <span class="tech-badge">SVG chart</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Track income and expenses by category. Shows balance, totals, a category breakdown, and an inline SVG bar chart. Filter entries by month with a dropdown.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>Array.reduce()</code> is the right tool for computing running totals from a list of transactions. Categorizing items and using <code>.filter()</code> before <code>.reduce()</code> lets you compute per-category subtotals — a fundamental functional programming pattern in React.
+  </div>
+  <div class="code-block">import { useState, useMemo } from 'react';
+
+const CATEGORIES = ['Food','Transport','Housing','Entertainment','Health','Salary','Freelance','Other'];
+const CAT_COLORS = { Food:'#f59e0b',Transport:'#3b82f6',Housing:'#8b5cf6',Entertainment:'#ec4899',Health:'#22c55e',Salary:'#10b981',Freelance:'#06b6d4',Other:'#64748b' };
+let eid = 1;
+
+const SEED = [
+  { id:eid++, desc:'Monthly Salary', amount:3500, type:'income', category:'Salary', date:'2024-01-01' },
+  { id:eid++, desc:'Rent', amount:1200, type:'expense', category:'Housing', date:'2024-01-02' },
+  { id:eid++, desc:'Groceries', amount:180, type:'expense', category:'Food', date:'2024-01-05' },
+  { id:eid++, desc:'Freelance Project', amount:800, type:'income', category:'Freelance', date:'2024-01-10' },
+  { id:eid++, desc:'Bus Pass', amount:45, type:'expense', category:'Transport', date:'2024-01-12' },
+  { id:eid++, desc:'Gym', amount:30, type:'expense', category:'Health', date:'2024-01-15' },
+];
+
+function BudgetTracker() {
+  const [entries, setEntries] = useState(SEED);
+  const [form, setForm] = useState({ desc:'', amount:'', type:'expense', category:'Food', date: new Date().toISOString().split('T')[0] });
+  const [monthFilter, setMonthFilter] = useState('all');
+
+  const months = useMemo(() =&gt; {
+    const set = new Set(entries.map(e =&gt; e.date.slice(0, 7)));
+    return Array.from(set).sort().reverse();
+  }, [entries]);
+
+  const filtered = useMemo(() =&gt;
+    monthFilter === 'all' ? entries : entries.filter(e =&gt; e.date.startsWith(monthFilter)),
+  [entries, monthFilter]);
+
+  const totals = useMemo(() =&gt; ({
+    income: filtered.filter(e =&gt; e.type === 'income').reduce((s, e) =&gt; s + e.amount, 0),
+    expense: filtered.filter(e =&gt; e.type === 'expense').reduce((s, e) =&gt; s + e.amount, 0),
+  }), [filtered]);
+
+  const balance = totals.income - totals.expense;
+
+  const catBreakdown = useMemo(() =&gt; {
+    const map = {};
+    filtered.filter(e =&gt; e.type === 'expense').forEach(e =&gt; { map[e.category] = (map[e.category] || 0) + e.amount; });
+    return Object.entries(map).sort((a, b) =&gt; b[1] - a[1]);
+  }, [filtered]);
+
+  const maxCat = catBreakdown[0]?.[1] || 1;
+
+  const add = () =&gt; {
+    const amt = parseFloat(form.amount);
+    if (!form.desc.trim() || isNaN(amt) || amt &lt;= 0) return;
+    setEntries(e =&gt; [...e, { ...form, id: eid++, amount: amt }]);
+    setForm(f =&gt; ({ ...f, desc: '', amount: '' }));
+  };
+
+  const remove = (id) =&gt; setEntries(e =&gt; e.filter(entry =&gt; entry.id !== id));
+
+  return (
+    &lt;div style={{ maxWidth: 700, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}&gt;💰 Budget Tracker&lt;/h1&gt;
+
+      &lt;div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: '1.5rem' }}&gt;
+        {[['💵','Income',totals.income,'#dcfce7','#166534'],['📉','Expenses',totals.expense,'#fee2e2','#991b1b'],['💳','Balance',balance, balance &gt;= 0 ? '#dbeafe':'#fee2e2', balance &gt;= 0 ? '#1d4ed8':'#991b1b']].map(([icon,label,val,bg,color]) =&gt; (
+          &lt;div key={label} style={{ background: bg, borderRadius: 14, padding: '1.2rem', textAlign: 'center' }}&gt;
+            &lt;div style={{ fontSize: '1.5rem' }}&gt;{icon}&lt;/div&gt;
+            &lt;div style={{ fontWeight: 800, fontSize: '1.4rem', color }}&gt;${Math.abs(val).toFixed(2)}&lt;/div&gt;
+            &lt;div style={{ fontSize: '.75rem', color, opacity: .8 }}&gt;{label}&lt;/div&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+
+      &lt;div style={{ background: '#f8fafc', borderRadius: 16, padding: '1.2rem', marginBottom: '1.5rem', border: '1px solid #e2e8f0' }}&gt;
+        &lt;div style={{ display: 'grid', gridTemplateColumns: '1fr 100px 1fr 1fr auto', gap: 8, alignItems: 'end', flexWrap: 'wrap' }}&gt;
+          &lt;input value={form.desc} onChange={e =&gt; setForm(f =&gt; ({ ...f, desc: e.target.value }))} placeholder="Description"
+            style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '.9rem', outline: 'none' }} /&gt;
+          &lt;input type="number" value={form.amount} onChange={e =&gt; setForm(f =&gt; ({ ...f, amount: e.target.value }))} placeholder="Amount"
+            style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '.9rem', outline: 'none' }} /&gt;
+          &lt;select value={form.category} onChange={e =&gt; setForm(f =&gt; ({ ...f, category: e.target.value }))}
+            style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '.9rem', background: '#fff', cursor: 'pointer' }}&gt;
+            {CATEGORIES.map(c =&gt; &lt;option key={c}&gt;{c}&lt;/option&gt;)}
+          &lt;/select&gt;
+          &lt;select value={form.type} onChange={e =&gt; setForm(f =&gt; ({ ...f, type: e.target.value }))}
+            style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '.9rem', background: '#fff', cursor: 'pointer' }}&gt;
+            &lt;option value="expense"&gt;Expense&lt;/option&gt;
+            &lt;option value="income"&gt;Income&lt;/option&gt;
+          &lt;/select&gt;
+          &lt;button onClick={add} style={{ padding: '9px 16px', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer' }}&gt;Add&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      {catBreakdown.length &gt; 0 &amp;&amp; (
+        &lt;div style={{ background: '#f8fafc', borderRadius: 14, padding: '1.2rem', marginBottom: '1.5rem', border: '1px solid #e2e8f0' }}&gt;
+          &lt;div style={{ fontWeight: 700, marginBottom: 10, color: '#475569' }}&gt;Expense Breakdown&lt;/div&gt;
+          {catBreakdown.map(([cat, amt]) =&gt; (
+            &lt;div key={cat} style={{ marginBottom: 8 }}&gt;
+              &lt;div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '.85rem', fontWeight: 600, marginBottom: 3 }}&gt;
+                &lt;span&gt;{cat}&lt;/span&gt;&lt;span&gt;${amt.toFixed(2)}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;svg width="100%" height="12"&gt;
+                &lt;rect x="0" y="0" width="100%" height="12" rx="6" fill="#e2e8f0" /&gt;
+                &lt;rect x="0" y="0" width={`${(amt / maxCat) * 100}%`} height="12" rx="6" fill={CAT_COLORS[cat] || '#64748b'} /&gt;
+              &lt;/svg&gt;
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      )}
+
+      &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}&gt;
+        &lt;div style={{ fontWeight: 700, color: '#475569' }}&gt;Transactions ({filtered.length})&lt;/div&gt;
+        &lt;select value={monthFilter} onChange={e =&gt; setMonthFilter(e.target.value)}
+          style={{ padding: '6px 10px', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '.85rem', background: '#fff', cursor: 'pointer' }}&gt;
+          &lt;option value="all"&gt;All Months&lt;/option&gt;
+          {months.map(m =&gt; &lt;option key={m} value={m}&gt;{m}&lt;/option&gt;)}
+        &lt;/select&gt;
+      &lt;/div&gt;
+
+      {[...filtered].reverse().map(e =&gt; (
+        &lt;div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', marginBottom: 6, background: '#fff', borderRadius: 12, border: `2px solid ${e.type === 'income' ? '#dcfce7' : '#fee2e2'}` }}&gt;
+          &lt;span style={{ width: 10, height: 10, borderRadius: '50%', background: CAT_COLORS[e.category] || '#ccc', flexShrink: 0 }} /&gt;
+          &lt;div style={{ flex: 1 }}&gt;
+            &lt;div style={{ fontWeight: 600, fontSize: '.9rem' }}&gt;{e.desc}&lt;/div&gt;
+            &lt;div style={{ fontSize: '.75rem', color: '#94a3b8' }}&gt;{e.category} · {e.date}&lt;/div&gt;
+          &lt;/div&gt;
+          &lt;span style={{ fontWeight: 800, color: e.type === 'income' ? '#22c55e' : '#ef4444', fontSize: '1rem' }}&gt;
+            {e.type === 'income' ? '+' : '-'}${e.amount.toFixed(2)}
+          &lt;/span&gt;
+          &lt;button onClick={() =&gt; remove(e.id)} style={{ padding: '3px 8px', background: '#fee2e2', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: '.8rem' }}&gt;🗑️&lt;/button&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+export default BudgetTracker;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 19 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">19</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Image Gallery</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">lightbox</span>
+        <span class="tech-badge">CSS grid</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">12-image gallery with CSS grid layout and a full lightbox modal. Supports prev/next navigation, zoom toggle on click, and a download link button per image.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>useEffect</code> for keyboard event listeners requires the <code>addEventListener</code>/<code>removeEventListener</code> cleanup pattern. The lightbox state (open/closed + current index) lives in the parent so arrow navigation and close actions can update it from any trigger — keyboard or click.
+  </div>
+  <div class="code-block">import { useState, useEffect } from 'react';
+
+const IMAGES = [
+  { id:10,  title:'Mountains at Sunrise', tags:['nature','mountains'] },
+  { id:20,  title:'City Skyline',         tags:['urban','architecture'] },
+  { id:30,  title:'Forest Path',          tags:['nature','forest'] },
+  { id:40,  title:'Ocean Waves',          tags:['nature','ocean'] },
+  { id:50,  title:'Desert Dunes',         tags:['nature','desert'] },
+  { id:60,  title:'Old Town Street',      tags:['urban','street'] },
+  { id:70,  title:'Waterfall',            tags:['nature','water'] },
+  { id:80,  title:'Night City',           tags:['urban','night'] },
+  { id:90,  title:'Autumn Leaves',        tags:['nature','autumn'] },
+  { id:100, title:'Snowy Peaks',          tags:['nature','snow'] },
+  { id:110, title:'Beach Sunset',         tags:['nature','beach'] },
+  { id:120, title:'Ancient Ruins',        tags:['architecture','history'] },
+].map(img =&gt; ({ ...img, src: `https://picsum.photos/seed/${img.id}/600/400`, thumb: `https://picsum.photos/seed/${img.id}/300/200` }));
+
+function ImageGallery() {
+  const [lightbox, setLightbox] = useState(null); // index into IMAGES
+  const [zoom, setZoom] = useState(false);
+  const [filter, setFilter] = useState('all');
+
+  const tags = ['all', ...new Set(IMAGES.flatMap(i =&gt; i.tags))];
+  const filtered = filter === 'all' ? IMAGES : IMAGES.filter(img =&gt; img.tags.includes(filter));
+
+  useEffect(() =&gt; {
+    const onKey = (e) =&gt; {
+      if (lightbox === null) return;
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'Escape') close();
+    };
+    window.addEventListener('keydown', onKey);
+    return () =&gt; window.removeEventListener('keydown', onKey);
+  }, [lightbox, filtered]);
+
+  const open = (idx) =&gt; { setLightbox(idx); setZoom(false); };
+  const close = () =&gt; { setLightbox(null); setZoom(false); };
+  const next = () =&gt; setLightbox(i =&gt; (i + 1) % filtered.length);
+  const prev = () =&gt; setLightbox(i =&gt; (i - 1 + filtered.length) % filtered.length);
+
+  const current = lightbox !== null ? filtered[lightbox] : null;
+
+  return (
+    &lt;div style={{ maxWidth: 900, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem' }}&gt;
+      &lt;h1 style={{ textAlign: 'center', marginBottom: '1rem' }}&gt;🖼️ Image Gallery&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginBottom: '1.5rem' }}&gt;
+        {tags.map(tag =&gt; (
+          &lt;button key={tag} onClick={() =&gt; setFilter(tag)}
+            style={{ padding: '6px 14px', borderRadius: 20, border: '2px solid', fontWeight: 700, cursor: 'pointer', fontSize: '.8rem', textTransform: 'capitalize',
+              borderColor: filter === tag ? '#3b82f6' : '#e2e8f0',
+              background: filter === tag ? '#dbeafe' : '#f8fafc',
+              color: filter === tag ? '#1d4ed8' : '#64748b' }}&gt;
+            {tag}
+          &lt;/button&gt;
+        ))}
+      &lt;/div&gt;
+
+      &lt;div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 12 }}&gt;
+        {filtered.map((img, idx) =&gt; (
+          &lt;div key={img.id} onClick={() =&gt; open(idx)}
+            style={{ borderRadius: 14, overflow: 'hidden', cursor: 'pointer', position: 'relative', boxShadow: '0 2px 10px rgba(0,0,0,.1)', transition: 'transform .2s, box-shadow .2s' }}
+            onMouseEnter={e =&gt; { e.currentTarget.style.transform='scale(1.02)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,.18)'; }}
+            onMouseLeave={e =&gt; { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow='0 2px 10px rgba(0,0,0,.1)'; }}&gt;
+            &lt;img src={img.thumb} alt={img.title} loading="lazy" style={{ width: '100%', height: 180, objectFit: 'cover', display: 'block' }} /&gt;
+            &lt;div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent,rgba(0,0,0,.7))', padding: '1.5rem .75rem .6rem', color: '#fff' }}&gt;
+              &lt;div style={{ fontWeight: 700, fontSize: '.9rem' }}&gt;{img.title}&lt;/div&gt;
+              &lt;div style={{ display: 'flex', gap: 4, marginTop: 3 }}&gt;
+                {img.tags.map(t =&gt; &lt;span key={t} style={{ fontSize: '.65rem', background: 'rgba(255,255,255,.2)', padding: '2px 6px', borderRadius: 10 }}&gt;{t}&lt;/span&gt;)}
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+
+      {current &amp;&amp; (
+        &lt;div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.92)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}
+          onClick={close}&gt;
+          &lt;div onClick={e =&gt; e.stopPropagation()} style={{ maxWidth: 800, width: '100%', position: 'relative' }}&gt;
+            &lt;button onClick={prev}
+              style={{ position: 'absolute', left: -50, top: '50%', transform: 'translateY(-50%)', width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,.15)', border: 'none', color: '#fff', fontSize: '1.2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}&gt;‹&lt;/button&gt;
+            &lt;img src={current.src} alt={current.title}
+              onClick={() =&gt; setZoom(z =&gt; !z)}
+              style={{ width: '100%', borderRadius: 16, display: 'block', cursor: zoom ? 'zoom-out' : 'zoom-in', transform: zoom ? 'scale(1.4)' : 'scale(1)', transition: 'transform .3s', maxHeight: '80vh', objectFit: 'contain' }} /&gt;
+            &lt;button onClick={next}
+              style={{ position: 'absolute', right: -50, top: '50%', transform: 'translateY(-50%)', width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,.15)', border: 'none', color: '#fff', fontSize: '1.2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}&gt;›&lt;/button&gt;
+            &lt;div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, color: '#e2e8f0' }}&gt;
+              &lt;div&gt;
+                &lt;div style={{ fontWeight: 700 }}&gt;{current.title}&lt;/div&gt;
+                &lt;div style={{ fontSize: '.8rem', color: '#94a3b8' }}&gt;{lightbox + 1} / {filtered.length}&lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div style={{ display: 'flex', gap: 8 }}&gt;
+                &lt;a href={current.src} download target="_blank" rel="noreferrer"
+                  style={{ padding: '8px 14px', background: 'rgba(255,255,255,.15)', color: '#fff', borderRadius: 8, fontWeight: 700, textDecoration: 'none', fontSize: '.85rem' }}&gt;
+                  ⬇ Download
+                &lt;/a&gt;
+                &lt;button onClick={close}
+                  style={{ padding: '8px 14px', background: 'rgba(255,255,255,.15)', border: 'none', color: '#fff', borderRadius: 8, fontWeight: 700, cursor: 'pointer', fontSize: '.85rem' }}&gt;
+                  ✕ Close
+                &lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+
+export default ImageGallery;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/>npm run dev</code>
+  </div>
+</div>
+
+<!-- PROJECT 20 -->
+<div class="content-card">
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <div class="project-num">20</div>
+    <div>
+      <h3 class="mb-1 fw-700" style="font-size:1.25rem;">Snake Game</h3>
+      <div class="d-flex gap-2 flex-wrap align-items-center mt-1">
+        <span class="diff-beginner">Beginner</span>
+        <span class="tech-badge">useState</span>
+        <span class="tech-badge">useEffect</span>
+        <span class="tech-badge">useRef</span>
+        <span class="tech-badge">game loop</span>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mb-3">Classic Snake on a 20×20 grid. Arrow keys control direction, score increases with food, speed ramps up every 5 points, and collision with walls or self ends the game.</p>
+  <div class="tip-box mb-3">
+    <strong>Key Learning:</strong> <code>useRef</code> for game state (direction, snake body, food) avoids stale closure issues inside <code>setInterval</code> callbacks. React state (<code>useState</code>) is only used for values that should trigger a visual re-render (score, game-over screen, the rendered grid).
+  </div>
+  <div class="code-block">import { useState, useEffect, useRef, useCallback } from 'react';
+
+const BOARD = 20;
+const CELL = 22;
+
+const rand = () =&gt; Math.floor(Math.random() * BOARD);
+const newFood = (snake) =&gt; {
+  let food;
+  do { food = { x: rand(), y: rand() }; }
+  while (snake.some(s =&gt; s.x === food.x &amp;&amp; s.y === food.y));
+  return food;
+};
+
+const DIR = { ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0} };
+const OPPOSITE = { ArrowUp:'ArrowDown', ArrowDown:'ArrowUp', ArrowLeft:'ArrowRight', ArrowRight:'ArrowLeft' };
+
+function SnakeGame() {
+  const initSnake = [{ x:10,y:10 },{ x:9,y:10 },{ x:8,y:10 }];
+  const [snake, setSnake] = useState(initSnake);
+  const [food, setFood] = useState({ x:15, y:15 });
+  const [dir, setDir] = useState('ArrowRight');
+  const [score, setScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [running, setRunning] = useState(false);
+  const [highScore, setHighScore] = useState(() =&gt; Number(localStorage.getItem('snakeHS') || 0));
+  const dirRef = useRef('ArrowRight');
+  const snakeRef = useRef(initSnake);
+  const foodRef = useRef({ x:15,y:15 });
+  const scoreRef = useRef(0);
+
+  const speed = () =&gt; Math.max(80, 160 - Math.floor(scoreRef.current / 5) * 10);
+
+  const gameLoop = useCallback(() =&gt; {
+    const head = snakeRef.current[0];
+    const d = DIR[dirRef.current];
+    const next = { x: head.x + d.x, y: head.y + d.y };
+
+    // Wall collision
+    if (next.x &lt; 0 || next.x &gt;= BOARD || next.y &lt; 0 || next.y &gt;= BOARD) {
+      setGameOver(true); setRunning(false);
+      if (scoreRef.current &gt; Number(localStorage.getItem('snakeHS') || 0)) {
+        localStorage.setItem('snakeHS', scoreRef.current);
+        setHighScore(scoreRef.current);
+      }
+      return;
+    }
+    // Self collision
+    if (snakeRef.current.slice(1).some(s =&gt; s.x === next.x &amp;&amp; s.y === next.y)) {
+      setGameOver(true); setRunning(false);
+      if (scoreRef.current &gt; Number(localStorage.getItem('snakeHS') || 0)) {
+        localStorage.setItem('snakeHS', scoreRef.current);
+        setHighScore(scoreRef.current);
+      }
+      return;
+    }
+
+    const ate = next.x === foodRef.current.x &amp;&amp; next.y === foodRef.current.y;
+    let newSnake;
+    if (ate) {
+      newSnake = [next, ...snakeRef.current];
+      scoreRef.current += 1;
+      setScore(scoreRef.current);
+      const f = newFood(newSnake);
+      foodRef.current = f;
+      setFood(f);
+    } else {
+      newSnake = [next, ...snakeRef.current.slice(0, -1)];
+    }
+    snakeRef.current = newSnake;
+    setSnake([...newSnake]);
+  }, []);
+
+  useEffect(() =&gt; {
+    if (!running) return;
+    const id = setTimeout(() =&gt; { gameLoop(); }, speed());
+    return () =&gt; clearTimeout(id);
+  }, [running, snake, gameLoop]);
+
+  useEffect(() =&gt; {
+    const onKey = (e) =&gt; {
+      if (!DIR[e.key]) return;
+      e.preventDefault();
+      if (OPPOSITE[e.key] === dirRef.current) return;
+      dirRef.current = e.key;
+      setDir(e.key);
+    };
+    window.addEventListener('keydown', onKey);
+    return () =&gt; window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const start = () =&gt; {
+    const s = [{ x:10,y:10 },{ x:9,y:10 },{ x:8,y:10 }];
+    const f = { x:15,y:15 };
+    snakeRef.current = s; foodRef.current = f; dirRef.current = 'ArrowRight'; scoreRef.current = 0;
+    setSnake(s); setFood(f); setDir('ArrowRight'); setScore(0); setGameOver(false); setRunning(true);
+  };
+
+  const snakeSet = new Set(snake.map(s =&gt; `${s.x},${s.y}`));
+  const headKey = `${snake[0]?.x},${snake[0]?.y}`;
+
+  return (
+    &lt;div style={{ maxWidth: 520, margin: '2rem auto', fontFamily: 'sans-serif', padding: '0 1rem', textAlign: 'center' }}&gt;
+      &lt;h1 style={{ marginBottom: '1rem' }}&gt;🐍 Snake Game&lt;/h1&gt;
+
+      &lt;div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginBottom: '1rem' }}&gt;
+        &lt;div&gt;&lt;div style={{ fontWeight: 800, fontSize: '1.5rem', color: '#22c55e' }}&gt;{score}&lt;/div&gt;&lt;div style={{ fontSize: '.75rem', color: '#64748b' }}&gt;Score&lt;/div&gt;&lt;/div&gt;
+        &lt;div&gt;&lt;div style={{ fontWeight: 800, fontSize: '1.5rem', color: '#f59e0b' }}&gt;{highScore}&lt;/div&gt;&lt;div style={{ fontSize: '.75rem', color: '#64748b' }}&gt;Best&lt;/div&gt;&lt;/div&gt;
+        &lt;div&gt;&lt;div style={{ fontWeight: 800, fontSize: '1.5rem', color: '#3b82f6' }}&gt;{snake.length}&lt;/div&gt;&lt;div style={{ fontSize: '.75rem', color: '#64748b' }}&gt;Length&lt;/div&gt;&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{ position: 'relative', display: 'inline-block', background: '#0d1117', borderRadius: 12, padding: 6, border: '2px solid #1e293b', boxShadow: '0 8px 32px rgba(0,0,0,.4)' }}&gt;
+        &lt;div style={{ display: 'grid', gridTemplateColumns: `repeat(${BOARD}, ${CELL}px)`, gap: 1 }}&gt;
+          {Array.from({ length: BOARD * BOARD }, (_, i) =&gt; {
+            const x = i % BOARD, y = Math.floor(i / BOARD);
+            const key = `${x},${y}`;
+            const isHead = key === headKey;
+            const isSnake = snakeSet.has(key);
+            const isFood = food.x === x &amp;&amp; food.y === y;
+            return (
+              &lt;div key={i} style={{
+                width: CELL, height: CELL,
+                background: isHead ? '#4ade80' : isSnake ? '#22c55e' : isFood ? '#f87171' : 'transparent',
+                borderRadius: isHead ? 6 : isSnake ? 4 : isFood ? '50%' : 2,
+                transition: isFood ? 'transform .3s' : 'none',
+                transform: isFood ? 'scale(0.85)' : 'scale(1)',
+                boxShadow: isHead ? '0 0 8px #4ade80' : isFood ? '0 0 6px #f87171' : 'none',
+              }} /&gt;
+            );
+          })}
+        &lt;/div&gt;
+
+        {(!running || gameOver) &amp;&amp; (
+          &lt;div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.75)', borderRadius: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}&gt;
+            {gameOver &amp;&amp; (
+              &lt;div style={{ color: '#f87171', fontWeight: 800, fontSize: '1.5rem' }}&gt;Game Over!&lt;/div&gt;
+            )}
+            {gameOver &amp;&amp; &lt;div style={{ color: '#94a3b8' }}&gt;Score: {score}&lt;/div&gt;}
+            &lt;button onClick={start}
+              style={{ padding: '12px 32px', background: '#22c55e', color: '#0f172a', border: 'none', borderRadius: 12, fontWeight: 900, fontSize: '1.1rem', cursor: 'pointer' }}&gt;
+              {gameOver ? '🔄 Play Again' : '▶ Start Game'}
+            &lt;/button&gt;
+          &lt;/div&gt;
+        )}
+      &lt;/div&gt;
+
+      &lt;div style={{ marginTop: '1rem', color: '#64748b', fontSize: '.85rem' }}&gt;Use ← → ↑ ↓ arrow keys to control the snake&lt;/div&gt;
+
+      &lt;div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: '1rem' }}&gt;
+        {[['↑','ArrowUp'],['↓','ArrowDown'],['←','ArrowLeft'],['→','ArrowRight']].map(([label,key]) =&gt; (
+          &lt;button key={key} onClick={() =&gt; { if (running &amp;&amp; OPPOSITE[key] !== dirRef.current) { dirRef.current=key; setDir(key); }}}
+            style={{ width:40,height:40,borderRadius:8,border:'2px solid #334155',background:'#1e293b',color:'#94a3b8',fontWeight:700,cursor:'pointer',fontSize:'1rem' }}&gt;
+            {label}
+          &lt;/button&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default SnakeGame;</div>
+  <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+    <strong>How to run:</strong>
+    <code style="display:block;margin-top:6px;font-size:.82rem;color:#374151;">npm create vite@latest my-app -- --template react<br/>cd my-app &amp;&amp; npm install<br/># Replace src/App.jsx with the code above<br/># Use arrow keys or on-screen buttons to play<br/>npm run dev</code>
+  </div>
+</div>
+
+</div><!-- /container-xl py-4 -->
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center"><span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Beginner Projects 1–20</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

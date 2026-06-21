@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>React Lifecycle — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-item{background:#111827;border-color:#1e293b;}
+    [data-theme="dark"] .accordion-button{background:#111827;color:#f1f5f9;}
+    [data-theme="dark"] .accordion-button:not(.collapsed){background:#1e293b;color:#61dafb;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.1rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.7rem 0;line-height:1.65;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.75rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    /* Lifecycle Timeline */
+    .lifecycle-timeline{position:relative;padding-left:2rem;}
+    .lifecycle-timeline::before{content:'';position:absolute;left:.6rem;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,#6366f1,#8b5cf6,#ec4899);}
+    .lifecycle-step{position:relative;margin-bottom:1.2rem;padding:.9rem 1rem .9rem 1.2rem;border-radius:10px;border:1.5px solid transparent;}
+    .lifecycle-step::before{content:'';position:absolute;left:-1.65rem;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;border:2px solid #fff;}
+    .lifecycle-step.mount{background:#eff6ff;border-color:#93c5fd;}
+    .lifecycle-step.mount::before{background:#3b82f6;}
+    .lifecycle-step.update{background:#f0fdf4;border-color:#6ee7b7;}
+    .lifecycle-step.update::before{background:#22c55e;}
+    .lifecycle-step.unmount{background:#fff5f5;border-color:#fca5a5;}
+    .lifecycle-step.unmount::before{background:#ef4444;}
+    [data-theme="dark"] .lifecycle-step.mount{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .lifecycle-step.update{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .lifecycle-step.unmount{background:#450a0a;border-color:#ef4444;color:#fecaca;}
+    .phase-badge{display:inline-block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.2rem .6rem;border-radius:4px;margin-bottom:.4rem;}
+    .phase-badge.mount{background:#dbeafe;color:#1d4ed8;}
+    .phase-badge.update{background:#dcfce7;color:#15803d;}
+    .phase-badge.unmount{background:#fee2e2;color:#b91c1c;}
+    [data-theme="dark"] .phase-badge.mount{background:#1e3a5f;color:#93c5fd;}
+    [data-theme="dark"] .phase-badge.update{background:#14532d;color:#86efac;}
+    [data-theme="dark"] .phase-badge.unmount{background:#450a0a;color:#fca5a5;}
+    .render-step{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem 1rem;border-radius:10px;margin-bottom:.6rem;background:#f8fafc;border:1px solid #e2e8f0;}
+    [data-theme="dark"] .render-step{background:#1e293b;border-color:#334155;}
+    .render-step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border-radius:50%;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:.1rem;}
+    .comparison-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:.5rem;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="section-hero">
+  <div class="container-xl">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <span class="badge" style="background:rgba(97,218,251,.2);color:#61dafb;font-size:.85rem;padding:.4rem .9rem;">Section 9</span>
+      <span class="badge bg-info text-dark">Core Concept</span>
+    </div>
+    <h1 class="fw-900 mb-2" style="font-size:clamp(1.8rem,4vw,2.8rem);">React Component Lifecycle</h1>
+    <p class="mb-0" style="color:#94a3b8;font-size:1.1rem;max-width:650px;">How React components are born, updated, and destroyed — with full class component lifecycle methods and their hooks equivalents side-by-side.</p>
+    <div class="d-flex flex-wrap gap-2 mt-3">
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Mounting</span>
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Updating</span>
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Unmounting</span>
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Error Boundaries</span>
+      <span style="display:inline-block;background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);border-radius:20px;padding:.2rem .75rem;font-size:.75rem;font-weight:600;">Hooks Equivalents</span>
+    </div>
+  </div>
+</section>
+
+<div class="container-xl pb-4">
+
+  <!-- Phase Timeline Visual -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-4" style="font-size:1.4rem;"><i class="bi bi-diagram-3-fill me-2" style="color:#6366f1;"></i>Class Component Lifecycle — Visual Timeline</h2>
+
+    <div class="row g-4 mb-2">
+      <!-- MOUNTING -->
+      <div class="col-md-4">
+        <div class="text-center mb-3">
+          <span class="phase-badge mount" style="font-size:.85rem;padding:.4rem 1rem;">Mounting</span>
+          <p class="text-muted small mt-1 mb-0">Component appears in the DOM for the first time</p>
+        </div>
+        <div class="lifecycle-timeline">
+          <div class="lifecycle-step mount">
+            <div class="fw-700 mb-1"><code>constructor(props)</code></div>
+            <div class="small text-muted">Initialize state, bind methods. Always call <code>super(props)</code> first.</div>
+          </div>
+          <div class="lifecycle-step mount">
+            <div class="fw-700 mb-1"><code>getDerivedStateFromProps()</code></div>
+            <div class="small text-muted">Rarely used. Derive state from props before render.</div>
+          </div>
+          <div class="lifecycle-step mount" style="border-color:#6366f1;background:#f0f0ff;">
+            <div class="fw-700 mb-1"><code>render()</code> <span class="badge bg-primary ms-1" style="font-size:.65rem;">Required</span></div>
+            <div class="small text-muted">Returns JSX. Must be pure — no side effects.</div>
+          </div>
+          <div class="lifecycle-step mount" style="border-color:#f59e0b;background:#fffbeb;">
+            <div class="fw-700 mb-1"><code>componentDidMount()</code> <span class="badge bg-warning text-dark ms-1" style="font-size:.65rem;">Most Used</span></div>
+            <div class="small text-muted">DOM is ready. Run API calls, subscriptions, timers here.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPDATING -->
+      <div class="col-md-4">
+        <div class="text-center mb-3">
+          <span class="phase-badge update" style="font-size:.85rem;padding:.4rem 1rem;">Updating</span>
+          <p class="text-muted small mt-1 mb-0">Triggered by setState() or new props from parent</p>
+        </div>
+        <div class="lifecycle-timeline">
+          <div class="lifecycle-step update">
+            <div class="fw-700 mb-1"><code>getDerivedStateFromProps()</code></div>
+            <div class="small text-muted">Runs again before each render. Rarely needed.</div>
+          </div>
+          <div class="lifecycle-step update">
+            <div class="fw-700 mb-1"><code>shouldComponentUpdate()</code></div>
+            <div class="small text-muted">Return false to skip re-render. Performance optimization.</div>
+          </div>
+          <div class="lifecycle-step update" style="border-color:#6366f1;background:#f0f0ff;">
+            <div class="fw-700 mb-1"><code>render()</code></div>
+            <div class="small text-muted">New JSX tree computed and diffed against Fiber.</div>
+          </div>
+          <div class="lifecycle-step update">
+            <div class="fw-700 mb-1"><code>getSnapshotBeforeUpdate()</code></div>
+            <div class="small text-muted">Read DOM before update (e.g., scroll position).</div>
+          </div>
+          <div class="lifecycle-step update" style="border-color:#f59e0b;background:#fffbeb;">
+            <div class="fw-700 mb-1"><code>componentDidUpdate(prev)</code> <span class="badge bg-warning text-dark ms-1" style="font-size:.65rem;">Common</span></div>
+            <div class="small text-muted">Respond to prop/state changes. Always compare before acting!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNMOUNTING -->
+      <div class="col-md-4">
+        <div class="text-center mb-3">
+          <span class="phase-badge unmount" style="font-size:.85rem;padding:.4rem 1rem;">Unmounting</span>
+          <p class="text-muted small mt-1 mb-0">Component removed from the DOM</p>
+        </div>
+        <div class="lifecycle-timeline">
+          <div class="lifecycle-step unmount" style="border-color:#ef4444;background:#fff5f5;">
+            <div class="fw-700 mb-1"><code>componentWillUnmount()</code></div>
+            <div class="small text-muted">Cleanup! Cancel timers, subscriptions, abort requests. Never call setState here.</div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="concept-box amber">
+            <strong>Error Phases:</strong>
+            <div class="small mt-1">
+              <code>getDerivedStateFromError()</code> — update UI<br>
+              <code>componentDidCatch()</code> — log error
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Class Component Example -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-3" style="font-size:1.4rem;"><i class="bi bi-code-square me-2" style="color:#6366f1;"></i>Full Class Component Example</h2>
+    <p class="text-muted mb-3">A real-world <code>DataFetcher</code> component demonstrating all three key lifecycle methods together.</p>
+    <div class="code-block"><pre><span class="kw">class</span> <span class="fn">DataFetcher</span> <span class="kw">extends</span> React.Component {
+  <span class="fn">constructor</span>(props) {
+    <span class="kw">super</span>(props);
+    <span class="kw">this</span>.state = { data: <span class="kw">null</span>, loading: <span class="kw">true</span>, error: <span class="kw">null</span> };
+  }
+
+  <span class="cm">// Runs ONCE after first render — perfect for API calls</span>
+  <span class="kw">async</span> <span class="fn">componentDidMount</span>() {
+    <span class="kw">await this</span>.<span class="fn">fetchData</span>();
+  }
+
+  <span class="cm">// Runs after every update — check if the relevant prop changed</span>
+  <span class="kw">async</span> <span class="fn">componentDidUpdate</span>(prevProps) {
+    <span class="kw">if</span> (prevProps.userId !== <span class="kw">this</span>.props.userId) {
+      <span class="kw">await this</span>.<span class="fn">fetchData</span>(); <span class="cm">// only re-fetch if userId changed</span>
+    }
+  }
+
+  <span class="cm">// Cleanup — cancel subscriptions, clear timers, abort requests</span>
+  <span class="fn">componentWillUnmount</span>() {
+    <span class="kw">if</span> (<span class="kw">this</span>.abortController) {
+      <span class="kw">this</span>.abortController.<span class="fn">abort</span>();
+    }
+  }
+
+  <span class="kw">async</span> <span class="fn">fetchData</span>() {
+    <span class="kw">this</span>.abortController = <span class="kw">new</span> <span class="fn">AbortController</span>();
+    <span class="kw">try</span> {
+      <span class="kw">this</span>.<span class="fn">setState</span>({ loading: <span class="kw">true</span>, error: <span class="kw">null</span> });
+      <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(`/api/users/${<span class="kw">this</span>.props.userId}`, {
+        signal: <span class="kw">this</span>.abortController.signal
+      });
+      <span class="kw">if</span> (!res.ok) <span class="kw">throw new</span> <span class="fn">Error</span>(`HTTP ${res.status}`);
+      <span class="kw">const</span> data = <span class="kw">await</span> res.<span class="fn">json</span>();
+      <span class="kw">this</span>.<span class="fn">setState</span>({ data, loading: <span class="kw">false</span> });
+    } <span class="kw">catch</span> (error) {
+      <span class="kw">if</span> (error.name !== <span class="st">'AbortError'</span>) {
+        <span class="kw">this</span>.<span class="fn">setState</span>({ error: error.message, loading: <span class="kw">false</span> });
+      }
+    }
+  }
+
+  <span class="fn">render</span>() {
+    <span class="kw">const</span> { data, loading, error } = <span class="kw">this</span>.state;
+    <span class="kw">if</span> (loading) <span class="kw">return</span> &lt;Spinner /&gt;;
+    <span class="kw">if</span> (error) <span class="kw">return</span> &lt;ErrorMessage message={error} /&gt;;
+    <span class="kw">return</span> &lt;UserProfile user={data} /&gt;;
+  }
+}</pre></div>
+  </div>
+
+  <!-- Hooks Equivalents Side-by-Side -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-4" style="font-size:1.4rem;"><i class="bi bi-arrow-left-right me-2" style="color:#6366f1;"></i>Hooks Equivalents — Side-by-Side</h2>
+
+    <!-- Comparison table -->
+    <div class="table-responsive mb-4">
+      <table class="table table-bordered" style="font-size:.9rem;">
+        <thead class="table-dark">
+          <tr>
+            <th>Class Method</th>
+            <th>Hook Equivalent</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>componentDidMount</code></td>
+            <td><code>useEffect(() =&gt; {}, [])</code></td>
+            <td>Empty deps = runs once after mount</td>
+          </tr>
+          <tr>
+            <td><code>componentDidUpdate</code></td>
+            <td><code>useEffect(() =&gt; {}, [dep])</code></td>
+            <td>Runs when listed dependency changes</td>
+          </tr>
+          <tr>
+            <td><code>componentWillUnmount</code></td>
+            <td><code>useEffect(() =&gt; { return cleanup }, [])</code></td>
+            <td>Returned function is the cleanup</td>
+          </tr>
+          <tr>
+            <td><code>shouldComponentUpdate</code></td>
+            <td><code>React.memo</code> / <code>useMemo</code></td>
+            <td>Memoize component or value</td>
+          </tr>
+          <tr>
+            <td><code>constructor</code> state init</td>
+            <td><code>useState(initialValue)</code></td>
+            <td>Lazy initializer: <code>useState(() =&gt; compute())</code></td>
+          </tr>
+          <tr>
+            <td><code>getDerivedStateFromProps</code></td>
+            <td><code>useState</code> + <code>useEffect</code></td>
+            <td>Derive state when prop changes</td>
+          </tr>
+          <tr>
+            <td><code>getSnapshotBeforeUpdate</code></td>
+            <td><code>useRef</code> + <code>useLayoutEffect</code></td>
+            <td>Read DOM synchronously before paint</td>
+          </tr>
+          <tr>
+            <td><code>componentDidCatch</code></td>
+            <td>No hook equivalent yet</td>
+            <td>Must use class component Error Boundary</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Side by side code -->
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="comparison-label"><i class="bi bi-buildings me-1"></i>Class Component</div>
+        <div class="code-block" style="height:100%;min-height:320px;"><pre><span class="kw">class</span> <span class="fn">DataFetcher</span> <span class="kw">extends</span> React.Component {
+  state = { data: <span class="kw">null</span>, loading: <span class="kw">true</span>, error: <span class="kw">null</span> };
+
+  <span class="kw">async</span> <span class="fn">componentDidMount</span>() {
+    <span class="kw">await this</span>.<span class="fn">fetchData</span>();
+  }
+
+  <span class="kw">async</span> <span class="fn">componentDidUpdate</span>(prevProps) {
+    <span class="kw">if</span> (prevProps.userId !== <span class="kw">this</span>.props.userId) {
+      <span class="kw">await this</span>.<span class="fn">fetchData</span>();
+    }
+  }
+
+  <span class="fn">componentWillUnmount</span>() {
+    <span class="kw">this</span>.controller?.<span class="fn">abort</span>();
+  }
+
+  <span class="kw">async</span> <span class="fn">fetchData</span>() {
+    <span class="kw">this</span>.controller = <span class="kw">new</span> <span class="fn">AbortController</span>();
+    <span class="kw">try</span> {
+      <span class="kw">this</span>.<span class="fn">setState</span>({ loading: <span class="kw">true</span> });
+      <span class="kw">const</span> data = <span class="kw">await</span> api.<span class="fn">get</span>(
+        `/users/${<span class="kw">this</span>.props.userId}`,
+        { signal: <span class="kw">this</span>.controller.signal }
+      );
+      <span class="kw">this</span>.<span class="fn">setState</span>({ data, loading: <span class="kw">false</span> });
+    } <span class="kw">catch</span> (err) {
+      <span class="kw">if</span> (err.name !== <span class="st">'AbortError'</span>)
+        <span class="kw">this</span>.<span class="fn">setState</span>({ error: err.message, loading: <span class="kw">false</span> });
+    }
+  }
+
+  <span class="fn">render</span>() {
+    <span class="kw">const</span> { data, loading, error } = <span class="kw">this</span>.state;
+    <span class="kw">if</span> (loading) <span class="kw">return</span> &lt;Spinner /&gt;;
+    <span class="kw">if</span> (error) <span class="kw">return</span> &lt;Error message={error} /&gt;;
+    <span class="kw">return</span> &lt;UserProfile user={data} /&gt;;
+  }
+}</pre></div>
+      </div>
+      <div class="col-lg-6">
+        <div class="comparison-label"><i class="bi bi-lightning-charge me-1"></i>Function Component (Hooks)</div>
+        <div class="code-block" style="height:100%;min-height:320px;"><pre><span class="kw">function</span> <span class="fn">DataFetcher</span>({ userId }) {
+  <span class="kw">const</span> [data, setData] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);
+  <span class="kw">const</span> [error, setError] = <span class="fn">useState</span>(<span class="kw">null</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> controller = <span class="kw">new</span> <span class="fn">AbortController</span>();
+    <span class="fn">setLoading</span>(<span class="kw">true</span>);
+    <span class="fn">setError</span>(<span class="kw">null</span>);
+
+    api.<span class="fn">get</span>(`/users/${userId}`, { signal: controller.signal })
+      .<span class="fn">then</span>(data =&gt; {
+        <span class="fn">setData</span>(data);
+        <span class="fn">setLoading</span>(<span class="kw">false</span>);
+      })
+      .<span class="fn">catch</span>(err =&gt; {
+        <span class="kw">if</span> (err.name !== <span class="st">'AbortError'</span>) {
+          <span class="fn">setError</span>(err.message);
+          <span class="fn">setLoading</span>(<span class="kw">false</span>);
+        }
+      });
+
+    <span class="cm">// This function IS componentWillUnmount + cleanup</span>
+    <span class="kw">return</span> () =&gt; controller.<span class="fn">abort</span>();
+  }, [userId]); <span class="cm">// Re-runs when userId changes</span>
+
+  <span class="kw">if</span> (loading) <span class="kw">return</span> &lt;Spinner /&gt;;
+  <span class="kw">if</span> (error) <span class="kw">return</span> &lt;Error message={error} /&gt;;
+  <span class="kw">return</span> &lt;UserProfile user={data} /&gt;;
+}</pre></div>
+      </div>
+    </div>
+    <div class="tip-box mt-3"><i class="bi bi-lightbulb-fill me-2"></i><strong>Key Insight:</strong> A single <code>useEffect</code> consolidates <em>three</em> lifecycle methods: the effect body runs like <code>componentDidMount</code> + <code>componentDidUpdate</code>, and the returned cleanup function runs like <code>componentWillUnmount</code>.</div>
+  </div>
+
+  <!-- Render Flow -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-4" style="font-size:1.4rem;"><i class="bi bi-flow-chart me-2" style="color:#6366f1;"></i>React Component Render Flow — Step by Step</h2>
+    <p class="text-muted mb-4">What happens inside React each time a component renders. Understanding this helps you reason about when effects run and why re-renders occur.</p>
+
+    <div class="render-step">
+      <span class="render-step-num">1</span>
+      <div><strong>Trigger:</strong> Parent renders with new props, or <code>setState()</code> / <code>dispatch()</code> is called — React schedules a re-render.</div>
+    </div>
+    <div class="render-step">
+      <span class="render-step-num">2</span>
+      <div><strong>React calls your component function</strong> — the entire function body runs from top to bottom with the new state/props values.</div>
+    </div>
+    <div class="render-step">
+      <span class="render-step-num">3</span>
+      <div><strong>Hooks execute in order</strong> — <code>useState</code> returns current state, <code>useEffect</code> checks if dependencies changed since last render.</div>
+    </div>
+    <div class="render-step">
+      <span class="render-step-num">4</span>
+      <div><strong>JSX returned → React.createElement tree</strong> — JSX is syntactic sugar that creates a plain JavaScript object tree describing the UI.</div>
+    </div>
+    <div class="render-step">
+      <span class="render-step-num">5</span>
+      <div><strong>Reconciliation (diffing)</strong> — React compares the new element tree against the previous Fiber tree to find the minimal set of DOM changes needed.</div>
+    </div>
+    <div class="render-step">
+      <span class="render-step-num">6</span>
+      <div><strong>Commit phase</strong> — React applies the computed DOM mutations. This is when <code>ref</code> values are updated and the browser paints.</div>
+    </div>
+    <div class="render-step">
+      <span class="render-step-num">7</span>
+      <div><strong>Cleanup runs</strong> — If a <code>useEffect</code>'s dependencies changed, its previous cleanup function runs first to tear down the old effect.</div>
+    </div>
+    <div class="render-step">
+      <span class="render-step-num">8</span>
+      <div><strong>Effects run</strong> — <code>useEffect</code> callbacks whose dependencies changed are invoked. <code>useLayoutEffect</code> runs synchronously before paint; <code>useEffect</code> runs asynchronously after.</div>
+    </div>
+
+    <div class="concept-box purple mt-3">
+      <strong><i class="bi bi-cpu me-1"></i>React 18 Concurrent Mode:</strong> React can now pause, interrupt, and restart renders. This is why you should keep render functions pure — they may run more than once. Side effects belong in <code>useEffect</code>, not in the function body.
+    </div>
+  </div>
+
+  <!-- Error Boundaries -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-3" style="font-size:1.4rem;"><i class="bi bi-shield-exclamation me-2" style="color:#ef4444;"></i>Error Boundaries — Class Components Only</h2>
+    <p class="text-muted mb-3">Error Boundaries catch JavaScript errors in their child component tree, log them, and display a fallback UI instead of a blank crash screen. They still require class components in React 18.</p>
+    <div class="code-block"><pre><span class="kw">class</span> <span class="fn">ErrorBoundary</span> <span class="kw">extends</span> React.Component {
+  state = { hasError: <span class="kw">false</span>, error: <span class="kw">null</span> };
+
+  <span class="cm">// Called during render phase — update state to show fallback UI</span>
+  <span class="kw">static</span> <span class="fn">getDerivedStateFromError</span>(error) {
+    <span class="kw">return</span> { hasError: <span class="kw">true</span>, error };
+  }
+
+  <span class="cm">// Called in commit phase — log the error to your error service</span>
+  <span class="fn">componentDidCatch</span>(error, info) {
+    <span class="cm">// info.componentStack shows where the error originated</span>
+    <span class="fn">logErrorToService</span>(error, info.componentStack);
+    console.<span class="fn">error</span>(<span class="st">'Caught by ErrorBoundary:'</span>, error);
+  }
+
+  <span class="fn">render</span>() {
+    <span class="kw">if</span> (<span class="kw">this</span>.state.hasError) {
+      <span class="kw">return this</span>.props.fallback || (
+        &lt;div className=<span class="st">"text-center p-5"</span>&gt;
+          &lt;h2&gt;Something went wrong.&lt;/h2&gt;
+          &lt;p className=<span class="st">"text-muted"</span>&gt;{<span class="kw">this</span>.state.error?.message}&lt;/p&gt;
+          &lt;button onClick={() =&gt; <span class="kw">this</span>.<span class="fn">setState</span>({ hasError: <span class="kw">false</span> })}&gt;
+            Try Again
+          &lt;/button&gt;
+        &lt;/div&gt;
+      );
+    }
+    <span class="kw">return this</span>.props.children;
+  }
+}
+
+<span class="cm">// Usage — wrap any subtree you want to protect</span>
+&lt;ErrorBoundary fallback={&lt;ErrorPage /&gt;}&gt;
+  &lt;App /&gt;
+&lt;/ErrorBoundary&gt;
+
+<span class="cm">// Granular — protect individual sections</span>
+<span class="kw">function</span> <span class="fn">Dashboard</span>() {
+  <span class="kw">return</span> (
+    &lt;div&gt;
+      &lt;ErrorBoundary fallback={&lt;p&gt;Chart failed to load&lt;/p&gt;}&gt;
+        &lt;ChartWidget /&gt;
+      &lt;/ErrorBoundary&gt;
+      &lt;ErrorBoundary fallback={&lt;p&gt;Table failed to load&lt;/p&gt;}&gt;
+        &lt;DataTable /&gt;
+      &lt;/ErrorBoundary&gt;
+    &lt;/div&gt;
+  );
+}</pre></div>
+    <div class="mistake-box"><i class="bi bi-x-circle-fill me-2"></i><strong>What Error Boundaries do NOT catch:</strong> Errors in event handlers (use try/catch there), asynchronous code (setTimeout, fetch), errors in the boundary itself, or server-side rendering. They only catch errors during rendering, in lifecycle methods, and in constructors of child components.</div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <h2 class="fw-800 mb-4" style="font-size:1.4rem;"><i class="bi bi-patch-question-fill me-2" style="color:#7c3aed;"></i>Interview Questions — React Lifecycle</h2>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>What are the three phases of a React class component's lifecycle? Name the key method in each phase.</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>Why is <code>componentDidMount</code> the right place to make API calls, rather than the constructor or <code>render()</code>?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>How does a single <code>useEffect</code> replace three class lifecycle methods? Explain with an example.</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>What is the difference between <code>useEffect</code> and <code>useLayoutEffect</code>? When would you use each?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>What is an Error Boundary and why does it still require a class component? What two methods does it use?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>Explain the React render flow — what happens between when state changes and when the user sees the updated screen?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>In <code>componentDidUpdate</code>, why must you wrap your logic in a <code>prevProps</code> comparison? What happens if you don't?</div>
+    <div class="interview-q"><i class="bi bi-chevron-right me-2" style="color:#7c3aed;"></i>How do you cancel a fetch request on component unmount? Show the class component approach and the hooks approach.</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center"><span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — From Zero to Architect</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

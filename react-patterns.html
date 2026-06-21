@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>React Design Patterns — React Mastery Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif;padding-top:64px;background:#f0f4ff;color:#1e293b;}
+    [data-theme="dark"] body{background:#0a0f1e;color:#f1f5f9;}
+    [data-theme="dark"] .card,.card{border-radius:14px;}
+    [data-theme="dark"] .card{background:#111827;border-color:#1e293b;color:#f1f5f9;}
+    .concept-box{border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;}
+    .concept-box.blue{background:#eff6ff;border:1.5px solid #93c5fd;}
+    .concept-box.green{background:#f0fdf4;border:1.5px solid #6ee7b7;}
+    .concept-box.amber{background:#fffbeb;border:1.5px solid #fcd34d;}
+    .concept-box.red{background:#fff5f5;border:1.5px solid #fca5a5;}
+    .concept-box.purple{background:#f5f3ff;border:1.5px solid #c4b5fd;}
+    [data-theme="dark"] .concept-box.blue{background:#1e3a5f;border-color:#3b82f6;color:#bfdbfe;}
+    [data-theme="dark"] .concept-box.green{background:#14532d;border-color:#22c55e;color:#bbf7d0;}
+    [data-theme="dark"] .concept-box.purple{background:#3b0764;border-color:#a78bfa;color:#ede9fe;}
+    [data-theme="dark"] .concept-box.amber{background:#451a03;border-color:#f59e0b;color:#fef3c7;}
+    .code-block{background:#0f172a;color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:.82rem;overflow-x:auto;margin:.8rem 0;line-height:1.7;}
+    .code-block .kw{color:#c084fc;}.code-block .fn{color:#60a5fa;}.code-block .st{color:#86efac;}.code-block .cm{color:#64748b;font-style:italic;}
+    .interview-q{background:#f5f3ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;font-weight:600;}
+    [data-theme="dark"] .interview-q{background:#1e1b4b;color:#ede9fe;}
+    .mistake-box{background:#fff5f5;border-left:4px solid #ef4444;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .mistake-box{background:#450a0a;color:#fecaca;}
+    .tip-box{background:#f0fdf4;border-left:4px solid #22c55e;border-radius:0 10px 10px 0;padding:.8rem 1rem;margin-bottom:.6rem;}
+    [data-theme="dark"] .tip-box{background:#052e16;color:#bbf7d0;}
+    .section-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#fff;padding:3rem 0 2rem;margin-bottom:2rem;}
+    .content-card{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    [data-theme="dark"] .content-card{background:#111827;box-shadow:0 2px 12px rgba(0,0,0,.3);}
+    .badge-section{display:inline-block;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:.75rem;font-weight:700;padding:.3rem .8rem;border-radius:20px;letter-spacing:.05em;margin-bottom:.5rem;}
+    .sub-heading{font-size:1.1rem;font-weight:700;color:#d97706;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+    [data-theme="dark"] .sub-heading{color:#fbbf24;}
+    .pattern-tag{display:inline-block;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;margin-bottom:.5rem;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background:rgba(15,23,42,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(97,218,251,.2);">
+  <div class="container-xl">
+    <a class="navbar-brand fw-800 d-flex align-items-center gap-2" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+      <span style="color:#61dafb;">React</span><span class="text-white">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html">Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html">Interview</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html">Projects</a></li>
+        <li class="nav-item"><button class="btn btn-sm ms-2" id="themeToggle" style="background:rgba(97,218,251,.15);border:1px solid #61dafb;color:#61dafb;border-radius:20px;padding:.3rem .8rem;"><i class="bi bi-moon-stars-fill"></i></button></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="section-hero">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <span class="badge-section">Section 18</span>
+        <h1 class="fw-900 mt-2 mb-3" style="font-size:2.6rem;">React Design Patterns</h1>
+        <p class="lead mb-0" style="color:#94a3b8;">Master reusable patterns — HOC, Render Props, Compound Components, Custom Hooks, Provider, Observer, Factory, and Strategy — to write clean, composable React code.</p>
+      </div>
+      <div class="col-lg-4 text-end d-none d-lg-block">
+        <i class="bi bi-puzzle" style="font-size:6rem;color:rgba(97,218,251,.15);"></i>
+      </div>
+    </div>
+    <div class="row mt-4 g-3">
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">HOC</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">Render Props</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">Compound Components</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">Custom Hooks</span></div>
+      <div class="col-auto"><span class="badge" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);padding:.4rem .9rem;border-radius:20px;font-size:.8rem;">Provider</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container-xl pb-5">
+
+  <!-- Intro -->
+  <div class="content-card">
+    <div class="concept-box blue">
+      <strong><i class="bi bi-info-circle me-2"></i>What Are Design Patterns?</strong>
+      <p class="mb-0 mt-2">Design patterns are reusable solutions to commonly occurring problems in software design. In React, patterns help you share logic between components, manage state, and compose UI in a maintainable way. Knowing which pattern to apply — and when — is a hallmark of senior React developers.</p>
+    </div>
+  </div>
+
+  <!-- Pattern 1: HOC -->
+  <div class="content-card">
+    <div class="pattern-tag">Pattern 1</div>
+    <div class="sub-heading"><i class="bi bi-layers"></i> Higher-Order Component (HOC)</div>
+    <p class="text-secondary mb-3">A HOC is a function that takes a component and returns a new enhanced component. It's a way to reuse component logic — like a decorator pattern for components.</p>
+
+    <div class="concept-box amber">
+      <strong>Signature:</strong> <code>const Enhanced = withSomething(WrappedComponent)</code> — The HOC wraps the component, adds behavior, and passes props through.
+    </div>
+
+    <div class="code-block"><span class="cm">// withLoading HOC — adds loading state to any component</span>
+<span class="kw">function</span> <span class="fn">withLoading</span>(WrappedComponent) {
+  <span class="kw">return function</span> <span class="fn">WithLoading</span>({ isLoading, ...props }) {
+    <span class="kw">if</span> (isLoading) <span class="kw">return</span> &lt;div className=<span class="st">"spinner"</span>&gt;Loading...&lt;/div&gt;;
+    <span class="kw">return</span> &lt;<span class="fn">WrappedComponent</span> {...props} /&gt;;
+  };
+}
+
+<span class="cm">// withErrorBoundary HOC</span>
+<span class="kw">function</span> <span class="fn">withErrorBoundary</span>(WrappedComponent, FallbackComponent) {
+  <span class="kw">return class extends</span> React.Component {
+    state = { hasError: <span class="kw">false</span> };
+    <span class="kw">static</span> <span class="fn">getDerivedStateFromError</span>() { <span class="kw">return</span> { hasError: <span class="kw">true</span> }; }
+    <span class="fn">render</span>() {
+      <span class="kw">if</span> (<span class="kw">this</span>.state.hasError) <span class="kw">return</span> &lt;<span class="fn">FallbackComponent</span> /&gt;;
+      <span class="kw">return</span> &lt;<span class="fn">WrappedComponent</span> {...<span class="kw">this</span>.props} /&gt;;
+    }
+  };
+}
+
+<span class="kw">const</span> SafeUserProfile = <span class="fn">withErrorBoundary</span>(UserProfile, ErrorFallback);
+<span class="kw">const</span> LoadingUserList = <span class="fn">withLoading</span>(UserList);
+
+<span class="cm">// Usage</span>
+&lt;<span class="fn">LoadingUserList</span> isLoading={loading} users={users} /&gt;</div>
+
+    <div class="tip-box">
+      <strong><i class="bi bi-lightbulb-fill me-1"></i> Naming Convention:</strong> HOC functions are conventionally named <code>with*</code> (e.g., <code>withAuth</code>, <code>withLoading</code>, <code>withAnalytics</code>). The returned component should have a display name for debugging: <code>WithLoading.displayName = `WithLoading(${WrappedComponent.displayName})`</code>.
+    </div>
+  </div>
+
+  <!-- Pattern 2: Render Props -->
+  <div class="content-card">
+    <div class="pattern-tag">Pattern 2</div>
+    <div class="sub-heading"><i class="bi bi-arrow-right-circle"></i> Render Props Pattern</div>
+    <p class="text-secondary mb-3">A component with a render prop accepts a function as a prop that it calls to render its output. This shares stateful logic without HOC wrapper complexity.</p>
+
+    <div class="code-block"><span class="kw">function</span> <span class="fn">MouseTracker</span>({ render }) {
+  <span class="kw">const</span> [pos, setPos] = <span class="fn">useState</span>({ x: <span class="st">0</span>, y: <span class="st">0</span> });
+
+  <span class="kw">return</span> (
+    &lt;div onMouseMove={e =&gt; <span class="fn">setPos</span>({ x: e.clientX, y: e.clientY })}&gt;
+      {<span class="fn">render</span>(pos)}
+    &lt;/div&gt;
+  );
+}
+
+<span class="cm">// Usage</span>
+&lt;<span class="fn">MouseTracker</span> render={({ x, y }) =&gt; (
+  &lt;p&gt;Mouse at {x}, {y}&lt;/p&gt;
+)} /&gt;
+
+<span class="cm">// Alternatively, use "children as a function" (same pattern, different API)</span>
+<span class="kw">function</span> <span class="fn">DataFetcher</span>({ url, children }) {
+  <span class="kw">const</span> [data, setData] = <span class="fn">useState</span>(<span class="kw">null</span>);
+  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="fn">fetch</span>(url).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>()).<span class="fn">then</span>(setData).<span class="fn">finally</span>(() =&gt; <span class="fn">setLoading</span>(<span class="kw">false</span>));
+  }, [url]);
+
+  <span class="kw">return</span> <span class="fn">children</span>({ data, loading });
+}
+
+<span class="cm">// Clean usage with children as a function</span>
+&lt;<span class="fn">DataFetcher</span> url=<span class="st">"/api/users"</span>&gt;
+  {({ data, loading }) =&gt; loading ? &lt;span&gt;Loading...&lt;/span&gt; : &lt;<span class="fn">UserList</span> users={data} /&gt;}
+&lt;/<span class="fn">DataFetcher</span>&gt;</div>
+
+    <div class="concept-box green">
+      <strong><i class="bi bi-arrow-left-right me-1"></i> Render Props vs Custom Hooks:</strong> Render props solve the same problem as custom hooks but with a different API. Custom hooks are generally preferred in modern React because they're simpler and don't add extra DOM nodes. Render props are still useful when you need render flexibility.
+    </div>
+  </div>
+
+  <!-- Pattern 3: Compound Components -->
+  <div class="content-card">
+    <div class="pattern-tag">Pattern 3</div>
+    <div class="sub-heading"><i class="bi bi-collection"></i> Compound Components Pattern</div>
+    <p class="text-secondary mb-3">Compound components work together to form a unified, flexible API. The parent manages shared state via context; child components are attached to the parent as properties. Think of HTML's <code>&lt;select&gt;</code> + <code>&lt;option&gt;</code> relationship.</p>
+
+    <div class="code-block"><span class="kw">const</span> SelectContext = <span class="fn">createContext</span>();
+
+<span class="kw">function</span> <span class="fn">Select</span>({ children, value, onChange }) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">SelectContext.Provider</span> value={{ value, onChange }}&gt;
+      &lt;div className=<span class="st">"select-container"</span>&gt;{children}&lt;/div&gt;
+    &lt;/<span class="fn">SelectContext.Provider</span>&gt;
+  );
+}
+
+Select.Option = <span class="kw">function</span> <span class="fn">Option</span>({ value, children }) {
+  <span class="kw">const</span> { value: selected, onChange } = <span class="fn">useContext</span>(SelectContext);
+  <span class="kw">return</span> (
+    &lt;div
+      className={<span class="st">`option ${selected === value ? 'selected' : ''}`</span>}
+      onClick={() =&gt; <span class="fn">onChange</span>(value)}
+    &gt;
+      {children}
+    &lt;/div&gt;
+  );
+};
+
+<span class="cm">// Usage — clean consumer API, no config props explosion</span>
+&lt;<span class="fn">Select</span> value={fruit} onChange={setFruit}&gt;
+  &lt;<span class="fn">Select.Option</span> value=<span class="st">"apple"</span>&gt;Apple&lt;/<span class="fn">Select.Option</span>&gt;
+  &lt;<span class="fn">Select.Option</span> value=<span class="st">"banana"</span>&gt;Banana&lt;/<span class="fn">Select.Option</span>&gt;
+  &lt;<span class="fn">Select.Option</span> value=<span class="st">"cherry"</span>&gt;Cherry&lt;/<span class="fn">Select.Option</span>&gt;
+&lt;/<span class="fn">Select</span>&gt;</div>
+
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="concept-box red mb-0">
+          <div class="fw-700 mb-1">Without Compound Components</div>
+          <div class="code-block" style="margin:0;font-size:.78rem;">&lt;<span class="fn">Select</span>
+  value={fruit}
+  onChange={setFruit}
+  options={[
+    { value: <span class="st">'apple'</span>, label: <span class="st">'Apple'</span> },
+    { value: <span class="st">'banana'</span>, label: <span class="st">'Banana'</span> },
+  ]}
+  renderOption={...}
+  optionClassName={...}
+/&gt; <span class="cm">// Prop explosion!</span></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="concept-box green mb-0">
+          <div class="fw-700 mb-1">With Compound Components</div>
+          <div class="code-block" style="margin:0;font-size:.78rem;">&lt;<span class="fn">Select</span> value={fruit} onChange={setFruit}&gt;
+  &lt;<span class="fn">Select.Option</span> value=<span class="st">"apple"</span>&gt;
+    🍎 Apple
+  &lt;/<span class="fn">Select.Option</span>&gt;
+  <span class="cm">// Flexible, extensible!</span>
+&lt;/<span class="fn">Select</span>&gt;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern 4: Custom Hooks -->
+  <div class="content-card">
+    <div class="pattern-tag">Pattern 4</div>
+    <div class="sub-heading"><i class="bi bi-hook"></i> Custom Hooks Pattern</div>
+    <p class="text-secondary mb-3">Custom hooks extract and reuse stateful logic across multiple components. They're the modern replacement for render props and HOCs for logic sharing.</p>
+
+    <div class="code-block"><span class="cm">// useForm — reusable form logic</span>
+<span class="kw">function</span> <span class="fn">useForm</span>(initialValues, validate) {
+  <span class="kw">const</span> [values, setValues] = <span class="fn">useState</span>(initialValues);
+  <span class="kw">const</span> [errors, setErrors] = <span class="fn">useState</span>({});
+  <span class="kw">const</span> [touched, setTouched] = <span class="fn">useState</span>({});
+
+  <span class="kw">const</span> handleChange = (e) =&gt; {
+    <span class="kw">const</span> { name, value } = e.target;
+    <span class="fn">setValues</span>(v =&gt; ({ ...v, [name]: value }));
+  };
+
+  <span class="kw">const</span> handleBlur = (e) =&gt; {
+    <span class="kw">const</span> { name } = e.target;
+    <span class="fn">setTouched</span>(t =&gt; ({ ...t, [name]: <span class="kw">true</span> }));
+    <span class="kw">if</span> (validate) <span class="fn">setErrors</span>(<span class="fn">validate</span>(values));
+  };
+
+  <span class="kw">const</span> handleSubmit = (onSubmit) =&gt; (e) =&gt; {
+    e.<span class="fn">preventDefault</span>();
+    <span class="kw">const</span> errs = validate ? <span class="fn">validate</span>(values) : {};
+    <span class="kw">if</span> (Object.<span class="fn">keys</span>(errs).length === <span class="st">0</span>) <span class="fn">onSubmit</span>(values);
+    <span class="kw">else</span> <span class="fn">setErrors</span>(errs);
+  };
+
+  <span class="kw">return</span> { values, errors, touched, handleChange, handleBlur, handleSubmit };
+}
+
+<span class="cm">// Usage — clean, no logic duplication</span>
+<span class="kw">function</span> <span class="fn">LoginForm</span>() {
+  <span class="kw">const</span> { values, errors, handleChange, handleBlur, handleSubmit } = <span class="fn">useForm</span>(
+    { email: <span class="st">''</span>, password: <span class="st">''</span> },
+    (vals) =&gt; {
+      <span class="kw">const</span> errs = {};
+      <span class="kw">if</span> (!vals.email) errs.email = <span class="st">'Required'</span>;
+      <span class="kw">if</span> (!vals.password) errs.password = <span class="st">'Required'</span>;
+      <span class="kw">return</span> errs;
+    }
+  );
+  <span class="cm">// Use values, errors, handlers in JSX</span>
+}</div>
+  </div>
+
+  <!-- Pattern 5: Provider -->
+  <div class="content-card">
+    <div class="pattern-tag">Pattern 5</div>
+    <div class="sub-heading"><i class="bi bi-broadcast"></i> Provider Pattern</div>
+    <p class="text-secondary mb-3">The Provider pattern uses React Context to share data across a component tree without prop drilling. Any component in the tree can subscribe to the context.</p>
+
+    <div class="code-block"><span class="cm">// ThemeProvider — wraps app and provides theme to all components</span>
+<span class="kw">const</span> ThemeContext = <span class="fn">createContext</span>();
+
+<span class="kw">function</span> <span class="fn">ThemeProvider</span>({ children }) {
+  <span class="kw">const</span> [theme, setTheme] = <span class="fn">useState</span>(<span class="st">'light'</span>);
+
+  <span class="kw">const</span> toggleTheme = () =&gt; <span class="fn">setTheme</span>(t =&gt; t === <span class="st">'light'</span> ? <span class="st">'dark'</span> : <span class="st">'light'</span>);
+
+  <span class="kw">return</span> (
+    &lt;<span class="fn">ThemeContext.Provider</span> value={{ theme, toggleTheme }}&gt;
+      &lt;div data-theme={theme}&gt;{children}&lt;/div&gt;
+    &lt;/<span class="fn">ThemeContext.Provider</span>&gt;
+  );
+}
+
+<span class="kw">const</span> useTheme = () =&gt; {
+  <span class="kw">const</span> ctx = <span class="fn">useContext</span>(ThemeContext);
+  <span class="kw">if</span> (!ctx) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="st">'useTheme must be inside ThemeProvider'</span>);
+  <span class="kw">return</span> ctx;
+};
+
+<span class="cm">// Any component, any depth — no prop drilling</span>
+<span class="kw">function</span> <span class="fn">DarkModeToggle</span>() {
+  <span class="kw">const</span> { theme, toggleTheme } = <span class="fn">useTheme</span>();
+  <span class="kw">return</span> &lt;button onClick={toggleTheme}&gt;{theme === <span class="st">'light'</span> ? <span class="st">'🌙'</span> : <span class="st">'☀️'</span>}&lt;/button&gt;;
+}</div>
+  </div>
+
+  <!-- Pattern 6: Observer -->
+  <div class="content-card">
+    <div class="pattern-tag">Pattern 6</div>
+    <div class="sub-heading"><i class="bi bi-eye"></i> Observer Pattern (Pub/Sub)</div>
+    <p class="text-secondary mb-3">The Observer pattern allows components to subscribe to events without being tightly coupled. Useful for cross-component communication that doesn't warrant Redux/Context.</p>
+
+    <div class="code-block"><span class="cm">// Simple EventEmitter for cross-component communication</span>
+<span class="kw">class</span> <span class="fn">EventEmitter</span> {
+  <span class="kw">constructor</span>() { <span class="kw">this</span>.events = {}; }
+
+  <span class="fn">on</span>(event, callback) {
+    <span class="kw">if</span> (!<span class="kw">this</span>.events[event]) <span class="kw">this</span>.events[event] = [];
+    <span class="kw">this</span>.events[event].<span class="fn">push</span>(callback);
+    <span class="kw">return</span> () =&gt; <span class="kw">this</span>.<span class="fn">off</span>(event, callback); <span class="cm">// returns unsubscribe fn</span>
+  }
+
+  <span class="fn">off</span>(event, callback) {
+    <span class="kw">this</span>.events[event] = (<span class="kw">this</span>.events[event] || []).<span class="fn">filter</span>(cb =&gt; cb !== callback);
+  }
+
+  <span class="fn">emit</span>(event, ...args) {
+    (<span class="kw">this</span>.events[event] || []).<span class="fn">forEach</span>(cb =&gt; <span class="fn">cb</span>(...args));
+  }
+}
+
+<span class="kw">const</span> bus = <span class="kw">new</span> <span class="fn">EventEmitter</span>();
+
+<span class="cm">// Subscribe in useEffect — clean up on unmount</span>
+<span class="kw">function</span> <span class="fn">NotificationListener</span>() {
+  <span class="kw">const</span> [notification, setNotification] = <span class="fn">useState</span>(<span class="kw">null</span>);
+
+  <span class="fn">useEffect</span>(() =&gt; {
+    <span class="kw">const</span> unsubscribe = bus.<span class="fn">on</span>(<span class="st">'notification'</span>, setNotification);
+    <span class="kw">return</span> unsubscribe; <span class="cm">// cleanup on unmount</span>
+  }, []);
+
+  <span class="kw">if</span> (!notification) <span class="kw">return null</span>;
+  <span class="kw">return</span> &lt;div className=<span class="st">"toast"</span>&gt;{notification.message}&lt;/div&gt;;
+}
+
+<span class="cm">// Emit from anywhere</span>
+<span class="kw">function</span> <span class="fn">SaveButton</span>() {
+  <span class="kw">return</span> &lt;button onClick={() =&gt; bus.<span class="fn">emit</span>(<span class="st">'notification'</span>, { message: <span class="st">'Saved!'</span> })}&gt;Save&lt;/button&gt;;
+}</div>
+  </div>
+
+  <!-- Patterns 7 & 8 -->
+  <div class="content-card">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="pattern-tag">Pattern 7</div>
+        <div class="sub-heading"><i class="bi bi-tools"></i> Factory Pattern</div>
+        <p class="text-secondary mb-3">A factory function creates different component variants based on configuration, avoiding repetitive boilerplate.</p>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// Create input variants from a factory</span>
+<span class="kw">function</span> <span class="fn">createInput</span>(type, defaultProps) {
+  <span class="kw">return function</span> <span class="fn">Input</span>(props) {
+    <span class="kw">return</span> (
+      &lt;input
+        type={type}
+        className=<span class="st">"form-control"</span>
+        {...defaultProps}
+        {...props}
+      /&gt;
+    );
+  };
+}
+
+<span class="kw">const</span> EmailInput = <span class="fn">createInput</span>(<span class="st">'email'</span>, {
+  placeholder: <span class="st">'Enter email'</span>,
+  autoComplete: <span class="st">'email'</span>,
+});
+<span class="kw">const</span> PasswordInput = <span class="fn">createInput</span>(<span class="st">'password'</span>, {
+  placeholder: <span class="st">'Enter password'</span>,
+  autoComplete: <span class="st">'current-password'</span>,
+});
+
+<span class="cm">// Usage</span>
+&lt;<span class="fn">EmailInput</span> name=<span class="st">"email"</span> onChange={handleChange} /&gt;
+&lt;<span class="fn">PasswordInput</span> name=<span class="st">"password"</span> onChange={handleChange} /&gt;</div>
+      </div>
+      <div class="col-md-6">
+        <div class="pattern-tag">Pattern 8</div>
+        <div class="sub-heading"><i class="bi bi-sliders"></i> Strategy Pattern</div>
+        <p class="text-secondary mb-3">The strategy pattern lets you swap algorithms/behaviors at runtime without changing the component itself.</p>
+        <div class="code-block" style="font-size:.78rem;"><span class="cm">// Different sort strategies</span>
+<span class="kw">const</span> sortStrategies = {
+  <span class="fn">alphabetical</span>: (a, b) =&gt; a.name.<span class="fn">localeCompare</span>(b.name),
+  <span class="fn">byDate</span>: (a, b) =&gt; <span class="kw">new</span> <span class="fn">Date</span>(b.createdAt) - <span class="kw">new</span> <span class="fn">Date</span>(a.createdAt),
+  <span class="fn">byPrice</span>: (a, b) =&gt; a.price - b.price,
+};
+
+<span class="kw">function</span> <span class="fn">SortableList</span>({ items, sortStrategy = <span class="st">'alphabetical'</span> }) {
+  <span class="kw">const</span> sorted = [...items].<span class="fn">sort</span>(sortStrategies[sortStrategy]);
+
+  <span class="kw">return</span> (
+    &lt;ul&gt;
+      {sorted.<span class="fn">map</span>(item =&gt; (
+        &lt;li key={item.id}&gt;{item.name}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+
+<span class="cm">// Swap strategy without changing component</span>
+&lt;<span class="fn">SortableList</span> items={products} sortStrategy=<span class="st">"byPrice"</span> /&gt;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-table"></i> When to Use Each Pattern</div>
+    <div class="table-responsive">
+      <table class="table table-bordered" style="font-size:.86rem;">
+        <thead class="table-dark">
+          <tr><th>Pattern</th><th>Best For</th><th>Modern Alternative</th><th>Still Relevant?</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HOC</strong></td>
+            <td>Adding behavior to existing components (auth, logging, loading)</td>
+            <td>Custom hooks</td>
+            <td><span class="badge bg-warning text-dark">Sometimes</span></td>
+          </tr>
+          <tr>
+            <td><strong>Render Props</strong></td>
+            <td>Sharing state + flexible rendering</td>
+            <td>Custom hooks</td>
+            <td><span class="badge bg-warning text-dark">Sometimes</span></td>
+          </tr>
+          <tr>
+            <td><strong>Compound Components</strong></td>
+            <td>Flexible, composable UI libraries (tabs, select, accordion)</td>
+            <td>—</td>
+            <td><span class="badge bg-success">Yes — preferred</span></td>
+          </tr>
+          <tr>
+            <td><strong>Custom Hooks</strong></td>
+            <td>Sharing stateful logic (forms, fetch, debounce)</td>
+            <td>—</td>
+            <td><span class="badge bg-success">Yes — preferred</span></td>
+          </tr>
+          <tr>
+            <td><strong>Provider</strong></td>
+            <td>Global state without Redux (theme, auth, locale)</td>
+            <td>Zustand for complex state</td>
+            <td><span class="badge bg-success">Yes</span></td>
+          </tr>
+          <tr>
+            <td><strong>Observer</strong></td>
+            <td>Decoupled event-driven communication</td>
+            <td>Redux, Zustand</td>
+            <td><span class="badge bg-secondary">Niche</span></td>
+          </tr>
+          <tr>
+            <td><strong>Factory</strong></td>
+            <td>Creating component variants programmatically</td>
+            <td>—</td>
+            <td><span class="badge bg-success">Yes</span></td>
+          </tr>
+          <tr>
+            <td><strong>Strategy</strong></td>
+            <td>Swappable algorithms/behaviors (sort, validate, format)</td>
+            <td>—</td>
+            <td><span class="badge bg-success">Yes</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Interview Questions -->
+  <div class="content-card">
+    <div class="sub-heading"><i class="bi bi-chat-left-quote"></i> Interview Questions</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is a Higher-Order Component? Give a real-world use case.</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the render props pattern? Why have custom hooks largely replaced it?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Explain the compound components pattern. What problem does it solve vs. passing many props?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>When would you use a custom hook vs. a HOC vs. render props to share logic?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is the Provider pattern? How does it differ from Redux?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>What is prop drilling and how do design patterns help solve it?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>How does the Observer/Pub-Sub pattern work in React? When would you use it?</div>
+    <div class="interview-q"><i class="bi bi-question-circle me-2"></i>Can you compose multiple HOCs together? What are the pitfalls?</div>
+  </div>
+
+</div>
+
+<footer style="background:#0f172a;color:#64748b;padding:1.5rem 0;margin-top:3rem;border-top:1px solid rgba(97,218,251,.1);">
+  <div class="container-xl text-center">
+    <span style="color:#61dafb;font-weight:700;">React Mastery Hub</span> — Complete React Learning Platform
+    <div class="mt-2 d-flex justify-content-center gap-3 flex-wrap">
+      <a href="index.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Home</a>
+      <a href="react-hooks.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Hooks</a>
+      <a href="react-redux.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Redux</a>
+      <a href="react-interview.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Interview</a>
+      <a href="react-projects.html" style="color:#64748b;font-size:.85rem;text-decoration:none;">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const t=document.getElementById('themeToggle');const h=document.documentElement;
+if(localStorage.getItem('theme')==='dark'){h.setAttribute('data-theme','dark');if(t)t.innerHTML='<i class="bi bi-sun-fill"></i>';}
+if(t)t.addEventListener('click',()=>{const d=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',d?'light':'dark');localStorage.setItem('theme',d?'light':'dark');t.innerHTML=d?'<i class="bi bi-moon-stars-fill"></i>':'<i class="bi bi-sun-fill"></i>';});
+</script>
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

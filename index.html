@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>React Mastery Hub — Complete React Learning Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <style>
+    :root {
+      --primary: #0ea5e9;
+      --bg: #ffffff;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --code-bg: #0f172a;
+    }
+    [data-theme="dark"] {
+      --bg: #060a19;
+      --card-bg: #0d1530;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: #1a2744;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.7;
+      transition: background .3s, color .3s;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    [data-theme="dark"] body {
+      background-image:
+        radial-gradient(ellipse 60% 40% at 10% 20%, rgba(99,102,241,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 90% 80%, rgba(97,218,251,.06) 0%, transparent 55%);
+    }
+
+    /* NAVBAR */
+    .navbar { background: rgba(6,10,25,.97) !important; backdrop-filter: blur(16px); border-bottom: 1px solid rgba(97,218,251,.12); padding: .75rem 0; }
+    .navbar-brand { font-weight: 800; font-size: 1.2rem; letter-spacing: -.5px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .nav-link { color: rgba(255,255,255,.75) !important; font-weight: 500; transition: color .2s; padding: .4rem .75rem !important; border-radius: 6px; }
+    .nav-link:hover { color: #61dafb !important; background: rgba(97,218,251,.08); }
+
+    /* HERO — light background */
+    .hero {
+      background:
+        radial-gradient(ellipse 60% 50% at 15% 40%, rgba(97,218,251,.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 45% at 85% 20%, rgba(99,102,241,.06) 0%, transparent 55%),
+        #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 0 60px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    [data-theme="dark"] .hero {
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 40%, rgba(99,102,241,.22) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 45% at 80% 20%, rgba(97,218,251,.18) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 60% 80%, rgba(168,85,247,.15) 0%, transparent 55%),
+        linear-gradient(160deg, #060a19 0%, #0d1a3a 40%, #0a0f2e 70%, #060a19 100%);
+      border-bottom: none;
+    }
+
+    /* Dot-matrix grid overlay */
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(14,165,233,.12) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+    }
+    [data-theme="dark"] .hero-grid {
+      background-image: radial-gradient(circle, rgba(97,218,251,.18) 1px, transparent 1px);
+    }
+
+    /* Floating glowing blobs */
+    .hero-blob { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; animation: blobFloat 8s ease-in-out infinite; }
+    .hero-blob-1 { width: 420px; height: 420px; background: radial-gradient(circle, rgba(99,102,241,.25), transparent 70%); top: -80px; left: -100px; animation-delay: 0s; }
+    .hero-blob-2 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(97,218,251,.2), transparent 70%); top: 30%; right: -80px; animation-delay: 2.5s; }
+    .hero-blob-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(168,85,247,.18), transparent 70%); bottom: 0; left: 30%; animation-delay: 5s; }
+    @keyframes blobFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      33%       { transform: translateY(-30px) scale(1.05); }
+      66%       { transform: translateY(15px) scale(.97); }
+    }
+
+    /* Shine line across the hero */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(97,218,251,.6), transparent);
+      animation: shineLine 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes shineLine {
+      0%   { left: -60%; opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { left: 120%; opacity: 0; }
+    }
+
+    .hero h1 {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      color: #0f172a;
+    }
+    [data-theme="dark"] .hero h1 { color: #f1f5f9; }
+    .hero h1 span { color: #0ea5e9; }
+    [data-theme="dark"] .hero h1 span { color: #61dafb; }
+    .hero .lead { font-size: 1.05rem; color: #475569; line-height: 1.8; max-width: 520px; font-weight: 400; font-family: 'Inter', sans-serif; }
+    [data-theme="dark"] .hero .lead { color: rgba(241,245,249,.75); }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+
+    .btn-react {
+      background: linear-gradient(135deg, #61dafb, #38bdf8);
+      color: #060a19;
+      font-weight: 800;
+      border: none;
+      padding: .8rem 2.2rem;
+      border-radius: 50px;
+      font-size: 1rem;
+      transition: transform .2s, box-shadow .2s;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: -.2px;
+    }
+    .btn-react:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(97,218,251,.5); color: #060a19; }
+
+    .btn-outline-react {
+      background: #f0f9ff;
+      color: #0284c7;
+      border: 1.5px solid #bae6fd;
+      padding: .8rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all .2s;
+    }
+    .btn-outline-react:hover { background: #e0f2fe; border-color: #0ea5e9; color: #0284c7; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(14,165,233,.2); }
+    [data-theme="dark"] .btn-outline-react { background: rgba(97,218,251,.06); color: #61dafb; border-color: rgba(97,218,251,.5); }
+    [data-theme="dark"] .btn-outline-react:hover { background: rgba(97,218,251,.14); border-color: #61dafb; color: #61dafb; box-shadow: 0 8px 24px rgba(97,218,251,.2); }
+
+    /* HERO LIGHT MODE OVERRIDES */
+    .hero-badge { background: rgba(14,165,233,.1); color: #0ea5e9; border: 1px solid rgba(14,165,233,.25); }
+    [data-theme="dark"] .hero-badge { background: rgba(97,218,251,.2); color: #61dafb; border-color: rgba(97,218,251,.3); }
+    .hero-checklist { color: #6b7280; font-size: .85rem; }
+    [data-theme="dark"] .hero-checklist { color: rgba(255,255,255,.6); }
+
+    /* ATOM SVG ANIMATION */
+    .atom-container { position: relative; width: 320px; height: 320px; }
+    .atom-svg { width: 100%; height: 100%; }
+    .orbit-1 { animation: orbit1 3s linear infinite; transform-origin: center; }
+    .orbit-2 { animation: orbit2 4s linear infinite; transform-origin: center; }
+    .orbit-3 { animation: orbit3 5s linear infinite; transform-origin: center; }
+    @keyframes orbit1 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes orbit2 { from { transform: rotate(60deg); } to { transform: rotate(420deg); } }
+    @keyframes orbit3 { from { transform: rotate(120deg); } to { transform: rotate(480deg); } }
+    .nucleus-pulse { animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{r:14;opacity:1;} 50%{r:18;opacity:.8;} }
+
+    /* TYPEWRITER */
+    #typewriter { color: #0ea5e9; border-right: 3px solid #0ea5e9; padding-right: 4px; animation: blink .7s step-end infinite; white-space: nowrap; overflow: hidden; }
+    [data-theme="dark"] #typewriter { color: #61dafb; border-right-color: #61dafb; }
+    @keyframes blink { 0%,100%{border-color:currentColor;} 50%{border-color:transparent;} }
+
+    /* STATS BAR */
+    .stats-bar {
+      background: #f7f8fa;
+      border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1.75rem 0;
+    }
+    [data-theme="dark"] .stats-bar {
+      background: linear-gradient(90deg, rgba(6,10,25,.97), rgba(13,26,58,.97), rgba(6,10,25,.97));
+      border-top-color: rgba(97,218,251,.15);
+      border-bottom-color: rgba(97,218,251,.1);
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 2.2rem; font-weight: 900; color: #0ea5e9; display: block; font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -1px; }
+    [data-theme="dark"] .stat-num { color: #61dafb; }
+    .stat-label { font-size: .75rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-top: .2rem; display: block; }
+    [data-theme="dark"] .stat-label { color: rgba(255,255,255,.5); }
+
+    /* SEARCH */
+    .search-wrap { position: relative; max-width: 600px; margin: 0 auto 2rem; }
+    .search-wrap input { width: 100%; padding: .9rem 1.2rem .9rem 3rem; border-radius: 50px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 1rem; outline: none; transition: border-color .2s; }
+    .search-wrap input:focus { border-color: #0ea5e9; }
+    [data-theme="dark"] .search-wrap input:focus { border-color: #61dafb; }
+    .search-wrap .bi-search { position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
+
+    /* SECTION CARDS */
+    .section-title { font-size: 1.85rem; font-weight: 800; color: var(--text); letter-spacing: -.5px; font-family: 'Inter', system-ui, sans-serif; line-height: 1.2; }
+    .section-subtitle { color: var(--text-muted); margin-bottom: 2rem; font-size: .975rem; line-height: 1.7; }
+    .topic-card { background: var(--card-bg); border-radius: 14px; padding: 1.4rem; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,.05); transition: border-color .25s, transform .25s, box-shadow .25s; height: 100%; display: flex; flex-direction: column; text-decoration: none; color: var(--text); }
+    .topic-card:hover { border-color: #0ea5e9; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.09), 0 0 0 1px rgba(14,165,233,.15); color: var(--text); }
+    [data-theme="dark"] .topic-card { box-shadow: none; }
+    [data-theme="dark"] .topic-card:hover { border-color: #61dafb; box-shadow: 0 12px 35px rgba(97,218,251,.12); }
+    .topic-card .card-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: .9rem; flex-shrink: 0; }
+    .topic-card .card-num { font-size: .7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: .25rem; }
+    .topic-card h5 { font-size: .95rem; font-weight: 700; margin-bottom: .35rem; color: var(--text); letter-spacing: -.1px; line-height: 1.4; }
+    .topic-card p { font-size: .84rem; color: var(--text-muted); flex-grow: 1; line-height: 1.65; margin-bottom: .7rem; }
+    .topic-card .tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: auto; }
+    .topic-card .tag { font-size: .69rem; padding: .18rem .5rem; border-radius: 20px; font-weight: 600; }
+
+    /* LEVEL BADGES */
+    .level-beginner { background: #dcfce7; color: #166534; }
+    .level-intermediate { background: #fef9c3; color: #854d0e; }
+    .level-advanced { background: #fee2e2; color: #991b1b; }
+    .level-expert { background: #ede9fe; color: #5b21b6; }
+    [data-theme="dark"] .level-beginner { background: #14532d; color: #bbf7d0; }
+    [data-theme="dark"] .level-intermediate { background: #451a03; color: #fef3c7; }
+    [data-theme="dark"] .level-advanced { background: #450a0a; color: #fecaca; }
+    [data-theme="dark"] .level-expert { background: #2e1065; color: #ddd6fe; }
+
+    /* LEARNING PATH */
+    .path-wrap { position: relative; padding: 2rem 0; }
+    .path-step { display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2rem; position: relative; }
+    .path-step::before { content: ''; position: absolute; left: 21px; top: 50px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, #0ea5e9, rgba(14,165,233,.1)); }
+    [data-theme="dark"] .path-step::before { background: linear-gradient(to bottom, #61dafb, rgba(97,218,251,.1)); }
+    .path-step:last-child::before { display: none; }
+    .path-num { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #0ea5e9, #3b82f6); color: #fff; font-weight: 800; font-size: .9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(14,165,233,.25); font-family: 'Inter', sans-serif; }
+    [data-theme="dark"] .path-num { background: linear-gradient(135deg, #61dafb, #3b82f6); color: #0f172a; box-shadow: 0 4px 12px rgba(97,218,251,.3); }
+    .path-content { background: var(--card-bg); border-radius: 10px; padding: 1rem 1.2rem; border: 1px solid var(--border); flex-grow: 1; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    .path-content h6 { font-weight: 700; margin-bottom: .25rem; color: var(--text); font-size: .9rem; font-family: 'Inter', sans-serif; }
+    .path-content p { font-size: .83rem; color: var(--text-muted); margin: 0; line-height: 1.65; }
+
+    /* POPULAR SECTION */
+    .popular-card { background: var(--card-bg); border-radius: 12px; padding: 1rem 1.3rem; border: 1px solid var(--border); display: flex; align-items: center; gap: 1rem; transition: all .2s; text-decoration: none; color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+    .popular-card:hover { border-color: #0ea5e9; transform: translateX(4px); color: var(--text); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+    [data-theme="dark"] .popular-card:hover { border-color: #61dafb; }
+    .popular-card .fw-700 { font-size: .93rem; font-weight: 700; color: var(--text); font-family: 'Inter', sans-serif; }
+    .popular-card .icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+
+    /* SECTION DIVIDERS */
+    .section-wrap { padding: 4rem 0; }
+    .section-wrap.alt { background: #f7f8fa; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    [data-theme="dark"] .section-wrap.alt { background: rgba(97,218,251,.02); }
+
+    /* THEME TOGGLE */
+    #themeToggle { background: #f0f9ff; border: 1.5px solid #bae6fd; color: #0284c7; border-radius: 50px; padding: .3rem .8rem; font-size: .85rem; transition: all .2s; font-family: 'Inter', sans-serif; font-weight: 500; }
+    #themeToggle:hover { background: #e0f2fe; }
+    [data-theme="dark"] #themeToggle { background: rgba(97,218,251,.12); border-color: rgba(97,218,251,.4); color: #61dafb; }
+    [data-theme="dark"] #themeToggle:hover { background: rgba(97,218,251,.25); }
+
+    /* FOOTER */
+    footer { background: #0f172a; color: #64748b; border-top: 1px solid rgba(97,218,251,.1); padding: 3rem 0 1.5rem; }
+    footer a { color: #94a3b8; text-decoration: none; transition: color .2s; }
+    footer a:hover { color: #61dafb; }
+
+    /* HIDDEN CARD (search) */
+    .topic-card.hidden { display: none; }
+
+    /* BACK TO TOP */
+    #backTop { position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px; background: #0ea5e9; border: none; border-radius: 50%; display: none; align-items: center; justify-content: center; color: #fff; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(14,165,233,.35); z-index: 999; transition: transform .2s; }
+    #backTop:hover { transform: translateY(-3px); }
+    [data-theme="dark"] #backTop { background: #61dafb; color: #0f172a; box-shadow: 0 4px 15px rgba(97,218,251,.4); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container-xl">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+      <svg width="28" height="28" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="8" fill="#61dafb"/>
+        <ellipse cx="50" cy="50" rx="42" ry="16" fill="none" stroke="#61dafb" stroke-width="3"/>
+        <ellipse cx="50" cy="50" rx="42" ry="16" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/>
+        <ellipse cx="50" cy="50" rx="42" ry="16" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/>
+      </svg>
+      <span style="color:#61dafb;">React</span><span style="color:#fff;">Mastery Hub</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-lg-center">
+        <li class="nav-item"><a class="nav-link" href="react-hooks.html"><i class="bi bi-lightning-charge me-1"></i>Hooks</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-interview.html"><i class="bi bi-chat-quote me-1"></i>Interview Q&amp;A</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-projects.html"><i class="bi bi-code-slash me-1"></i>60 Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="react-typescript.html"><i class="bi bi-filetype-tsx me-1"></i>TypeScript</a></li>
+        <li class="nav-item ms-lg-2">
+          <button id="themeToggle" class="btn btn-sm"><i class="bi bi-moon-stars-fill"></i></button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-blob hero-blob-3"></div>
+  <div class="container-xl position-relative">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="badge hero-badge" style="font-size:.8rem;padding:.4rem .9rem;border-radius:20px;">
+            <i class="bi bi-stars me-1"></i>From Zero to React Architect
+          </span>
+        </div>
+        <h1>Master <span id="typewriter">React</span><br/>from scratch</h1>
+        <p class="lead mt-3">29 sections covering every React concept — hooks, performance, testing, TypeScript, Next.js, architecture, and 500+ interview questions. The most complete React learning resource.</p>
+        <div class="hero-cta">
+          <a href="react-intro.html" class="btn btn-react"><i class="bi bi-play-circle-fill me-2"></i>Start Learning</a>
+          <a href="react-hooks.html" class="btn btn-outline-react"><i class="bi bi-lightning-charge me-2"></i>Jump to Hooks</a>
+          <a href="react-interview.html" class="btn btn-outline-react"><i class="bi bi-chat-quote me-2"></i>Interview Q&amp;A</a>
+        </div>
+        <div class="d-flex flex-wrap gap-3 mt-4 hero-checklist">
+          <span><i class="bi bi-check-circle-fill me-1" style="color:#61dafb;"></i>29 Sections</span>
+          <span><i class="bi bi-check-circle-fill me-1" style="color:#61dafb;"></i>500+ Interview Q&amp;A</span>
+          <span><i class="bi bi-check-circle-fill me-1" style="color:#61dafb;"></i>60 Projects</span>
+          <span><i class="bi bi-check-circle-fill me-1" style="color:#61dafb;"></i>Dark Mode</span>
+          <span><i class="bi bi-check-circle-fill me-1" style="color:#61dafb;"></i>All React Hooks</span>
+        </div>
+      </div>
+      <div class="col-lg-5 d-none d-lg-flex justify-content-center">
+        <div class="atom-container">
+          <svg class="atom-svg" viewBox="0 0 320 320">
+            <defs>
+              <radialGradient id="atomGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#61dafb" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#61dafb" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <circle cx="160" cy="160" r="130" fill="url(#atomGlow)"/>
+            <g class="orbit-1"><ellipse cx="160" cy="160" rx="130" ry="50" fill="none" stroke="#61dafb" stroke-width="2" stroke-opacity="0.6"/><circle cx="290" cy="160" r="6" fill="#61dafb"/></g>
+            <g class="orbit-2"><ellipse cx="160" cy="160" rx="130" ry="50" fill="none" stroke="#93c5fd" stroke-width="2" stroke-opacity="0.5" transform="rotate(60 160 160)"/><circle cx="225" cy="272.6" r="5" fill="#93c5fd"/></g>
+            <g class="orbit-3"><ellipse cx="160" cy="160" rx="130" ry="50" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-opacity="0.5" transform="rotate(120 160 160)"/><circle cx="95" cy="272.6" r="5" fill="#c4b5fd"/></g>
+            <circle class="nucleus-pulse" cx="160" cy="160" r="14" fill="#61dafb"/>
+            <circle cx="160" cy="160" r="8" fill="#0f172a"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="container-xl">
+    <div class="row g-3">
+      <div class="col-6 col-md-3"><div class="stat-item"><span class="stat-num" data-target="29">0</span><span class="stat-label">Sections</span></div></div>
+      <div class="col-6 col-md-3"><div class="stat-item"><span class="stat-num" data-target="500">0</span><span class="stat-label">Interview Q&amp;A</span></div></div>
+      <div class="col-6 col-md-3"><div class="stat-item"><span class="stat-num" data-target="60">0</span><span class="stat-label">Projects</span></div></div>
+      <div class="col-6 col-md-3"><div class="stat-item"><span class="stat-num" data-target="16">0</span><span class="stat-label">Hooks Covered</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LEARNING PATH -->
+<section class="section-wrap">
+  <div class="container-xl">
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="mb-2"><span class="badge level-beginner">Learning Path</span></div>
+        <h2 class="section-title mb-1">Your React Journey</h2>
+        <p class="section-subtitle">Follow this structured path from complete beginner to React architect.</p>
+        <div class="path-wrap">
+          <div class="path-step">
+            <div class="path-num">1</div>
+            <div class="path-content">
+              <h6>JavaScript Foundations</h6>
+              <p>Arrow functions, destructuring, spread, async/await, array methods, modules. Section 2 covers all JS you need.</p>
+            </div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">2</div>
+            <div class="path-content">
+              <h6>React Basics</h6>
+              <p>Sections 1–7: React intro, setup, JSX, components, props, state. Build your first 20 projects.</p>
+            </div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">3</div>
+            <div class="path-content">
+              <h6>Hooks Mastery</h6>
+              <p>Section 8 (most important): All 16 React hooks with deep dives, custom hooks, and common mistakes.</p>
+            </div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">4</div>
+            <div class="path-content">
+              <h6>Intermediate Skills</h6>
+              <p>Sections 9–15: Lifecycle, forms, routing, API calls, performance, Context, Redux/RTK.</p>
+            </div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">5</div>
+            <div class="path-content">
+              <h6>Professional React</h6>
+              <p>Sections 16–22: Testing, auth, design patterns, TypeScript, Next.js, React Native, architecture.</p>
+            </div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">6</div>
+            <div class="path-content">
+              <h6>Interview Ready</h6>
+              <p>Sections 23–29: DevOps, system design, 60 projects, 500 interview Q&amp;A, animations, React 18+ features.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="mb-2"><span class="badge level-expert">Quick Access</span></div>
+        <h2 class="section-title mb-1">Most Popular Pages</h2>
+        <p class="section-subtitle">Jump to the pages learners visit most.</p>
+        <div class="d-flex flex-column gap-2 mb-4">
+          <a href="react-hooks.html" class="popular-card">
+            <div class="icon" style="background:#dbeafe;color:#2563eb;"><i class="bi bi-lightning-charge-fill"></i></div>
+            <div>
+              <div class="fw-700">React Hooks Deep Dive</div>
+              <div style="font-size:.82rem;color:var(--text-muted);">All 16 hooks — useState, useEffect, useRef, useMemo, useCallback, useReducer, custom hooks</div>
+            </div>
+            <i class="bi bi-chevron-right ms-auto" style="color:var(--text-muted);"></i>
+          </a>
+          <a href="react-interview.html" class="popular-card">
+            <div class="icon" style="background:#f3e8ff;color:#7c3aed;"><i class="bi bi-chat-quote-fill"></i></div>
+            <div>
+              <div class="fw-700">500 Interview Questions</div>
+              <div style="font-size:.82rem;color:var(--text-muted);">Beginner to expert — fundamentals, hooks, performance, architecture, system design</div>
+            </div>
+            <i class="bi bi-chevron-right ms-auto" style="color:var(--text-muted);"></i>
+          </a>
+          <a href="react-projects.html" class="popular-card">
+            <div class="icon" style="background:#dcfce7;color:#16a34a;"><i class="bi bi-code-slash"></i></div>
+            <div>
+              <div class="fw-700">60 Projects to Build</div>
+              <div style="font-size:.82rem;color:var(--text-muted);">20 beginner + 20 intermediate + 20 advanced projects with detailed requirements</div>
+            </div>
+            <i class="bi bi-chevron-right ms-auto" style="color:var(--text-muted);"></i>
+          </a>
+          <a href="react-performance.html" class="popular-card">
+            <div class="icon" style="background:#fef9c3;color:#ca8a04;"><i class="bi bi-speedometer2"></i></div>
+            <div>
+              <div class="fw-700">Performance Optimization</div>
+              <div style="font-size:.82rem;color:var(--text-muted);">React.memo, useMemo, useCallback, lazy loading, virtualization, code splitting</div>
+            </div>
+            <i class="bi bi-chevron-right ms-auto" style="color:var(--text-muted);"></i>
+          </a>
+          <a href="react-typescript.html" class="popular-card">
+            <div class="icon" style="background:#e0f2fe;color:#0369a1;"><i class="bi bi-filetype-tsx"></i></div>
+            <div>
+              <div class="fw-700">TypeScript with React</div>
+              <div style="font-size:.82rem;color:var(--text-muted);">Typed components, hooks, Redux, event handlers, generics — everything typed</div>
+            </div>
+            <i class="bi bi-chevron-right ms-auto" style="color:var(--text-muted);"></i>
+          </a>
+          <a href="react-nextjs.html" class="popular-card">
+            <div class="icon" style="background:#f1f5f9;color:#334155;"><i class="bi bi-layers-fill"></i></div>
+            <div>
+              <div class="fw-700">Next.js Complete Guide</div>
+              <div style="font-size:.82rem;color:var(--text-muted);">SSR, SSG, ISR, App Router, Server Components, API routes, deployment</div>
+            </div>
+            <i class="bi bi-chevron-right ms-auto" style="color:var(--text-muted);"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALL SECTIONS -->
+<section class="section-wrap alt">
+  <div class="container-xl">
+    <div class="text-center mb-4">
+      <div class="mb-2"><span class="badge level-beginner">Complete Curriculum</span></div>
+      <h2 class="section-title">All 29 Sections</h2>
+      <p class="section-subtitle">Every React concept from zero to architect — click any card to start.</p>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+      <i class="bi bi-search"></i>
+      <input type="text" id="sectionSearch" placeholder="Search sections... (e.g. hooks, redux, testing)" autocomplete="off"/>
+    </div>
+
+    <!-- BEGINNER GROUP -->
+    <h4 class="fw-800 mb-3 mt-4" style="color:var(--text);"><span class="badge level-beginner me-2">Beginner</span>Sections 1–7: React Foundations</h4>
+    <div class="row g-4 mb-5" id="beginner-cards">
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-intro.html" class="topic-card">
+          <div class="card-icon" style="background:#dbeafe;color:#2563eb;"><i class="bi bi-rocket-takeoff-fill"></i></div>
+          <div class="card-num">Section 1</div>
+          <h5>Introduction to React</h5>
+          <p>What is React, why use it, Virtual DOM, reconciliation, the React ecosystem and how it all works.</p>
+          <div class="tags">
+            <span class="tag level-beginner">Beginner</span>
+            <span class="tag" style="background:#e0f2fe;color:#0369a1;">Virtual DOM</span>
+            <span class="tag" style="background:#f3e8ff;color:#7c3aed;">Must Know</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="js-for-react.html" class="topic-card">
+          <div class="card-icon" style="background:#fef9c3;color:#ca8a04;"><i class="bi bi-filetype-js"></i></div>
+          <div class="card-num">Section 2</div>
+          <h5>JavaScript for React</h5>
+          <p>All JS you MUST know: arrow functions, destructuring, spread, async/await, modules, closures.</p>
+          <div class="tags">
+            <span class="tag level-beginner">Beginner</span>
+            <span class="tag" style="background:#fef9c3;color:#854d0e;">ES6+</span>
+            <span class="tag" style="background:#fee2e2;color:#991b1b;">Prerequisites</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-setup.html" class="topic-card">
+          <div class="card-icon" style="background:#dcfce7;color:#16a34a;"><i class="bi bi-tools"></i></div>
+          <div class="card-num">Section 3</div>
+          <h5>React Setup &amp; Tooling</h5>
+          <p>Vite, CRA, Next.js setup. Dev tools, folder structure, ESLint, Prettier, TypeScript configuration.</p>
+          <div class="tags">
+            <span class="tag level-beginner">Beginner</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">Vite</span>
+            <span class="tag" style="background:#e0f2fe;color:#0369a1;">Tooling</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-jsx.html" class="topic-card">
+          <div class="card-icon" style="background:#f3e8ff;color:#7c3aed;"><i class="bi bi-code-slash"></i></div>
+          <div class="card-num">Section 4</div>
+          <h5>JSX Deep Dive</h5>
+          <p>JSX syntax, compilation, expressions, conditional rendering, lists, keys, fragments, spread props.</p>
+          <div class="tags">
+            <span class="tag level-beginner">Beginner</span>
+            <span class="tag" style="background:#f3e8ff;color:#7c3aed;">JSX</span>
+            <span class="tag" style="background:#fef9c3;color:#854d0e;">Babel</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-components.html" class="topic-card">
+          <div class="card-icon" style="background:#e0f2fe;color:#0369a1;"><i class="bi bi-puzzle-fill"></i></div>
+          <div class="card-num">Section 5</div>
+          <h5>Components</h5>
+          <p>9 component types — functional, class, HOC, memo, lazy, pure, controlled, compound, server.</p>
+          <div class="tags">
+            <span class="tag level-beginner">Beginner</span>
+            <span class="tag" style="background:#dbeafe;color:#1d4ed8;">Component Types</span>
+            <span class="tag" style="background:#f3e8ff;color:#7c3aed;">React.memo</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-props.html" class="topic-card">
+          <div class="card-icon" style="background:#fef3c7;color:#d97706;"><i class="bi bi-arrow-right-circle-fill"></i></div>
+          <div class="card-num">Section 6</div>
+          <h5>Props</h5>
+          <p>Prop types, default props, prop drilling, children prop, render props, PropTypes validation.</p>
+          <div class="tags">
+            <span class="tag level-beginner">Beginner</span>
+            <span class="tag" style="background:#fef9c3;color:#854d0e;">Props</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">PropTypes</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-state.html" class="topic-card">
+          <div class="card-icon" style="background:#fee2e2;color:#dc2626;"><i class="bi bi-database-fill"></i></div>
+          <div class="card-num">Section 7</div>
+          <h5>State Management</h5>
+          <p>useState deep dive — object/array state, batching, async updates, lazy initialization, state patterns.</p>
+          <div class="tags">
+            <span class="tag level-beginner">Beginner</span>
+            <span class="tag" style="background:#fee2e2;color:#991b1b;">useState</span>
+            <span class="tag" style="background:#f3e8ff;color:#7c3aed;">Immutability</span>
+          </div>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- INTERMEDIATE GROUP -->
+    <h4 class="fw-800 mb-3" style="color:var(--text);"><span class="badge level-intermediate me-2">Intermediate</span>Sections 8–15: Core React Skills</h4>
+    <div class="row g-4 mb-5" id="intermediate-cards">
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-hooks.html" class="topic-card" style="border-color:#61dafb;">
+          <div class="card-icon" style="background:rgba(97,218,251,.15);color:#61dafb;"><i class="bi bi-lightning-charge-fill"></i></div>
+          <div class="card-num">Section 8 — Most Important</div>
+          <h5 style="color:#61dafb;">React Hooks Deep Dive</h5>
+          <p>All 16 hooks with complete examples, 20 custom hooks, stale closure, common mistakes.</p>
+          <div class="tags">
+            <span class="tag level-intermediate">Intermediate</span>
+            <span class="tag" style="background:rgba(97,218,251,.15);color:#61dafb;border:1px solid rgba(97,218,251,.3);">Must Master</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-lifecycle.html" class="topic-card">
+          <div class="card-icon" style="background:#d1fae5;color:#059669;"><i class="bi bi-arrow-repeat"></i></div>
+          <div class="card-num">Section 9</div>
+          <h5>Component Lifecycle</h5>
+          <p>Class lifecycle methods, hooks equivalents, mount/update/unmount phases, error boundaries.</p>
+          <div class="tags">
+            <span class="tag level-intermediate">Intermediate</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">Lifecycle</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-forms.html" class="topic-card">
+          <div class="card-icon" style="background:#fce7f3;color:#db2777;"><i class="bi bi-ui-checks"></i></div>
+          <div class="card-num">Section 10</div>
+          <h5>Forms &amp; Validation</h5>
+          <p>Controlled/uncontrolled inputs, React Hook Form, Yup validation, multi-step forms, file uploads.</p>
+          <div class="tags">
+            <span class="tag level-intermediate">Intermediate</span>
+            <span class="tag" style="background:#fce7f3;color:#db2777;">RHF</span>
+            <span class="tag" style="background:#f3e8ff;color:#7c3aed;">Validation</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-routing.html" class="topic-card">
+          <div class="card-icon" style="background:#e0f2fe;color:#0891b2;"><i class="bi bi-signpost-2-fill"></i></div>
+          <div class="card-num">Section 11</div>
+          <h5>React Router v6</h5>
+          <p>Nested routes, protected routes, lazy loading, useNavigate, useParams, useSearchParams, outlets.</p>
+          <div class="tags">
+            <span class="tag level-intermediate">Intermediate</span>
+            <span class="tag" style="background:#e0f2fe;color:#0369a1;">Router v6</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-api.html" class="topic-card">
+          <div class="card-icon" style="background:#dbeafe;color:#2563eb;"><i class="bi bi-cloud-arrow-up-fill"></i></div>
+          <div class="card-num">Section 12</div>
+          <h5>API &amp; Data Fetching</h5>
+          <p>Fetch, Axios, React Query (useQuery, useMutation), SWR, error handling, optimistic updates.</p>
+          <div class="tags">
+            <span class="tag level-intermediate">Intermediate</span>
+            <span class="tag" style="background:#dbeafe;color:#1d4ed8;">React Query</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">Axios</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-performance.html" class="topic-card">
+          <div class="card-icon" style="background:#fef9c3;color:#ca8a04;"><i class="bi bi-speedometer2"></i></div>
+          <div class="card-num">Section 13</div>
+          <h5>Performance Optimization</h5>
+          <p>React.memo, useMemo, useCallback, lazy/Suspense, virtualization, profiler, code splitting.</p>
+          <div class="tags">
+            <span class="tag level-intermediate">Intermediate</span>
+            <span class="tag" style="background:#fef9c3;color:#854d0e;">Performance</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-context.html" class="topic-card">
+          <div class="card-icon" style="background:#f3e8ff;color:#9333ea;"><i class="bi bi-share-fill"></i></div>
+          <div class="card-num">Section 14</div>
+          <h5>Context API</h5>
+          <p>createContext, Provider, useContext, context patterns, performance optimization, when not to use.</p>
+          <div class="tags">
+            <span class="tag level-intermediate">Intermediate</span>
+            <span class="tag" style="background:#f3e8ff;color:#7c3aed;">Context</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-redux.html" class="topic-card">
+          <div class="card-icon" style="background:#ede9fe;color:#7c3aed;"><i class="bi bi-boxes"></i></div>
+          <div class="card-num">Section 15</div>
+          <h5>Redux &amp; Redux Toolkit</h5>
+          <p>Redux Toolkit (RTK), createSlice, RTK Query, useSelector, useDispatch, Immer, thunks.</p>
+          <div class="tags">
+            <span class="tag level-intermediate">Intermediate</span>
+            <span class="tag" style="background:#ede9fe;color:#5b21b6;">Redux</span>
+            <span class="tag" style="background:#f3e8ff;color:#7c3aed;">RTK</span>
+          </div>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ADVANCED GROUP -->
+    <h4 class="fw-800 mb-3" style="color:var(--text);"><span class="badge level-advanced me-2">Advanced</span>Sections 16–22: Professional Skills</h4>
+    <div class="row g-4 mb-5" id="advanced-cards">
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-testing.html" class="topic-card">
+          <div class="card-icon" style="background:#dcfce7;color:#16a34a;"><i class="bi bi-check-circle-fill"></i></div>
+          <div class="card-num">Section 16</div>
+          <h5>Testing React Apps</h5>
+          <p>Jest, React Testing Library, renderHook, mocking, Cypress E2E, accessibility testing.</p>
+          <div class="tags">
+            <span class="tag level-advanced">Advanced</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">RTL</span>
+            <span class="tag" style="background:#e0f2fe;color:#0369a1;">Cypress</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-auth.html" class="topic-card">
+          <div class="card-icon" style="background:#fee2e2;color:#dc2626;"><i class="bi bi-shield-lock-fill"></i></div>
+          <div class="card-num">Section 17</div>
+          <h5>Authentication &amp; Auth</h5>
+          <p>JWT auth, AuthProvider pattern, Axios interceptors, protected routes, OAuth, RBAC.</p>
+          <div class="tags">
+            <span class="tag level-advanced">Advanced</span>
+            <span class="tag" style="background:#fee2e2;color:#991b1b;">JWT</span>
+            <span class="tag" style="background:#fef9c3;color:#854d0e;">OAuth</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-patterns.html" class="topic-card">
+          <div class="card-icon" style="background:#fef3c7;color:#d97706;"><i class="bi bi-diagram-3-fill"></i></div>
+          <div class="card-num">Section 18</div>
+          <h5>Design Patterns</h5>
+          <p>HOC, Render Props, Compound Components, Custom Hooks, Provider, Observer, Factory patterns.</p>
+          <div class="tags">
+            <span class="tag level-advanced">Advanced</span>
+            <span class="tag" style="background:#fef3c7;color:#b45309;">Patterns</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-typescript.html" class="topic-card">
+          <div class="card-icon" style="background:#e0f2fe;color:#0369a1;"><i class="bi bi-filetype-tsx"></i></div>
+          <div class="card-num">Section 19</div>
+          <h5>TypeScript with React</h5>
+          <p>Typed props, events, hooks, Redux, generics, discriminated unions, utility types.</p>
+          <div class="tags">
+            <span class="tag level-advanced">Advanced</span>
+            <span class="tag" style="background:#dbeafe;color:#1d4ed8;">TypeScript</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-nextjs.html" class="topic-card">
+          <div class="card-icon" style="background:#f1f5f9;color:#334155;"><i class="bi bi-layers-fill"></i></div>
+          <div class="card-num">Section 20</div>
+          <h5>Next.js</h5>
+          <p>SSR, SSG, ISR, App Router vs Pages Router, Server Components, API routes, deployment.</p>
+          <div class="tags">
+            <span class="tag level-advanced">Advanced</span>
+            <span class="tag" style="background:#f1f5f9;color:#475569;">Next.js</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">SSR</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-native.html" class="topic-card">
+          <div class="card-icon" style="background:#ecfdf5;color:#059669;"><i class="bi bi-phone-fill"></i></div>
+          <div class="card-num">Section 21</div>
+          <h5>React Native</h5>
+          <p>Mobile development with React Native — components, StyleSheet, React Navigation, Expo.</p>
+          <div class="tags">
+            <span class="tag level-advanced">Advanced</span>
+            <span class="tag" style="background:#ecfdf5;color:#059669;">Mobile</span>
+            <span class="tag" style="background:#dbeafe;color:#1d4ed8;">Expo</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-architecture.html" class="topic-card">
+          <div class="card-icon" style="background:#ede9fe;color:#6d28d9;"><i class="bi bi-building-fill"></i></div>
+          <div class="card-num">Section 22</div>
+          <h5>React Architecture</h5>
+          <p>Folder structure patterns, feature-based vs type-based, micro-frontends, API layer, state decisions.</p>
+          <div class="tags">
+            <span class="tag level-advanced">Advanced</span>
+            <span class="tag" style="background:#ede9fe;color:#5b21b6;">Architecture</span>
+          </div>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- EXPERT GROUP -->
+    <h4 class="fw-800 mb-3" style="color:var(--text);"><span class="badge level-expert me-2">Expert</span>Sections 23–29: Interview Ready</h4>
+    <div class="row g-4" id="expert-cards">
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-devops.html" class="topic-card">
+          <div class="card-icon" style="background:#f0fdf4;color:#16a34a;"><i class="bi bi-gear-wide-connected"></i></div>
+          <div class="card-num">Section 23</div>
+          <h5>DevOps for React</h5>
+          <p>GitHub Actions CI/CD, Docker multi-stage builds, nginx SPA config, S3+CloudFront, Sentry.</p>
+          <div class="tags">
+            <span class="tag level-expert">Expert</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">Docker</span>
+            <span class="tag" style="background:#dbeafe;color:#1d4ed8;">CI/CD</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-system-design.html" class="topic-card">
+          <div class="card-icon" style="background:#fef3c7;color:#d97706;"><i class="bi bi-diagram-2-fill"></i></div>
+          <div class="card-num">Section 24</div>
+          <h5>System Design</h5>
+          <p>Design real apps end-to-end: chat app, e-commerce, social feed. Performance budgets, trade-offs.</p>
+          <div class="tags">
+            <span class="tag level-expert">Expert</span>
+            <span class="tag" style="background:#fef3c7;color:#b45309;">System Design</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-projects.html" class="topic-card">
+          <div class="card-icon" style="background:#d1fae5;color:#059669;"><i class="bi bi-collection-fill"></i></div>
+          <div class="card-num">Section 25</div>
+          <h5>60 Projects</h5>
+          <p>20 beginner + 20 intermediate + 20 advanced projects with features, concepts, and tech stacks.</p>
+          <div class="tags">
+            <span class="tag level-expert">Expert</span>
+            <span class="tag" style="background:#dcfce7;color:#166534;">60 Projects</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-interview.html" class="topic-card" style="border-color:#a78bfa;">
+          <div class="card-icon" style="background:#ede9fe;color:#7c3aed;"><i class="bi bi-chat-quote-fill"></i></div>
+          <div class="card-num">Section 26</div>
+          <h5 style="color:#7c3aed;">500 Interview Questions</h5>
+          <p>Every React interview question — fundamentals to architecture. Difficulty badges, full answers.</p>
+          <div class="tags">
+            <span class="tag level-expert">Expert</span>
+            <span class="tag" style="background:#ede9fe;color:#5b21b6;border:1px solid #a78bfa;">500+ Q&amp;A</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-animations.html" class="topic-card">
+          <div class="card-icon" style="background:#fce7f3;color:#db2777;"><i class="bi bi-stars"></i></div>
+          <div class="card-num">Section 27</div>
+          <h5>Animations</h5>
+          <p>CSS transitions, React Spring physics, Framer Motion — page transitions, drag, AOS scroll animations.</p>
+          <div class="tags">
+            <span class="tag level-expert">Expert</span>
+            <span class="tag" style="background:#fce7f3;color:#db2777;">Framer</span>
+            <span class="tag" style="background:#f3e8ff;color:#7c3aed;">React Spring</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-bootstrap.html" class="topic-card">
+          <div class="card-icon" style="background:#fee2e2;color:#9333ea;"><i class="bi bi-bootstrap-fill"></i></div>
+          <div class="card-num">Section 28</div>
+          <h5>Bootstrap with React</h5>
+          <p>react-bootstrap, dynamic tables, modals, toasts, dark mode toggle — all Bootstrap patterns in React.</p>
+          <div class="tags">
+            <span class="tag level-expert">Expert</span>
+            <span class="tag" style="background:#fee2e2;color:#9333ea;">Bootstrap 5</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-sm-6 col-lg-4 topic-card-wrap">
+        <a href="react-features.html" class="topic-card">
+          <div class="card-icon" style="background:rgba(97,218,251,.1);color:#61dafb;"><i class="bi bi-lightning-fill"></i></div>
+          <div class="card-num">Section 29</div>
+          <h5>React 18+ Features</h5>
+          <p>Concurrent features, automatic batching, useTransition, useDeferredValue, Server Components, React 19.</p>
+          <div class="tags">
+            <span class="tag level-expert">Expert</span>
+            <span class="tag" style="background:rgba(97,218,251,.1);color:#61dafb;border:1px solid rgba(97,218,251,.3);">React 18+</span>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container-xl">
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <svg width="24" height="24" viewBox="0 0 100 100"><circle cx="50" cy="50" r="8" fill="#61dafb"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#61dafb" stroke-width="3" transform="rotate(120 50 50)"/></svg>
+          <span style="color:#61dafb;font-weight:800;">React Mastery Hub</span>
+        </div>
+        <p style="font-size:.85rem;color:#64748b;">The most complete React learning platform — from zero to React architect.</p>
+      </div>
+      <div class="col-md-8">
+        <div class="row g-3">
+          <div class="col-6 col-md-3">
+            <div style="color:#94a3b8;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.75rem;">Basics</div>
+            <div class="d-flex flex-column gap-1" style="font-size:.85rem;">
+              <a href="react-intro.html">Introduction</a>
+              <a href="js-for-react.html">JS for React</a>
+              <a href="react-jsx.html">JSX</a>
+              <a href="react-components.html">Components</a>
+              <a href="react-state.html">State</a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div style="color:#94a3b8;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.75rem;">Core</div>
+            <div class="d-flex flex-column gap-1" style="font-size:.85rem;">
+              <a href="react-hooks.html">Hooks</a>
+              <a href="react-routing.html">Routing</a>
+              <a href="react-forms.html">Forms</a>
+              <a href="react-context.html">Context</a>
+              <a href="react-redux.html">Redux</a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div style="color:#94a3b8;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.75rem;">Advanced</div>
+            <div class="d-flex flex-column gap-1" style="font-size:.85rem;">
+              <a href="react-testing.html">Testing</a>
+              <a href="react-typescript.html">TypeScript</a>
+              <a href="react-nextjs.html">Next.js</a>
+              <a href="react-performance.html">Performance</a>
+              <a href="react-patterns.html">Patterns</a>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div style="color:#94a3b8;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.75rem;">Expert</div>
+            <div class="d-flex flex-column gap-1" style="font-size:.85rem;">
+              <a href="react-interview.html">500 Q&amp;A</a>
+              <a href="react-projects.html">60 Projects</a>
+              <a href="react-system-design.html">System Design</a>
+              <a href="react-architecture.html">Architecture</a>
+              <a href="react-features.html">React 18+</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="border-top pt-3 d-flex justify-content-between align-items-center flex-wrap gap-2" style="border-color:rgba(97,218,251,.1)!important;font-size:.82rem;">
+      <span>React Mastery Hub — Complete React Learning Platform</span>
+      <span>29 Sections · 500+ Q&amp;A · 60 Projects</span>
+    </div>
+  </div>
+</footer>
+
+<!-- BACK TO TOP -->
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+// AOS
+AOS.init({ duration: 600, once: true, offset: 60 });
+
+// THEME
+const tBtn = document.getElementById('themeToggle');
+const html = document.documentElement;
+function applyTheme(dark) {
+  html.setAttribute('data-theme', dark ? 'dark' : 'light');
+  tBtn.innerHTML = dark ? '<i class="bi bi-sun-fill"></i>' : '<i class="bi bi-moon-stars-fill"></i>';
+  localStorage.setItem('theme', dark ? 'dark' : 'light');
+}
+applyTheme(localStorage.getItem('theme') === 'dark');
+tBtn.addEventListener('click', () => applyTheme(html.getAttribute('data-theme') !== 'dark'));
+
+// TYPEWRITER
+const words = ['React', 'Hooks', 'Next.js', 'Redux', 'TypeScript', 'Performance', 'React'];
+let wi = 0, ci = 0, del = false;
+const tw = document.getElementById('typewriter');
+function type() {
+  const word = words[wi];
+  tw.textContent = del ? word.slice(0, ci--) : word.slice(0, ci++);
+  if (!del && ci > word.length) { del = true; setTimeout(type, 1400); return; }
+  if (del && ci < 0) { del = false; wi = (wi + 1) % words.length; ci = 0; }
+  setTimeout(type, del ? 60 : 100);
+}
+type();
+
+// COUNTER ANIMATION
+function animateCounter(el, target) {
+  let start = 0;
+  const step = Math.ceil(target / 60);
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = start + (target >= 100 ? '+' : '');
+    if (start >= target) clearInterval(timer);
+  }, 25);
+}
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.stat-num').forEach(el => {
+        animateCounter(el, parseInt(el.dataset.target));
+      });
+      observer.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+const statsBar = document.querySelector('.stats-bar');
+if (statsBar) observer.observe(statsBar);
+
+// SEARCH
+document.getElementById('sectionSearch').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('.topic-card-wrap').forEach(wrap => {
+    const text = wrap.textContent.toLowerCase();
+    wrap.style.display = (!q || text.includes(q)) ? '' : 'none';
+  });
+});
+
+// BACK TO TOP
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+  backTop.style.display = window.scrollY > 400 ? 'flex' : 'none';
+});
+</script>
+
+<script src="js/codeblocks.js"></script>
+</body>
+</html>

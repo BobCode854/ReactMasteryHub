@@ -1,0 +1,1199 @@
+<div class="tab-pane fade" id="tab-hooks" role="tabpanel">
+  <div class="accordion" id="acc-hooks">
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q1">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is a React hook?
+        </button>
+      </h2>
+      <div id="hooks-q1" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          A React hook is a special function that lets you "hook into" React features (state, lifecycle, context, refs) from function components — before hooks existed, these features were only available in class components. Hooks were introduced in React 16.8 and completely transformed how React components are written. Hook names always start with <code>use</code> (e.g., <code>useState</code>, <code>useEffect</code>, <code>useRef</code>). You can only call hooks at the top level of a component (not inside conditions, loops, or nested functions) and only from React function components or custom hooks — these are the two Rules of Hooks. Hooks enable sharing stateful logic between components without HOC/render-prop patterns.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q2">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is useState?
+        </button>
+      </h2>
+      <div id="hooks-q2" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useState</code> is a hook that adds state to a function component. It returns a tuple: <code>[currentValue, setterFunction]</code>. The initial value is passed as the argument and is only used on the first render. <code>setterFunction</code> triggers a re-render when called with a new value (or an updater function). Unlike class component <code>this.setState</code>, <code>useState</code> setter completely replaces the state value rather than merging — for objects, you must spread the old state manually: <code>setState(prev =&gt; ({ ...prev, newField: value }))</code>. Each <code>useState</code> call manages a single independent piece of state.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q3">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is useEffect?
+        </button>
+      </h2>
+      <div id="hooks-q3" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useEffect(callback, deps)</code> lets you perform side effects in function components — data fetching, subscriptions, timers, DOM mutations, and anything that needs to happen "after render." The callback runs after the component renders. The <code>deps</code> array controls when the effect re-runs: <code>[]</code> means run once after mount, <code>[a, b]</code> means re-run when <code>a</code> or <code>b</code> changes, and omitting deps means run after every render. Return a cleanup function from the callback to cancel subscriptions, clear timers, or abort fetches when the component unmounts or before the effect re-runs. <code>useEffect</code> is React's escape hatch from the declarative rendering model to imperative side effects.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q4">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is useRef?
+        </button>
+      </h2>
+      <div id="hooks-q4" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useRef(initialValue)</code> returns a mutable ref object <code>{ current: initialValue }</code> whose <code>.current</code> property persists across renders. It has two main uses: (1) accessing DOM elements directly — <code>const inputRef = useRef(null)</code> then <code>&lt;input ref={inputRef}&gt;</code> makes <code>inputRef.current</code> the DOM node; (2) storing a mutable value that doesn't trigger re-renders when changed — like an instance variable in a class component. Unlike state, mutating <code>ref.current</code> does not cause a re-render. Common uses: storing previous state values, storing interval/timeout IDs, tracking whether a component is mounted, and imperatively focusing inputs.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q5">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is useContext?
+        </button>
+      </h2>
+      <div id="hooks-q5" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useContext(MyContext)</code> subscribes a component to a React context. It takes a context object (created by <code>React.createContext()</code>) and returns the current context value — the value from the nearest <code>&lt;MyContext.Provider value={...}&gt;</code> above in the tree. Every time the Provider's value changes, components calling <code>useContext(MyContext)</code> re-render with the new value. <code>useContext</code> replaces the <code>Context.Consumer</code> render-prop pattern with a clean hook call. It is useful for sharing data that needs to be accessible throughout the component tree without prop drilling (themes, user authentication, locale settings). However, for frequently-changing state, Context + useContext has performance limitations compared to Redux.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q6">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is useReducer?
+        </button>
+      </h2>
+      <div id="hooks-q6" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useReducer(reducer, initialState)</code> is an alternative to <code>useState</code> for managing complex state logic. It takes a reducer function <code>(state, action) =&gt; newState</code> (same pattern as Redux) and an initial state, returning <code>[state, dispatch]</code>. Use <code>useReducer</code> over <code>useState</code> when: (1) state has multiple sub-values that change together; (2) the next state depends on the previous state; (3) the update logic is complex (multiple cases). It's also preferred when a component has many state transitions — the reducer consolidates all logic in one place. <code>useReducer</code> with Context is a common pattern for simple global state management without Redux.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q7">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is useMemo?
+        </button>
+      </h2>
+      <div id="hooks-q7" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useMemo(() =&gt; expensiveComputation(a, b), [a, b])</code> memoizes the result of a computation — the function only re-runs when the dependencies <code>[a, b]</code> change, returning the cached value otherwise. Use it for: expensive calculations (sorting/filtering large arrays, complex transformations), creating stable object/array references for Context values or memoized children's props, and derived data that is computed from props or state. The key mental model: <code>useMemo</code> is not just for performance — it's for reference stability. Without <code>useMemo</code>, every render creates a new object reference even if the data hasn't changed, which can defeat <code>React.memo</code> and trigger unnecessary <code>useEffect</code> runs.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q8">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What is useCallback?
+        </button>
+      </h2>
+      <div id="hooks-q8" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useCallback(fn, [deps])</code> memoizes a function reference — it returns the same function object across renders as long as the dependencies haven't changed. It is equivalent to <code>useMemo(() =&gt; fn, [deps])</code>. Use <code>useCallback</code> when: passing a callback to a <code>React.memo</code>-wrapped child component (a new function reference would defeat memo), or using a function in a <code>useEffect</code> dependency array (a new reference would trigger the effect every render). Without <code>useCallback</code>, <code>const handleClick = () =&gt; doSomething(id)</code> creates a new function on every render. Caveat: <code>useCallback</code> adds overhead (storing the previous function and comparing dependencies), so only use it when the stability of the reference actually matters.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q9">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What are the Rules of Hooks?
+        </button>
+      </h2>
+      <div id="hooks-q9" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          There are two Rules of Hooks: (1) Only call hooks at the top level — never inside loops, conditions, or nested functions. This ensures hooks are called in the same order on every render, which is how React tracks which state belongs to which <code>useState</code> call; (2) Only call hooks from React function components or custom hooks — not from regular JavaScript functions, class components, or event handlers. React's ESLint plugin (<code>eslint-plugin-react-hooks</code>) enforces both rules automatically. Violating Rule 1 causes bugs where state gets mixed up between renders. React relies on the call order of hooks to maintain their state — calling a hook conditionally would cause the order to vary between renders.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q10">
+          <span class="diff-easy">Easy</span>&nbsp;&nbsp;What are custom hooks?
+        </button>
+      </h2>
+      <div id="hooks-q10" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          Custom hooks are JavaScript functions whose names start with <code>use</code> that call other hooks internally. They let you extract and reuse stateful logic across multiple components — without introducing HOC/render-prop nesting. For example, <code>useWindowSize()</code> encapsulates the logic for tracking window dimensions (adding/removing event listeners, storing state). The component uses the hook and receives the data; the logic is in one place. Custom hooks follow the same rules as built-in hooks. They don't share state between components — each component calling <code>useWindowSize()</code> gets its own independent state. Custom hooks are the React community's primary pattern for sharing non-UI logic.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q11">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is useLayoutEffect and when should you use it?
+        </button>
+      </h2>
+      <div id="hooks-q11" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useLayoutEffect</code> has the same signature as <code>useEffect</code> but fires synchronously after all DOM mutations and before the browser paints. This gives you a chance to read DOM layout (element dimensions, positions) and synchronously make DOM mutations — without the user seeing the intermediate state. <code>useEffect</code> fires asynchronously after the browser paints, so using it for DOM measurements can cause a visible flash (the browser paints once with the initial state, then again after the effect). Use <code>useLayoutEffect</code> for: reading DOM measurements (element width/height), repositioning a tooltip based on element bounds, synchronizing scroll position. The trade-off: <code>useLayoutEffect</code> blocks the browser paint and can hurt performance if used for expensive work — prefer <code>useEffect</code> by default and only switch to <code>useLayoutEffect</code> when you observe flickering or need synchronous DOM reads.
+          <pre class="code-block">// useEffect: can cause flash because paint happens before effect
+function Tooltip({ target, content }) {
+  const [position, setPosition] = React.useState({ top: 0, left: 0 });
+
+  // ❌ Browser paints at top:0,left:0 first, then repaints after effect
+  React.useEffect(() =&gt; {
+    const rect = target.current.getBoundingClientRect();
+    setPosition({ top: rect.bottom, left: rect.left });
+  }, [target]);
+
+  return &lt;div style={position}&gt;{content}&lt;/div&gt;;
+}
+
+// useLayoutEffect: no flash — DOM update happens before paint
+function TooltipFixed({ target, content }) {
+  const [position, setPosition] = React.useState({ top: 0, left: 0 });
+
+  // ✅ Fires synchronously before paint — user never sees top:0,left:0
+  React.useLayoutEffect(() =&gt; {
+    const rect = target.current.getBoundingClientRect();
+    setPosition({ top: rect.bottom, left: rect.left });
+  }, [target]);
+
+  return &lt;div style={position}&gt;{content}&lt;/div&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q12">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is useImperativeHandle?
+        </button>
+      </h2>
+      <div id="hooks-q12" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useImperativeHandle(ref, createHandle, [deps])</code> customizes the value that is exposed to the parent component when using <code>ref</code> with <code>forwardRef</code>. Instead of exposing the entire DOM node, you expose a custom object with only the methods and properties you want the parent to control. This is the principle of least privilege for imperative handles — parents should not have unrestricted DOM access. Common use cases: exposing a <code>focus()</code> method on a custom input component, exposing <code>scroll()</code> on a custom list component, or exposing <code>reset()</code> on a custom form. It must be used with <code>React.forwardRef</code>. Without <code>useImperativeHandle</code>, <code>forwardRef</code> would give the parent the raw DOM node.
+          <pre class="code-block">// Child component: exposes only focus() and clear()
+const CustomInput = React.forwardRef((props, ref) =&gt; {
+  const inputRef = React.useRef(null);
+
+  React.useImperativeHandle(ref, () =&gt; ({
+    focus() {
+      inputRef.current.focus();
+    },
+    clear() {
+      inputRef.current.value = '';
+    },
+    // Parent does NOT get access to inputRef.current directly
+  }));
+
+  return &lt;input ref={inputRef} {...props} /&gt;;
+});
+
+// Parent: uses the custom handle
+function Form() {
+  const inputRef = React.useRef(null);
+
+  return (
+    &lt;&gt;
+      &lt;CustomInput ref={inputRef} /&gt;
+      &lt;button onClick={() =&gt; inputRef.current.focus()}&gt;Focus&lt;/button&gt;
+      &lt;button onClick={() =&gt; inputRef.current.clear()}&gt;Clear&lt;/button&gt;
+    &lt;/&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q13">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is useTransition?
+        </button>
+      </h2>
+      <div id="hooks-q13" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useTransition()</code> returns <code>[isPending, startTransition]</code> — a hook version of <code>startTransition</code> that also provides an <code>isPending</code> boolean you can use to show a loading indicator. It marks state updates inside <code>startTransition(callback)</code> as non-urgent (lower priority) — React can interrupt these renders to handle urgent updates (like user typing). <code>isPending</code> is <code>true</code> while React is processing the deferred transition updates, letting you show a spinner or "updating..." indicator without a full loading screen. It was introduced in React 18 as part of Concurrent Mode. Use it for: filtering/searching large lists (typing stays instant, filter update is deferred), page transitions (show previous page content while next page loads), tab switching with heavy content.
+          <pre class="code-block">function SearchPage({ allItems }) {
+  const [query, setQuery] = React.useState('');
+  const [results, setResults] = React.useState(allItems);
+  const [isPending, startTransition] = React.useTransition();
+
+  function handleSearch(e) {
+    const value = e.target.value;
+    setQuery(value); // urgent: updates input immediately
+    startTransition(() =&gt; {
+      // non-urgent: can be interrupted by further typing
+      setResults(allItems.filter(item =&gt;
+        item.name.toLowerCase().includes(value.toLowerCase())
+      ));
+    });
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;input value={query} onChange={handleSearch} placeholder="Search..." /&gt;
+      {isPending &amp;&amp; &lt;span&gt;Updating...&lt;/span&gt;}
+      &lt;ul style={{ opacity: isPending ? 0.7 : 1 }}&gt;
+        {results.map(item =&gt; &lt;li key={item.id}&gt;{item.name}&lt;/li&gt;)}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q14">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is useDeferredValue?
+        </button>
+      </h2>
+      <div id="hooks-q14" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useDeferredValue(value)</code> accepts a value and returns a deferred copy of it — during urgent renders, the deferred copy stays at its previous value; React updates it in a background render after the urgent work is done. It is the "consumer-side" equivalent of <code>startTransition</code> — useful when you don't control the state update (e.g., the value comes from a prop or another component). The deferred value is always one step behind during fast updates, allowing expensive components that receive it to stay memoized and skip re-rendering until React has time. Combined with <code>React.memo</code>, <code>useDeferredValue</code> lets you build responsive UIs where fast-changing inputs (typing in a search box) don't block expensive downstream renders.
+          <pre class="code-block">function SearchPage({ query }) {
+  // deferredQuery lags behind query during rapid updates
+  const deferredQuery = React.useDeferredValue(query);
+  const isStale = query !== deferredQuery;
+
+  // ExpensiveList only re-renders when deferredQuery changes (not on every keystroke)
+  const results = React.useMemo(
+    () =&gt; allItems.filter(item =&gt; item.name.includes(deferredQuery)),
+    [deferredQuery]
+  );
+
+  return (
+    &lt;div style={{ opacity: isStale ? 0.6 : 1, transition: 'opacity 0.2s' }}&gt;
+      {results.map(item =&gt; &lt;Item key={item.id} item={item} /&gt;)}
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q15">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is useId?
+        </button>
+      </h2>
+      <div id="hooks-q15" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useId()</code> (React 18+) generates a unique, stable ID that is consistent between server-side rendering and client-side hydration — solving the hydration mismatch problem that occurs when IDs are generated differently on server vs client. It returns a string like <code>:r1:</code>. Use it for: linking <code>&lt;label&gt;</code> to <code>&lt;input&gt;</code> with <code>htmlFor</code>/<code>id</code>, ARIA attributes (<code>aria-describedby</code>, <code>aria-labelledby</code>), and any place where a unique HTML ID is needed. Before <code>useId</code>, developers used <code>Math.random()</code> or counter-based IDs which caused SSR hydration mismatches (server and client generated different IDs, React logged warnings). Do not use <code>useId</code> for list keys — it generates one ID per hook call, not per list item.
+          <pre class="code-block">function FormField({ label, type }) {
+  const id = React.useId(); // stable, unique: ":r3:"
+
+  return (
+    &lt;div&gt;
+      &lt;label htmlFor={id}&gt;{label}&lt;/label&gt;
+      &lt;input id={id} type={type} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// For multiple related IDs, derive from the base id
+function PasswordField() {
+  const id = React.useId();
+  return (
+    &lt;div&gt;
+      &lt;label htmlFor={id + '-input'}&gt;Password&lt;/label&gt;
+      &lt;input id={id + '-input'} type="password" aria-describedby={id + '-hint'} /&gt;
+      &lt;p id={id + '-hint'}&gt;Must be at least 8 characters&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q16">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is useSyncExternalStore?
+        </button>
+      </h2>
+      <div id="hooks-q16" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?)</code> is a React 18 hook for subscribing to external data stores (non-React state like browser APIs, Zustand, Redux, Valtio). It ensures the component always renders a consistent snapshot of the external store, preventing tearing in Concurrent Mode (where different parts of the tree might read different versions of external state during an interrupted render). The <code>subscribe</code> function is called with a callback that React calls to re-render when the store changes. <code>getSnapshot</code> returns the current store value. This hook replaced the <code>unstable_subscribe</code> pattern and is now the recommended way for library authors to integrate external stores with React. Redux, Zustand, and other stores use this internally.
+          <pre class="code-block">// Custom hook using useSyncExternalStore
+function useWindowWidth() {
+  return React.useSyncExternalStore(
+    // subscribe: React calls callback when store changes
+    (callback) =&gt; {
+      window.addEventListener('resize', callback);
+      return () =&gt; window.removeEventListener('resize', callback);
+    },
+    // getSnapshot: returns current value
+    () =&gt; window.innerWidth,
+    // getServerSnapshot: SSR value
+    () =&gt; 1024
+  );
+}
+
+function Component() {
+  const width = useWindowWidth();
+  return &lt;p&gt;Window width: {width}px&lt;/p&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q17">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is useDebugValue?
+        </button>
+      </h2>
+      <div id="hooks-q17" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useDebugValue(value, format?)</code> displays a label for custom hooks in React DevTools. When you inspect a component in DevTools, custom hooks that use <code>useDebugValue</code> show a descriptive label next to the hook name instead of the raw state value. This makes complex custom hooks easier to debug — instead of seeing the raw state structure, you see a meaningful description. The optional <code>format</code> function is called lazily (only when DevTools is open) — useful for expensive formatting operations. <code>useDebugValue</code> is intended only for custom hooks shared in libraries or within teams; adding it to every custom hook is unnecessary overhead.
+          <pre class="code-block">function useOnlineStatus() {
+  const [isOnline, setIsOnline] = React.useState(navigator.onLine);
+
+  React.useEffect(() =&gt; {
+    const handleOnline = () =&gt; setIsOnline(true);
+    const handleOffline = () =&gt; setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () =&gt; {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // DevTools shows: OnlineStatus: "Online" or "Offline"
+  React.useDebugValue(isOnline ? 'Online' : 'Offline');
+
+  return isOnline;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q18">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;Explain the useEffect dependency array in detail. What happens with each case?
+        </button>
+      </h2>
+      <div id="hooks-q18" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          The <code>useEffect</code> dependency array controls when the effect re-runs: (1) <code>useEffect(fn)</code> — no array: runs after every render; (2) <code>useEffect(fn, [])</code> — empty array: runs once after mount, cleanup runs on unmount; (3) <code>useEffect(fn, [a, b])</code> — with deps: runs after mount and whenever <code>a</code> or <code>b</code> changes (by reference/value). The comparison uses <code>Object.is</code> (strict equality) — objects and functions compare by reference, so a new object <code>{}</code> always triggers the effect even if its contents are the same. This is why you must memoize objects/functions used as deps with <code>useMemo</code>/<code>useCallback</code>. Omitting a variable from the deps array that is used inside the effect is a bug (stale closure) — always include all values from the component scope used inside the effect. The <code>exhaustive-deps</code> ESLint rule enforces this.
+          <pre class="code-block">// Case 1: runs every render (usually wrong — causes infinite loops with setState)
+React.useEffect(() =&gt; { document.title = 'Page'; });
+
+// Case 2: runs once after mount
+React.useEffect(() =&gt; {
+  fetchData().then(setData);
+  return () =&gt; cleanup(); // runs on unmount
+}, []);
+
+// Case 3: runs when userId changes
+React.useEffect(() =&gt; {
+  fetchUser(userId).then(setUser);
+}, [userId]); // userId in deps — safe
+
+// Stale closure bug: userId not in deps
+React.useEffect(() =&gt; {
+  fetchUser(userId).then(setUser); // uses the userId from first render!
+}, []); // ❌ stale closure — always fetches initial userId
+
+// Object reference bug
+const options = { method: 'POST' }; // new reference every render
+React.useEffect(() =&gt; {
+  fetch('/api', options); // runs on every render because options is always new
+}, [options]); // ❌</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q19">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What are stale closures in React hooks and how do you fix them?
+        </button>
+      </h2>
+      <div id="hooks-q19" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          A stale closure occurs when a function (like an effect, event handler, or memoized callback) captures a variable from its outer scope at creation time, and that variable later changes without the function being recreated. The function "closes over" the old value and uses it even though the current value is different. In React: a <code>useEffect</code> with <code>[]</code> deps captures all variables at mount time — any state/prop it uses will be stale on subsequent renders; a <code>useCallback</code> with stale deps returns the same function with the old captured values. Fixes: (1) Add all used variables to the dependency array (the linter will help); (2) Use the functional updater form of setState — <code>setState(prev =&gt; prev + 1)</code> doesn't need <code>count</code> in deps; (3) Use a ref to store the latest value of frequently-changing variables that shouldn't be in deps.
+          <pre class="code-block">// Stale closure in event handler
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() =&gt; {
+    const id = setInterval(() =&gt; {
+      console.log(count); // ❌ always logs 0 — stale closure
+      setCount(count + 1); // ❌ always sets to 1 (0 + 1)
+    }, 1000);
+    return () =&gt; clearInterval(id);
+  }, []); // [] captures count=0 forever
+}
+
+// Fix 1: functional updater (no stale closure for incrementing)
+React.useEffect(() =&gt; {
+  const id = setInterval(() =&gt; {
+    setCount(prev =&gt; prev + 1); // ✅ always uses current value
+  }, 1000);
+  return () =&gt; clearInterval(id);
+}, []); // safe because we don't read count anymore
+
+// Fix 2: use a ref for the latest callback
+function useInterval(callback, delay) {
+  const callbackRef = React.useRef(callback);
+  React.useLayoutEffect(() =&gt; { callbackRef.current = callback; });
+  React.useEffect(() =&gt; {
+    const id = setInterval(() =&gt; callbackRef.current(), delay);
+    return () =&gt; clearInterval(id);
+  }, [delay]);
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q20">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement a custom useFetch hook?
+        </button>
+      </h2>
+      <div id="hooks-q20" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          A custom <code>useFetch</code> hook encapsulates the pattern of fetching data in <code>useEffect</code>, managing loading/error/data state, and cleaning up with <code>AbortController</code> to prevent state updates on unmounted components (or after the URL changes). A robust implementation handles: race conditions (via AbortController), loading state, error state, and re-fetching when the URL changes. Advanced versions add caching, retry logic, and deduplification. This is essentially what React Query does at a higher level — but understanding the custom hook version illuminates why React Query is so valuable.
+          <pre class="code-block">function useFetch(url) {
+  const [state, setState] = React.useState({
+    data: null,
+    loading: true,
+    error: null,
+  });
+
+  React.useEffect(() =&gt; {
+    if (!url) return;
+
+    let cancelled = false;
+    const controller = new AbortController();
+
+    setState({ data: null, loading: true, error: null });
+
+    fetch(url, { signal: controller.signal })
+      .then(res =&gt; {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(data =&gt; {
+        if (!cancelled) setState({ data, loading: false, error: null });
+      })
+      .catch(err =&gt; {
+        if (!cancelled &amp;&amp; err.name !== 'AbortError') {
+          setState({ data: null, loading: false, error: err.message });
+        }
+      });
+
+    return () =&gt; {
+      cancelled = true;
+      controller.abort(); // cancel in-flight request when url changes or unmount
+    };
+  }, [url]);
+
+  return state;
+}
+
+// Usage
+function UserProfile({ userId }) {
+  const { data, loading, error } = useFetch(`/api/users/${userId}`);
+  if (loading) return &lt;Spinner /&gt;;
+  if (error) return &lt;Error message={error} /&gt;;
+  return &lt;Profile user={data} /&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q21">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the difference between useEffect and useLayoutEffect in practice?
+        </button>
+      </h2>
+      <div id="hooks-q21" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          Both hooks run after React has processed component updates, but at different points in the browser rendering pipeline. <code>useEffect</code> runs asynchronously after the browser has painted — the user sees the new DOM before the effect runs. <code>useLayoutEffect</code> runs synchronously after DOM mutations but before the browser paint — the user never sees the pre-effect DOM state. The practical difference: if your effect modifies the DOM visually (adds/removes classes, changes styles, measures element dimensions), using <code>useEffect</code> causes a flash (initial paint → effect runs → repaint). <code>useLayoutEffect</code> prevents the flash. However, <code>useLayoutEffect</code> blocks painting, so expensive work in it makes the page feel unresponsive. Server-side rendering: <code>useLayoutEffect</code> generates a warning on the server (no DOM to lay out) — use <code>useEffect</code> for SSR-compatible components.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q22">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you create a custom hook for local storage?
+        </button>
+      </h2>
+      <div id="hooks-q22" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          A custom <code>useLocalStorage</code> hook should synchronize React state with localStorage, handle JSON serialization/deserialization, handle the case where localStorage is unavailable (SSR, private browsing), and optionally synchronize across browser tabs using the <code>storage</code> event. The key design decision is whether to use a lazy initializer in useState (to read localStorage only on first render, not every render) and how to handle serialization errors.
+          <pre class="code-block">function useLocalStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = React.useState(() =&gt; {
+    // Lazy initializer: only reads localStorage once on mount
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch {
+      return initialValue;
+    }
+  });
+
+  const setValue = React.useCallback((value) =&gt; {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.warn(`Error setting localStorage key "${key}":`, error);
+    }
+  }, [key, storedValue]);
+
+  // Sync across tabs
+  React.useEffect(() =&gt; {
+    const handler = (e) =&gt; {
+      if (e.key === key &amp;&amp; e.newValue !== null) {
+        setStoredValue(JSON.parse(e.newValue));
+      }
+    };
+    window.addEventListener('storage', handler);
+    return () =&gt; window.removeEventListener('storage', handler);
+  }, [key]);
+
+  return [storedValue, setValue];
+}
+
+// Usage
+const [theme, setTheme] = useLocalStorage('theme', 'light');</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q23">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you handle race conditions in useEffect data fetching?
+        </button>
+      </h2>
+      <div id="hooks-q23" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          Race conditions in data fetching occur when multiple requests are in flight simultaneously and the responses arrive out of order — an earlier request for <code>userId=1</code> might resolve after a later request for <code>userId=2</code>, overwriting the correct data. Two main solutions: (1) Cleanup flag — set a <code>let cancelled = false</code> variable in the effect, set it to <code>true</code> in cleanup, and check it before setting state; (2) AbortController — pass an AbortSignal to fetch, call <code>abort()</code> in cleanup to cancel the in-flight request. React 18's StrictMode (which double-invokes effects in development) makes these race conditions visible early. React Query handles this automatically by ignoring responses from superseded queries — another reason to prefer it over manual useEffect fetching.
+          <pre class="code-block">// Problem: race condition when userId changes rapidly
+React.useEffect(() =&gt; {
+  fetchUser(userId).then(setUser); // ❌ if userId changes, old response may arrive last
+}, [userId]);
+
+// Fix: cleanup flag
+React.useEffect(() =&gt; {
+  let cancelled = false;
+  fetchUser(userId).then(user =&gt; {
+    if (!cancelled) setUser(user); // ✅ ignore if superseded
+  });
+  return () =&gt; { cancelled = true; };
+}, [userId]);
+
+// Fix: AbortController (also cancels network request, saving bandwidth)
+React.useEffect(() =&gt; {
+  const controller = new AbortController();
+  fetch(`/api/users/${userId}`, { signal: controller.signal })
+    .then(r =&gt; r.json())
+    .then(user =&gt; setUser(user))
+    .catch(err =&gt; { if (err.name !== 'AbortError') setError(err); });
+  return () =&gt; controller.abort(); // cancels in-flight request
+}, [userId]);</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q24">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is forwardRef and when do you need it?
+        </button>
+      </h2>
+      <div id="hooks-q24" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>React.forwardRef((props, ref) =&gt; JSX)</code> allows a component to receive a <code>ref</code> from its parent and pass it to a DOM element or another component inside it. By default, refs don't flow through components — if a parent does <code>&lt;MyInput ref={myRef} /&gt;</code>, <code>myRef.current</code> would be null unless <code>MyInput</code> uses <code>forwardRef</code>. Use cases: building reusable form inputs (so parent can focus/validate them), custom wrapper components that need to expose DOM behavior (like a custom scroll container), and component library elements (Button, Input, Modal) that need to support forwarded refs. React 19 simplifies this — refs are passed as regular props, so <code>forwardRef</code> is no longer required (refs just work like any other prop).
+          <pre class="code-block">// forwardRef: allows parent to get a ref to the inner input DOM node
+const FancyInput = React.forwardRef((props, ref) =&gt; {
+  return (
+    &lt;div className="fancy-input-wrapper"&gt;
+      &lt;input ref={ref} {...props} /&gt; {/* ref forwarded to the input */}
+    &lt;/div&gt;
+  );
+});
+
+// Parent can now use a ref with FancyInput
+function Form() {
+  const inputRef = React.useRef(null);
+
+  const focusInput = () =&gt; inputRef.current?.focus();
+
+  return (
+    &lt;&gt;
+      &lt;FancyInput ref={inputRef} placeholder="Type here" /&gt;
+      &lt;button onClick={focusInput}&gt;Focus Input&lt;/button&gt;
+    &lt;/&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q25">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement a useEventListener custom hook?
+        </button>
+      </h2>
+      <div id="hooks-q25" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          A <code>useEventListener</code> hook abstracts the <code>addEventListener</code>/<code>removeEventListener</code> pattern — ensuring the listener is properly cleaned up on unmount and updated when the handler changes. The key insight: event handlers should be stored in a ref so the latest handler is always called (avoiding stale closures) without needing to re-add/remove the listener every render. This combines <code>useRef</code>, <code>useEffect</code>, and proper cleanup.
+          <pre class="code-block">function useEventListener(eventName, handler, element = window) {
+  // Store handler in a ref so we always call the latest version
+  const handlerRef = React.useRef(handler);
+  React.useLayoutEffect(() =&gt; { handlerRef.current = handler; });
+
+  React.useEffect(() =&gt; {
+    const targetElement = element?.current ?? element;
+    if (!targetElement?.addEventListener) return;
+
+    const eventListener = (e) =&gt; handlerRef.current(e);
+    targetElement.addEventListener(eventName, eventListener);
+    return () =&gt; targetElement.removeEventListener(eventName, eventListener);
+  }, [eventName, element]); // re-subscribe only if eventName or element changes
+}
+
+// Usage
+function ScrollTracker() {
+  const [scrollY, setScrollY] = React.useState(0);
+  useEventListener('scroll', () =&gt; setScrollY(window.scrollY));
+  return &lt;p&gt;Scroll Y: {scrollY}&lt;/p&gt;;
+}
+
+// With a specific element
+function ClickTracker() {
+  const buttonRef = React.useRef(null);
+  useEventListener('click', (e) =&gt; console.log('clicked', e), buttonRef);
+  return &lt;button ref={buttonRef}&gt;Click me&lt;/button&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q26">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What is the cleanup function in useEffect and why is it important?
+        </button>
+      </h2>
+      <div id="hooks-q26" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          The cleanup function returned from <code>useEffect</code> runs: (1) before the component unmounts, and (2) before the effect re-runs due to dependency changes (to clean up the previous effect). It is critical for: clearing timers (<code>clearInterval</code>/<code>clearTimeout</code>), removing event listeners (to prevent memory leaks and duplicate handlers), aborting fetch requests (to prevent state updates on unmounted components), closing WebSocket connections, and unsubscribing from observables. Without cleanup, event listeners accumulate (each re-render adds another listener without removing the old one), intervals keep running after unmount, and state updates on unmounted components generate warnings. React 18's StrictMode mounts → unmounts → remounts in development specifically to surface missing cleanup functions.
+          <pre class="code-block">// Without cleanup: interval runs forever even after unmount
+React.useEffect(() =&gt; {
+  const id = setInterval(() =&gt; setTime(Date.now()), 1000);
+  // ❌ no cleanup — interval never stops
+}, []);
+
+// With cleanup: interval is cleared
+React.useEffect(() =&gt; {
+  const id = setInterval(() =&gt; setTime(Date.now()), 1000);
+  return () =&gt; clearInterval(id); // ✅ cleared on unmount or re-run
+}, []);
+
+// Without cleanup: adds new listener on every render
+React.useEffect(() =&gt; {
+  window.addEventListener('resize', handleResize);
+  // ❌ adds another listener on re-run without removing the old one
+}, [handleResize]);
+
+// With cleanup: only one listener at a time
+React.useEffect(() =&gt; {
+  window.addEventListener('resize', handleResize);
+  return () =&gt; window.removeEventListener('resize', handleResize); // ✅
+}, [handleResize]);</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q27">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you implement a useDebounce custom hook?
+        </button>
+      </h2>
+      <div id="hooks-q27" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          Debouncing delays executing a function until after a specified wait period has passed since the last invocation — useful for search inputs (don't fetch on every keystroke), resize handlers, and form validation. A <code>useDebounce</code> hook can debounce either a value (return a debounced version of the value) or a callback function. The value-debounce pattern is simpler and works well with <code>useEffect</code>: update the debounced value after a delay, and cancel the timer if the value changes before the delay elapses.
+          <pre class="code-block">// Debounce a value (simpler)
+function useDebounce(value, delay = 300) {
+  const [debouncedValue, setDebouncedValue] = React.useState(value);
+
+  React.useEffect(() =&gt; {
+    const timer = setTimeout(() =&gt; setDebouncedValue(value), delay);
+    return () =&gt; clearTimeout(timer); // cancel if value changes before delay
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
+// Usage: only fetch when user stops typing for 300ms
+function SearchInput() {
+  const [query, setQuery] = React.useState('');
+  const debouncedQuery = useDebounce(query, 300);
+
+  React.useEffect(() =&gt; {
+    if (debouncedQuery) fetch(`/api/search?q=${debouncedQuery}`);
+  }, [debouncedQuery]); // only fires 300ms after last keystroke
+
+  return &lt;input value={query} onChange={e =&gt; setQuery(e.target.value)} /&gt;;
+}
+
+// Debounce a callback (more flexible)
+function useDebouncedCallback(fn, delay) {
+  const timerRef = React.useRef(null);
+  return React.useCallback((...args) =&gt; {
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() =&gt; fn(...args), delay);
+  }, [fn, delay]);
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q28">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;How does useState handle functional updates?
+        </button>
+      </h2>
+      <div id="hooks-q28" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>setState(newValue)</code> replaces the state with <code>newValue</code>. <code>setState(prevState =&gt; newValue)</code> uses a functional update — the updater function receives the current state (not the state at render time) and returns the new state. Functional updates are essential when: (1) new state depends on old state (<code>setCount(c =&gt; c + 1)</code> instead of <code>setCount(count + 1)</code>); (2) updating state inside a stale closure where <code>count</code> might be stale; (3) batching multiple updates that build on each other. The functional form is always safe; the direct form can cause bugs with stale closures. For objects: combine the functional form with spread: <code>setUser(prev =&gt; ({ ...prev, name: 'Alice' }))</code>.
+          <pre class="code-block">// Problem: direct setState with stale value
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  const incrementThreeTimes = () =&gt; {
+    setCount(count + 1); // all three use the same stale count=0
+    setCount(count + 1);
+    setCount(count + 1); // result: count becomes 1, not 3
+  };
+
+  const incrementThreeTimesFix = () =&gt; {
+    setCount(c =&gt; c + 1); // uses latest value
+    setCount(c =&gt; c + 1); // uses result of previous updater
+    setCount(c =&gt; c + 1); // result: count becomes 3 ✅
+  };
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q29">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is lazy state initialization in useState?
+        </button>
+      </h2>
+      <div id="hooks-q29" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useState(initialValue)</code> evaluates <code>initialValue</code> on every render — if it's an expensive computation, this is wasted work. <code>useState(() =&gt; expensiveComputation())</code> uses a lazy initializer — the function is only called on the first render, and its return value is used as the initial state. The function is never called again. Use lazy initialization for: reading localStorage, computing an initial value from a large dataset, or any setup that is expensive but only needed once. This is a common interview gotcha: <code>useState(getInitialState())</code> calls the function on every render; <code>useState(getInitialState)</code> (passing the function, not calling it) only calls it once.
+          <pre class="code-block">// Called on every render (bad if expensive)
+const [items, setItems] = React.useState(parseHeavyData(rawData)); // ❌
+
+// Lazy initialization: called only once
+const [items, setItems] = React.useState(() =&gt; parseHeavyData(rawData)); // ✅
+
+// Reading localStorage (should be lazy — localStorage reads are synchronous I/O)
+const [theme, setTheme] = React.useState(() =&gt; {
+  const saved = localStorage.getItem('theme');
+  return saved ?? 'light';
+}); // ✅ only reads localStorage on initial render</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q30">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you avoid infinite loops with useEffect?
+        </button>
+      </h2>
+      <div id="hooks-q30" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          Infinite loops in <code>useEffect</code> occur when: (1) the effect updates state that is listed in the dependency array — each render triggers the effect, which updates state, which triggers another render; (2) a dependency is a non-memoized object/function — it's a new reference every render, triggering the effect every render. Fixes: (1) If the effect genuinely shouldn't re-run after each state update, reconsider the dependency array (perhaps the state shouldn't be a dep); (2) Memoize object/function deps with <code>useMemo</code>/<code>useCallback</code>; (3) Use the functional updater form of setState to avoid needing state as a dependency; (4) Move object/function definitions outside the component if they don't depend on props/state.
+          <pre class="code-block">// Infinite loop: effect updates its own dependency
+const [count, setCount] = React.useState(0);
+React.useEffect(() =&gt; {
+  setCount(count + 1); // triggers re-render → count changes → effect re-runs...
+}, [count]); // ❌ infinite loop
+
+// Fix: remove count from deps using functional updater
+React.useEffect(() =&gt; {
+  setCount(prev =&gt; prev + 1); // doesn't need count as dep
+}, []); // ✅ runs once
+
+// Infinite loop: new object reference every render
+React.useEffect(() =&gt; {
+  fetchData(options);
+}, [options]); // ❌ if options = {} is defined in render, new ref every render
+
+// Fix: memoize the options
+const options = React.useMemo(() =&gt; ({ method: 'GET', cache: 'default' }), []);
+React.useEffect(() =&gt; { fetchData(options); }, [options]); // ✅</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q31">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the useReducer hook and how does it differ from useState?
+        </button>
+      </h2>
+      <div id="hooks-q31" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useReducer</code> is like <code>useState</code> but for complex state management. Instead of setting state directly, you dispatch action objects to a pure reducer function that computes the next state. The reducer receives <code>(currentState, action)</code> and returns <code>newState</code>. Key differences: <code>useState</code> is for simple, independent values; <code>useReducer</code> is for complex state objects with multiple sub-values, or state transitions that follow a state machine pattern. <code>useReducer</code> makes state transitions explicit (each action type is named), makes logic testable in isolation (pure reducer function), and consolidates related state updates. The pattern is identical to Redux but local to the component. <code>useReducer</code> with Context is a solid pattern for medium-complexity global state.
+          <pre class="code-block">const initialState = { count: 0, step: 1, history: [] };
+
+function counterReducer(state, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return { ...state, count: state.count + state.step, history: [...state.history, state.count] };
+    case 'DECREMENT':
+      return { ...state, count: state.count - state.step };
+    case 'SET_STEP':
+      return { ...state, step: action.payload };
+    case 'RESET':
+      return initialState;
+    default:
+      return state;
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = React.useReducer(counterReducer, initialState);
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {state.count}&lt;/p&gt;
+      &lt;button onClick={() =&gt; dispatch({ type: 'INCREMENT' })}&gt;+&lt;/button&gt;
+      &lt;button onClick={() =&gt; dispatch({ type: 'DECREMENT' })}&gt;-&lt;/button&gt;
+      &lt;button onClick={() =&gt; dispatch({ type: 'RESET' })}&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q32">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you share state between sibling components using hooks?
+        </button>
+      </h2>
+      <div id="hooks-q32" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          Sibling components can't directly share state. The pattern is "lifting state up" — move the shared state to the lowest common ancestor component, and pass it down via props. For deeply nested components, use Context: create a context with the shared state, wrap siblings in the Provider, and use <code>useContext</code> in each sibling. For application-wide state, use Redux or Zustand. The lifting-state-up pattern: Parent holds <code>[value, setValue]</code>, passes <code>value</code> as a prop to one sibling (to display) and <code>setValue</code> as a callback to the other sibling (to update). When one sibling calls <code>setValue</code>, Parent re-renders and passes the new value to both siblings.
+          <pre class="code-block">// Lifting state up to share between siblings
+function Parent() {
+  const [selectedId, setSelectedId] = React.useState(null);
+
+  return (
+    &lt;div&gt;
+      &lt;ItemList items={items} onSelect={setSelectedId} /&gt;
+      &lt;ItemDetail itemId={selectedId} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// OR: Context for deeply nested siblings
+const SelectedContext = React.createContext(null);
+
+function App() {
+  const [selectedId, setSelectedId] = React.useState(null);
+  return (
+    &lt;SelectedContext.Provider value={{ selectedId, setSelectedId }}&gt;
+      &lt;DeepNestedList /&gt;
+      &lt;DeepNestedDetail /&gt;
+    &lt;/SelectedContext.Provider&gt;
+  );
+}
+
+function DeepNestedList() {
+  const { setSelectedId } = React.useContext(SelectedContext);
+  return &lt;button onClick={() =&gt; setSelectedId(1)}&gt;Select Item 1&lt;/button&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q33">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the purpose of the deps array in useCallback?
+        </button>
+      </h2>
+      <div id="hooks-q33" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useCallback(fn, deps)</code> returns a memoized version of <code>fn</code> — the same function reference is returned as long as <code>deps</code> haven't changed. The deps array tells React when to create a new function. If deps are stale (not included in the array), the function closes over old values. The <code>exhaustive-deps</code> ESLint rule helps by warning when you've omitted a dep. Common mistake: <code>useCallback(fn, [])</code> with an empty array — the function closes over its initial values and never gets the updated ones. The correct approach: include all values from component scope that the function reads. When the deps are frequently-changing, <code>useCallback</code> doesn't help much — the function changes as often as without it. React Compiler (React 19) automatically applies memoization, making manual <code>useCallback</code> largely unnecessary going forward.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q34">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;How do you implement a useThrottle hook?
+        </button>
+      </h2>
+      <div id="hooks-q34" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          Throttling limits function execution to at most once per interval — unlike debounce (which delays until activity stops), throttle ensures regular execution during continuous activity. A <code>useThrottle</code> hook returns a throttled version of a value or callback. Uses: scroll event handlers, mouse move tracking, resize handlers, and any high-frequency event where you want regular but rate-limited updates.
+          <pre class="code-block">// Throttle a value: only updates at most once per 200ms
+function useThrottle(value, limit = 200) {
+  const [throttledValue, setThrottledValue] = React.useState(value);
+  const lastUpdated = React.useRef(Date.now());
+
+  React.useEffect(() =&gt; {
+    const now = Date.now();
+    const remaining = limit - (now - lastUpdated.current);
+
+    if (remaining &lt;= 0) {
+      lastUpdated.current = now;
+      setThrottledValue(value);
+    } else {
+      const timer = setTimeout(() =&gt; {
+        lastUpdated.current = Date.now();
+        setThrottledValue(value);
+      }, remaining);
+      return () =&gt; clearTimeout(timer);
+    }
+  }, [value, limit]);
+
+  return throttledValue;
+}
+
+// Usage: scroll position updates throttled to 100ms
+function ScrollTracker() {
+  const [scrollY, setScrollY] = React.useState(0);
+  useEventListener('scroll', () =&gt; setScrollY(window.scrollY));
+  const throttledScrollY = useThrottle(scrollY, 100);
+  return &lt;p&gt;Scroll: {throttledScrollY}px&lt;/p&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q35">
+          <span class="diff-medium">Medium</span>&nbsp;&nbsp;What is the useRef hook for persisting values across renders?
+        </button>
+      </h2>
+      <div id="hooks-q35" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          <code>useRef</code> is commonly used as a way to store a mutable value that: (1) persists across renders (unlike a local variable which is recreated on every render); (2) does NOT trigger a re-render when changed (unlike state). This makes it the React equivalent of an instance variable in a class component. Use cases: storing the previous value of a prop or state (<code>prevValueRef.current = currentValue</code>), storing an interval/timer ID so it can be cleared, tracking whether the component is mounted, storing a WebSocket connection, and memoizing values that are too volatile to be state but need to persist. The key: <code>ref.current = newValue</code> is a mutation that React doesn't track — intentionally.
+          <pre class="code-block">// Persist a value without causing re-renders
+function StopwatchDisplay() {
+  const [isRunning, setIsRunning] = React.useState(false);
+  const [elapsed, setElapsed] = React.useState(0);
+  const intervalRef = React.useRef(null); // persists without causing re-render
+  const startTimeRef = React.useRef(null);
+
+  const start = () =&gt; {
+    setIsRunning(true);
+    startTimeRef.current = Date.now() - elapsed;
+    intervalRef.current = setInterval(() =&gt; {
+      setElapsed(Date.now() - startTimeRef.current);
+    }, 10);
+  };
+
+  const stop = () =&gt; {
+    setIsRunning(false);
+    clearInterval(intervalRef.current); // uses the stored interval ID
+  };
+
+  return (
+    &lt;div&gt;
+      {elapsed}ms
+      &lt;button onClick={isRunning ? stop : start}&gt;
+        {isRunning ? 'Stop' : 'Start'}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q36">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;How do you build a useForm custom hook from scratch?
+        </button>
+      </h2>
+      <div id="hooks-q36" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          A custom <code>useForm</code> hook encapsulates form state management: tracking field values, touched state, validation errors, and submission status. It should support initial values, field registration, change handlers, blur handlers (to mark as touched), validation, and submission handling. Building this reveals why React Hook Form uses uncontrolled inputs — managing all fields as controlled state causes every keystroke to re-render the entire form.
+          <pre class="code-block">function useForm({ initialValues, validate, onSubmit }) {
+  const [values, setValues] = React.useState(initialValues);
+  const [errors, setErrors] = React.useState({});
+  const [touched, setTouched] = React.useState({});
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const handleChange = React.useCallback((e) =&gt; {
+    const { name, value } = e.target;
+    setValues(prev =&gt; ({ ...prev, [name]: value }));
+  }, []);
+
+  const handleBlur = React.useCallback((e) =&gt; {
+    const { name } = e.target;
+    setTouched(prev =&gt; ({ ...prev, [name]: true }));
+    if (validate) {
+      const validationErrors = validate(values);
+      setErrors(validationErrors);
+    }
+  }, [validate, values]);
+
+  const handleSubmit = React.useCallback((e) =&gt; {
+    e.preventDefault();
+    const validationErrors = validate ? validate(values) : {};
+    setErrors(validationErrors);
+    setTouched(Object.keys(values).reduce((acc, key) =&gt; ({ ...acc, [key]: true }), {}));
+    if (Object.keys(validationErrors).length === 0) {
+      setIsSubmitting(true);
+      Promise.resolve(onSubmit(values)).finally(() =&gt; setIsSubmitting(false));
+    }
+  }, [validate, values, onSubmit]);
+
+  return { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit };
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q37">
+          <span class="diff-hard">Hard</span>&nbsp;&nbsp;What are React 19's new hooks?
+        </button>
+      </h2>
+      <div id="hooks-q37" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          React 19 introduces several new hooks and changes: (1) <code>use(promise | context)</code> — a new primitive that can read a promise's value during rendering (suspend while pending) or read context; it can be called inside loops and conditions, unlike <code>useContext</code>; (2) <code>useFormStatus()</code> — provides the status of the parent <code>&lt;form&gt;</code> element (<code>pending</code>, <code>data</code>, <code>method</code>, <code>action</code>) — useful for submit buttons that need to know if the form is submitting; (3) <code>useActionState(action, initialState)</code> — manages state returned by a server action or form action function; (4) <code>useOptimistic(state, updateFn)</code> — shows an optimistic update while a mutation is in progress, automatically rolling back when the mutation completes. React 19 also removes the need for <code>forwardRef</code> (refs work as regular props) and stabilizes the React Compiler (auto-memoization).
+          <pre class="code-block">// React 19: useOptimistic
+function LikeButton({ postId, initialLikeCount }) {
+  const [likeCount, setLikeCount] = React.useState(initialLikeCount);
+  const [optimisticCount, addOptimisticLike] = React.useOptimistic(
+    likeCount,
+    (currentCount, increment) =&gt; currentCount + increment
+  );
+
+  async function handleLike() {
+    addOptimisticLike(1); // immediately show +1
+    try {
+      const newCount = await likePost(postId);
+      setLikeCount(newCount); // update with real server value
+    } catch {
+      // optimistic update rolls back automatically on error
+    }
+  }
+
+  return &lt;button onClick={handleLike}&gt;❤️ {optimisticCount}&lt;/button&gt;;
+}
+
+// React 19: useFormStatus
+function SubmitButton() {
+  const { pending } = ReactDOM.useFormStatus();
+  return &lt;button type="submit" disabled={pending}&gt;{pending ? 'Saving...' : 'Save'}&lt;/button&gt;;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q38">
+          <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;A component re-renders on every parent render even with useCallback and useMemo. What could be wrong?
+        </button>
+      </h2>
+      <div id="hooks-q38" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          This is a classic debugging challenge. Possible causes: (1) <code>useCallback</code> has an unstable dependency — one of its deps (an object, another function) is a new reference every render, making the callback itself change every render; (2) <code>useMemo</code> has the same issue — a dep that looks stable but isn't (e.g., the component receives a function prop from above that is not memoized); (3) The child component is consuming a Context that changes on every render (even if the specific props haven't changed, <code>useContext</code> re-renders on any context value change); (4) The <code>React.memo</code> comparator is not properly comparing complex props; (5) The child renders via an index key that changes on reorder. Debugging: use React DevTools "why did this render?" to see which exact prop or hook caused the re-render, then trace where that value originates.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q39">
+          <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;How would you manage a complex wizard form with multiple steps using hooks?
+        </button>
+      </h2>
+      <div id="hooks-q39" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          A multi-step wizard form requires: current step tracking, accumulated form data across steps, per-step validation, navigation (next/back), and final submission. The cleanest pattern uses <code>useReducer</code> for the wizard state (step index + accumulated data) because multiple related state pieces change together on each transition. Each step is a separate component receiving the accumulated data and dispatch as props. Validation happens per step in the <code>NEXT</code> action. This pattern is composable, testable (the reducer is a pure function), and scales to many steps.
+          <pre class="code-block">const wizardReducer = (state, action) =&gt; {
+  switch (action.type) {
+    case 'NEXT':
+      return { ...state, step: state.step + 1, data: { ...state.data, ...action.payload } };
+    case 'BACK':
+      return { ...state, step: state.step - 1 };
+    case 'SUBMIT':
+      return { ...state, submitting: true };
+    default:
+      return state;
+  }
+};
+
+function Wizard() {
+  const [{ step, data, submitting }, dispatch] = React.useReducer(wizardReducer, {
+    step: 0, data: {}, submitting: false
+  });
+
+  const steps = [PersonalInfoStep, ContactStep, ReviewStep];
+  const StepComponent = steps[step];
+
+  return (
+    &lt;div&gt;
+      &lt;ProgressBar current={step} total={steps.length} /&gt;
+      &lt;StepComponent
+        data={data}
+        onNext={(stepData) =&gt; dispatch({ type: 'NEXT', payload: stepData })}
+        onBack={() =&gt; dispatch({ type: 'BACK' })}
+        onSubmit={() =&gt; dispatch({ type: 'SUBMIT' })}
+      /&gt;
+    &lt;/div&gt;
+  );
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hooks-q40">
+          <span class="diff-scenario">Scenario</span>&nbsp;&nbsp;You have a component that makes an API call on mount but users are reporting stale data. How do you handle it?
+        </button>
+      </h2>
+      <div id="hooks-q40" class="accordion-collapse collapse" data-bs-parent="#acc-hooks">
+        <div class="accordion-body">
+          Stale data from a mount-only fetch (<code>useEffect(..., [])</code>) is a common problem — the component fetches once and never refreshes. Solutions depend on how fresh data needs to be: (1) Add relevant dependencies to the dependency array so the effect re-fetches when those change (e.g., include <code>userId</code> so data refreshes when the user changes); (2) Manual refetch — expose a <code>refetch</code> function that re-runs the fetch (useful for "Refresh" buttons); (3) Polling — re-fetch on an interval with <code>setInterval</code> (appropriate for dashboards); (4) React Query — use <code>staleTime</code> and <code>refetchOnWindowFocus</code> to control freshness; by default React Query refetches on window focus, which handles many "came back to the tab" staleness issues; (5) WebSockets/SSE — for truly real-time data, push updates from the server instead of polling. React Query is the recommended solution as it handles all these cases declaratively.
+        </div>
+      </div>
+    </div>
+
